@@ -1,29 +1,52 @@
-import { type QueryObserverOptions, queryOptions } from '@tanstack/react-query';
-import type { News } from '@/entities/news/types';
-import type { ResponseError } from '@/shared/api';
+import { queryOptions } from '@tanstack/react-query';
+import { isAxiosError } from 'axios';
+import type { TNews } from '@/entities/news/types';
 import { $api } from '@/shared/api/http.ts';
+import { FEATURE_FLAGS } from '@/shared/config/featureFlags';
 
-export const newsItemQueryKey = {
-  list: 'newsItem.list',
-  bySlug: 'newsItem.bySlug',
+const getMockNews = async () => (await import('../model/mock')).mockNews;
+
+export const newsQueryKey = {
+  list: 'news.list',
+  byId: 'news.byId',
 };
 
-export const newsItemQueries = {
-  list: (options?: Partial<QueryObserverOptions<News[], ResponseError>>) =>
-    queryOptions<News[], ResponseError>({
-      queryKey: [newsItemQueryKey.list],
-      queryFn: async () => (await $api.get('/news')).data,
-      ...options,
+export const newsQueries = {
+  list: (params?: { skip?: number; take?: number }) =>
+    queryOptions({
+      queryKey: [newsQueryKey.list, params],
+      queryFn: async ({ signal }) => {
+        const { skip = 0, take = 100 } = params ?? {};
+
+        if (!FEATURE_FLAGS.newsFromBackend) {
+          return (await getMockNews()).slice(skip, skip + take);
+        }
+
+        return (
+          await $api.get<TNews[]>('/news/', { params: { skip, take }, signal })
+        ).data;
+      },
     }),
 
-  bySlug: (
-    slug: string,
-    options?: Partial<QueryObserverOptions<News, ResponseError>>,
-  ) =>
-    queryOptions<News, ResponseError>({
-      queryKey: [newsItemQueryKey.bySlug, slug],
-      queryFn: async () => (await $api.get(`/news/${slug}`)).data,
-      enabled: !!slug,
-      ...options,
+  byId: (id: string) =>
+    queryOptions({
+      queryKey: [newsQueryKey.byId, id],
+      queryFn: async ({ signal }) => {
+        if (!FEATURE_FLAGS.newsFromBackend) {
+          return (await getMockNews()).find((item) => item.id === id) ?? null;
+        }
+
+        try {
+          return (
+            await $api.get<TNews>(`/news/${encodeURIComponent(id)}`, { signal })
+          ).data;
+        } catch (error) {
+          if (isAxiosError(error) && error.response?.status === 404) {
+            return null;
+          }
+          throw error;
+        }
+      },
+      enabled: !!id,
     }),
 };

@@ -1,0 +1,45 @@
+.news {
+  margin: 64px 0 128px;
+}
+
+.listWrapper {
+  display: flex;
+  gap: 16px;
+
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 48px 120px 0;
+}
+
+.listContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+@media (width <= 1200px) {
+  .news {
+    margin: 36px 0 96px;
+  }
+
+  .listWrapper {
+    flex-direction: column;
+    padding: 36px 57px 0;
+  }
+}
+
+@media (width <= 720px) {
+  .news {
+    margin: 16px 0 64px;
+  }
+
+  .listWrapper {
+    padding: 24px 10px 0;
+  }
+}

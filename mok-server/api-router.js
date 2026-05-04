@@ -56,24 +56,4 @@ router.get('/therapists/:therapistId', (req, res) => {
   res.status(200).json(therapist);
 });
 
-router.get('/news/', (req, res) => {
-  const skip = parseInt(req.query.skip) || 0;
-  const limit = parseInt(req.query.limit) || 12;
-  if (db.news.length === 0) {
-    return res.status(404).json({ message: 'Данные не найдены' });
-  }
-  const sorted = [...db.news].sort(
-    (a, b) => new Date(b.date) - new Date(a.date),
-  );
-  res.status(200).json(sorted.slice(skip, skip + limit));
-});
-router.get('/news/:slug', (req, res) => {
-  const slug = req.params.slug;
-  const newsItem = db.news.find((t) => t.slug === slug);
-  if (!newsItem) {
-    return res.status(404).json({ message: 'Данные не найдены' });
-  }
-  res.status(200).json(newsItem);
-});
-
 export default router;

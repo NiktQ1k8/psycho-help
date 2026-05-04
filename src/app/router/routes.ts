@@ -5,12 +5,12 @@ import {
   DoctorsPage,
   FaqPage,
   HomePage,
-  NewsItemPage,
-  NewsPage,
   PersonalCabinet,
   ResourcesPage,
   TestPage,
 } from '@/pages';
+import { News } from '@/pages/News/ui/News/News';
+import { NewsItem } from '@/pages/NewsItem/ui/NewsItem/NewsItem';
 import PsychologistApplicationPage from '@/pages/personal-cabinet/psychologist-application-page/PsychologistApplicationPage';
 import PsychologistAppointmentPage from '@/pages/personal-cabinet/psychologist-appointment-page/PsychologistAppointmentPage';
 import { SLUG } from '@/shared/config/slug';
@@ -40,12 +40,12 @@ export const routes: RoutePath[] = [
   },
   {
     path: SLUG.NEWS,
-    Component: NewsPage,
+    Component: News,
     navText: 'Новости',
   },
   {
-    path: `${SLUG.NEWS}/:slug`,
-    Component: NewsItemPage,
+    path: `${SLUG.NEWS}/:id`,
+    Component: NewsItem,
   },
   {
     path: SLUG.RESOURCES,

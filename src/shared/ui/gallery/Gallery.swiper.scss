@@ -1,0 +1,126 @@
+[data-image-gallery] {
+  .swiper-wrapper {
+    position: relative;
+
+    display: flex;
+
+    box-sizing: content-box;
+    width: 100%;
+    height: 100%;
+
+    transition-property: transform;
+  }
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    cursor: pointer;
+
+    position: absolute;
+    z-index: 1;
+    top: calc(50% - 18px);
+    transform: translateY(-50%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 40px;
+    height: 40px;
+    padding: 10px;
+    border-radius: 50%;
+
+    color: var(--color-label-brand-primary);
+
+    background-color: var(--color-background-neutral-primary);
+
+    svg {
+      pointer-events: none;
+      width: 100%;
+      height: 100%;
+      fill: currentcolor;
+    }
+  }
+
+  .swiper-button-prev {
+    left: 12px;
+
+    svg {
+      transform: rotate(180deg);
+    }
+  }
+
+  .swiper-button-next {
+    right: 12px;
+  }
+
+  .swiper-button-disabled {
+    pointer-events: none;
+    cursor: default;
+    opacity: 0.35;
+  }
+
+  .swiper-pagination {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    padding: 8px 4px;
+  }
+
+  .swiper-pagination-bullet {
+    cursor: pointer;
+
+    position: relative;
+
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+
+    opacity: 0.4;
+    background-color: var(--color-label-neutral-secondary);
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -8px -4px;
+    }
+  }
+
+  .swiper-pagination-bullet-active {
+    opacity: 1;
+    background-color: var(--color-label-brand-primary);
+  }
+
+  .swiper-button-lock,
+  .swiper-pagination-lock {
+    display: none;
+  }
+
+  .swiper-notification {
+    pointer-events: none;
+
+    position: absolute;
+
+    overflow: hidden;
+
+    width: 1px;
+    height: 1px;
+
+    white-space: nowrap;
+
+    clip-path: inset(50%);
+  }
+
+  .swiper-button-prev:focus-visible,
+  .swiper-button-next:focus-visible,
+  .swiper-pagination-bullet:focus-visible {
+    outline: 2px solid var(--color-border-brand-strong);
+    outline-offset: 2px;
+  }
+}

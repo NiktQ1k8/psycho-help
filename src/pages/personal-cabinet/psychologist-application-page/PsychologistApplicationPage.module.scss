@@ -449,3 +449,53 @@
     width: 100%;
   }
 }
+
+[data-theme='dark'] {
+  .back,
+  .pageTitle,
+  .userName,
+  .statusLabel,
+  .dataLabel,
+  .sidebarTitle,
+  .fieldLabel {
+    color: var(--color-label-neutral-inverted-primary);
+  }
+  .status-text,
+  .dataValue {
+    color: color-mix(
+      in srgb,
+      var(--color-label-neutral-secondary),
+      var(--color-label-neutral-inverted-primary)
+    );
+  }
+  .status-dot {
+    &--completed {
+      background-color: var(--color-label-neutral-inverted-primary);
+    }
+  }
+  .fieldSelectWrapper :global(.customSelect-selector),
+  .timeWrapper :global(.ant-picker),
+  .dataValue:global(.ant-input-outlined[disabled]) {
+    border: 0.1rem solid var(--color-border-neutral-base, #e5e7eb) !important;
+    color: color-mix(
+      in srgb,
+      var(--color-label-neutral-secondary),
+      var(--color-label-neutral-inverted-primary)
+    ) !important;
+    background: var(--color-background-neutral-inverted) !important;
+    input[disabled] {
+      color: color-mix(
+        in srgb,
+        var(--color-label-neutral-secondary),
+        var(--color-label-neutral-inverted-primary)
+      ) !important;
+    }
+  }
+  .dataValueDescription {
+    color: color-mix(
+      in srgb,
+      var(--color-label-neutral-secondary),
+      var(--color-label-neutral-inverted-primary)
+    );
+  }
+}

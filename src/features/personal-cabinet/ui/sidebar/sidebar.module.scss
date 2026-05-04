@@ -122,7 +122,7 @@
 
   .navItem {
     color: var(--color-label-neutral-inverted-primary);
-    &:hover {
+    &:hover:not(.active) {
       color: var(--color-interactive-brand-primary);
     }
     &.active {

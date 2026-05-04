@@ -253,3 +253,28 @@
     padding: 0;
   }
 }
+
+[data-theme='dark'] {
+  .back,
+  .title,
+  .infoLabel,
+  .statusLabel {
+    color: var(--color-label-neutral-inverted-primary);
+  }
+  .infoName,
+  .status-text,
+  .infoValueGrid,
+  .infoValue {
+    color: color-mix(
+      in srgb,
+      var(--color-label-neutral-secondary),
+      var(--color-label-neutral-inverted-primary)
+    );
+  }
+  .status-dot {
+    &--completed {
+      background-color: var(--color-label-neutral-inverted-primary);
+    }
+  }
+  
+}

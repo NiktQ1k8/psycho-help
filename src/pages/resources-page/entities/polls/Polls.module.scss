@@ -50,3 +50,18 @@
     }
   }
 }
+
+[data-theme="dark"]{
+  .wrapper{
+    .passList{
+      .passBtn{
+        &:hover{
+          background-color: var(--color-interactive-neutral-hover-secondary);
+        }
+        &:active{
+          background-color: var(--color-interactive-neutral-active-secondary);
+        }
+      }
+    }
+  }
+}

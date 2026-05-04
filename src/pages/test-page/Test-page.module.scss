@@ -161,6 +161,9 @@
   .option {
     background-color: var(--color-fill-neutral-primary);
     color: var(--color-label-neutral-inverted-primary);
+    &:hover:not(.selected){
+      background-color: var(--color-fill-neutral-tetriary);
+    }
   }
   .buttonAction {
     &Back {

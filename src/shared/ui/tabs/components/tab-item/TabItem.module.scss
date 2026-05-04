@@ -16,7 +16,7 @@
   }
 
   @include past-tablet {
-    &:hover {
+    &:hover:not(.active) {
       background: var(--color-interactive-brand-hover-secondary);
       color: var(--color-label-brand-primary);
     }
@@ -34,7 +34,14 @@
 }
 
 [data-theme='dark'] {
-  .tab.active {
-    background-color: var(--color-interactive-brand-active) !important;
+  .tab {
+    &:hover:not(.active) {
+      background-color: var(--color-interactive-brand-hover-secondary);
+      color: var(--color-label-brand-primary);
+    }
+    &:active:not(.active) {
+      background-color: var(--color-interactive-brand-primary);
+      color: var(--color-label-neutral-inverted-primary);
+    }
   }
 }

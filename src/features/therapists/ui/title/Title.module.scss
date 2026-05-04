@@ -243,6 +243,15 @@
   .tab {
     background-color: var(--color-interactive-neutral-active);
     color: var(--color-label-neutral-inverted-primary);
+    &:hover:not(.active) {
+      color: var(--color-interactive-neutral-primary);
+      background: var(--color-background-neutral-primary);
+    }
+    &:active:not(.active) {
+      background: none;
+      border: 1px solid var(--color-border-brand-strong);
+      color: var(--color-interactive-brand-active);
+    }
   }
   .tab.active {
     background-color: var(--color-interactive-brand-primary);
@@ -254,7 +263,7 @@
     &:hover {
       background-color: var(--color-interactive-neutral-hover-secondary);
     }
-    &:hover {
+    &:active {
       background-color: var(--color-interactive-neutral-active-secondary);
     }
   }

@@ -225,13 +225,13 @@
 
   .greeting__option {
     background: var(--color-interactive-neutral-active);
-    &:hover {
+    &:hover:not(.greeting__selected) {
       color: var(--color-interactive-neutral-primary);
       background: var(--color-background-neutral-primary);
     }
-    &:active {
+    &:active:not(.greeting__selected) {
       background: none;
-      border-color: var(--color-border-brand-strong);
+      border: 1px solid var(--color-border-brand-strong);
       color: var(--color-interactive-brand-active);
     }
   }

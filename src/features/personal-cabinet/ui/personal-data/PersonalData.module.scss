@@ -564,34 +564,35 @@
   .selectOption {
     background-color: var(--color-interactive-neutral-hover);
     color: var(--color-label-neutral-inverted-primary);
-  }
-  .selectOption.selected {
-    background-color: var(--color-fill-neutral-primary);
-    color: var(--color-interactive-brand-primary);
+    &.selected {
+      background-color: var(--color-fill-neutral-primary);
+      color: var(--color-interactive-brand-primary);
+    }
   }
 
   .editableField {
     background-color: var(--color-fill-neutral-primary);
+    input {
+      color: var(--color-label-neutral-inverted-primary);
+      &::placeholder {
+        color: color-mix(
+          in srgb,
+          var(--color-label-neutral-secondary),
+          var(--color-label-neutral-inverted-primary)
+        );
+      }
+    }
   }
-  .editableField input {
-    color: var(--color-label-neutral-inverted-primary);
-  }
-  .field .editableField input::placeholder {
-    color: color-mix(
-      in srgb,
-      var(--color-label-neutral-secondary),
-      var(--color-label-neutral-inverted-primary)
-    );
-  }
+
   .passwordField {
     background-color: var(--color-fill-neutral-primary);
     color: var(--color-label-neutral-inverted-primary);
-  }
-  .passwordField input::placeholder {
-    color: color-mix(
-      in srgb,
-      var(--color-label-neutral-secondary),
-      var(--color-label-neutral-inverted-primary)
-    );
+    input::placeholder {
+      color: color-mix(
+        in srgb,
+        var(--color-label-neutral-secondary),
+        var(--color-label-neutral-inverted-primary)
+      );
+    }
   }
 }

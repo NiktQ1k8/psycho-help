@@ -348,6 +348,12 @@
       color: var(--color-interactive-brand-active);
     }
   }
+  .showPassButton{
+    color: var(--color-fill-neutral-none);
+    &:hover{
+      color: var(--color-interactive-neutral-active-secondary);
+    }
+  }
   .hintText,
   .modalDesc,
   .Suggestion span {

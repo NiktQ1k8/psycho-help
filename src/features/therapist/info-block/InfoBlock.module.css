@@ -176,6 +176,10 @@
   .infoBtn {
     color: var(--color-label-neutral-inverted-primary);
   }
+  .infoBtnActive{
+    background-color: var(--color-fill-neutral-none);
+    color: var(--color-label-neutral-primary);
+  }
   .supInfo {
     color: color-mix(
       in srgb,
@@ -187,6 +191,12 @@
   .regBtn {
     background-color: var(--color-background-neutral-primary);
     color: var(--color-label-neutral-primary);
+    &:hover {
+      background-color: var(--color-interactive-neutral-hover-secondary);
+    }
+    &:active {
+      background-color: var(--color-interactive-neutral-active-secondary);
+    }
   }
   .photo {
     background-color: var(--color-fill-neutral-primary);

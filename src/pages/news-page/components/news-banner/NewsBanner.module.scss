@@ -1,0 +1,147 @@
+.banner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 28.8rem;
+  height: 51.6rem;
+  padding: 3.2rem 2.4rem;
+  overflow: hidden;
+  background-color: var(--color-fill-brand-quaternary);
+  border-radius: 1.6rem;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+.title {
+  font-weight: 500;
+  font-size: 3.2rem;
+  line-height: 3.6rem;
+  letter-spacing: -0.05em;
+  color: var(--color-label-neutral-primary);
+}
+
+.text {
+  z-index: 1;
+  font-size: 2rem;
+  line-height: 2.8rem;
+  color: var(--color-label-neutral-primary);
+}
+
+.icon {
+  position: absolute;
+  top: 25.8rem;
+  right: 7.6rem;
+  bottom: 11.1rem;
+  left: -2.8rem;
+  width: 21.3rem;
+  height: 14.7rem;
+}
+
+.link {
+  width: 100%;
+  z-index: 1;
+  text-align: center;
+  border: 1px solid var(--color-border-brand-base);
+  padding: 1.1rem;
+  border-radius: 1.6rem;
+  background-color: var(--color-border-brand-strong);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 2rem;
+  line-height: 2.8rem;
+  color: var(--color-label-neutral-inverted-primary);
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: var(--color-interactive-brand-hover);
+  }
+
+  &:active {
+    background-color: var(--color-interactive-brand-active);
+  }
+}
+
+@media (max-width: 1200px) {
+  .banner {
+    width: 100%;
+    height: 30rem;
+    gap: 4.8rem;
+  }
+
+  .info {
+    width: 30rem;
+  }
+
+  .icon {
+    top: 11.9rem;
+    right: 2.7rem;
+    bottom: -1.3rem;
+    left: auto;
+    width: 31.8rem;
+    height: 18.2rem;
+  }
+
+  .link {
+    width: 30rem;
+  }
+}
+
+@media (max-width: 720px) {
+  .banner {
+    height: 51.6rem;
+  }
+
+  .info {
+    width: 100%;
+  }
+
+  .icon {
+    top: 25.8rem;
+    right: auto;
+    bottom: 11.1rem;
+    left: -2.2rem;
+    width: 21.9rem;
+    height: 14.7rem;
+  }
+
+  .link {
+    width: 100%;
+  }
+}
+
+[data-theme='dark'] {
+  .title {
+    color: var(--color-label-neutral-inverted-primary);
+  }
+
+  .banner {
+    background-color: transparent;
+    border: 1px solid var(--color-border-neutral-inverted);
+  }
+
+  .text {
+    color: color-mix(
+      in srgb,
+      var(--color-label-neutral-secondary),
+      var(--color-label-neutral-inverted-primary)
+    );
+  }
+
+  .link {
+    background-color: var(--color-background-neutral-primary);
+    color: var(--color-label-neutral-primary);
+  }
+
+  .link:hover {
+    background-color: var(--color-interactive-neutral-hover-secondary);
+  }
+
+  .link:active {
+    background-color: var(--color-interactive-neutral-active-secondary);
+  }
+}

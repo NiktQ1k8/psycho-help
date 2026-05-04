@@ -7,7 +7,7 @@
   color: var(--color-label-neutral-primary);
 }
 
-.newsItemHeader {
+.newsHeader {
   display: flex;
   justify-content: space-between;
   margin-bottom: 3.6rem;
@@ -87,7 +87,7 @@
     line-height: 2.4rem;
   }
 
-  .newsItemHeader {
+  .newsHeader {
     flex-direction: column;
     gap: 2.8rem;
     margin-bottom: 1.2rem;
@@ -139,9 +139,11 @@
       var(--color-label-neutral-inverted-primary)
     );
   }
+
   .title {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .content {
     color: var(--color-label-neutral-inverted-primary);
   }

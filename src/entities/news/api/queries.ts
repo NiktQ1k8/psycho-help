@@ -1,25 +1,29 @@
-import { type QueryObserverOptions, queryOptions } from '@tanstack/react-query';
-import type { TNews } from '@/entities/news/types';
-import { $api } from '@/shared/api/http.ts';
+import { queryOptions } from '@tanstack/react-query';
 
-export const newsItemQueryKey = {
-  list: 'newsItem.list',
-  byId: 'newsItem.byId',
+const getMockNews = async () => (await import('../model/mock')).mockNews;
+
+export const newsQueryKey = {
+  list: 'news.list',
+  byId: 'news.byId',
 };
 
-export const newsItemQueries = {
-  list: (options?: Partial<QueryObserverOptions<TNews[], Error>>) =>
-    queryOptions<TNews[], Error>({
-      queryKey: [newsItemQueryKey.list],
-      queryFn: async () => (await $api.get<TNews[]>('/news/')).data,
-      ...options,
+export const newsQueries = {
+  list: (params?: { skip?: number; take?: number }) =>
+    queryOptions({
+      queryKey: [newsQueryKey.list, params],
+      queryFn: async () => {
+        const { skip = 0, take = 100 } = params ?? {};
+
+        return (await getMockNews()).slice(skip, skip + take);
+      },
     }),
 
-  byId: (id: string, options?: Partial<QueryObserverOptions<TNews, Error>>) =>
-    queryOptions<TNews, Error>({
-      queryKey: [newsItemQueryKey.byId, id],
-      queryFn: async () => (await $api.get<TNews>(`/news/${id}`)).data,
+  byId: (id: string) =>
+    queryOptions({
+      queryKey: [newsQueryKey.byId, id],
+      queryFn: async () => {
+        return (await getMockNews()).find((item) => item.id === id) ?? null;
+      },
       enabled: !!id,
-      ...options,
     }),
 };

@@ -31,8 +31,6 @@
   justify-content: center;
 
   margin-top: 2rem;
-
-  background-color: var(--backgrounds-neutral-primary);
 }
 
 .header__nav {
@@ -46,7 +44,7 @@
   padding: 0 3.6rem;
   border-radius: 2.8rem;
 
-  background-color: var(--fills-neutral-quaternary);
+  background-color: var(--backgrounds-neutral-secondary);
 }
 
 .header__logo {
@@ -382,12 +380,8 @@
 }
 
 [data-theme='dark'] {
-  .header {
-    background-color: var(--backgrounds-neutral-inverted);
-  }
-
   .header__nav {
-    background-color: var(--fills-neutral-primary);
+    background-color: var(--labels-neutral-primary);
   }
 
   .header__logo {

@@ -1,0 +1,169 @@
+.banner {
+  position: relative;
+
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  justify-content: space-between;
+
+  width: 288px;
+  height: 516px;
+  padding: 32px 24px;
+  border: 1px solid var(--border-brand-base);
+  border-radius: 16px;
+
+  background-color: var(--fills-brand-quaternary);
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 36px;
+  color: var(--labels-neutral-primary);
+  letter-spacing: -0.05em;
+}
+
+.text {
+  z-index: 1;
+  font: var(--font-text-large);
+  color: var(--labels-neutral-primary);
+}
+
+.icon {
+  position: absolute;
+  inset: 258px 76px 111px -28px;
+  width: 213px;
+  height: 147px;
+}
+
+.link {
+  z-index: 1;
+  width: 100%;
+}
+
+.blur1 {
+  position: absolute;
+  inset: 29px 6px 305px 107px;
+
+  width: 175px;
+  height: 182px;
+  border-radius: 100%;
+
+  background-color: var(--labels-brand-tetriary);
+  filter: blur(200px);
+}
+
+.blur2 {
+  position: absolute;
+  inset: 100px 48px 180px 14px;
+
+  width: 226px;
+  height: 236px;
+  border-radius: 100%;
+
+  background-color: var(--fills-brand-derivable-quaternary);
+  filter: blur(100px);
+}
+
+.blur3 {
+  position: absolute;
+  inset: 366px 99px -86px -37px;
+
+  width: 226px;
+  height: 236px;
+  border-radius: 100%;
+
+  background-color: var(--fills-brand-derivable-quaternary);
+  filter: blur(100px);
+}
+
+@media (width <= 1200px) {
+  .banner {
+    gap: 48px;
+    width: 100%;
+    height: 300px;
+  }
+
+  .info {
+    width: 300px;
+  }
+
+  .icon {
+    inset: 119px 27px -13px auto;
+    width: 318px;
+    height: 182px;
+  }
+
+  .link {
+    width: 300px;
+  }
+
+  .blur1 {
+    inset: -20px 27px 138px auto;
+  }
+
+  .blur2 {
+    inset: 50px 69px 14px auto;
+  }
+
+  .blur3 {
+    inset: 50px auto 14px -52px;
+  }
+}
+
+@media (width <= 720px) {
+  .banner {
+    height: 516px;
+  }
+
+  .info {
+    width: 100%;
+  }
+
+  .icon {
+    inset: 258px auto 111px -22px;
+    width: 219px;
+    height: 147px;
+  }
+
+  .link {
+    width: 100%;
+  }
+
+  .blur1 {
+    inset: 29px 6px 305px auto;
+  }
+
+  .blur2 {
+    inset: 100px 48px 180px auto;
+  }
+
+  .blur3 {
+    inset: 366px 99px -86px -37px;
+  }
+}
+
+[data-theme='dark'] {
+  .banner {
+    background-color: transparent;
+  }
+
+  .title {
+    color: var(--labels-neutral-inverted-primary);
+  }
+
+  .text {
+    color: color-mix(
+      in srgb,
+      var(--labels-neutral-secondary),
+      var(--labels-neutral-inverted-primary)
+    );
+  }
+}

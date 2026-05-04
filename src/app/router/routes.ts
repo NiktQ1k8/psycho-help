@@ -1,13 +1,13 @@
 import type { FC } from 'react';
 import Logout from '@/pages/Logout/Logout';
+import { News } from '@/pages/News/ui/News/News';
+import { NewsItem } from '@/pages/NewsItem/ui/NewsItem/NewsItem';
 import ResetPassword from '@/pages/ResetPassword/ResetPassword';
 import { ArticlePage } from '@/pages/article-page/ArticlePage';
 import { DoctorPage } from '@/pages/doctor-page';
 import { DoctorsPage } from '@/pages/doctors-page';
 import { FaqPage } from '@/pages/faq-page';
 import { HomePage } from '@/pages/home-page';
-import { NewsItemPage } from '@/pages/news-item-page/NewsItemPage';
-import { NewsPage } from '@/pages/news-page/NewsPage';
 import MedicalRecordPage from '@/pages/personal-cabinet/medical-record-page/MedicalRecordPage';
 import PersonalCabinet from '@/pages/personal-cabinet/personal-cabinet';
 import PsychologistApplicationPage from '@/pages/personal-cabinet/psychologist-application-page/PsychologistApplicationPage';
@@ -43,12 +43,12 @@ export const routes: IRoutePath[] = [
   },
   {
     path: SLUG.NEWS,
-    Component: NewsPage,
+    Component: News,
     navText: 'Новости',
   },
   {
     path: `${SLUG.NEWS}/:id`,
-    Component: NewsItemPage,
+    Component: NewsItem,
   },
   {
     path: SLUG.RESOURCES,

@@ -1,0 +1,10 @@
+.list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  list-style: none;
+
+  @media (width <= 720px) {
+    grid-template-columns: 1fr;
+  }
+}

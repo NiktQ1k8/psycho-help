@@ -10,6 +10,13 @@
   justify-content: center;
 }
 
+.inline {
+  position: static;
+  transform: none;
+  min-height: 240px;
+  padding: 32px 16px;
+}
+
 .loader__item {
   display: inline-block;
 

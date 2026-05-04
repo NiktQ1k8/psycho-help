@@ -1,9 +1,9 @@
 import type { CSSProperties } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, type LinkProps, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
-import ChevronLeft from '@/shared/assets/images/news/chevron-left.svg?react';
 import { SLUG } from '@/shared/config/slug';
 import styles from './BackButton.module.scss';
+import ChevronLeft from './assets/chevron-left.svg?react';
 
 type TBackButtonProps = {
   text?: string;
@@ -11,6 +11,7 @@ type TBackButtonProps = {
   darkColor?: CSSProperties['color'];
   className?: string;
   onClick?: () => void;
+  to?: LinkProps['to'];
 };
 
 export const BackButton = ({
@@ -19,6 +20,7 @@ export const BackButton = ({
   darkColor = 'var(--labels-brand-primary)',
   className,
   onClick,
+  to,
 }: TBackButtonProps) => {
   const navigate = useNavigate();
   const style = {
@@ -31,15 +33,30 @@ export const BackButton = ({
     else navigate(SLUG.MAIN, { replace: true });
   };
 
+  const content = (
+    <>
+      <ChevronLeft aria-hidden focusable="false" width={24} height={24} />
+      {text}
+    </>
+  );
+  const classNames = clsx(styles.backButton, className);
+
+  if (to !== undefined) {
+    return (
+      <Link to={to} className={classNames} style={style} onClick={onClick}>
+        {content}
+      </Link>
+    );
+  }
+
   return (
     <button
       type="button"
-      className={clsx(styles.backButton, className)}
+      className={classNames}
       style={style}
       onClick={onClick ?? goBack}
     >
-      <ChevronLeft aria-hidden focusable="false" width={24} height={24} />
-      {text}
+      {content}
     </button>
   );
 };

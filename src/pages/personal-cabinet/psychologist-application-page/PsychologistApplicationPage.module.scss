@@ -450,6 +450,43 @@
   }
 }
 
+@media (max-width: 600px) {
+  .sidebarWrapper * {
+    display: none;
+  }
+  .page {
+    padding: 0 10px 100px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .pageTitle, .sidebarTitle  {
+    font-size: 2rem;
+    line-height: 2.8rem;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+  }
+  .dataGrid {
+    gap: 2rem;
+  }
+  .userName{
+    font-size: 1.8rem;
+    line-height: 2.4rem;
+  }
+}
+
+@media (min-width: 500px) and (max-width: 1024px) {
+  .sidebarWrapper * {
+    display: none;
+  }
+
+  .page {
+    padding: 0 24px;
+    padding-bottom: 4rem;
+    display: flex;
+    flex-direction: column;
+  }
+}
 [data-theme='dark'] {
   .back,
   .pageTitle,

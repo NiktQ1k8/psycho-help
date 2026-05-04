@@ -253,6 +253,45 @@
     padding: 0;
   }
 }
+@media (max-width: 600px) {
+  .sidebarWrapper * {
+    display: none;
+  }
+  .page {
+    padding: 0 10px 100px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .infoGrid {
+    display: flex;
+    flex-direction: column;
+  }
+  .title {
+    font-size: 2rem;
+    line-height: 2.8rem;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+  }
+  .infoName {
+    font-size: 1.8rem;
+    line-height: 2.4rem;
+    font-family: var(--font-h5);
+  }
+}
+
+@media (min-width: 500px) and (max-width: 1024px)  {
+  .sidebarWrapper * {
+    display: none;
+  }
+
+  .page {
+    padding: 0 24px;
+    padding-bottom: 4rem;
+    display: flex;
+    flex-direction: column;
+  }
+}
 
 [data-theme='dark'] {
   .back,

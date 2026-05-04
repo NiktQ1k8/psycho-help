@@ -126,3 +126,28 @@
     color: var(--color-label-neutral-inverted-primary);
   }
 }
+
+@media (max-width: 600px) {
+  .layout {
+    padding: 0 10px 100px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  h2 {
+    font-size: 2rem;
+  }
+  .detailsPanel {
+    max-width: 100px;
+  }
+
+}
+
+@media (min-width: 500px) and (max-width: 1024px) {
+  .page {
+    padding: 0 24px;
+    padding-bottom: 4rem;
+    display: flex;
+    flex-direction: column;
+  }
+}

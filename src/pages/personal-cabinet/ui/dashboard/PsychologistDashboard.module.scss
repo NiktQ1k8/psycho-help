@@ -344,3 +344,55 @@
     }
   }
 }
+@media (max-width: 600px) {
+  .layout {
+    padding: 0 10px 100px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  h2 {
+    font-size: 2rem;
+  }
+  .detailsPanel {
+    width: 100%;
+  }
+  .wrapper {
+    flex-direction: column;
+  }
+  .dayItem {
+    flex-direction: column;
+  }
+  .navigationRow {
+     flex-direction: column-reverse;
+     flex-wrap: wrap;
+     gap: 1.6rem;
+   }
+  .weekSelector {
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+  }
+  .pageTitle {
+    font-size: 2rem;
+    line-height: 2.8rem;
+  }
+  .btnAdd {
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+  }
+}
+
+
+@media (min-width: 500px) and (max-width: 1024px) {
+  .sidebarWrapper * {
+    display: none;
+  }
+
+  .page {
+    padding: 0 24px;
+    padding-bottom: 4rem;
+    display: flex;
+    flex-direction: column;
+  }
+}

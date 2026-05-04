@@ -201,6 +201,24 @@
   }
 }
 
+@media (max-width: 600px) {
+  .appointmentRow {
+    flex-direction: column;
+    gap: 1.6rem;
+  }
+  .infoCol {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .actionsCol {
+    justify-content: flex-start;
+  }
+  .location::before {
+    display: none;
+    margin: 0 0;
+  }
+}
+
 [data-theme='dark'] {
   .dateHeader,
   .timeCol,

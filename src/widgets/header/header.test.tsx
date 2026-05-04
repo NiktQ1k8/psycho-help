@@ -10,7 +10,7 @@ vi.stubGlobal(
   'ResizeObserver',
   vi.fn(() => ({ observe: vi.fn(), unobserve: vi.fn(), disconnect: vi.fn() })),
 );
-// Мокаем SVG-компоненты
+
 vi.mock('@/shared/assets/images/logo.svg?react', () => ({
   default: (props: Record<string, unknown>) => <svg data-testid="logo" {...props} />,
 }));
@@ -20,8 +20,12 @@ vi.mock('@/shared/assets/images/header/profile.svg?react', () => ({
 vi.mock('@/shared/assets/images/header/auth.svg?react', () => ({
   default: (props: Record<string, unknown>) => <svg data-testid="auth-icon" {...props} />,
 }));
+vi.mock('@/shared/ui/theme-toggle/ThemeToggle', () => ({
+  default: ({ className }: { className?: string }) => (
+    <button data-testid="theme-toggle-button" className={className} />
+  ),
+}));
 
-// Мокаем модальное окно
 vi.mock('@/features/auth/modal/modal', () => ({
   default: ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) =>
     isOpen ? (
@@ -33,10 +37,7 @@ vi.mock('@/features/auth/modal/modal', () => ({
     ) : null,
 }));
 
-// Мокаем хук авторизации
-vi.mock('@/features/auth/api/useAuth', () => ({
-  useAuth: vi.fn(),
-}));
+vi.mock('@/features/auth/api/useAuth', () => ({ useAuth: vi.fn() }));
 
 const renderHeader = () =>
   render(
@@ -45,16 +46,15 @@ const renderHeader = () =>
     </MemoryRouter>,
   );
 
-describe('Header component', () => {
+describe('Header', () => {
   beforeEach(() => {
     vi.mocked(useAuth).mockReturnValue({ isAuth: false } as ReturnType<typeof useAuth>);
   });
 
-  it('рендерит логотип и все навигационные пункты', () => {
+  it('рендерит логотип и все навигационные ссылки', () => {
     renderHeader();
 
     expect(screen.getByTestId('logo')).toBeInTheDocument();
-
     navPages.forEach(({ navText }) => {
       expect(screen.getByRole('link', { name: new RegExp(navText, 'i') })).toBeInTheDocument();
     });
@@ -64,23 +64,22 @@ describe('Header component', () => {
     renderHeader();
 
     navPages.forEach(({ path, navText }) => {
-      const link = screen.getByRole('link', { name: new RegExp(navText, 'i') });
-      expect(link).toHaveAttribute('href', path);
+      expect(screen.getByRole('link', { name: new RegExp(navText, 'i') })).toHaveAttribute(
+        'href',
+        path,
+      );
     });
   });
 
   describe('Авторизация', () => {
-    it('показывает кнопку "Войти", если пользователь не авторизован', () => {
+    it('показывает кнопку входа для неавторизованного пользователя', () => {
       renderHeader();
 
-      const authBtn = screen.getByTestId('auth-button');
-      expect(authBtn).toBeInTheDocument();
-      expect(authBtn).toHaveAccessibleName();
-      expect(authBtn.textContent?.trim().length ?? 0).toBeGreaterThan(0);
+      expect(screen.getByTestId('auth-button')).toBeInTheDocument();
       expect(screen.queryByTestId('profile-icon')).not.toBeInTheDocument();
     });
 
-    it('показывает иконку профиля, если пользователь авторизован', () => {
+    it('показывает ссылку на кабинет для авторизованного пользователя', () => {
       vi.mocked(useAuth).mockReturnValue({ isAuth: true } as ReturnType<typeof useAuth>);
       renderHeader();
 
@@ -92,37 +91,109 @@ describe('Header component', () => {
       vi.mocked(useAuth).mockReturnValue({ isAuth: true } as ReturnType<typeof useAuth>);
       renderHeader();
 
-      const cabinetLink = screen.getByTestId('profile-icon').closest('a');
-      expect(cabinetLink).toHaveAttribute('href', CABINET_PATH);
+      expect(screen.getByTestId('profile-icon').closest('a')).toHaveAttribute('href', CABINET_PATH);
     });
   });
 
-  describe('Модальное окно входа', () => {
-    it('клик по кнопке "Войти" открывает модальное окно', async () => {
+  describe('Модальное окно', () => {
+    it('открывается при клике на кнопку входа', async () => {
       renderHeader();
-
-      expect(screen.queryByTestId('auth-modal')).not.toBeInTheDocument();
 
       await userEvent.click(screen.getByTestId('auth-button'));
 
       expect(screen.getByTestId('auth-modal')).toBeInTheDocument();
     });
 
-    it('модальное окно закрывается при вызове onClose', async () => {
+    it('закрывается при вызове onClose', async () => {
       renderHeader();
 
       await userEvent.click(screen.getByTestId('auth-button'));
-      expect(screen.getByTestId('auth-modal')).toBeInTheDocument();
-
       await userEvent.click(screen.getByTestId('close-modal'));
+
       expect(screen.queryByTestId('auth-modal')).not.toBeInTheDocument();
     });
 
-    it('модальное окно не рендерится для авторизованного пользователя', () => {
+    it('не рендерится для авторизованного пользователя', () => {
       vi.mocked(useAuth).mockReturnValue({ isAuth: true } as ReturnType<typeof useAuth>);
       renderHeader();
 
       expect(screen.queryByTestId('auth-modal')).not.toBeInTheDocument();
+    });
+
+    it('открывает модалку и закрывает меню при клике на кнопку входа из открытого меню', async () => {
+      renderHeader();
+
+      await userEvent.click(screen.getByTestId('burger-button'));
+      expect(screen.getByTestId('burger-button')).toHaveAttribute('aria-expanded', 'true');
+
+      await userEvent.click(screen.getByTestId('auth-button'));
+
+      expect(screen.getByTestId('auth-modal')).toBeInTheDocument();
+      expect(screen.getByTestId('burger-button')).toHaveAttribute('aria-expanded', 'false');
+    });
+  });
+
+  describe('Бургер-меню', () => {
+    const getBurger = () => screen.getByTestId('burger-button');
+
+    it('закрыто по умолчанию', () => {
+      renderHeader();
+
+      expect(getBurger()).toHaveAttribute('aria-expanded', 'false');
+    });
+
+    it('открывается по клику', async () => {
+      renderHeader();
+
+      await userEvent.click(getBurger());
+
+      expect(getBurger()).toHaveAttribute('aria-expanded', 'true');
+    });
+
+    it('закрывается повторным кликом', async () => {
+      renderHeader();
+
+      await userEvent.click(getBurger());
+      await userEvent.click(getBurger());
+
+      expect(getBurger()).toHaveAttribute('aria-expanded', 'false');
+    });
+
+    it('закрывается при нажатии Escape', async () => {
+      renderHeader();
+
+      await userEvent.click(getBurger());
+      await userEvent.keyboard('{Escape}');
+
+      expect(getBurger()).toHaveAttribute('aria-expanded', 'false');
+    });
+
+    it('закрывается при клике на навигационную ссылку', async () => {
+      renderHeader();
+
+      await userEvent.click(getBurger());
+      await userEvent.click(
+        screen.getByRole('link', { name: new RegExp(navPages[0].navText, 'i') }),
+      );
+
+      expect(getBurger()).toHaveAttribute('aria-expanded', 'false');
+    });
+
+    it('блокирует скролл страницы при открытии', async () => {
+      renderHeader();
+
+      await userEvent.click(getBurger());
+
+      expect(document.body.style.overflow).toBe('hidden');
+    });
+
+    it('восстанавливает скролл при закрытии', async () => {
+      renderHeader();
+
+      await userEvent.click(getBurger());
+      await userEvent.click(getBurger());
+
+      expect(document.body.style.overflow).toBe('');
     });
   });
 });

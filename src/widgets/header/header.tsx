@@ -1,12 +1,13 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useAuth } from '@/features/auth/api/useAuth';
+import ModalWindow from '@/features/auth/modal/modal';
+import ThemeToggle from '@/shared/ui/theme-toggle/ThemeToggle';
+import { navPages, CABINET_PATH } from '@/app/router/routes';
 import { Link } from 'react-router-dom';
-import styles from './header.module.css';
 import Logo from '@/shared/assets/images/logo.svg?react';
 import Profile from '@/shared/assets/images/header/profile.svg?react';
 import Auth from '@/shared/assets/images/header/auth.svg?react';
-import ModalWindow from '@/features/auth/modal/modal';
-import { navPages, CABINET_PATH } from '@/app/router/routes';
+import styles from './header.module.scss';
 
 const Header = () => {
   const { isAuth } = useAuth();
@@ -14,11 +15,14 @@ const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
+  const animatingTimerRef = useRef<ReturnType<typeof setTimeout>>();
 
   const closeMenu = useCallback(() => {
     setMenuOpen(false);
-    setTimeout(() => setIsAnimating(false), 300);
+    animatingTimerRef.current = setTimeout(() => setIsAnimating(false), 300);
   }, []);
+
+  useEffect(() => () => clearTimeout(animatingTimerRef.current), []);
 
   const toggleMenu = useCallback(() => {
     if (menuOpen) {
@@ -38,7 +42,9 @@ const Header = () => {
     const header = headerRef.current;
     if (!header) return;
     const observer = new ResizeObserver(() => {
-      document.documentElement.style.setProperty('--header-height', `${header.offsetHeight}px`);
+      const { marginTop, marginBottom } = getComputedStyle(header);
+      const totalHeight = header.offsetHeight + parseFloat(marginTop) + parseFloat(marginBottom);
+      document.documentElement.style.setProperty('--header-height', `${totalHeight}px`);
     });
     observer.observe(header);
     return () => observer.disconnect();
@@ -64,46 +70,60 @@ const Header = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, [menuOpen, closeMenu]);
 
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeMenu();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [menuOpen, closeMenu]);
+
   return (
-    <header ref={headerRef} className={styles.header}>
+    <header className={styles.header} ref={headerRef}>
       <nav className={styles.header__nav} aria-label="Основная навигация">
-        <Link to="/" className={styles.header__logo} aria-label="Вернуться на главную страницу">
+        <Link className={styles.header__logo} to="/" aria-label="Вернуться на главную страницу">
           <Logo aria-hidden="true" />
         </Link>
         <button
-          className={`${styles.header__burger} ${menuOpen ? styles.header__burger_open : ''}`}
+          className={`${styles.header__burger} ${menuOpen ? styles['header__burger--open'] : ''}`}
           onClick={toggleMenu}
           type="button"
           aria-label={menuOpen ? 'Закрыть меню' : 'Открыть меню'}
           aria-expanded={menuOpen}
+          aria-controls="main-nav-menu"
+          data-testid="burger-button"
         >
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
         </button>
         <ul
-          className={`${styles.header__list} ${isAnimating ? styles.header__list_animating : ''} ${menuOpen ? styles.header__list_open : ''}`}
+          id="main-nav-menu"
+          className={`${styles.header__list} ${isAnimating ? styles['header__list--animating'] : ''} ${menuOpen ? styles['header__list--open'] : ''}`}
+          role="list"
         >
           {navPages.map((item, index) => (
-            <li key={index} className={styles.header__item}>
-              <Link to={item.path} className={styles.header__link} onClick={closeMenu}>
+            <li className={styles.header__item} key={index}>
+              <Link className={styles.header__link} to={item.path} onClick={closeMenu}>
                 {item.navText}
               </Link>
             </li>
           ))}
           <li className={styles.header__item}>
+            <ThemeToggle className={styles.header__link} />
             {isAuth ? (
               <Link
+                className={`${styles.header__link}`}
                 to={CABINET_PATH}
-                className={styles.header__link}
                 onClick={closeMenu}
                 aria-label="Личный кабинет"
               >
-                <Profile className={styles.header__profile} aria-hidden="true" />
+                <Profile aria-hidden="true" />
               </Link>
             ) : (
               <button
-                className={styles.header__auth}
+                className={`${styles.header__link} ${styles['header__link--auth']}`}
                 onClick={handleAuthClick}
                 type="button"
                 aria-label="Открыть окно входа"

@@ -41,32 +41,6 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.themeToggle {
-  position: absolute;
-  top: 0px;
-  right: 20px;
-  transform: translate(-8px, 8px);
-  background: rgba(255, 255, 255, 0.12);
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 10;
-  transition:
-    background 0.2s ease,
-    transform 0.15s ease;
-}
-
-.themeToggle:hover {
-  background: rgba(255, 255, 255, 0.18);
-  transform: translate(-8px, 6px);
-}
-
 .logoSection {
   flex-shrink: 0;
 }

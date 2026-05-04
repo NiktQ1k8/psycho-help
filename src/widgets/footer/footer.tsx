@@ -1,13 +1,9 @@
-import { useTheme } from '@/shared/hooks/useTheme';
 import VkIcon from '@/shared/assets/images/footer/vk.svg';
 import TgIcon from '@/shared/assets/images/footer/tg.svg';
-import Moon from '@/shared/assets/images/footer/moon.svg';
-import Sun from '@/shared/assets/images/footer/sun.svg';
 import styles from './footer.module.scss';
 import FooterLogo from '@/shared/assets/images/footer/logo.svg?react';
 
 const Footer = () => {
-  const { currentTheme, toggleTheme } = useTheme();
   const addresses = [
     {
       street: 'ул. Большая Семёновская, 38',
@@ -38,15 +34,6 @@ const Footer = () => {
 
   return (
     <footer className={styles.footer}>
-      <button
-        className={styles.themeToggle}
-        onClick={toggleTheme}
-        aria-label={
-          currentTheme === 'light' ? 'Переключить на тёмную тему' : 'Переключить на светлую тему'
-        }
-      >
-        <img src={currentTheme === 'light' ? Moon : Sun} />
-      </button>
       <div className={styles.container}>
         {/* Верхняя секция с логотипом, контактами и соцсетями */}
         <div className={styles.topSection}>

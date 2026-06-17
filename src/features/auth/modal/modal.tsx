@@ -1,7 +1,7 @@
-import React from 'react';
-import type { FC } from 'react';
+import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import type { TAuthModalView } from '../model/modal-types';
+import styles from './Modal.module.scss';
 import ModalChangePassword from './modal-change-password';
 import ModalForgotPassword from './modal-forgot-password';
 import ModalLogin from './modal-login';
@@ -14,14 +14,26 @@ type TModalWindowProps = {
   resetToken?: string;
 };
 
-const ModalContent: FC<TModalWindowProps> = ({
+const dialogLabels = {
+  log: 'Вход',
+  reg: 'Регистрация',
+  forgot: 'Восстановление пароля',
+  change: 'Восстановление пароля',
+};
+
+const openDialog = (dialog: HTMLDialogElement | null) => {
+  if (!dialog) return;
+  dialog.showModal();
+  return () => dialog.close();
+};
+
+const ModalContent = ({
   isOpen,
   onClose,
   initialView = 'log',
   resetToken,
-}) => {
-  const [modalWindow, setModalWindow] =
-    React.useState<TAuthModalView>(initialView);
+}: TModalWindowProps) => {
+  const [modalWindow, setModalWindow] = useState(initialView);
 
   const handleSetModalOpen = (open: boolean) => {
     if (!open) onClose();
@@ -68,12 +80,24 @@ const ModalContent: FC<TModalWindowProps> = ({
     return null;
   };
 
-  if (!isOpen) return null;
-
-  return createPortal(renderContent(), document.body);
+  return createPortal(
+    <dialog
+      className={styles.dialog}
+      aria-label={dialogLabels[modalWindow]}
+      key={modalWindow}
+      ref={openDialog}
+      onCancel={(event) => {
+        event.preventDefault();
+        onClose();
+      }}
+    >
+      {renderContent()}
+    </dialog>,
+    document.body,
+  );
 };
 
-const ModalWindow: FC<TModalWindowProps> = (props) => {
+const ModalWindow = (props: TModalWindowProps) => {
   if (!props.isOpen) return null;
   return <ModalContent key={props.initialView ?? 'log'} {...props} />;
 };

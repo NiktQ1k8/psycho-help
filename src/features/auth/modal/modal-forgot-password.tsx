@@ -118,12 +118,13 @@ const ModalForgotPassword = ({
                   {isLoading ? 'Отправка...' : 'Восстановить'}
                 </button>
                 <p className={styles.Suggestion}>
-                  <a
+                  <button
                     className={styles.ModalSwitcher}
+                    type="button"
                     onClick={() => setWindow('log')}
                   >
                     Вернуться ко входу
-                  </a>
+                  </button>
                 </p>
               </div>
             </form>

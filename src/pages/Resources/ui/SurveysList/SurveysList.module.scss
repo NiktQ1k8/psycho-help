@@ -1,0 +1,23 @@
+.list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+}
+
+@media (width <= 1023px) {
+  .list {
+    gap: 12px;
+  }
+}
+
+@media (width <= 633px) {
+  .list {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}

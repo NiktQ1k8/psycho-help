@@ -1,3 +1,24 @@
+.dialog {
+  inset: 0;
+
+  overflow: visible;
+
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  border: 0;
+
+  color: inherit;
+
+  background: transparent;
+
+  &::backdrop {
+    background: transparent;
+  }
+}
+
 .modalOverlay {
   position: fixed;
   z-index: 1000;
@@ -93,7 +114,8 @@
   margin-top: 24px;
 }
 
-.form label {
+.form label,
+.field {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -131,6 +153,14 @@
   @include text-xsmall;
 
   color: var(--labels-danger-primary);
+}
+
+.forgotLink,
+.ModalSwitcher {
+  cursor: pointer;
+  border: none;
+  font: inherit;
+  background: none;
 }
 
 .forgotLink {
@@ -205,9 +235,12 @@
 }
 
 .ModalSwitcher {
-  cursor: pointer;
+  align-self: flex-start;
+
   color: var(--interactive-brand-primary);
+  text-align: start;
   text-decoration: none;
+
   transition: color 0.3s;
 }
 

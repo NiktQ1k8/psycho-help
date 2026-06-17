@@ -35,6 +35,7 @@ import { usePsychologistView } from '@/features/personal-cabinet/model/psycholog
 import Logout from '@/pages/Logout/Logout';
 import { $api, $serviceClient } from '@/shared/api/http';
 import { queryClient } from '@/shared/api/queryClient';
+import { SLUG } from '@/shared/config/slug';
 import { setupSession } from './setupSession';
 
 const user: TUser = {
@@ -83,9 +84,12 @@ const SessionRoutes = () => {
   if (isAppLoading) return null;
   return (
     <Routes>
-      <Route element={<Logout />} path="/logout" />
-      <Route element={<Link to="/">На главную</Link>} path="/reset-password" />
-      <Route element={<p>Главная</p>} path="/" />
+      <Route element={<Logout />} path={SLUG.LOGOUT} />
+      <Route
+        element={<Link to={SLUG.MAIN}>На главную</Link>}
+        path={SLUG.RESET_PASSWORD}
+      />
+      <Route element={<p>Главная</p>} path={SLUG.MAIN} />
     </Routes>
   );
 };
@@ -140,7 +144,7 @@ afterAll(() => {
 
 describe('Авторизация и сессия', () => {
   it('проверяет сессию после перехода со страницы восстановления на главную', async () => {
-    renderSession('/reset-password');
+    renderSession(SLUG.RESET_PASSWORD);
     expect(requests).toEqual([]);
     fireEvent.click(screen.getByRole('link', { name: 'На главную' }));
     await screen.findByText('Главная');
@@ -148,19 +152,19 @@ describe('Авторизация и сессия', () => {
   });
 
   it('при запуске под StrictMode проверяет пользователя одним запросом', async () => {
-    renderSession('/');
+    renderSession(SLUG.MAIN);
     await screen.findByText('Главная');
     expect(requests).toEqual(['/api/users/user']);
     expect(useAuth.getState()).toMatchObject({ isAuth: true, user });
   });
 
-  it('на /logout отправляет один запрос выхода без повторной проверки сессии', async () => {
+  it('на странице выхода отправляет один запрос без повторной проверки сессии', async () => {
     useAuth.setState({ isAuth: true, user });
     respond = (config) => {
       if (config.url !== '/users/logout') fail(config);
       return response(config, null);
     };
-    renderSession('/logout');
+    renderSession(SLUG.LOGOUT);
     await screen.findByText('Главная');
     expect(requests).toEqual(['/api/users/logout']);
     expect(useAuth.getState()).toMatchObject({ isAuth: false, user: null });
@@ -226,7 +230,7 @@ describe('Авторизация и сессия', () => {
     'успешный %s сохраняет пользователя и очищает старый кэш',
     async (action) => {
       respond = (config) => fail(config);
-      renderSession('/');
+      renderSession(SLUG.MAIN);
       await screen.findByText('Главная');
       requests = [];
       queryClient.setQueryData(['appointment.list'], ['private data']);

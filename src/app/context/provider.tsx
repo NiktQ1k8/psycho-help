@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
-import { useLocation } from 'react-router-dom';
+import { matchPath, useLocation } from 'react-router-dom';
 import { Button, Result } from 'antd';
 import { useAuth } from '@/entities/auth/model/useAuth';
 import { useFetch } from '@/shared/api/useFetch';
@@ -43,7 +43,17 @@ export const AppContextProvider = ({ children }: TProps) => {
 
   const memoizedValues = useMemo(() => ({ isAppLoading }), [isAppLoading]);
 
-  if (!skipUserRequest && error.message && error.status !== 401) {
+  const isPublicResource =
+    matchPath(SLUG.RESOURCES, pathname) ||
+    matchPath(`${SLUG.ARTICLE}/:id?`, pathname) ||
+    matchPath(`${SLUG.TEST}/:id?`, pathname);
+
+  if (
+    !skipUserRequest &&
+    !isPublicResource &&
+    error.message &&
+    error.status !== 401
+  ) {
     return (
       <Result
         extra={

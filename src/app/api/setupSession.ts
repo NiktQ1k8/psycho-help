@@ -7,6 +7,7 @@ import { useAppointmentBooking } from '@/features/personal-cabinet/model/appoint
 import { useCabinetDrafts } from '@/features/personal-cabinet/model/cabinet-drafts';
 import { usePsychologistDrafts } from '@/features/personal-cabinet/model/psychologist-drafts';
 import { usePsychologistView } from '@/features/personal-cabinet/model/psychologist-view';
+import { useResourceAttempts } from '@/features/resource-questionnaire/model/attempts';
 import { $api } from '@/shared/api/http';
 
 type TSessionRequestConfig = InternalAxiosRequestConfig & { _retry?: boolean };
@@ -15,6 +16,9 @@ export const setupSession = () => {
   const unsubscribe = useAuth.subscribe((state, previous) => {
     if (state.user?.id !== previous.user?.id) {
       useAuthDrafts.setState(useAuthDrafts.getInitialState(), true);
+      if (previous.user) {
+        useResourceAttempts.getState().clearUserDrafts(previous.user.id);
+      }
     }
     if (state.user && (!previous.user || state.user.id === previous.user.id)) {
       return;

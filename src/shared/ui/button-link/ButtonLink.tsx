@@ -24,7 +24,7 @@ const variantClasses = {
  *
  * @example
  * <ButtonLink type="submit">Сохранить</ButtonLink>
- * <ButtonLink to="/therapists">Специалисты</ButtonLink>
+ * <ButtonLink to={SLUG.THERAPISTS}>Специалисты</ButtonLink>
  * <ButtonLink href="/guide.pdf" download>Скачать</ButtonLink>
  */
 export const ButtonLink = ({

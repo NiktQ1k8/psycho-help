@@ -322,12 +322,13 @@ const ModalRegistration: React.FC<TAuthModalProps> = ({
             </button>
             <p className={styles.Suggestion}>
               <span>У вас уже есть учётная запись?</span>{' '}
-              <a
+              <button
                 className={styles.ModalSwitcher}
+                type="button"
                 onClick={() => setWindow('log')}
               >
                 Войти
-              </a>
+              </button>
             </p>
           </div>
         </form>

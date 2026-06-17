@@ -170,12 +170,13 @@ const ModalChangePassword = ({
                 {isLoading ? 'Сохранение...' : 'Сохранить пароль'}
               </button>
               <p className={styles.Suggestion}>
-                <a
+                <button
                   className={styles.ModalSwitcher}
+                  type="button"
                   onClick={() => setWindow('forgot')}
                 >
                   Запросить новое письмо
-                </a>
+                </button>
               </p>
             </div>
           </form>

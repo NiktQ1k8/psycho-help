@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { type ChangeEvent, useId, useState } from 'react';
 import { getAuthErrorMessage } from '@/entities/auth/model/auth-errors';
 import { validateProfileField } from '@/entities/auth/model/profile-form';
 import { useAuth } from '@/entities/auth/model/useAuth';
@@ -14,11 +14,8 @@ const INITIAL_FORM_VALUE = {
   password: '',
 };
 
-const ModalLogin: React.FC<TAuthModalProps> = ({
-  setWindow,
-  isOpen,
-  setModalOpen,
-}) => {
+const ModalLogin = ({ setWindow, isOpen, setModalOpen }: TAuthModalProps) => {
+  const fieldId = useId();
   const email = useAuthDrafts((state) => state.loginEmail);
   const setEmail = useAuthDrafts((state) => state.setLoginEmail);
   const [password, setPassword] = useState('');
@@ -62,7 +59,7 @@ const ModalLogin: React.FC<TAuthModalProps> = ({
     setModalOpen(false);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     clearError();
     if (name === 'email') setEmail(value);
@@ -83,6 +80,7 @@ const ModalLogin: React.FC<TAuthModalProps> = ({
           <button
             className={styles.closeButton}
             aria-label="Закрыть окно входа"
+            type="button"
             onClick={handleCancel}
           >
             ✕
@@ -97,14 +95,17 @@ const ModalLogin: React.FC<TAuthModalProps> = ({
           }}
         >
           <div className={styles.form}>
-            <label>
-              <span>Электронная почта</span>
+            <div className={styles.field}>
+              <label htmlFor={`${fieldId}-email`}>Электронная почта</label>
               <input
                 className={styles.input}
-                aria-details="Строка для ввода электронной почты"
+                aria-describedby={
+                  errors.email ? `${fieldId}-email-error` : undefined
+                }
                 aria-invalid={!!errors.email}
                 autoComplete="email"
                 disabled={isLoading}
+                id={`${fieldId}-email`}
                 maxLength={64}
                 name="email"
                 placeholder="Введите почту"
@@ -119,17 +120,26 @@ const ModalLogin: React.FC<TAuthModalProps> = ({
                 onChange={handleInputChange}
               />
               {errors.email && (
-                <span className={styles.errorText}>{errors.email}</span>
+                <span
+                  className={styles.errorText}
+                  id={`${fieldId}-email-error`}
+                >
+                  {errors.email}
+                </span>
               )}
-            </label>
-            <label>
-              <span>Пароль</span>
+            </div>
+            <div className={styles.field}>
+              <label htmlFor={`${fieldId}-password`}>Пароль</label>
               <div className={styles.passwordWrapper}>
                 <input
                   className={styles.passwordInput}
+                  aria-describedby={
+                    errors.password ? `${fieldId}-password-error` : undefined
+                  }
                   aria-invalid={!!errors.password}
                   autoComplete="current-password"
                   disabled={isLoading}
+                  id={`${fieldId}-password`}
                   maxLength={64}
                   name="password"
                   placeholder="Введите пароль"
@@ -150,18 +160,21 @@ const ModalLogin: React.FC<TAuthModalProps> = ({
                 </button>
               </div>
               {errors.password && (
-                <span className={styles.errorText}>{errors.password}</span>
+                <span
+                  className={styles.errorText}
+                  id={`${fieldId}-password-error`}
+                >
+                  {errors.password}
+                </span>
               )}
-            </label>
-            <a
+            </div>
+            <button
               className={styles.forgotLink}
-              onClick={(e) => {
-                e.preventDefault();
-                setWindow('forgot');
-              }}
+              type="button"
+              onClick={() => setWindow('forgot')}
             >
               Забыли пароль?
-            </a>
+            </button>
           </div>
 
           {error.message && (
@@ -180,12 +193,13 @@ const ModalLogin: React.FC<TAuthModalProps> = ({
             </button>
             <p className={styles.Suggestion}>
               <span>У вас еще нет учетной записи?</span>{' '}
-              <a
+              <button
                 className={styles.ModalSwitcher}
+                type="button"
                 onClick={() => setWindow('reg')}
               >
                 Регистрация
-              </a>
+              </button>
             </p>
           </div>
         </form>

@@ -1,0 +1,41 @@
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+  padding: 0 12px;
+}
+
+.item {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.icon {
+  color: var(--border-neutral-strong);
+  opacity: 0.5;
+}
+
+.text {
+  @include text-large;
+}
+
+@media (width <= 633px) {
+  .list {
+    gap: 20px;
+  }
+
+  .item {
+    padding: 0;
+  }
+
+  .text {
+    @include text-medium;
+  }
+}
+
+[data-theme='dark'] {
+  .icon {
+    color: var(--border-neutral-inverted);
+  }
+}

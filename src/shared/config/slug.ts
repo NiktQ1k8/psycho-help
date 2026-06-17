@@ -1,3 +1,5 @@
+const RESOURCES_BASE = '/resources';
+
 export const SLUG = {
   /** Главная страница */
   MAIN: '/',
@@ -15,13 +17,22 @@ export const SLUG = {
   NEWS: '/news',
 
   /** Полезные материалы */
-  RESOURCES: '/resources',
+  RESOURCES: RESOURCES_BASE,
+  /** Полезные материалы / Статьи */
+  RESOURCES_ARTICLES: `${RESOURCES_BASE}?entity=articles`,
+  /** Полезные материалы / Тесты */
+  RESOURCES_TESTS: `${RESOURCES_BASE}?entity=tests`,
+  /** Полезные материалы / Опросы */
+  RESOURCES_SURVEYS: `${RESOURCES_BASE}?entity=surveys`,
 
   /** Статья */
   ARTICLE: '/article',
 
   /** Тест */
   TEST: '/test',
+
+  /** Опрос */
+  SURVEY: '/survey',
 
   /** FAQ */
   FAQ: '/faq',

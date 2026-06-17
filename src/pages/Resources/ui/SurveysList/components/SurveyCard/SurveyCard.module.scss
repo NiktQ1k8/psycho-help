@@ -1,0 +1,129 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  padding: 10px 8px 16px;
+  border: 1px solid var(--border-neutral-base);
+  border-radius: 28px;
+
+  background-color: var(--backgrounds-neutral-primary);
+
+  transition:
+    border-color 0.3s,
+    background-color 0.3s;
+}
+
+.imageWrapper {
+  position: relative;
+  overflow: hidden;
+  height: 288px;
+  border-radius: 24px;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 0 16px;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 8px;
+}
+
+.title {
+  font: var(--font-h4);
+  color: var(--interactive-neutral-primary);
+  transition: color 0.3s;
+}
+
+.description {
+  font: var(--font-text-medium);
+  color: var(--labels-neutral-secondary);
+  transition: color 0.3s;
+}
+
+.info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 25px;
+  padding: 0 12px;
+}
+
+.infoItem {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.infoIcon {
+  width: 24px;
+  color: var(--labels-neutral-primary);
+  transition: color 0.3s;
+}
+
+.infoValue {
+  font: var(--font-text-large);
+  color: var(--interactive-neutral-primary);
+  transition: color 0.3s;
+}
+
+@media (width <= 1023px) {
+  .content {
+    padding: 0 8px;
+  }
+}
+
+@media (width <= 633px) {
+  .info {
+    gap: 20px;
+    padding: 0;
+  }
+
+  .infoValue {
+    font: var(--font-text-medium);
+  }
+}
+
+.bottomSlot {
+  margin-top: auto;
+}
+
+.button {
+  width: 100%;
+  padding: 16px;
+  border-radius: 16px;
+}
+
+[data-theme='dark'] {
+  .card {
+    border-color: var(--border-neutral-inverted);
+    background-color: var(--backgrounds-neutral-inverted);
+  }
+
+  .title {
+    color: var(--labels-neutral-inverted-primary);
+  }
+
+  .description {
+    color: var(--interactive-neutral-active-secondary);
+  }
+
+  .infoIcon {
+    color: var(--labels-neutral-inverted-primary);
+  }
+
+  .infoValue {
+    color: var(--labels-neutral-inverted-primary);
+  }
+}

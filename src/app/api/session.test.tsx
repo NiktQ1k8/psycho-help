@@ -35,6 +35,7 @@ import { usePsychologistView } from '@/features/personal-cabinet/model/psycholog
 import Logout from '@/pages/Logout/Logout';
 import { $api, $serviceClient } from '@/shared/api/http';
 import { queryClient } from '@/shared/api/queryClient';
+import { SLUG } from '@/shared/config/slug';
 import { setupSession } from './setupSession';
 
 const user: TUser = {
@@ -83,9 +84,12 @@ const SessionRoutes = () => {
   if (isAppLoading) return null;
   return (
     <Routes>
-      <Route element={<Logout />} path="/logout" />
-      <Route element={<Link to="/">На главную</Link>} path="/reset-password" />
-      <Route element={<p>Главная</p>} path="/" />
+      <Route element={<Logout />} path={SLUG.LOGOUT} />
+      <Route
+        element={<Link to="/">На главную</Link>}
+        path={SLUG.RESET_PASSWORD}
+      />
+      <Route element={<p>Главная</p>} path={SLUG.MAIN} />
     </Routes>
   );
 };

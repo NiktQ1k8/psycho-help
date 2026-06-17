@@ -20,19 +20,24 @@ const NewsItem = lazy(() =>
     default: module.NewsItem,
   })),
 );
-const ResourcesPage = lazy(() =>
-  import('@/pages/resources-page').then((module) => ({
-    default: module.ResourcesPage,
+const Resources = lazy(() =>
+  import('@/pages/Resources/ui/Resources/Resources').then((module) => ({
+    default: module.Resources,
   })),
 );
-const ArticlePage = lazy(() =>
-  import('@/pages/article-page/ArticlePage').then((module) => ({
-    default: module.ArticlePage,
+const Article = lazy(() =>
+  import('@/pages/Article/Article').then((module) => ({
+    default: module.Article,
   })),
 );
-const TestPage = lazy(() =>
-  import('@/pages/test-page').then((module) => ({
-    default: module.TestPage,
+const Test = lazy(() =>
+  import('@/pages/Test/ui/Test/Test').then((module) => ({
+    default: module.Test,
+  })),
+);
+const Survey = lazy(() =>
+  import('@/pages/Survey/ui/Survey/Survey').then((module) => ({
+    default: module.Survey,
   })),
 );
 const FaqPage = lazy(() => import('@/pages/faq-page/faq-page'));
@@ -88,16 +93,20 @@ export const routes: IRoutePath[] = [
   },
   {
     path: SLUG.RESOURCES,
-    Component: ResourcesPage,
+    Component: Resources,
     navText: 'Полезные материалы',
   },
   {
     path: `${SLUG.ARTICLE}/:id`,
-    Component: ArticlePage,
+    Component: Article,
   },
   {
     path: `${SLUG.TEST}/:id`,
-    Component: TestPage,
+    Component: Test,
+  },
+  {
+    path: `${SLUG.SURVEY}/:id`,
+    Component: Survey,
   },
   {
     path: SLUG.FAQ,

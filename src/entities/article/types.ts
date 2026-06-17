@@ -1,10 +1,8 @@
 export type TArticle = {
   id: string;
-  slug: string;
-  image: string | null;
-  date: string | null;
-  author: string | null;
+  image?: string;
   title: string;
-  description: string | null;
   text: string;
+  author?: string;
+  date?: string;
 };

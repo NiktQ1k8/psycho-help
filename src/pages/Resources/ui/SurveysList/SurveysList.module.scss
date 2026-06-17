@@ -1,0 +1,49 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.passList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (width <= 1023px) {
+  .wrapper {
+    gap: 36px;
+  }
+
+  .passList {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+}
+
+@media (width <= 633px) {
+  .wrapper {
+    gap: 20px;
+  }
+
+  .passList {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+.loadMoreTrigger {
+  width: 100%;
+  height: 1px;
+}
+
+.passList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  > li {
+    display: grid;
+    min-width: 0;
+  }
+}

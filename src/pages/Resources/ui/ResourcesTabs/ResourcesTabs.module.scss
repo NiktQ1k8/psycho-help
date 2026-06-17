@@ -1,0 +1,105 @@
+.tabsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.tabList {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.tab {
+  cursor: pointer;
+
+  display: block;
+
+  width: 187px;
+  padding: 16px;
+  border: none;
+  border-radius: 12px;
+
+  font: var(--font-text-large-button);
+  color: var(--labels-neutral-primary);
+  text-align: center;
+  text-decoration: none;
+
+  background: var(--interactive-neutral-secondary);
+
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+.tab:not([aria-current='page']):hover {
+  @media (hover: hover) {
+    color: var(--labels-brand-primary);
+    background: var(--interactive-brand-hover-secondary);
+  }
+}
+
+.tab[aria-current='page'] {
+  cursor: default;
+  color: var(--labels-neutral-inverted-primary);
+  background: var(--interactive-brand-primary);
+}
+
+.tab:focus-visible {
+  outline: 2px solid var(--labels-brand-primary);
+  outline-offset: 4px;
+}
+
+@media (width <= 1023px) {
+  .tabsContainer {
+    gap: 36px;
+  }
+
+  .tabList {
+    gap: 12px;
+  }
+
+  .tab {
+    width: 110px;
+    padding: 10px;
+  }
+}
+
+@media (width <= 633px) {
+  .tabsContainer {
+    gap: 20px;
+  }
+
+  .tabList {
+    gap: 10px;
+  }
+
+  .tab {
+    width: 85px;
+    padding: 7.5px;
+    font: var(--font-text-medium-button);
+  }
+}
+
+[data-theme='dark'] {
+  .tab {
+    background: var(--interactive-brand-secondary);
+  }
+
+  .tab[aria-current='page'] {
+    background: var(--interactive-brand-active);
+  }
+
+  .tab:focus-visible {
+    outline-color: var(--labels-brand-tetriary);
+  }
+}
+
+@media (forced-colors: active) {
+  .tab[aria-current='page'],
+  [data-theme='dark'] .tab[aria-current='page'] {
+    color: HighlightText;
+    forced-color-adjust: none;
+    background: Highlight;
+  }
+}

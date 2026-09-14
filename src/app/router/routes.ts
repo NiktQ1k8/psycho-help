@@ -75,8 +75,12 @@ export const routes: RoutePath[] = [
     Component: NewsPage,
     navText: 'Новости',
   },
+  // {
+  //   path: '/news/:slug',
+  //   Component: NewsItemPage,
+  // },
   {
-    path: '/news/:slug',
+    path: '/news/:id',
     Component: NewsItemPage,
   },
   {

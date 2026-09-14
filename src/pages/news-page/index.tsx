@@ -1,15 +1,14 @@
-import styles from './NewsPage.module.scss';
-import NewsList from '@/features/news/news-list';
+import { newsQueries } from '@/entities/news/api/queries';
+import { NewsBanner } from '@/pages/news-page/components/news-banner/NewsBanner';
+import { NewsHero } from '@/pages/news-page/components/news-hero/NewsHero';
+import { NewsList } from '@/pages/news-page/components/news-list/NewsList';
 import Loader from '@/shared/ui/loader/loader';
 import { useQuery } from '@tanstack/react-query';
-import { newsItemQueries } from '@/entities/news/api/queries';
 import { Result } from 'antd';
-import newsHeroImage from '@/shared/assets/images/news/news-hero-image.png';
-import telegramIcon from '@/shared/assets/images/news/telegram-icon.svg';
-// import { Button } from '@/shared/ui';
+import styles from './NewsPage.module.scss';
 
 export const NewsPage = () => {
-  const { data: news, isLoading, error } = useQuery(newsItemQueries.list());
+  const { data: news, isLoading, error } = useQuery(newsQueries.list());
 
   if (isLoading) {
     return (
@@ -27,37 +26,13 @@ export const NewsPage = () => {
   }
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.blue}>
-        <div className={styles.hero}>
-          <h1 className={styles.title}>Новости</h1>
-          <img src={newsHeroImage} alt="Изображение новости" className={styles.image} />
-          <p className={styles.text}>
-            Здесь вы всегда будете в курсе последних событий, анонсов и изменений в работе нашей
-            Службы психологической помощи.
-          </p>
-        </div>
-      </div>
+    <div className={styles.news}>
+      <NewsHero />
 
       <div className={styles.listWrapper}>
         <NewsList news={news} />
 
-        <div className={styles.telegramBanner}>
-          <h2 className={styles.telegramTitle}>Новости в нашем Telegram</h2>
-          <p className={styles.telegramText}>
-            Подпишитесь, чтобы узнавать актуальную информацию самыми первыми
-          </p>
-          <img src={telegramIcon} alt="Telegram" className={styles.telegramIcon} />
-          <a
-            href="https://vk.com/spp_polytech"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.telegramLink}
-          >
-            Подписаться
-            {/* <Button variant="primary">Подписаться</Button> */}
-          </a>
-        </div>
+        <NewsBanner />
       </div>
     </div>
   );

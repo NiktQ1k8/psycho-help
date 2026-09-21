@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import styles from './Title.module.scss';
-import doctorImg from '@/shared/assets/images/doctors/titleImg.svg';
 import ComputerIcon from '@/shared/assets/images/doctors/computer.svg?react';
+import doctorImg from '@/shared/assets/images/doctors/titleImg.svg';
 import UserIcon from '@/shared/assets/images/doctors/user.svg?react';
+import styles from './Title.module.scss';
 
 const Title = () => {
   const [activeTab, setActiveTab] = useState<'personal' | 'online'>('personal');
@@ -12,8 +12,9 @@ const Title = () => {
         <div className={styles.content}>
           <h1 className={styles.title}>Психологи</h1>
           <p className={styles.text}>
-            На этой странице с психологами вы найдёте широкий выбор специалистов, которые помогут
-            вам справиться с различными жизненными ситуациями.
+            На этой странице с психологами вы найдёте широкий выбор
+            специалистов, которые помогут вам справиться с различными жизненными
+            ситуациями.
           </p>
           <div className={styles.containerTabButton}>
             <div className={styles.tabs}>
@@ -40,7 +41,11 @@ const Title = () => {
             </button>
           </div>
         </div>
-        <img src={doctorImg} alt="Изображение диалога с психологом" className={styles.titleImg} />
+        <img
+          src={doctorImg}
+          alt="Изображение диалога с психологом"
+          className={styles.titleImg}
+        />
       </div>
     </div>
   );

@@ -1,15 +1,17 @@
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  EnvironmentOutlined,
+  PlusOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
 import { Button, DatePicker } from 'antd';
-import { PlusOutlined, UserOutlined, EnvironmentOutlined } from '@ant-design/icons';
+import clsx from 'clsx';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
-import clsx from 'clsx';
-
 import { appointmentQueries } from '@/entities/appointment/api';
 import Loader from '@/shared/ui/loader/loader';
-
 import styles from './PsychologistDashboard.module.scss';
 
 const DAY_HOURS = Array.from({ length: 11 }, (_, i) => i + 9);
@@ -19,12 +21,16 @@ interface PsychologistDashboardProps {
   onBookClick?: () => void;
 }
 
-const PsychologistDashboard: React.FC<PsychologistDashboardProps> = ({ onBookClick }) => {
+const PsychologistDashboard: React.FC<PsychologistDashboardProps> = ({
+  onBookClick,
+}) => {
   const navigate = useNavigate();
   const [currentDate, setCurrentDate] = useState<Dayjs>(dayjs());
   const [selectedAptId, setSelectedAptId] = useState<string | null>(null);
 
-  const { data: appointments = [], isLoading: isLoadingApts } = useQuery(appointmentQueries.list());
+  const { data: appointments = [], isLoading: isLoadingApts } = useQuery(
+    appointmentQueries.list(),
+  );
 
   const todaysAppointments = useMemo(() => {
     const startOfDay = currentDate.startOf('day').valueOf();
@@ -99,7 +105,11 @@ const PsychologistDashboard: React.FC<PsychologistDashboardProps> = ({ onBookCli
           <div className={styles.scheduleGrid}>
             <div className={styles.timeLabels}>
               {DAY_HOURS.map((hour) => (
-                <div key={hour} className={styles.timeLabelRow} style={{ height: HOUR_HEIGHT }}>
+                <div
+                  key={hour}
+                  className={styles.timeLabelRow}
+                  style={{ height: HOUR_HEIGHT }}
+                >
                   <span
                     className={styles.timeText}
                   >{`${hour.toString().padStart(2, '0')}:00`}</span>
@@ -120,21 +130,34 @@ const PsychologistDashboard: React.FC<PsychologistDashboardProps> = ({ onBookCli
                 const durationHeight = HOUR_HEIGHT;
 
                 const venueStr =
-                  apt.type === 'Online' ? 'Онлайн' : apt.venue ? `${apt.venue}` : 'Очно';
+                  apt.type === 'Online'
+                    ? 'Онлайн'
+                    : apt.venue
+                      ? `${apt.venue}`
+                      : 'Очно';
 
                 if (aptTime.hour() < 9 || aptTime.hour() > 19) return null;
 
                 return (
                   <div
                     key={apt.id}
-                    className={clsx(styles.eventCard, isSelected && styles.eventCardActive)}
-                    style={{ top: `${topPosition}px`, height: `${durationHeight}px` }}
+                    className={clsx(
+                      styles.eventCard,
+                      isSelected && styles.eventCardActive,
+                    )}
+                    style={{
+                      top: `${topPosition}px`,
+                      height: `${durationHeight}px`,
+                    }}
                     onClick={() => setSelectedAptId(apt.id)}
                   >
-                    <div className={styles.eventTime}>{getTimeRange(apt.scheduled_time)}</div>
+                    <div className={styles.eventTime}>
+                      {getTimeRange(apt.scheduled_time)}
+                    </div>
                     <div className={styles.eventName}>
-                      {[apt.patient.first_name, apt.patient.last_name].join(' ') ||
-                        'Пациент не указан'}
+                      {[apt.patient.first_name, apt.patient.last_name].join(
+                        ' ',
+                      ) || 'Пациент не указан'}
                     </div>
                     <div className={styles.eventVenue}>{venueStr}</div>
                   </div>
@@ -181,7 +204,9 @@ const PsychologistDashboard: React.FC<PsychologistDashboardProps> = ({ onBookCli
               <Button
                 type="primary"
                 className={styles.btnNavigate}
-                onClick={() => navigate(`/cabinet/appointment/${selectedAppointment.id}`)}
+                onClick={() =>
+                  navigate(`/cabinet/appointment/${selectedAppointment.id}`)
+                }
               >
                 Перейти к записи
               </Button>

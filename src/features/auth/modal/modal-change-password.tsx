@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useFetch } from '@/shared/api/useFetch';
-import styles from './modal.module.css';
+import styles from './Modal.module.scss';
 import EyeIcon from './icons/Eye.svg?react';
 import EyeOffIcon from './icons/EyeOff.svg?react';
 
@@ -10,7 +10,11 @@ type Tprops = {
   setModalOpen: (param: boolean) => void;
 };
 
-const ModalChangePassword: React.FC<Tprops> = ({ setWindow, isOpen, setModalOpen }) => {
+const ModalChangePassword: React.FC<Tprops> = ({
+  setWindow,
+  isOpen,
+  setModalOpen,
+}) => {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -33,8 +37,10 @@ const ModalChangePassword: React.FC<Tprops> = ({ setWindow, isOpen, setModalOpen
   const validate = () => {
     const newErrors = { current: '', new: '', confirm: '' };
     if (!currentPassword) newErrors.current = 'Введите текущий пароль';
-    if (newPassword.length < 8) newErrors.new = 'Пароль должен содержать не менее 8 символов';
-    if (newPassword !== confirmPassword) newErrors.confirm = 'Пароли не совпадают';
+    if (newPassword.length < 8)
+      newErrors.new = 'Пароль должен содержать не менее 8 символов';
+    if (newPassword !== confirmPassword)
+      newErrors.confirm = 'Пароли не совпадают';
     setErrors(newErrors);
     return Object.values(newErrors).every((v) => v === '');
   };
@@ -60,7 +66,11 @@ const ModalChangePassword: React.FC<Tprops> = ({ setWindow, isOpen, setModalOpen
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeaderPassword}>
           <h2 className={styles.modalTitle}>Смена пароля</h2>
-          <button className={styles.closeButton} onClick={handleCancel} aria-label="Закрыть">
+          <button
+            className={styles.closeButton}
+            onClick={handleCancel}
+            aria-label="Закрыть"
+          >
             ✕
           </button>
         </div>
@@ -85,7 +95,9 @@ const ModalChangePassword: React.FC<Tprops> = ({ setWindow, isOpen, setModalOpen
                 {showCurrent ? <EyeIcon /> : <EyeOffIcon />}
               </button>
             </div>
-            {errors.current && <p className={styles.errorText}>{errors.current}</p>}
+            {errors.current && (
+              <p className={styles.errorText}>{errors.current}</p>
+            )}
           </label>
 
           <label>
@@ -135,14 +147,22 @@ const ModalChangePassword: React.FC<Tprops> = ({ setWindow, isOpen, setModalOpen
                 {showConfirm ? <EyeIcon /> : <EyeOffIcon />}
               </button>
             </div>
-            {errors.confirm && <p className={styles.errorText}>{errors.confirm}</p>}
+            {errors.confirm && (
+              <p className={styles.errorText}>{errors.confirm}</p>
+            )}
           </label>
         </form>
 
-        {fetchError.message !== '' && <p className={styles.errorMessage}>{fetchError.message}</p>}
+        {fetchError.message !== '' && (
+          <p className={styles.errorMessage}>{fetchError.message}</p>
+        )}
 
         <div className={styles.footer}>
-          <button className={styles.submitButton} onClick={handleOk} disabled={isLoading}>
+          <button
+            className={styles.submitButton}
+            onClick={handleOk}
+            disabled={isLoading}
+          >
             {isLoading ? 'Загрузка...' : 'Сохранить'}
           </button>
           <p className={styles.Suggestion} style={{ marginTop: 12 }}>

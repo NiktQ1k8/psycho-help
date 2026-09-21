@@ -4,13 +4,20 @@
   padding: 1.2rem 1.6rem;
   border: 1px solid var(--color-border-neutral-soft);
   border-radius: 0.8rem;
+
   font-size: 1.6rem;
   color: var(--color-label-neutral-primary);
+
   background-color: var(--color-background-neutral-primary);
+  outline: none;
+
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
-  outline: none;
+
+  &::placeholder {
+    color: var(--color-label-neutral-quaternary);
+  }
 
   &:hover {
     border-color: var(--color-fill-neutral-primary);
@@ -18,16 +25,12 @@
 
   &:focus {
     border-color: var(--color-label-brand-secondary);
-    box-shadow: 0 0 0 3px rgba(64, 123, 254, 0.15);
-  }
-
-  &::placeholder {
-    color: var(--color-label-neutral-quaternary);
+    box-shadow: 0 0 0 3px rgb(64 123 254 / 15%);
   }
 
   &:disabled {
-    background-color: var(--color-background-neutral-secondary);
     cursor: not-allowed;
+    background-color: var(--color-background-neutral-secondary);
   }
 }
 
@@ -41,17 +44,21 @@
 
 // Миксин для редактируемого поля
 @mixin editable-field {
+  position: relative;
+
   display: flex;
-  align-items: center;
   gap: 0.8rem;
+  align-items: center;
+
   padding: 1.2rem;
   border: 1px solid var(--color-border-neutral-soft);
   border-radius: 0.8rem;
+
   background-color: var(--color-background-neutral-primary);
+
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
-  position: relative;
 
   &:hover {
     border-color: var(--color-fill-neutral-primary);
@@ -59,22 +66,25 @@
 
   &:focus-within {
     border-color: var(--color-label-brand-secondary);
-    box-shadow: 0 0 0 3px rgba(64, 123, 254, 0.15);
+    box-shadow: 0 0 0 3px rgb(64 123 254 / 15%);
   }
 
   &.editing {
     border-color: var(--color-label-brand-secondary);
-    box-shadow: 0 0 0 3px rgba(64, 123, 254, 0.15);
+    box-shadow: 0 0 0 3px rgb(64 123 254 / 15%);
   }
 
   input {
     flex: 1;
+
+    padding: 0;
     border: none;
-    outline: none;
+
     font-size: 1.6rem;
     color: var(--color-label-neutral-primary);
+
     background: transparent;
-    padding: 0;
+    outline: none;
 
     &::placeholder {
       color: var(--color-label-neutral-quaternary);
@@ -88,7 +98,7 @@
   gap: 2.4rem;
   max-width: 1200px;
 
-  @media (min-width: 634px) {
+  @media (width >= 634px) {
     grid-template-columns: 320px 1fr;
     gap: 3.2rem;
   }
@@ -97,23 +107,27 @@
 .avatarSection {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 1.6rem;
-  background-color: var(--color-background-neutral-primary);
+  align-items: center;
 
   font-family: var(--text-font-family);
+
+  background-color: var(--color-background-neutral-primary);
 }
 
 .avatar {
   position: relative;
-  width: 28.8rem;
-  height: 28.8rem;
-  border-radius: 50%;
-  background-color: var(--color-border-neutral-soft);
+
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+
+  width: 28.8rem;
+  height: 28.8rem;
+  border-radius: 50%;
+
+  background-color: var(--color-border-neutral-soft);
 
   img {
     width: 100%;
@@ -125,35 +139,38 @@
     font-size: 16.4rem;
     color: var(--color-label-neutral-secondary);
 
-    @media (min-width: 634px) and (max-width: 1023px) {
+    @media (width >= 634px) and (width <= 1023px) {
       font-size: 12rem;
     }
 
-    @media (max-width: 633px) {
+    @media (width <= 633px) {
       font-size: 10rem;
     }
   }
 
-  @media (min-width: 634px) and (max-width: 1023px) {
+  @media (width >= 634px) and (width <= 1023px) {
     width: 20rem;
     height: 20rem;
   }
 
-  @media (max-width: 633px) {
+  @media (width <= 633px) {
     width: 17rem;
     height: 17rem;
   }
 }
 
 .avatarUpload {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1.2rem;
   cursor: pointer;
-  padding: 0.8rem 1.6rem;
+
+  display: flex;
+  gap: 1.2rem;
+  align-items: center;
+  justify-content: center;
+
   margin-top: 1.2rem;
+  padding: 0.8rem 1.6rem;
   border-radius: 0.8rem;
+
   transition: background-color 0.2s ease;
 
   &:hover {
@@ -163,9 +180,9 @@
   }
 
   label {
-    color: var(--color-label-brand-primary);
-    font: var(--font-text-medium);
     cursor: pointer;
+    font: var(--font-text-medium);
+    color: var(--color-label-brand-primary);
   }
 
   svg {
@@ -183,30 +200,31 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  background-color: var(--color-background-neutral-primary);
 
-  font-family: var(--text-font-family);
   font: var(--font-text-medium);
+  font-family: var(--text-font-family);
+
+  background-color: var(--color-background-neutral-primary);
 }
 
 .header {
   display: flex;
+  gap: 1.6rem;
   align-items: center;
   justify-content: space-between;
-  gap: 1.6rem;
 
   h2 {
+    margin: 0;
     font-size: 2rem;
     font-weight: 600;
     color: var(--color-label-neutral-primary);
-    margin: 0;
   }
 }
 
 .nameWrapper {
   display: flex;
-  align-items: flex-start;
   gap: 1.2rem;
+  align-items: flex-start;
 
   .name {
     font-size: 2rem;
@@ -227,7 +245,7 @@
   grid-template-columns: 1fr;
   gap: 1.2rem;
 
-  @media (min-width: 634px) {
+  @media (width >= 634px) {
     grid-template-columns: repeat(3, 1fr);
   }
 }
@@ -239,6 +257,7 @@
 
   input {
     @include input-field;
+
     height: 4.8rem;
     padding: 1.2rem 1.6rem;
 
@@ -247,16 +266,16 @@
 
       &:focus {
         border-color: var(--color-label-danger-primary);
-        box-shadow: 0 0 0 3px rgba(255, 77, 79, 0.15);
+        box-shadow: 0 0 0 3px rgb(255 77 79 / 15%);
       }
     }
   }
 }
 
 .nameErrorText {
+  padding-left: 0.4rem;
   font-size: 1.2rem;
   color: var(--color-label-danger-primary);
-  padding-left: 0.4rem;
 }
 
 .nameActions {
@@ -266,14 +285,18 @@
 }
 
 .saveNameButton {
+  cursor: pointer;
+
   padding: 0.8rem 1.6rem;
-  background-color: var(--color-interactive-brand-primary);
-  color: var(--color-background-neutral-primary);
   border: none;
   border-radius: 0.8rem;
+
   font-size: 1.4rem;
   font-weight: 500;
-  cursor: pointer;
+  color: var(--color-background-neutral-primary);
+
+  background-color: var(--color-interactive-brand-primary);
+
   transition: background-color 0.2s ease;
 
   &:hover {
@@ -282,27 +305,34 @@
 }
 
 .cancelNameButton {
+  cursor: pointer;
+
   padding: 0.8rem 1.6rem;
-  background-color: transparent;
-  color: var(--color-label-neutral-secondary);
   border: 1px solid var(--color-border-neutral-soft);
   border-radius: 0.8rem;
+
   font-size: 1.4rem;
   font-weight: 500;
-  cursor: pointer;
+  color: var(--color-label-neutral-secondary);
+
+  background-color: transparent;
+
   transition: all 0.2s ease;
 
   &:hover {
-    background-color: var(--color-background-neutral-secondary);
     border-color: var(--color-fill-neutral-primary);
+    background-color: var(--color-background-neutral-secondary);
   }
 }
 
 .editButton {
-  border: none;
-  background: transparent;
   cursor: pointer;
+
+  border: none;
   border-radius: 0.4rem;
+
+  background: transparent;
+
   transition: background-color 0.2s ease;
 
   &:hover {
@@ -338,6 +368,7 @@
 
   .editableField {
     @include editable-field;
+
     height: 4.8rem;
 
     input {
@@ -346,25 +377,28 @@
   }
 
   .errorText {
+    margin-top: 0.4rem;
     font-size: 1.2rem;
     color: var(--color-label-danger-primary);
-    margin-top: 0.4rem;
   }
 }
 
 .passwordField {
   display: flex;
-  align-items: center;
   gap: 0.8rem;
+  align-items: center;
+
+  box-sizing: border-box;
+  height: 4.8rem;
   padding: 1.2rem;
   border: 1px solid var(--color-border-neutral-soft);
   border-radius: 0.8rem;
+
   background-color: var(--color-background-neutral-primary);
+
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
-  height: 4.8rem;
-  box-sizing: border-box;
 
   &:hover {
     border-color: var(--color-fill-neutral-primary);
@@ -372,18 +406,21 @@
 
   &:focus-within {
     border-color: var(--color-label-brand-secondary);
-    box-shadow: 0 0 0 3px rgba(64, 123, 254, 0.15);
+    box-shadow: 0 0 0 3px rgb(64 123 254 / 15%);
   }
 
   input {
     flex: 1;
+
+    height: 100%;
+    padding: 0;
     border: none;
-    outline: none;
+
     font-size: 1.6rem;
     color: var(--color-label-neutral-primary);
+
     background: transparent;
-    padding: 0;
-    height: 100%;
+    outline: none;
 
     &::placeholder {
       color: var(--color-label-neutral-quaternary);
@@ -395,14 +432,17 @@
   }
 
   .togglePassword {
-    background: none;
-    border: none;
     cursor: pointer;
-    padding: 0.4rem;
+
     display: flex;
+    flex-shrink: 0;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
+
+    padding: 0.4rem;
+    border: none;
+
+    background: none;
 
     svg {
       width: 2rem;
@@ -417,13 +457,16 @@
 }
 
 .changePasswordLink {
+  cursor: pointer;
+
+  margin-left: auto;
+  padding: 0;
+  border: none;
+
   font: var(--font-text-medium);
   color: var(--color-interactive-brand-primary);
+
   background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  margin-left: auto;
 
   &:hover {
     color: var(--color-interactive-brand-hover);
@@ -432,26 +475,30 @@
 
 .actions {
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
-
   gap: 1.2rem;
+  align-items: center;
+  justify-content: flex-end;
+
   padding-top: 1.6rem;
 }
 
 .logoutButton {
+  cursor: pointer;
+
   display: flex;
-  align-items: center;
   flex-direction: row-reverse;
   gap: 1.2rem;
-  background-color: transparent;
+  align-items: center;
 
   padding: 1.2rem 2rem;
-  color: var(--color-label-danger-primary);
   border: none;
   border-radius: 0.8rem;
+
   font: var(--font-text-large);
-  cursor: pointer;
+  color: var(--color-label-danger-primary);
+
+  background-color: transparent;
+
   transition: background-color 0.2s ease;
 
   &:hover {
@@ -459,8 +506,8 @@
   }
 
   &:disabled {
-    background-color: var(--color-interactive-neutral-disable);
     cursor: not-allowed;
+    background-color: var(--color-interactive-neutral-disable);
   }
 
   svg {
@@ -470,16 +517,21 @@
 }
 
 .saveButton {
+  cursor: pointer;
+
   display: flex;
-  align-items: center;
   gap: 0.8rem;
+  align-items: center;
+
   padding: 1.2rem 2rem;
-  background-color: var(--color-interactive-brand-primary);
-  color: var(--color-background-neutral-primary);
   border: none;
   border-radius: 0.8rem;
+
   font: var(--font-text-medium);
-  cursor: pointer;
+  color: var(--color-background-neutral-primary);
+
+  background-color: var(--color-interactive-brand-primary);
+
   transition: background-color 0.2s ease;
 
   &:hover {
@@ -487,8 +539,8 @@
   }
 
   &:disabled {
-    background-color: var(--color-interactive-neutral-disable);
     cursor: not-allowed;
+    background-color: var(--color-interactive-neutral-disable);
   }
 }
 
@@ -496,9 +548,11 @@
   .name {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .avatarSection {
     background-color: transparent;
   }
+
   .avatarIcon {
     color: color-mix(
       in srgb,
@@ -506,6 +560,7 @@
       var(--color-label-neutral-inverted-primary)
     );
   }
+
   .avatarUpload rect {
     fill: transparent;
   }
@@ -513,20 +568,24 @@
   .profileSection {
     background-color: transparent;
   }
+
   .editButton rect {
     fill: transparent;
   }
+
   .editButton path {
     stroke: var(--color-border-neutral-inverted);
   }
+
   .editButton:hover {
     background-color: var(--color-interactive-neutral-hover);
   }
 
   .nameFieldsRow input {
-    background-color: var(--color-fill-neutral-primary);
     color: var(--color-label-neutral-inverted-primary);
+    background-color: var(--color-fill-neutral-primary);
   }
+
   .nameFieldsRow input::placeholder {
     color: color-mix(
       in srgb,
@@ -534,46 +593,55 @@
       var(--color-label-neutral-inverted-primary)
     );
   }
+
   .cancelNameButton {
-    color: var(--color-label-neutral-inverted-primary);
     border: 1px solid
       color-mix(
         in srgb,
         var(--color-label-neutral-secondary),
         var(--color-label-neutral-inverted-primary)
       );
+    color: var(--color-label-neutral-inverted-primary);
   }
+
   .cancelNameButton:hover {
-    background-color: var(--color-interactive-neutral-hover-secondary);
     color: var(--color-interactive-neutral-active);
+    background-color: var(--color-interactive-neutral-hover-secondary);
   }
 
   .fieldsGrid label {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .selectDropdown {
     border: none;
   }
+
   .customSelect {
-    background-color: var(--color-fill-neutral-primary);
     color: var(--color-label-neutral-inverted-primary);
+    background-color: var(--color-fill-neutral-primary);
   }
+
   .selectArrow {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .selectOption {
-    background-color: var(--color-interactive-neutral-hover);
     color: var(--color-label-neutral-inverted-primary);
+    background-color: var(--color-interactive-neutral-hover);
+
     &.selected {
-      background-color: var(--color-fill-neutral-primary);
       color: var(--color-interactive-brand-primary);
+      background-color: var(--color-fill-neutral-primary);
     }
   }
 
   .editableField {
     background-color: var(--color-fill-neutral-primary);
+
     input {
       color: var(--color-label-neutral-inverted-primary);
+
       &::placeholder {
         color: color-mix(
           in srgb,
@@ -585,8 +653,9 @@
   }
 
   .passwordField {
-    background-color: var(--color-fill-neutral-primary);
     color: var(--color-label-neutral-inverted-primary);
+    background-color: var(--color-fill-neutral-primary);
+
     input::placeholder {
       color: color-mix(
         in srgb,

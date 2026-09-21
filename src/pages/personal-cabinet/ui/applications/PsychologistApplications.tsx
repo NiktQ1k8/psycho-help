@@ -1,28 +1,36 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Alert, Empty, Pagination, message } from 'antd';
 import { AxiosError } from 'axios';
-import dayjs from '@/shared/lib/dayjs';
 import clsx from 'clsx';
 import {
+  acceptApplication,
   applicationQueries,
   applicationQueryKey,
-  acceptApplication,
 } from '@/entities/application/api';
-import type { Application, ApplicationStatus, MeetingType } from '@/entities/application/types';
+import type {
+  Application,
+  ApplicationStatus,
+  MeetingType,
+} from '@/entities/application/types';
 import { useAuth } from '@/features/auth/api/useAuth';
 import { usePsychologistView } from '@/features/personal-cabinet/model/psychologist-view';
 import PsychologistListFilters from '@/features/personal-cabinet/ui/psychologist-filters/PsychologistFilters';
-import Loader from '@/shared/ui/loader/loader';
 import { ApplicationStatusTag } from '@/pages/personal-cabinet/constants';
+import dayjs from '@/shared/lib/dayjs';
+import Loader from '@/shared/ui/loader/loader';
 import styles from './PsychologistApplications.module.scss';
 
 const toMoscow = (date: string) => dayjs(date).tz();
 
 const ITEMS_PER_PAGE = 5;
 
-const CLOSED_STATUSES: ApplicationStatus[] = ['rejected', 'cancelled', 'expired'];
+const CLOSED_STATUSES: ApplicationStatus[] = [
+  'rejected',
+  'cancelled',
+  'expired',
+];
 
 const APPLICATION_STATUS_OPTIONS = [
   { value: 'all', label: 'Все статусы' },
@@ -40,8 +48,9 @@ const APPLICATION_FORMAT_OPTIONS = [
 ];
 
 const getPatientName = (application: Application) =>
-  [application.user?.last_name, application.user?.first_name].filter(Boolean).join(' ') ||
-  'Имя не указано';
+  [application.user?.last_name, application.user?.first_name]
+    .filter(Boolean)
+    .join(' ') || 'Имя не указано';
 
 const getShortPsychologistName = (
   user?: {
@@ -71,7 +80,9 @@ const getTimeRange = (time: string | null) => {
   return `${start.format('HH:mm')} - ${start.add(1, 'hour').format('HH:mm')}`;
 };
 
-const getMeetingType: (application: Application) => MeetingType = (application: Application) => {
+const getMeetingType: (application: Application) => MeetingType = (
+  application: Application,
+) => {
   if (application.meeting_type) return application.meeting_type;
   if (application.location_address) return 'offline';
   if (application.meeting_url) return 'online';
@@ -80,7 +91,8 @@ const getMeetingType: (application: Application) => MeetingType = (application: 
 };
 
 const getVenue = (application: Application) => {
-  if (getMeetingType(application) === 'online') return application.meeting_url || 'Онлайн';
+  if (getMeetingType(application) === 'online')
+    return application.meeting_url || 'Онлайн';
   return application.location_address || application.preferred_campus || 'Очно';
 };
 
@@ -121,8 +133,14 @@ const PsychologistApplications = () => {
   } = usePsychologistView();
 
   const filters = applicationFilters;
-  const { currentPage, sortDirection, statusFilter, formatFilter, searchQuery, dateRange } =
-    filters;
+  const {
+    currentPage,
+    sortDirection,
+    statusFilter,
+    formatFilter,
+    searchQuery,
+    dateRange,
+  } = filters;
 
   const hasActiveFilters =
     searchQuery !== '' ||
@@ -138,8 +156,10 @@ const PsychologistApplications = () => {
   } = useQuery(applicationQueries.list());
 
   const acceptMutation = useMutation({
-    mutationFn: (applicationId: string) => acceptApplication(applicationId, userId!),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: [applicationQueryKey.list] }),
+    mutationFn: (applicationId: string) =>
+      acceptApplication(applicationId, userId!),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: [applicationQueryKey.list] }),
     onError: (error: AxiosError<{ detail?: string }>) => {
       const detail = error.response?.data?.detail;
       message.error(detail || 'Не удалось выполнить операцию');
@@ -148,7 +168,9 @@ const PsychologistApplications = () => {
 
   const relevantApplications = useMemo(() => {
     return allApplications.filter(
-      (application) => application.status === 'new' || application.assigned_to_user?.id === userId,
+      (application) =>
+        application.status === 'new' ||
+        application.assigned_to_user?.id === userId,
     );
   }, [allApplications, userId]);
 
@@ -163,7 +185,9 @@ const PsychologistApplications = () => {
 
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
-      result = result.filter((a) => getPatientName(a).toLowerCase().includes(q));
+      result = result.filter((a) =>
+        getPatientName(a).toLowerCase().includes(q),
+      );
     }
 
     if (formatFilter !== 'all') {
@@ -184,7 +208,14 @@ const PsychologistApplications = () => {
 
     const dir = sortDirection === 'asc' ? 1 : -1;
     return [...result].sort((a, b) => dir * (getSortTime(a) - getSortTime(b)));
-  }, [relevantApplications, statusFilter, formatFilter, searchQuery, dateRange, sortDirection]);
+  }, [
+    relevantApplications,
+    statusFilter,
+    formatFilter,
+    searchQuery,
+    dateRange,
+    sortDirection,
+  ]);
 
   const currentItems = filteredApplications;
   const paginated = currentItems.slice(
@@ -217,15 +248,28 @@ const PsychologistApplications = () => {
 
   const renderApplicationRow = (application: Application) => {
     const statusUI = ApplicationStatusTag[application.status];
-    const preferPsychologistName = getShortPsychologistName(application.psychologist?.user);
+    const preferPsychologistName = getShortPsychologistName(
+      application.psychologist?.user,
+    );
 
     return (
-      <article className={styles.appointmentRow} key={application.id} role="listitem">
+      <article
+        className={styles.appointmentRow}
+        key={application.id}
+        role="listitem"
+      >
         <div className={styles.contentCol}>
           <div className={styles.timeStatusRow}>
-            <div className={styles.timeCol}>{getTimeRange(application.scheduled_at)}</div>
+            <div className={styles.timeCol}>
+              {getTimeRange(application.scheduled_at)}
+            </div>
             <div className={styles['status']}>
-              <div className={clsx(styles['status-dot'], styles[statusUI.className])}></div>
+              <div
+                className={clsx(
+                  styles['status-dot'],
+                  styles[statusUI.className],
+                )}
+              ></div>
               <span className={styles['status-text']}>{statusUI.text}</span>
             </div>
             {application.status === 'new' && preferPsychologistName && (
@@ -233,7 +277,9 @@ const PsychologistApplications = () => {
             )}
           </div>
           <div className={styles.infoCol}>
-            <span className={styles.patientName}>{getPatientName(application)}</span>
+            <span className={styles.patientName}>
+              {getPatientName(application)}
+            </span>
             <span className={styles.location}>{getVenue(application)}</span>
           </div>
         </div>
@@ -270,14 +316,18 @@ const PsychologistApplications = () => {
         onSearchQueryChange={(value) => setSearchQuery(FILTERS_TAB, value)}
         formatFilter={formatFilter}
         formatOptions={APPLICATION_FORMAT_OPTIONS}
-        onFormatFilterChange={(value) => setFormatFilter(FILTERS_TAB, value as typeof formatFilter)}
+        onFormatFilterChange={(value) =>
+          setFormatFilter(FILTERS_TAB, value as typeof formatFilter)
+        }
         statusFilter={statusFilter}
         statusOptions={APPLICATION_STATUS_OPTIONS}
         onStatusFilterChange={(value) => setStatusFilter(FILTERS_TAB, value)}
         dateRange={dateRange}
         onDateRangeChange={(range) => setDateRange(FILTERS_TAB, range)}
         sortDirection={sortDirection}
-        onSortDirectionChange={(direction) => setSortDirection(FILTERS_TAB, direction)}
+        onSortDirectionChange={(direction) =>
+          setSortDirection(FILTERS_TAB, direction)
+        }
         hasActiveFilters={hasActiveFilters}
         onResetFilters={() => resetFilters(FILTERS_TAB)}
       />

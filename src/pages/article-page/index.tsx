@@ -1,13 +1,16 @@
 import { Link, useNavigate } from 'react-router-dom';
-import styles from './ArticlePage.module.scss';
-import { mockArticlePageData } from './mocks';
-import { TRANSLATES as t } from './constants';
-import { Button } from '@/shared/ui';
 import { LeftOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
+import { Button } from '@/shared/ui';
+import styles from './ArticlePage.module.scss';
+import { TRANSLATES as t } from './constants';
+import { mockArticlePageData } from './mocks';
 import type { TArticleContentItem } from './models';
 
-const parseContentData = (item: TArticleContentItem, index: number | string) => {
+const parseContentData = (
+  item: TArticleContentItem,
+  index: number | string,
+) => {
   const key = `article-content-${item.type}-${index}`;
 
   switch (item.type) {
@@ -74,7 +77,9 @@ export const ArticlePage = () => {
         </div>
       </div>
       <h1 className={styles.title}>{data.title}</h1>
-      <div className={styles.content}>{data?.content?.map(parseContentData)}</div>
+      <div className={styles.content}>
+        {data?.content?.map(parseContentData)}
+      </div>
 
       <Button
         className={styles.bottomBtn}

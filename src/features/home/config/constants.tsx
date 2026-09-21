@@ -4,16 +4,17 @@
 // import MoodSwingsImage from '../../assets/images/main/reasons/reason_mood-swings.png';
 // import SelfetimateImage from '../../assets/images/main/reasons/reason_selfetimate.png';
 // import StressReductionImage from '../../assets/images/main/reasons/reason_stress-reduction.png';
-import StarRed from '@/shared/assets/images/main/reasons/star_red_t.png';
-import StormRed from '@/shared/assets/images/main/reasons/storm_red_t.png';
-import ControlEmotions from '@/shared/assets/images/main/reasons/control_of_emotions_red_t.png';
-import MirrorRed from '@/shared/assets/images/main/reasons/mirror_red_t.png';
-import PuzzleRed from '@/shared/assets/images/main/reasons/puzzle_red_t.png';
-import PhoneRed from '@/shared/assets/images/main/reasons/phone_red_t.png';
 import DegreeImage from '@/shared/assets/images/main/features/DegreeImage.svg';
 import FormatImage from '@/shared/assets/images/main/features/FormatImage.svg';
-import TimeImage from '@/shared/assets/images/main/features/TimeImage.svg';
 import RescheduleImage from '@/shared/assets/images/main/features/RescheduleImage.svg';
+import TimeImage from '@/shared/assets/images/main/features/TimeImage.svg';
+import ControlEmotions from '@/shared/assets/images/main/reasons/control_of_emotions_red_t.png';
+import MirrorRed from '@/shared/assets/images/main/reasons/mirror_red_t.png';
+import PhoneRed from '@/shared/assets/images/main/reasons/phone_red_t.png';
+import PuzzleRed from '@/shared/assets/images/main/reasons/puzzle_red_t.png';
+import StarRed from '@/shared/assets/images/main/reasons/star_red_t.png';
+import StormRed from '@/shared/assets/images/main/reasons/storm_red_t.png';
+
 // import DegreeImage from '../../assets/images/main/features/feature_degree.png';
 // import FormatImage from '../../assets/images/main/features/feature_format.png';
 // import TimeImage from '../../assets/images/main/features/feature_time.png';

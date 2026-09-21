@@ -1,107 +1,134 @@
 .sidebar {
   display: flex;
   flex-direction: column;
-  background-color: var(--color-background-neutral-secondary);
-  border-radius: 2.4rem;
-  padding: 3.1rem 1.2rem 1.2rem 1.2rem;
+
   height: 100%;
   min-height: 50rem;
+  padding: 3.1rem 1.2rem 1.2rem;
+  border-radius: 2.4rem;
+
+  background-color: var(--color-background-neutral-secondary);
 }
+
 .profileInfo {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 6.4rem;
 }
+
 .avatar {
-  width: 10.6rem;
-  height: 10.6rem;
-  border-radius: 50%;
-  background-color: var(--color-border-neutral-soft);
   display: flex;
   align-items: center;
   justify-content: center;
+
+  width: 10.6rem;
+  height: 10.6rem;
+  margin-bottom: 1.2rem;
+  border-radius: 50%;
+
   font-size: 5.4rem;
   color: var(--color-label-neutral-secondary);
-  margin-bottom: 1.2rem;
+
+  background-color: var(--color-border-neutral-soft);
 }
+
 .name {
+  max-width: 15rem;
   font: var(--font-text-medium);
   color: var(--color-label-neutral-primary);
   text-align: center;
-  max-width: 15rem;
 }
+
 .nav {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
   flex-grow: 1;
+  gap: 0.8rem;
 }
+
 .navItem {
-  background: none;
-  border: none;
-  text-align: left;
-  padding: 1.2rem 1.2rem;
-  border-radius: 0.8rem;
-  font: var(--font-text-large);
-  color: var(--color-label-neutral-secondary);
   cursor: pointer;
-  transition: all 0.2s;
+
   display: flex;
+  gap: 0.8rem;
   align-items: center;
   justify-content: space-between;
-  gap: 0.8rem;
+
+  padding: 1.2rem;
+  border: none;
+  border-radius: 0.8rem;
+
+  font: var(--font-text-large);
+  color: var(--color-label-neutral-secondary);
+  text-align: left;
+
+  background: none;
+
+  transition: all 0.2s;
+
   &:hover {
     color: var(--color-label-neutral-primary);
   }
+
   &.active {
-    background-color: var(--color-interactive-brand-secondary);
-    color: var(--color-interactive-brand-primary);
     font: var(--font-text-large-button);
+    color: var(--color-interactive-brand-primary);
+    background-color: var(--color-interactive-brand-secondary);
   }
 }
 
 .navLabel {
   flex: 1;
 }
+
 .footer {
   margin-top: 3.2rem;
 }
-@media (min-width: 1023px) {
+
+@media (width >= 1023px) {
   .footer {
     margin-top: 23.7rem;
   }
 }
+
 .askButton {
+  cursor: pointer;
+
   width: 100%;
   padding: 1.6rem 6.2rem;
   border: none;
   border-radius: 0.8rem;
-  background-color: var(--color-interactive-brand-secondary);
-  color: var(--color-interactive-brand-primary);
+
   font: var(--font-text-large-button);
-  cursor: pointer;
+  color: var(--color-interactive-brand-primary);
+
+  background-color: var(--color-interactive-brand-secondary);
+
   transition: background-color 0.2s;
+
   &:hover {
     background-color: var(--color-interactive-brand-hover-secondary);
   }
 }
-@media (max-width: 1023px) {
+
+@media (width <= 1023px) {
   .sidebar {
     min-height: auto;
     padding: 2.4rem 1.6rem;
   }
+
   .nav {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: stretch;
+    flex-flow: row wrap;
     gap: 0.8rem;
+    align-items: stretch;
+    justify-content: center;
   }
+
   .navItem {
     flex: 1 1 auto;
-    text-align: center;
     padding: 1.2rem 0.8rem;
+    text-align: center;
   }
 }
 
@@ -109,6 +136,7 @@
   .sidebar {
     background-color: var(--color-fill-neutral-primary);
   }
+
   .avatar {
     color: color-mix(
       in srgb,
@@ -116,24 +144,30 @@
       var(--color-label-neutral-inverted-primary)
     );
   }
+
   .name {
     color: var(--color-label-neutral-inverted-primary);
   }
 
   .navItem {
     color: var(--color-label-neutral-inverted-primary);
+
     &:hover:not(.active) {
       color: var(--color-interactive-brand-primary);
     }
+
     &.active {
       background-color: var(--color-interactive-neutral-active);
     }
   }
+
   .askButton {
     color: var(--color-interactive-neutral-primary);
+
     &:hover {
       background-color: var(--color-interactive-neutral-hover-secondary);
     }
+
     &:active {
       background-color: var(--color-interactive-neutral-active-secondary);
     }

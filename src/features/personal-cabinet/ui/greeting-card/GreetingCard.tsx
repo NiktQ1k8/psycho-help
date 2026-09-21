@@ -1,6 +1,7 @@
 import type { FC } from 'react';
-import styles from './greeting-card.module.scss';
 import egorImg from '@/shared/assets/images/cabinet/egor.png';
+import styles from './greeting-card.module.scss';
+
 interface GreetingCardProps {
   userName: string;
   onBookClick: () => void;

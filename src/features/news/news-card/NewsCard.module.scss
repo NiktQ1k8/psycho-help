@@ -15,38 +15,43 @@
 
 .wrapper {
   position: relative;
+
   height: 100%;
   padding: 1.6rem 2.5rem 8rem;
   border-radius: 2rem;
+
   background-color: var(--color-fill-brand-quaternary);
 }
 
 .photoWrapper {
   overflow: hidden;
-  border-radius: 2.4rem;
   margin-bottom: 2rem;
+  border-radius: 2.4rem;
 }
 
 .photo {
   aspect-ratio: 1 / 1;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
   width: 100%;
+
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+
   transition: scale 0.5s;
 }
 
 .cardHeader {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   gap: 2.5rem;
+  align-items: center;
+  justify-content: space-between;
+
   margin: 0 1.3rem 4.4rem 0;
 }
 
 .type {
-  font-weight: 500;
   font-size: 2rem;
+  font-weight: 500;
   line-height: 2.8rem;
   color: var(--color-interactive-neutral-primary);
 }
@@ -58,21 +63,24 @@
 }
 
 .title {
-  font-weight: 500;
   font-size: 2.4rem;
+  font-weight: 500;
   line-height: 2.8rem;
-  letter-spacing: -0.04em;
   color: var(--color-interactive-neutral-primary);
+  letter-spacing: -0.04em;
+
   transition: color 0.5s;
 }
 
 .description {
+  overflow: hidden;
   display: -webkit-box;
+  -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
   line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+
   margin-top: 1.2rem;
+
   font-size: 1.6rem;
   line-height: 2.4rem;
   color: var(--color-label-neutral-tetriary);
@@ -80,23 +88,23 @@
 
 .externalLink {
   position: absolute;
-  left: 3.5rem;
   bottom: 1.8rem;
+  left: 3.5rem;
   width: 2.5rem;
 }
 
-@media (max-width: 1200px) {
+@media (width <= 1200px) {
   .wrapper {
     padding: 1.6rem 2.5rem 6.4rem;
   }
 
   .cardHeader {
-    margin: 0 0 3.6rem 0;
+    margin: 0 0 3.6rem;
   }
 
   .title {
-    font-weight: 400;
     font-size: 2rem;
+    font-weight: 400;
     line-height: 2.8rem;
     letter-spacing: 0;
   }
@@ -106,7 +114,7 @@
   }
 }
 
-@media (max-width: 720px) {
+@media (width <= 720px) {
   .wrapper {
     padding: 1.2rem 1rem 6.5rem;
   }
@@ -131,8 +139,8 @@
   }
 
   .externalLink {
-    left: 1rem;
     bottom: 2.5rem;
+    left: 1rem;
     width: 2.3rem;
   }
 }
@@ -141,12 +149,15 @@
   .wrapper {
     background-color: var(--color-fill-neutral-primary);
   }
+
   .type {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .date {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .title {
     color: color-mix(
       in srgb,

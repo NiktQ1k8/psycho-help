@@ -1,11 +1,12 @@
 @use '@/shared/scss/abstracts/breakpoints' as *;
-@use '@/shared/scss/base/_typography.scss' as *;
+@use '@/shared/scss/base/typography' as *;
 
 .wrapper {
   margin-block: 4.8rem 9.6rem;
 
   .title {
     @include header(2);
+
     margin-bottom: 2rem;
     color: var(--color-interactive-neutral-primary);
     text-align: center;
@@ -47,14 +48,15 @@
 }
 
 .list_wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.6rem;
+  align-items: stretch;
+  justify-content: center;
+
   width: 90%;
   max-width: 120rem;
   margin: 0 auto;
-  display: flex;
-  justify-content: center;
-  gap: 1.6rem;
-  flex-wrap: wrap;
-  align-items: stretch;
 }
 
 [data-theme='dark'] {

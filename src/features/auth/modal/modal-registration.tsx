@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from 'react';
-import { useFetch } from '@/shared/api/useFetch';
-import { useAuth } from '@/features/auth/api/useAuth';
+import React, { useMemo, useState } from 'react';
 import type { RegistrationData } from '@/entities/auth';
-import styles from './modal.module.css';
+import { useAuth } from '@/features/auth/api/useAuth';
+import { useFetch } from '@/shared/api/useFetch';
+import styles from './Modal.module.scss';
 import EyeIcon from './icons/Eye.svg?react';
 import EyeOffIcon from './icons/EyeOff.svg?react';
 
@@ -30,7 +30,11 @@ type Tprops = {
   setModalOpen: (param: boolean) => void;
 };
 
-const ModalRegistration: React.FC<Tprops> = ({ setWindow, isOpen, setModalOpen }) => {
+const ModalRegistration: React.FC<Tprops> = ({
+  setWindow,
+  isOpen,
+  setModalOpen,
+}) => {
   const [formValue, setFormValue] = useState({ ...INITIAL_FORM_VALUE });
   const [errors, setErrors] = useState({ ...INITIAL_FORM_VALUE });
 
@@ -216,7 +220,9 @@ const ModalRegistration: React.FC<Tprops> = ({ setWindow, isOpen, setModalOpen }
                 className={styles.input}
                 aria-label="Строка для ввода имени"
               />
-              {errors.first_name && <p className={styles.errorText}>{errors.first_name}</p>}
+              {errors.first_name && (
+                <p className={styles.errorText}>{errors.first_name}</p>
+              )}
             </label>
             <label>
               <span className={styles.required}>Ваша фамилия</span>
@@ -229,7 +235,9 @@ const ModalRegistration: React.FC<Tprops> = ({ setWindow, isOpen, setModalOpen }
                 className={styles.input}
                 aria-label="Строка для ввода фамилии"
               />
-              {errors.last_name && <p className={styles.errorText}>{errors.last_name}</p>}
+              {errors.last_name && (
+                <p className={styles.errorText}>{errors.last_name}</p>
+              )}
             </label>
           </div>
           <label>
@@ -242,7 +250,9 @@ const ModalRegistration: React.FC<Tprops> = ({ setWindow, isOpen, setModalOpen }
               onChange={handlePhoneChange}
               className={styles.input}
             />
-            {errors.phone_number && <span className={styles.errorText}>{errors.phone_number}</span>}
+            {errors.phone_number && (
+              <span className={styles.errorText}>{errors.phone_number}</span>
+            )}
           </label>
           <label>
             <span className={styles.required}>Электронная почта</span>
@@ -255,7 +265,9 @@ const ModalRegistration: React.FC<Tprops> = ({ setWindow, isOpen, setModalOpen }
               className={styles.input}
               aria-label="Строка для ввода электронной почты"
             />
-            {errors.email && <span className={styles.errorText}>{errors.email}</span>}
+            {errors.email && (
+              <span className={styles.errorText}>{errors.email}</span>
+            )}
           </label>
           <label>
             <span className={styles.required}>Пароль</span>
@@ -302,7 +314,9 @@ const ModalRegistration: React.FC<Tprops> = ({ setWindow, isOpen, setModalOpen }
                 className={styles.showPassButton}
                 onClick={() => setShowConfirmPassword((s) => !s)}
                 aria-pressed={showConfirmPassword}
-                aria-label={showConfirmPassword ? 'Скрыть пароль' : 'Показать пароль'}
+                aria-label={
+                  showConfirmPassword ? 'Скрыть пароль' : 'Показать пароль'
+                }
               >
                 {showConfirmPassword ? <EyeIcon /> : <EyeOffIcon />}
               </button>
@@ -313,7 +327,9 @@ const ModalRegistration: React.FC<Tprops> = ({ setWindow, isOpen, setModalOpen }
           </label>
         </form>
 
-        {error.message !== '' && <p className={styles.errorMessage}>{error.message}</p>}
+        {error.message !== '' && (
+          <p className={styles.errorMessage}>{error.message}</p>
+        )}
 
         <div className={styles.footer}>
           <button
@@ -325,7 +341,10 @@ const ModalRegistration: React.FC<Tprops> = ({ setWindow, isOpen, setModalOpen }
           </button>
           <p className={styles.Suggestion}>
             <span>У вас уже есть учётная запись?</span>{' '}
-            <a className={styles.ModalSwitcher} onClick={() => setWindow('log')}>
+            <a
+              className={styles.ModalSwitcher}
+              onClick={() => setWindow('log')}
+            >
               Войти
             </a>
           </p>

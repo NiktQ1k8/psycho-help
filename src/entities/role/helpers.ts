@@ -1,4 +1,5 @@
 import type { Role as RoleType } from './types';
+
 export class Role {
   roles: RoleType[];
   constructor(roles: RoleType[]) {

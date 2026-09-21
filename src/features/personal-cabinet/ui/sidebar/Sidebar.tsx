@@ -1,6 +1,6 @@
 import type { FC, ReactNode } from 'react';
-import clsx from 'clsx';
 import { UserOutlined } from '@ant-design/icons';
+import clsx from 'clsx';
 import type { User } from '@/entities/auth';
 import styles from './sidebar.module.scss';
 
@@ -22,7 +22,13 @@ interface SidebarProps {
   tabBadges?: TabBadge[];
 }
 
-const Sidebar: FC<SidebarProps> = ({ user, activeTab, onChangeTab, tabs, tabBadges }) => {
+const Sidebar: FC<SidebarProps> = ({
+  user,
+  activeTab,
+  onChangeTab,
+  tabs,
+  tabBadges,
+}) => {
   const getBadgeForTab = (tabId: string) => {
     return tabBadges?.find((b) => b.tabId === tabId)?.content;
   };

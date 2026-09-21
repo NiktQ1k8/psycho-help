@@ -8,8 +8,15 @@ type ReasonDrafts = Record<PsychologistReasonDraftType, Record<string, string>>;
 interface PsychologistDraftsState {
   reasonDrafts: ReasonDrafts;
   conclusionDrafts: Record<string, string>;
-  setReasonDraft: (type: PsychologistReasonDraftType, entityId: string, reason: string) => void;
-  clearReasonDraft: (type: PsychologistReasonDraftType, entityId: string) => void;
+  setReasonDraft: (
+    type: PsychologistReasonDraftType,
+    entityId: string,
+    reason: string,
+  ) => void;
+  clearReasonDraft: (
+    type: PsychologistReasonDraftType,
+    entityId: string,
+  ) => void;
   setConclusionDraft: (appointmentId: string, conclusion: string) => void;
   clearConclusionDraft: (appointmentId: string) => void;
 }

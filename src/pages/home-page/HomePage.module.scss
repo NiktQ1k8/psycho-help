@@ -1,6 +1,8 @@
 .block {
   /* margin-top: 48px; */
+
   /* padding-block: 48px; */
+
   /* padding-inline: 24px; */
 }
 
@@ -10,9 +12,9 @@
 }
 
 .contentWrapper {
+  width: 100%;
   max-width: 1440px;
   margin: auto;
-  width: 100%;
 }
 
 .titleWrapper {
@@ -20,19 +22,19 @@
 }
 
 .title {
-  text-align: center;
   font-size: 3rem;
+  text-align: center;
 }
 
-@media (max-width: 425px) {
+@media (width <= 425px) {
   .titleWrapper {
     margin-top: 20px;
   }
 
   .title {
-    text-align: center;
     font-size: 2.8rem;
     line-height: 36px;
+    text-align: center;
   }
 }
 

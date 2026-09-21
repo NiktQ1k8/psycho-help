@@ -5,17 +5,20 @@
   flex-direction: row;
   gap: 0.8rem;
   align-items: center;
-  border: 1px solid var(--color-border-neutral-base);
+
   padding: 2.4rem 1rem;
+  border: 1px solid var(--color-border-neutral-base);
   border-radius: 2rem;
 
   .photo {
+    aspect-ratio: 1 / 1;
     width: 10.4rem;
     max-width: 10.4rem;
     border-radius: 2rem;
-    aspect-ratio: 1 / 1;
+
     background-repeat: no-repeat;
     background-size: cover;
+
     transition: all 0.3s ease;
   }
 
@@ -28,12 +31,25 @@
   }
 
   .info {
-    padding-inline: 0.8rem;
     width: 100%;
+    padding-inline: 0.8rem;
   }
 
   @include past-tablet {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    width: 100%;
+    max-width: 38.9rem;
+    height: 100%;
     margin: 0 auto;
+    padding: 1.2rem 1.2rem 3rem;
+    border: 1px solid var(--color-border-neutral-base);
+
+    background-color: var(--color-background-neutral-primary);
+
+    transition: transform 0.2s;
 
     .info {
       padding-inline: 0;
@@ -48,28 +64,16 @@
     }
 
     .photo {
-      max-width: initial;
-      width: 100%;
       aspect-ratio: 1 / 1;
-      border-radius: 1.2rem;
+      width: 100%;
+      max-width: initial;
       margin-bottom: 1.2rem;
+      border-radius: 1.2rem;
     }
 
     .experience {
       margin-bottom: 1.5rem;
     }
-
-    align-items: flex-start;
-    flex-direction: column;
-    max-width: 38.9rem;
-    width: 100%;
-    height: 100%;
-    background-color: var(--color-background-neutral-primary);
-    display: flex;
-    flex-direction: column;
-    padding: 1.2rem 1.2rem 3rem 1.2rem;
-    transition: transform 0.2s;
-    border: 1px solid var(--color-border-neutral-base);
   }
 }
 
@@ -78,44 +82,49 @@
 }
 
 .fio {
-  color: var(--color-label-neutral-primary);
+  margin: 0 0 0.4rem;
+
+  font: var(--font-h4);
   font-size: 3.2rem;
   font-weight: 500;
-  margin: 0 0 0.4rem 0;
-  font: var(--font-h4);
+  color: var(--color-label-neutral-primary);
 }
 
 .speciality {
+  font: var(--font-text-large);
   font-size: 2rem;
   color: var(--color-label-neutral-primary);
-  font: var(--font-text-large);
 }
 
 .experience {
+  font: var(--font-text-large);
   font-size: 2rem;
   font-weight: 400;
   color: var(--color-label-neutral-secondary);
-  font: var(--font-text-large);
+
   opacity: 0.72;
 }
 
 .consult_label {
+  margin-top: 0.8rem;
+
+  font: var(--font-h5);
   font-size: 2.4rem;
   font-weight: 500;
-  margin-top: 0.8rem;
   color: var(--color-label-neutral-primary);
-  font: var(--font-h5);
 }
 
 .consult_areas {
-  font-size: 2rem;
-  color: var(--color-label-neutral-secondary);
-  opacity: 0.72;
   margin-top: 0.2rem;
+
+  font-size: 2rem;
   line-height: 1.5;
+  color: var(--color-label-neutral-secondary);
+
+  opacity: 0.72;
 }
 
-@media (max-width: 1150px) {
+@media (width <= 1150px) {
   .fio {
     font-size: 2.8rem;
   }
@@ -141,6 +150,7 @@
   .consult_label {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .experience,
   .consult_areas {
     color: color-mix(
@@ -149,6 +159,7 @@
       var(--color-label-neutral-inverted-primary)
     );
   }
+
   .photo {
     background-color: var(--color-fill-neutral-primary);
   }

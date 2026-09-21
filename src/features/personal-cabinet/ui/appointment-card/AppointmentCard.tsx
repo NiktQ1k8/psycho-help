@@ -1,5 +1,9 @@
 import type { FC } from 'react';
-import { UserOutlined, EnvironmentOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import {
+  ClockCircleOutlined,
+  EnvironmentOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
 import clsx from 'clsx';
 import type { AppointmentStatus } from '@/entities/appointment/types';
 import styles from './AppointmentCard.module.scss';
@@ -47,7 +51,9 @@ const AppointmentCard: FC<AppointmentCardProps> = ({
     <div className={styles.card}>
       <div className={styles.header}>
         <div className={styles.date}>{date}</div>
-        {type === 'confirmation' && <ClockCircleOutlined className={styles.iconWarning} />}
+        {type === 'confirmation' && (
+          <ClockCircleOutlined className={styles.iconWarning} />
+        )}
       </div>
 
       <div className={styles.infoList}>
@@ -64,7 +70,9 @@ const AppointmentCard: FC<AppointmentCardProps> = ({
       <div className={styles.footer}>
         {(type === 'upcoming' || type === 'past') && (
           <div className={styles.status}>
-            <span className={clsx(styles.statusDot, statusConfig.dotClass)}></span>
+            <span
+              className={clsx(styles.statusDot, statusConfig.dotClass)}
+            ></span>
             {statusConfig.text}
           </div>
         )}

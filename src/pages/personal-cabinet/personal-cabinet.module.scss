@@ -2,72 +2,90 @@
   display: grid;
   grid-template-columns: 28.8rem 1fr;
   gap: 2.4rem;
+
   max-width: 122.4rem;
+  min-height: calc(100vh - 8rem);
   margin: 0 auto;
   padding: 4rem 2.4rem;
-  min-height: calc(100vh - 8rem);
-  @media (max-width: 1023px) {
+
+  @media (width <= 1023px) {
     grid-template-columns: 1fr;
     gap: 2.4rem;
     padding: 2.4rem 1.6rem;
   }
 }
+
 // Из-за новой шапки всё сломалось, это моя попытка починить (в комментариях указано, что было до изменений):
 .sidebarWrapper {
   position: sticky;
+
   // top: 4rem;
   top: calc(var(--header-height) + 4rem);
   height: fit-content;
+
   // @media (max-width: 1023px) {
-  @media (max-height: 900px), (max-width: 1023px) {
+  @media (height <= 900px), (width <= 1023px) {
     position: static;
   }
 }
+
 .mainContent {
-  width: 100%;
   display: flex;
   flex-direction: column;
+  width: 100%;
   min-width: 0;
 }
+
 .section {
   margin-bottom: 6.4rem;
 }
+
 .sectionTitle {
+  margin: 0 0 2.4rem;
   font: var(--font-h5);
-  letter-spacing: var(--font-header-letter-spacing-h5);
   color: var(--color-label-neutral-primary);
-  margin: 0 0 2.4rem 0;
+  letter-spacing: var(--font-header-letter-spacing-h5);
 }
+
 .cardsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(28rem, 1fr));
   gap: 1.6rem;
-  @media (max-width: 633px) {
+
+  @media (width <= 633px) {
     grid-template-columns: 1fr;
   }
 }
+
 .emptyText {
   font: var(--font-text-large);
   color: var(--color-label-neutral-secondary);
 }
+
 .h1 {
-  font: var(--font-h2);
   margin-bottom: 2.4rem;
+  font: var(--font-h2);
 }
+
 .dateInput {
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
 }
+
 .subButton {
-  background-color: var(--color-interactive-brand-primary);
-  color: var(--color-label-neutral-inverted-primary);
-  font: var(--font-text-large-button);
+  cursor: pointer;
+
+  margin-top: 1.6rem;
   padding: 1.6rem;
   border: none;
   border-radius: 1.2rem;
-  cursor: pointer;
-  margin-top: 1.6rem;
+
+  font: var(--font-text-large-button);
+  color: var(--color-label-neutral-inverted-primary);
+
+  background-color: var(--color-interactive-brand-primary);
+
   &:hover {
     background-color: var(--color-interactive-brand-hover);
   }
@@ -82,27 +100,32 @@
 }
 
 .comingSoon {
-  font: var(--font-text-large);
-  color: var(--color-label-neutral-secondary);
-  font-style: italic;
-  text-align: center;
   padding: 4rem 0;
+
+  font: var(--font-text-large);
+  font-style: italic;
+  color: var(--color-label-neutral-secondary);
+  text-align: center;
 }
 
 .countBage {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
+  min-width: 2.6rem;
   padding: 0.2rem 0.4rem;
   border-radius: 0.6rem;
-  background-color: var(--color-fill-neutral-primary);
-  color: var(--color-label-neutral-primary);
+
   font: var(--font-text-medium);
-  min-width: 2.6rem;
+  color: var(--color-label-neutral-primary);
+
+  background-color: var(--color-fill-neutral-primary);
 }
+
 .countBageActive {
-  background-color: var(--color-fill-brand-primary);
   color: var(--color-label-neutral-inverted-primary);
+  background-color: var(--color-fill-brand-primary);
   transition:
     background-color 0.3s,
     color 0.3s;
@@ -112,9 +135,11 @@
   .title {
     color: var(--color-label-neutral-inverted-primary) !important;
   }
+
   .sectionTitle {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .emptyText {
     color: color-mix(
       in srgb,
@@ -122,32 +147,34 @@
       var(--color-label-neutral-inverted-primary)
     ) !important;
   }
+
   .countBage {
     color: var(--color-label-neutral-inverted-primary);
   }
 }
 
-@media (max-width: 600px) {
+@media (width <= 600px) {
   .layout {
-    padding: 0 10px 100px 10px;
     display: flex;
     flex-direction: column;
     gap: 20px;
+    padding: 0 10px 100px;
   }
+
   h2 {
     font-size: 2rem;
   }
+
   .detailsPanel {
     max-width: 100px;
   }
-
 }
 
-@media (min-width: 500px) and (max-width: 1024px) {
+@media (width >= 500px) and (width <= 1024px) {
   .page {
-    padding: 0 24px;
-    padding-bottom: 4rem;
     display: flex;
     flex-direction: column;
+    padding: 0 24px;
+    padding-bottom: 4rem;
   }
 }

@@ -13,26 +13,36 @@ function requireRoleAdmin(req, res, next) {
   next();
 }
 
-router.post('/:user_id/assign', isAuthenticated, requireRoleAdmin, async (req, res) => {
-  try {
-    const { role_code } = req.body;
-    const updatedUser = await assignRole(req.params.user_id, role_code);
-    const { password, ...userResponse } = updatedUser;
-    res.json(userResponse);
-  } catch (e) {
-    res.status(400).json({ detail: e.message });
-  }
-});
+router.post(
+  '/:user_id/assign',
+  isAuthenticated,
+  requireRoleAdmin,
+  async (req, res) => {
+    try {
+      const { role_code } = req.body;
+      const updatedUser = await assignRole(req.params.user_id, role_code);
+      const { password, ...userResponse } = updatedUser;
+      res.json(userResponse);
+    } catch (e) {
+      res.status(400).json({ detail: e.message });
+    }
+  },
+);
 
-router.post('/:user_id/remove', isAuthenticated, requireRoleAdmin, async (req, res) => {
-  try {
-    const { role_code } = req.body;
-    const updatedUser = await removeRole(req.params.user_id, role_code);
-    const { password, ...userResponse } = updatedUser;
-    res.json(userResponse);
-  } catch (e) {
-    res.status(400).json({ detail: e.message });
-  }
-});
+router.post(
+  '/:user_id/remove',
+  isAuthenticated,
+  requireRoleAdmin,
+  async (req, res) => {
+    try {
+      const { role_code } = req.body;
+      const updatedUser = await removeRole(req.params.user_id, role_code);
+      const { password, ...userResponse } = updatedUser;
+      res.json(userResponse);
+    } catch (e) {
+      res.status(400).json({ detail: e.message });
+    }
+  },
+);
 
 export default router;

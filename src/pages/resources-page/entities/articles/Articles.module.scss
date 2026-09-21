@@ -12,20 +12,22 @@
   }
 
   .articleList {
-    grid-template-columns: 1fr;
-
     display: grid;
-    padding-inline: 1rem;
+    grid-template-columns: 1fr;
     gap: 1.2rem;
-    justify-items: center;
     justify-content: center;
+    justify-items: center;
+
+    padding-inline: 1rem;
 
     .readBtn {
-      background: var(--color-interactive-brand-secondary);
-      color: var(--color-label-brand-primary);
       width: 100%;
       padding: 1.6rem;
       border-radius: 1.6rem;
+
+      color: var(--color-label-brand-primary);
+
+      background: var(--color-interactive-brand-secondary);
     }
   }
 
@@ -34,8 +36,8 @@
 
     .articleList {
       grid-template-columns: repeat(auto-fit, minmax(35rem, 1fr));
-      padding: 0;
       gap: 1.6rem;
+      padding: 0;
     }
   }
 

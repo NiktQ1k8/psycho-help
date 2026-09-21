@@ -1,79 +1,86 @@
 @use '@/shared/scss/abstracts/breakpoints' as *;
 
 .wrapper {
-  padding: 2.4rem 1rem 5.3rem 1rem;
-
   display: flex;
   flex-direction: column;
-  max-width: 70rem;
+
   width: 100%;
+  max-width: 70rem;
   margin: 0 auto;
+  padding: 2.4rem 1rem 5.3rem;
 
   .top {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
     flex-direction: column;
-
     gap: 2.4rem;
+    align-items: flex-start;
+    justify-content: space-between;
 
     .backButton {
-      font: var(--font-text-medium);
       display: flex;
+      gap: 0.6rem;
       align-items: center;
       justify-content: center;
-      gap: 0.6rem;
+
+      font: var(--font-text-medium);
       color: var(--color-label-brand-primary);
     }
   }
+
   .info {
     display: flex;
-    align-items: center;
     gap: 1.6rem;
+    align-items: center;
+
     font: var(--font-text-small);
     color: var(--color-label-neutral-secondary);
   }
 
   .title {
+    margin-block: 0.9rem;
     font: var(--font-h2);
     color: var(--color-label-neutral-primary);
-    margin-block: 0.9rem;
     letter-spacing: var(--font-header-letter-spacing);
   }
 
   .content {
     .imageWrapper {
-      margin-block: 2rem 4rem;
-      width: 100%;
-      height: auto;
-      border-radius: 1.6rem;
       overflow: hidden;
 
+      width: 100%;
+      height: auto;
+      margin-block: 2rem 4rem;
+      border-radius: 1.6rem;
+
       & > img {
-        object-fit: contain;
         width: 100%;
+        object-fit: contain;
       }
     }
+
     & > h1 {
+      margin-bottom: 2.4rem;
       font: var(--font-h2);
-      letter-spacing: var(--font-header-letter-spacing);
-      margin-bottom: 2.4rem;
       color: var(--color-label-neutral-primary);
+      letter-spacing: var(--font-header-letter-spacing);
     }
+
     & > h2 {
-      font: var(--font-h3);
-      letter-spacing: var(--font-header-letter-spacing);
       margin-bottom: 2.4rem;
+      font: var(--font-h3);
       color: var(--color-label-neutral-primary);
+      letter-spacing: var(--font-header-letter-spacing);
     }
+
     & > p {
+      margin-bottom: 2.4rem;
       font: var(--font-text-medium);
       color: var(--color-label-neutral-primary);
-      margin-bottom: 2.4rem;
     }
 
     .block {
       margin-bottom: 2.4rem;
+
       & > p {
         font: var(--font-text-medium);
         color: var(--color-label-neutral-primary);
@@ -83,13 +90,15 @@
         padding-left: 2.4rem;
 
         & > li {
-          // list-style-position: inside;
-          list-style-type: disc;
+          margin-bottom: 0.4rem;
           font: var(--font-text-medium);
           color: var(--color-label-neutral-primary);
-          margin-bottom: 0.4rem;
+
+          // list-style-position: inside;
+          list-style-type: disc;
         }
       }
+
       & > * {
         margin-bottom: 2rem;
       }
@@ -97,13 +106,14 @@
   }
 
   .bottomBtn {
-    margin: 0 auto;
-    max-width: 39rem;
     width: 100%;
+    max-width: 39rem;
+    margin: 0 auto;
   }
 
   @include past-tablet {
     padding: 4rem 6.7rem;
+
     .top {
       flex-direction: row;
 
@@ -118,24 +128,29 @@
 
     .content {
       .imageWrapper {
-        margin-block: 1.6rem 4.8rem;
+        overflow: hidden;
+
         width: 100%;
         height: auto;
+        margin-block: 1.6rem 4.8rem;
         border-radius: 2.4rem;
-        overflow: hidden;
       }
+
       & > h1 {
         margin-bottom: 2.4rem;
       }
+
       & > h2 {
         margin-bottom: 2.8rem;
       }
+
       & > p {
         margin-bottom: 4.8rem;
       }
 
       .block {
         margin-bottom: 4.8rem;
+
         & > * {
           margin-bottom: 2.4rem;
         }
@@ -151,16 +166,19 @@
       color: var(--color-label-neutral-inverted-primary);
     }
   }
+
   .content {
     & > h1,
     & > h2,
     & > p {
       color: var(--color-label-neutral-inverted-primary);
     }
+
     .block {
       & > p {
         color: var(--color-label-neutral-inverted-primary);
       }
+
       & > ul > li {
         color: var(--color-label-neutral-inverted-primary) !important;
       }

@@ -2,14 +2,14 @@ import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Alert, Empty, Pagination } from 'antd';
-import dayjs from '@/shared/lib/dayjs';
 import clsx from 'clsx';
 import { appointmentQueries } from '@/entities/appointment/api';
 import type { Appointment } from '@/entities/appointment/types';
 import { usePsychologistView } from '@/features/personal-cabinet/model/psychologist-view';
 import PsychologistListFilters from '@/features/personal-cabinet/ui/psychologist-filters/PsychologistFilters';
-import Loader from '@/shared/ui/loader/loader';
 import { AppointmentStatusTag } from '@/pages/personal-cabinet/constants';
+import dayjs from '@/shared/lib/dayjs';
+import Loader from '@/shared/ui/loader/loader';
 import styles from './PsychologistAppointments.module.scss';
 
 const toMoscow = (date: string) => dayjs(date).tz();
@@ -30,8 +30,9 @@ const APPOINTMENT_FORMAT_OPTIONS = [
 ];
 
 const getPatientName = (appointment: Appointment) =>
-  [appointment.patient?.last_name, appointment.patient?.first_name].filter(Boolean).join(' ') ||
-  'Имя не указано';
+  [appointment.patient?.last_name, appointment.patient?.first_name]
+    .filter(Boolean)
+    .join(' ') || 'Имя не указано';
 
 const getTimeRange = (time: string) => {
   const start = toMoscow(time);
@@ -77,8 +78,14 @@ const PsychologistAppointments = () => {
   } = usePsychologistView();
 
   const filters = appointmentFilters;
-  const { currentPage, sortDirection, statusFilter, formatFilter, searchQuery, dateRange } =
-    filters;
+  const {
+    currentPage,
+    sortDirection,
+    statusFilter,
+    formatFilter,
+    searchQuery,
+    dateRange,
+  } = filters;
 
   const hasActiveFilters =
     searchQuery !== '' ||
@@ -107,7 +114,9 @@ const PsychologistAppointments = () => {
 
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
-      result = result.filter((a) => getPatientName(a).toLowerCase().includes(q));
+      result = result.filter((a) =>
+        getPatientName(a).toLowerCase().includes(q),
+      );
     }
 
     if (dateRange) {
@@ -122,9 +131,19 @@ const PsychologistAppointments = () => {
 
     const dir = sortDirection === 'asc' ? 1 : -1;
     return [...result].sort(
-      (a, b) => dir * (new Date(a.scheduled_time).getTime() - new Date(b.scheduled_time).getTime()),
+      (a, b) =>
+        dir *
+        (new Date(a.scheduled_time).getTime() -
+          new Date(b.scheduled_time).getTime()),
     );
-  }, [allAppointments, statusFilter, formatFilter, searchQuery, dateRange, sortDirection]);
+  }, [
+    allAppointments,
+    statusFilter,
+    formatFilter,
+    searchQuery,
+    dateRange,
+    sortDirection,
+  ]);
 
   const currentItems = filteredAppointments;
   const paginated = currentItems.slice(
@@ -159,18 +178,33 @@ const PsychologistAppointments = () => {
     const statusUI = AppointmentStatusTag[appointment.status];
 
     return (
-      <article className={styles.appointmentRow} key={appointment.id} role="listitem">
+      <article
+        className={styles.appointmentRow}
+        key={appointment.id}
+        role="listitem"
+      >
         <div className={styles.contentCol}>
           <div className={styles.timeStatusRow}>
-            <div className={styles.timeCol}>{getTimeRange(appointment.scheduled_time)}</div>
+            <div className={styles.timeCol}>
+              {getTimeRange(appointment.scheduled_time)}
+            </div>
             <div className={styles['status']}>
-              <div className={clsx(styles['status-dot'], styles[statusUI.className])}></div>
+              <div
+                className={clsx(
+                  styles['status-dot'],
+                  styles[statusUI.className],
+                )}
+              ></div>
               <span className={styles['status-text']}>{statusUI.text}</span>
             </div>
           </div>
           <div className={styles.infoCol}>
-            <span className={styles.patientName}>{getPatientName(appointment)}</span>
-            <span className={styles.location}>{getVenueDisplay(appointment)}</span>
+            <span className={styles.patientName}>
+              {getPatientName(appointment)}
+            </span>
+            <span className={styles.location}>
+              {getVenueDisplay(appointment)}
+            </span>
           </div>
         </div>
         <div className={styles.actionsCol}>
@@ -196,14 +230,18 @@ const PsychologistAppointments = () => {
         onSearchQueryChange={(value) => setSearchQuery(FILTERS_TAB, value)}
         formatFilter={formatFilter}
         formatOptions={APPOINTMENT_FORMAT_OPTIONS}
-        onFormatFilterChange={(value) => setFormatFilter(FILTERS_TAB, value as typeof formatFilter)}
+        onFormatFilterChange={(value) =>
+          setFormatFilter(FILTERS_TAB, value as typeof formatFilter)
+        }
         statusFilter={statusFilter}
         statusOptions={APPOINTMENT_STATUS_OPTIONS}
         onStatusFilterChange={(value) => setStatusFilter(FILTERS_TAB, value)}
         dateRange={dateRange}
         onDateRangeChange={(range) => setDateRange(FILTERS_TAB, range)}
         sortDirection={sortDirection}
-        onSortDirectionChange={(direction) => setSortDirection(FILTERS_TAB, direction)}
+        onSortDirectionChange={(direction) =>
+          setSortDirection(FILTERS_TAB, direction)
+        }
         hasActiveFilters={hasActiveFilters}
         onResetFilters={() => resetFilters(FILTERS_TAB)}
       />

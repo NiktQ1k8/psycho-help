@@ -1,6 +1,6 @@
+import type { Appointment } from '@/entities/appointment/types';
 import type { User } from '@/entities/auth';
 import type { Psychologist } from '@/entities/psychologist/types';
-import type { Appointment } from '@/entities/appointment/types';
 
 export interface Application {
   id: string;

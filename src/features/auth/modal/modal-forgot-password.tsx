@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useFetch } from '@/shared/api/useFetch';
-import styles from './modal.module.css';
+import styles from './Modal.module.scss';
 
 type Tprops = {
   setWindow: (param: 'log' | 'reg' | 'forgot' | 'change') => void;
@@ -8,7 +8,11 @@ type Tprops = {
   setModalOpen: (param: boolean) => void;
 };
 
-const ModalForgotPassword: React.FC<Tprops> = ({ setWindow, isOpen, setModalOpen }) => {
+const ModalForgotPassword: React.FC<Tprops> = ({
+  setWindow,
+  isOpen,
+  setModalOpen,
+}) => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [open, setOpen] = useState(isOpen);
@@ -52,12 +56,18 @@ const ModalForgotPassword: React.FC<Tprops> = ({ setWindow, isOpen, setModalOpen
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeaderPassword}>
           <h2 className={styles.modalTitle}>Забыли пароль?</h2>
-          <button className={styles.closeButton} onClick={handleCancel} aria-label="Закрыть">
+          <button
+            className={styles.closeButton}
+            onClick={handleCancel}
+            aria-label="Закрыть"
+          >
             ✕
           </button>
         </div>
 
-        <p className={styles.modalDesc}>Введите Email, который вы использовали при регистрации</p>
+        <p className={styles.modalDesc}>
+          Введите Email, который вы использовали при регистрации
+        </p>
 
         <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
           <label>
@@ -74,18 +84,30 @@ const ModalForgotPassword: React.FC<Tprops> = ({ setWindow, isOpen, setModalOpen
           </label>
         </form>
 
-        {fetchError.message !== '' && <p className={styles.errorMessage}>{fetchError.message}</p>}
+        {fetchError.message !== '' && (
+          <p className={styles.errorMessage}>{fetchError.message}</p>
+        )}
 
         <div className={styles.footer}>
-          <button className={styles.submitButton} onClick={handleOk} disabled={isLoading}>
+          <button
+            className={styles.submitButton}
+            onClick={handleOk}
+            disabled={isLoading}
+          >
             {isLoading ? 'Загрузка...' : 'Восстановить'}
           </button>
           <p className={styles.Suggestion}>
-            <a className={styles.ModalSwitcher} onClick={() => setWindow('log')}>
+            <a
+              className={styles.ModalSwitcher}
+              onClick={() => setWindow('log')}
+            >
               Вернуться
             </a>
             <span> | </span>
-            <a className={styles.ModalSwitcher} onClick={() => setWindow('change')}>
+            <a
+              className={styles.ModalSwitcher}
+              onClick={() => setWindow('change')}
+            >
               Перейти к восстановлению пароля
             </a>
           </p>

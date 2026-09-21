@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
+
   width: 100%;
   max-width: 1000px;
 }
@@ -17,9 +18,9 @@
 }
 
 .dateHeader {
+  margin-bottom: 0.8rem;
   font: var(--font-h5);
   color: var(--color-label-neutral-primary);
-  margin-bottom: 0.8rem;
 }
 
 .dateGroup:not(:first-child) {
@@ -30,7 +31,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 1.6rem 1.6rem 2.4rem 1.6rem;
+  padding: 1.6rem 1.6rem 2.4rem;
 }
 
 .appointmentRow:not(:first-of-type) {
@@ -65,16 +66,16 @@
 
 .patientName,
 .location {
-  white-space: nowrap;
-  text-overflow: ellipsis;
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .patientName {
   flex-shrink: 0;
-  color: var(--color-label-neutral-primary);
-  font: var(--font-text-large);
   max-width: 370px;
+  font: var(--font-text-large);
+  color: var(--color-label-neutral-primary);
 }
 
 .location {
@@ -90,16 +91,16 @@
 
 .actionsCol {
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 1.2rem;
   flex-shrink: 0;
+  gap: 1.2rem;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .status {
   display: flex;
-  align-items: center;
   gap: 0.8rem;
+  align-items: center;
 }
 
 .status-dot {
@@ -126,15 +127,19 @@
 }
 
 .btnPrimary {
-  padding: 0.8rem 2.7rem;
-  border-radius: 12px;
-  border: none;
-  background-color: var(--color-interactive-brand-primary);
-  color: var(--color-label-neutral-inverted-primary);
-  font: var(--font-text-medium);
   cursor: pointer;
-  transition: all 0.2s ease;
+
+  padding: 0.8rem 2.7rem;
+  border: none;
+  border-radius: 12px;
+
+  font: var(--font-text-medium);
+  color: var(--color-label-neutral-inverted-primary);
   white-space: nowrap;
+
+  background-color: var(--color-interactive-brand-primary);
+
+  transition: all 0.2s ease;
 
   &:hover {
     background-color: var(--color-interactive-brand-hover);
@@ -145,8 +150,8 @@
   }
 
   &:disabled {
-    opacity: 0.5;
     cursor: not-allowed;
+    opacity: 0.5;
   }
 }
 
@@ -157,8 +162,8 @@
   margin-bottom: 2.4rem;
 
   :global(.ant-pagination-item-active) {
-    background-color: var(--color-label-brand-primary);
     border-color: var(--color-label-brand-primary);
+    background-color: var(--color-label-brand-primary);
 
     a {
       color: var(--color-label-neutral-inverted-primary) !important;
@@ -173,6 +178,7 @@
   .status-text {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .location {
     color: color-mix(
       in srgb,
@@ -180,9 +186,11 @@
       var(--color-label-neutral-inverted-primary)
     );
   }
+
   .appointmentRow:not(:first-of-type) {
     border-top: 1px solid var(--color-border-neutral-inverted);
   }
+
   .status-dot {
     &--awaiting {
       background-color: var(--color-label-neutral-inverted-primary);
@@ -190,20 +198,23 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (width <= 600px) {
   .appointmentRow {
     flex-direction: column;
     gap: 1.6rem;
   }
+
   .infoCol {
     flex-direction: column;
     gap: 0.4rem;
   }
+
   .actionsCol {
     justify-content: flex-start;
   }
+
   .location::before {
     display: none;
-    margin: 0 0;
+    margin: 0;
   }
 }

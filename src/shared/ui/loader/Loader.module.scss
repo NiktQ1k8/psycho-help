@@ -1,22 +1,25 @@
 .loader__wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   position: fixed;
   top: 20%;
   left: 50%;
   transform: translate(-50%);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .loader__item {
+  display: inline-block;
+
+  box-sizing: border-box;
   width: 64px;
   height: 64px;
   border: 8px solid var(--color-border-neutral-inverted);
   border-bottom-color: var(--color-fill-brand-primary);
   border-radius: 50%;
-  display: inline-block;
-  box-sizing: border-box;
+
   animation: rotation 1s linear infinite;
 }
 

@@ -38,5 +38,7 @@ export const AppContextProvider = ({ children }: IProps) => {
     [error, isAppLoading, isError],
   );
 
-  return <AppContext.Provider value={memoizedValues}>{children}</AppContext.Provider>;
+  return (
+    <AppContext.Provider value={memoizedValues}>{children}</AppContext.Provider>
+  );
 };

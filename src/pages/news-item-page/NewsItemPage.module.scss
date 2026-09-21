@@ -2,6 +2,7 @@
   max-width: 83.4rem;
   margin: 0 auto;
   padding: 4.1rem 6.7rem 6.7rem;
+
   font-size: 2rem;
   line-height: 2.8rem;
   color: var(--color-label-neutral-primary);
@@ -30,15 +31,16 @@
 
 .info {
   display: flex;
-  align-items: center;
   gap: 3.7rem;
+  align-items: center;
   color: var(--color-label-neutral-secondary);
 }
 
 .title {
   margin-bottom: 2.4rem;
-  font-weight: 600;
+
   font-size: 2.8rem;
+  font-weight: 600;
   line-height: 3.6rem;
   letter-spacing: -0.03em;
 }
@@ -60,8 +62,8 @@
 
   ol,
   ul {
-    padding-left: 3rem;
     margin-block: 2.8rem;
+    padding-left: 3rem;
   }
 
   li {
@@ -70,16 +72,17 @@
 }
 
 .bottomBtn {
-  margin: 5rem auto 0;
-  max-width: 39rem;
   width: 100%;
-  font-weight: 500;
+  max-width: 39rem;
+  margin: 5rem auto 0;
+
   font-size: 2rem;
+  font-weight: 500;
   line-height: 2.8rem;
   color: var(--color-label-brand-primary);
 }
 
-@media (max-width: 720px) {
+@media (width <= 720px) {
   .wrapper {
     max-width: 60.6rem;
     padding: 2.4rem 1rem 5.3rem;
@@ -119,8 +122,8 @@
 
     ol,
     ul {
-      padding-left: 2.4rem;
       margin-block: 2rem;
+      padding-left: 2.4rem;
     }
   }
 
@@ -139,9 +142,11 @@
       var(--color-label-neutral-inverted-primary)
     );
   }
+
   .title {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .content {
     color: var(--color-label-neutral-inverted-primary);
   }

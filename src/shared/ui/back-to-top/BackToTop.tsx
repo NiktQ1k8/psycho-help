@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import styles from './BackToTop.module.scss';
 import clsx from 'clsx';
+import styles from './BackToTop.module.scss';
 
 const BackToTop: React.FC = () => {
   const [visible, setVisible] = useState(false);
-  const lastScroll = useRef<number>(typeof window !== 'undefined' ? window.scrollY : 0);
+  const lastScroll = useRef<number>(
+    typeof window !== 'undefined' ? window.scrollY : 0,
+  );
 
   useEffect(() => {
     const onScroll = () => {

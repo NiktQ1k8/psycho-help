@@ -1,19 +1,27 @@
 import type { AxiosResponse } from 'axios';
-import { $serviceClient } from '@/shared/api/http';
 import type {
-  User,
   RegistrationData,
-  UserProfileUpdate,
+  User,
   UserPasswordUpdate,
+  UserProfileUpdate,
 } from '@/entities/auth';
+import { $serviceClient } from '@/shared/api/http';
 
 export default class AuthApi {
-  static async login(email: string, password: string): Promise<AxiosResponse<User>> {
-    const res = await $serviceClient.post<User>('/users/login', { email, password });
+  static async login(
+    email: string,
+    password: string,
+  ): Promise<AxiosResponse<User>> {
+    const res = await $serviceClient.post<User>('/users/login', {
+      email,
+      password,
+    });
     return res;
   }
 
-  static async registration(data: RegistrationData): Promise<AxiosResponse<User>> {
+  static async registration(
+    data: RegistrationData,
+  ): Promise<AxiosResponse<User>> {
     const res = await $serviceClient.post<User>('/users/register', { ...data });
     return res;
   }
@@ -28,11 +36,15 @@ export default class AuthApi {
     return res;
   }
 
-  static async updateProfile(data: UserProfileUpdate): Promise<AxiosResponse<User>> {
+  static async updateProfile(
+    data: UserProfileUpdate,
+  ): Promise<AxiosResponse<User>> {
     const res = await $serviceClient.put<User>('/users/me', data);
     return res;
   }
-  static async updatePassword(data: UserPasswordUpdate): Promise<AxiosResponse<User>> {
+  static async updatePassword(
+    data: UserPasswordUpdate,
+  ): Promise<AxiosResponse<User>> {
     const res = await $serviceClient.post<User>('/users/me/password', data);
     return res;
   }

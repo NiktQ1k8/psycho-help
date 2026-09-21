@@ -1,6 +1,6 @@
-import { useTheme } from '@/shared/hooks/useTheme';
 import Moon from '@/shared/assets/images/header/moon.svg?react';
 import Sun from '@/shared/assets/images/header/sun.svg?react';
+import { useTheme } from '@/shared/hooks/useTheme';
 
 interface ThemeToggleProps {
   className?: string;
@@ -16,10 +16,16 @@ const ThemeToggle = ({ className }: ThemeToggleProps) => {
       data-testid="theme-toggle-button"
       type="button"
       aria-label={
-        currentTheme === 'light' ? 'Переключить на тёмную тему' : 'Переключить на светлую тему'
+        currentTheme === 'light'
+          ? 'Переключить на тёмную тему'
+          : 'Переключить на светлую тему'
       }
     >
-      {currentTheme === 'light' ? <Moon aria-hidden="true" /> : <Sun aria-hidden="true" />}
+      {currentTheme === 'light' ? (
+        <Moon aria-hidden="true" />
+      ) : (
+        <Sun aria-hidden="true" />
+      )}
     </button>
   );
 };

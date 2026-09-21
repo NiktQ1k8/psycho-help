@@ -1,42 +1,44 @@
 .modalOverlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: var(--color-label-neutral-tetriary);
-  display: flex;
-  justify-content: center;
-  align-items: center;
   z-index: 1000;
-  font-size: 16px;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   font: var(--font-text-medium);
+  font-size: 16px;
+
+  background-color: var(--color-label-neutral-tetriary);
 }
 
 .modalContent {
-  box-sizing: border-box;
-  background: var(--color-background-neutral-primary);
-  border-radius: 20px;
-  max-width: 718px;
-  width: 90%;
-  max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 4px 16px var(--color-fill-neutral-primary);
+
+  box-sizing: border-box;
+  width: 90%;
+  max-width: 718px;
+  max-height: 90vh;
   padding: clamp(16px, 2.5vw, 36px);
+  border-radius: 20px;
+
+  background: var(--color-background-neutral-primary);
+  box-shadow: 0 4px 16px var(--color-fill-neutral-primary);
 }
 
 .modalHeaderAuth {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .modalHeaderPassword {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .modalTitle {
@@ -47,24 +49,30 @@
 
 .modalDesc {
   margin-top: 12px;
-  color: var(--color-label-neutral-secondary);
+
   font-size: clamp(12px, 2.5vw, 14px);
   font-weight: 400;
+  color: var(--color-label-neutral-secondary);
   text-align: center;
 }
 
 .closeButton {
-  background: none;
-  border: none;
-  font-size: 24px;
   cursor: pointer;
-  padding: 0;
-  width: 32px;
-  height: 32px;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+
+  font-size: 24px;
   color: var(--color-border-neutral-strong);
+
+  background: none;
+
   transition: color 0.3s;
 }
 
@@ -81,6 +89,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+
   margin: 0;
   margin-top: 24px;
 }
@@ -88,8 +97,8 @@
 .form label {
   display: flex;
   flex-direction: column;
-  gap: 8px;
   flex-grow: 1;
+  gap: 8px;
 }
 
 .form label.checkboxLabel {
@@ -100,8 +109,10 @@
   padding: 12px 16px;
   border: 1px solid var(--color-border-neutral-base);
   border-radius: 4px;
-  transition: all 0.3s;
+
   font-size: 16px;
+
+  transition: all 0.3s;
 }
 
 .input:hover {
@@ -109,29 +120,30 @@
 }
 
 .input:focus {
-  outline: none;
   border-color: var(--color-border-brand-strong);
+  outline: none;
   box-shadow: 0 0 0 2px var(--color-fill-neutral-primary);
 }
 
 .hintText {
-  opacity: 0.5;
   font-size: 12px;
   color: var(--color-label-neutral-secondary);
+  opacity: 0.5;
 }
 
 .errorText {
-  color: var(--color-label-danger-primary);
   font-size: 12px;
   font-weight: 500;
+  color: var(--color-label-danger-primary);
 }
 
 .checkboxLabel {
+  cursor: pointer;
+
   display: flex;
+  gap: 8px;
   align-items: center;
   justify-content: start;
-  gap: 8px;
-  cursor: pointer;
 }
 
 .checkboxText {
@@ -140,50 +152,60 @@
 
 .rememberContainer {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  font-size: clamp(12px, 2.5vw, 16px);
-  min-width: 200px;
+  justify-content: space-between;
+
   width: 100%;
+  min-width: 200px;
+
+  font-size: clamp(12px, 2.5vw, 16px);
 }
 
 .checkbox {
+  position: absolute;
+
+  overflow: hidden;
+
   width: 1px;
   height: 1px;
-  clip: rect(0, 0, 0, 0);
-  overflow: hidden;
-  position: absolute;
+
+  clip-path: inset(50%);
 }
 
 .checkbox_custom {
-  flex-shrink: 0;
   position: relative;
+
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+
   box-sizing: border-box;
   width: 15px;
   height: 15px;
   border: 1px solid var(--color-border-neutral-strong);
   border-radius: 2px;
+
   transition: all 0.3s;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .checkbox:checked + .checkbox_custom::after {
   content: '';
+
   position: absolute;
-  left: 50%;
   top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+
   width: 35%;
   height: 60%;
   border: solid var(--color-border-neutral-inverted);
   border-width: 0 2px 2px 0;
-  transform: translate(-50%, -50%) rotate(45deg);
 }
 
 .checkbox:checked + .checkbox_custom {
-  background-color: var(--color-background-brand-primary);
   border-color: var(--color-background-brand-primary);
+  background-color: var(--color-background-brand-primary);
   transition: all 0.3s;
 }
 
@@ -193,8 +215,8 @@
 }
 
 .checkbox:disabled + .checkbox_custom {
-  background-color: var(--color-fill-neutral-primary);
   border-color: var(--color-border-neutral-base);
+  background-color: var(--color-fill-neutral-primary);
   box-shadow: none;
 }
 
@@ -209,11 +231,13 @@
 }
 
 .errorMessage {
-  color: var(--color-label-danger-primary);
-  background-color: var(--color-fill-danger-secondary);
+  margin: 16px 0 0;
   padding: 12px 16px;
   border-radius: 6px;
-  margin: 16px 0 0 0;
+
+  color: var(--color-label-danger-primary);
+
+  background-color: var(--color-fill-danger-secondary);
 }
 
 .footer {
@@ -221,15 +245,19 @@
 }
 
 .submitButton {
+  cursor: pointer;
+
   width: 100%;
   height: 56px;
-  background-color: var(--color-interactive-brand-primary);
-  color: var(--color-label-neutral-inverted-primary);
   border: none;
   border-radius: 16px;
+
   font-size: clamp(16px, 2.5vw, 20px);
   font-weight: 600;
-  cursor: pointer;
+  color: var(--color-label-neutral-inverted-primary);
+
+  background-color: var(--color-interactive-brand-primary);
+
   transition: all 0.3s;
 }
 
@@ -242,24 +270,26 @@
 }
 
 .submitButton:disabled {
-  opacity: 0.6;
   cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .Suggestion {
-  width: 100%;
   display: flex;
-  justify-content: center;
-  margin-top: 12px;
   gap: 6px;
-  color: var(--color-label-neutral-primary);
+  justify-content: center;
+
+  width: 100%;
+  margin-top: 12px;
+
   font-size: clamp(12px, 2.5vw, 16px);
+  color: var(--color-label-neutral-primary);
 }
 
 .ModalSwitcher {
+  cursor: pointer;
   color: var(--color-interactive-brand-primary);
   text-decoration: none;
-  cursor: pointer;
   transition: color 0.3s;
 }
 
@@ -275,12 +305,14 @@
 }
 
 .passwordInput {
+  width: 100%;
   padding: 12px 40px 12px 16px;
   border: 1px solid var(--color-border-neutral-base);
   border-radius: 4px;
-  transition: all 0.3s;
+
   font-size: 16px;
-  width: 100%;
+
+  transition: all 0.3s;
 }
 
 .passwordInput:hover {
@@ -288,22 +320,28 @@
 }
 
 .passwordInput:focus {
-  outline: none;
   border-color: var(--color-interactive-brand-hover);
+  outline: none;
   box-shadow: 0 0 0 2px var(--color-fill-neutral-primary);
 }
 
 .showPassButton {
+  cursor: pointer;
+
   position: absolute;
   right: 12px;
-  background: none;
-  border: none;
-  padding: 6px;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
+  padding: 6px;
+  border: none;
+
   color: var(--color-label-neutral-secondary);
-  cursor: pointer;
+
+  background: none;
+
   transition: color 0.3s;
 }
 
@@ -318,9 +356,8 @@
 
 .names {
   display: flex;
-  flex-direction: row;
+  flex-flow: row wrap;
   gap: 16px;
-  flex-wrap: wrap;
 }
 
 .input:has(+ .errorText) {
@@ -335,25 +372,32 @@
   .modalContent {
     background: var(--color-background-neutral-inverted);
   }
+
   .closeButton {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .button {
     color: var(--color-label-neutral-inverted-primary);
+
     &:hover {
-      background-color: var(--color-interactive-neutral-hover-secondary);
       color: var(--color-interactive-brand-hover);
+      background-color: var(--color-interactive-neutral-hover-secondary);
     }
+
     &:active {
       color: var(--color-interactive-brand-active);
     }
   }
-  .showPassButton{
+
+  .showPassButton {
     color: var(--color-fill-neutral-none);
-    &:hover{
+
+    &:hover {
       color: var(--color-interactive-neutral-active-secondary);
     }
   }
+
   .hintText,
   .modalDesc,
   .Suggestion span {
@@ -363,6 +407,7 @@
       var(--color-label-neutral-inverted-primary)
     );
   }
+
   .checkbox_custom {
     border: 1px solid var(--color-border-neutral-inverted);
   }

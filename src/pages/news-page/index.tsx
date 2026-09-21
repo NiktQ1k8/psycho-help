@@ -1,11 +1,12 @@
-import styles from './NewsPage.module.scss';
-import NewsList from '@/features/news/news-list';
-import Loader from '@/shared/ui/loader/loader';
 import { useQuery } from '@tanstack/react-query';
-import { newsItemQueries } from '@/entities/news/api/queries';
 import { Result } from 'antd';
+import { newsItemQueries } from '@/entities/news/api/queries';
+import NewsList from '@/features/news/news-list';
 import newsHeroImage from '@/shared/assets/images/news/news-hero-image.png';
 import telegramIcon from '@/shared/assets/images/news/telegram-icon.svg';
+import Loader from '@/shared/ui/loader/loader';
+import styles from './NewsPage.module.scss';
+
 // import { Button } from '@/shared/ui';
 
 export const NewsPage = () => {
@@ -31,10 +32,14 @@ export const NewsPage = () => {
       <div className={styles.blue}>
         <div className={styles.hero}>
           <h1 className={styles.title}>Новости</h1>
-          <img src={newsHeroImage} alt="Изображение новости" className={styles.image} />
+          <img
+            src={newsHeroImage}
+            alt="Изображение новости"
+            className={styles.image}
+          />
           <p className={styles.text}>
-            Здесь вы всегда будете в курсе последних событий, анонсов и изменений в работе нашей
-            Службы психологической помощи.
+            Здесь вы всегда будете в курсе последних событий, анонсов и
+            изменений в работе нашей Службы психологической помощи.
           </p>
         </div>
       </div>
@@ -47,7 +52,11 @@ export const NewsPage = () => {
           <p className={styles.telegramText}>
             Подпишитесь, чтобы узнавать актуальную информацию самыми первыми
           </p>
-          <img src={telegramIcon} alt="Telegram" className={styles.telegramIcon} />
+          <img
+            src={telegramIcon}
+            alt="Telegram"
+            className={styles.telegramIcon}
+          />
           <a
             href="https://vk.com/spp_polytech"
             target="_blank"

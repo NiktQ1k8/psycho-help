@@ -1,4 +1,4 @@
-import styles from './PageLoader.module.css';
+import styles from './PageLoader.module.scss';
 
 const PageLoader = () => (
   <div className={styles.loaderCenter}>

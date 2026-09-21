@@ -1,7 +1,7 @@
-import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
-import svgr from 'vite-plugin-svgr';
 import path from 'path';
+import svgr from 'vite-plugin-svgr';
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   plugins: [react(), svgr()],
@@ -11,7 +11,6 @@ export default defineConfig({
     setupFiles: './src/tests/setup.ts',
     css: true,
     exclude: [
-      'tests/e2e/**',
       'node_modules/**',
       // Потом нужно будет исправить этот тест и убрать его из исключений
       'src/widgets/footer/footer.test.tsx',

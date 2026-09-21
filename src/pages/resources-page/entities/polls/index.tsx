@@ -1,9 +1,9 @@
-import styles from './Polls.module.scss';
-import { pollMocks } from '@/pages/resources-page/entities/polls/mocks.ts';
+import { useState } from 'react';
 import { PollCard } from '@/pages/resources-page/components/poll-card';
 import { TRANSLATES } from '@/pages/resources-page/consts';
+import { pollMocks } from '@/pages/resources-page/entities/polls/mocks.ts';
 import { Button } from '@/shared/ui/button';
-import { useState } from 'react';
+import styles from './Polls.module.scss';
 
 const initialPolls = pollMocks.slice(0, 6);
 
@@ -28,7 +28,9 @@ export const Polls = () => {
                 value: item.date,
               }}
               description={item.description}
-              bottomSlot={<button className={styles.passBtn}>{TRANSLATES.pass}</button>}
+              bottomSlot={
+                <button className={styles.passBtn}>{TRANSLATES.pass}</button>
+              }
               hasHorizontalDesktopVersion
               key={`polls-${index}`}
             />

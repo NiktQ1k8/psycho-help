@@ -1,8 +1,8 @@
 import type { FC } from 'react';
-import UserDashboard from './UserDashboard';
-import PsychologistDashboard from './PsychologistDashboard';
-import AdminDashboard from './AdminDashboard';
 import type { RoleCode } from '@/entities/role/types';
+import AdminDashboard from './AdminDashboard';
+import PsychologistDashboard from './PsychologistDashboard';
+import UserDashboard from './UserDashboard';
 
 interface DashboardProps {
   userName: string;
@@ -19,7 +19,12 @@ const Dashboard: FC<DashboardProps> = ({ userName, role, onBookClick }) => {
       return <AdminDashboard />;
     case 'user':
     default:
-      return <UserDashboard userName={userName} onBookClick={onBookClick || (() => {})} />;
+      return (
+        <UserDashboard
+          userName={userName}
+          onBookClick={onBookClick || (() => {})}
+        />
+      );
   }
 };
 

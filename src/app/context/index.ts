@@ -14,7 +14,9 @@ export const useAppContext = () => {
   const context = useContext(AppContext);
 
   if (!context) {
-    throw new Error('useAppContext должен использоваться внутри AppContextProvider');
+    throw new Error(
+      'useAppContext должен использоваться внутри AppContextProvider',
+    );
   }
 
   return context;

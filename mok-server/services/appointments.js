@@ -2,7 +2,9 @@ import crypto from 'node:crypto';
 import * as db from '../services/db.js';
 
 export async function getAppointments(userId, role) {
-  return db.appointments.filter((a) => a.patient_id === userId || a.therapist_id === userId);
+  return db.appointments.filter(
+    (a) => a.patient_id === userId || a.therapist_id === userId,
+  );
 }
 
 export async function getAppointmentById(id) {
@@ -30,7 +32,8 @@ export async function createAppointment(data) {
 
   if (remind_time) {
     const remindTimeDate = new Date(remind_time);
-    if (remindTimeDate <= now) throw new Error('Время напоминания не может быть в прошлом');
+    if (remindTimeDate <= now)
+      throw new Error('Время напоминания не может быть в прошлом');
     if (remindTimeDate >= scheduledTimeDate)
       throw new Error('Время напоминания должно быть раньше времени встречи');
   }
@@ -39,13 +42,15 @@ export async function createAppointment(data) {
   if (!patient) throw new Error(`Patient not found: ${patient_id}`);
 
   const psychologist = db.therapists.find((t) => t.id === psychologist_id);
-  if (!psychologist) throw new Error(`Psychologist not found: ${psychologist_id}`);
+  if (!psychologist)
+    throw new Error(`Psychologist not found: ${psychologist_id}`);
 
   let finalVenue = inputVenue;
   if (type === 'Offline') {
     finalVenue = psychologist.office;
   } else if (type === 'Online') {
-    if (!inputVenue) throw new Error('Для онлайн встречи требуется указать место (venue)');
+    if (!inputVenue)
+      throw new Error('Для онлайн встречи требуется указать место (venue)');
   }
 
   const newAppointment = {
@@ -70,7 +75,10 @@ export async function cancelAppointment(id, userId) {
   const appointment = db.appointments.find((a) => a.id === id);
   if (!appointment) throw new Error('Запись не найдена');
 
-  if (appointment.patient_id !== userId && appointment.therapist_id !== userId) {
+  if (
+    appointment.patient_id !== userId &&
+    appointment.therapist_id !== userId
+  ) {
     throw new Error('Нет прав на отмену этой записи');
   }
 

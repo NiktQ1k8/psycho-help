@@ -1,6 +1,6 @@
 import React, { type FC, type KeyboardEvent } from 'react';
-import styles from './TabItem.module.scss';
 import clsx from 'clsx';
+import styles from './TabItem.module.scss';
 
 export interface ITabItemProps {
   id: string;

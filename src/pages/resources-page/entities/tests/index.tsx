@@ -1,9 +1,9 @@
-import styles from './Tests.module.scss';
-import { testMocks } from '@/pages/resources-page/entities/tests/mocks.ts';
-import { TestCard } from '@/pages/resources-page/components';
-import { Button } from '@/shared/ui/button';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { TestCard } from '@/pages/resources-page/components';
+import { testMocks } from '@/pages/resources-page/entities/tests/mocks.ts';
+import { Button } from '@/shared/ui/button';
+import styles from './Tests.module.scss';
 
 const initialTests = testMocks.slice(0, 6);
 
@@ -42,7 +42,11 @@ export const Tests = () => {
         })}
       </div>
       {isShowMoreVisible && (
-        <Button data-testid="show-more-tests" className={styles.showMore} onClick={handleShowMore}>
+        <Button
+          data-testid="show-more-tests"
+          className={styles.showMore}
+          onClick={handleShowMore}
+        >
           Показать ещё
         </Button>
       )}

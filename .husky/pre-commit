@@ -1,1 +1,16 @@
-npx lint-staged
+node --input-type=module <<'JS'
+import lintStaged from 'lint-staged';
+
+const passed = await lintStaged({
+  concurrent: false,
+  config: {
+    '*.{js,cjs,mjs,ts,tsx}': 'eslint --fix',
+    '*': 'prettier --write --ignore-unknown',
+    '*.{css,scss}': 'stylelint --fix',
+  },
+});
+
+if (!passed) process.exitCode = 1;
+JS
+npm run test:run
+npm run --silent build -- --logLevel error

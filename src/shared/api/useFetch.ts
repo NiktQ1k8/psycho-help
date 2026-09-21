@@ -1,5 +1,5 @@
-import { AxiosError } from 'axios';
 import { useCallback, useRef, useState } from 'react';
+import { AxiosError } from 'axios';
 import type { ResponseError } from '@/shared/api';
 
 export type UseFetchReturn = {
@@ -12,7 +12,10 @@ export type UseFetchReturn = {
 // Теперь можно строго типизировать возвращаемое значение функции
 export function useFetch<T>(foo: () => Promise<T>): UseFetchReturn {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<ResponseError>({ message: '', status: undefined });
+  const [error, setError] = useState<ResponseError>({
+    message: '',
+    status: undefined,
+  });
 
   const fooRef = useRef(foo);
   fooRef.current = foo;

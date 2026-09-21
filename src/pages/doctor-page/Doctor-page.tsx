@@ -1,17 +1,21 @@
+import { useEffect } from 'react';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
-import styles from './Doctor-page.module.css';
-import Loader from '@/shared/ui/loader/loader';
 import { useQuery } from '@tanstack/react-query';
-import { therapistQueries } from '@/entities/therapist/api';
 import { Result } from 'antd';
+import { therapistQueries } from '@/entities/therapist/api';
 import InfoBlock from '@/features/therapist/info-block/InfoBlock';
-import { useEffect } from 'react';
+import Loader from '@/shared/ui/loader/loader';
+import styles from './DoctorPage.module.scss';
 
 const DoctorPage = () => {
   const { id } = useParams();
 
-  const { data: doctor, isLoading, error } = useQuery(therapistQueries.byId(id!));
+  const {
+    data: doctor,
+    isLoading,
+    error,
+  } = useQuery(therapistQueries.byId(id!));
 
   useEffect(() => {
     window.scroll(0, 0);
@@ -48,7 +52,10 @@ const DoctorPage = () => {
           {[doctor.last_name, doctor.first_name, doctor.middle_name].join(' ')}
         </p>
       </div>
-      <Link to={'/therapists'} className={[styles.link, styles.mobileLink].join(' ')}>
+      <Link
+        to={'/therapists'}
+        className={[styles.link, styles.mobileLink].join(' ')}
+      >
         Вернуться к списку
       </Link>
       <div className={styles.contentWrapper}>

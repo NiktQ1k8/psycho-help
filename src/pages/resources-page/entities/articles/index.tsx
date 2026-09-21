@@ -1,10 +1,10 @@
-import styles from './Articles.module.scss';
-import { articleMocks } from '@/pages/resources-page/entities/articles/mocks.ts';
-import { ArticleCard } from '@/pages/resources-page/components';
-import { TRANSLATES } from '@/pages/resources-page/consts';
-import { Button } from '@/shared/ui/button';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ArticleCard } from '@/pages/resources-page/components';
+import { TRANSLATES } from '@/pages/resources-page/consts';
+import { articleMocks } from '@/pages/resources-page/entities/articles/mocks.ts';
+import { Button } from '@/shared/ui/button';
+import styles from './Articles.module.scss';
 
 const initialArticles = articleMocks.slice(0, 6);
 

@@ -1,48 +1,62 @@
 .card {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: var(--color-background-neutral-secondary);
-  border-radius: 1.6rem;
-  padding: 2rem;
-  margin-bottom: 6.4rem;
   gap: 2.4rem;
-  @media (max-width: 633px) {
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 6.4rem;
+  padding: 2rem;
+  border-radius: 1.6rem;
+
+  background-color: var(--color-background-neutral-secondary);
+
+  @media (width <= 633px) {
     flex-direction: column;
     padding: 2.4rem;
     text-align: center;
   }
 }
+
 .content {
   max-width: 44.2rem;
 }
+
 .title {
+  margin: 0 0 1.2rem;
   font: var(--font-h4);
-  letter-spacing: var(--font-header-letter-spacing);
   color: var(--color-label-neutral-primary);
-  margin: 0 0 1.2rem 0;
+  letter-spacing: var(--font-header-letter-spacing);
 }
+
 .text {
+  margin: 0 0 3.6rem;
   font: var(--font-text-large);
   color: var(--color-label-neutral-primary);
-  margin: 0 0 3.6rem 0;
 }
+
 .button {
-  background-color: var(--color-interactive-brand-primary);
-  color: var(--color-label-neutral-inverted-primary);
-  font: var(--font-text-large-button);
+  cursor: pointer;
+
   padding: 1.6rem 5.2rem;
   border: none;
   border-radius: 1.6rem;
-  cursor: pointer;
+
+  font: var(--font-text-large-button);
+  color: var(--color-label-neutral-inverted-primary);
+
+  background-color: var(--color-interactive-brand-primary);
+
   transition: background-color 0.2s;
+
   &:hover {
     background-color: var(--color-interactive-brand-hover);
   }
 }
+
 .illustration {
   flex-shrink: 0;
 }
+
 .image {
   width: 16.8rem;
   height: 19.7rem;
@@ -53,14 +67,17 @@
   .title {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .text {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .card {
     background-color: var(--color-fill-neutral-primary);
   }
+
   .button {
-    background-color: var(--color-background-neutral-primary);
     color: var(--color-interactive-neutral-primary);
+    background-color: var(--color-background-neutral-primary);
   }
 }

@@ -1,6 +1,6 @@
-import { useMutation, type UseMutationOptions } from '@tanstack/react-query';
+import { type UseMutationOptions, useMutation } from '@tanstack/react-query';
 import type { ResponseError } from '@/shared/api';
-import type { User, RegistrationData, LoginData } from '../types';
+import type { LoginData, RegistrationData, User } from '../types';
 import { authApi } from './api';
 
 export const useLoginMutation = (

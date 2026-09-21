@@ -1,9 +1,9 @@
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
-import { routes } from './routes';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { useAppContext } from '@/app/context';
 import { useAuth } from '@/features/auth/api/useAuth';
 import { Loader } from '@/shared/ui';
-import { useAppContext } from '@/app/context';
+import { routes } from './routes';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();

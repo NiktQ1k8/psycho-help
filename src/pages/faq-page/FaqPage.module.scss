@@ -1,17 +1,18 @@
 .wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+
+  width: 100%;
   max-width: 120rem;
   margin: auto;
-  width: 100%;
-  display: flex;
-  gap: 2.4rem;
-  flex-direction: column;
   margin-top: 6.4rem;
   margin-bottom: 14.8rem;
 }
 
 .container {
-  padding-left: 1rem;
   padding-right: 1rem;
+  padding-left: 1rem;
 }
 
 .header {
@@ -23,15 +24,15 @@
 .headline {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   gap: 2rem;
+  justify-content: center;
 }
 
 .faq {
-  font: var(--font-h1);
-  letter-spacing: var(--font-header-letter-spacing);
-  color: var(--color-label-brand-primary);
   margin: 0;
+  font: var(--font-h1);
+  color: var(--color-label-brand-primary);
+  letter-spacing: var(--font-header-letter-spacing);
 }
 
 .description {
@@ -44,12 +45,12 @@
   object-fit: contain;
 }
 
-@media (max-width: 1024px) {
+@media (width <= 1024px) {
   .header {
     display: flex;
+    flex-direction: column;
     align-items: center;
     text-align: center;
-    flex-direction: column;
   }
 
   .image {
@@ -57,7 +58,7 @@
   }
 }
 
-@media (max-width: 634px) {
+@media (width <= 634px) {
   .description {
     font: var(--font-text-medium);
   }

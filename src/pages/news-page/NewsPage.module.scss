@@ -7,19 +7,20 @@
 }
 
 .hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 2rem 5rem;
+  align-items: center;
+
   max-width: 144rem;
   margin: 0 auto;
   padding: 10rem 12rem;
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  gap: 2rem 5rem;
 }
 
 .title {
-  font-weight: 500;
   font-size: 9.6rem;
+  font-weight: 500;
   line-height: 11.3rem;
   color: var(--color-label-brand-secondary);
 }
@@ -27,27 +28,28 @@
 .text {
   max-width: 52.9rem;
   height: 100%;
+
   font-size: 2.4rem;
   line-height: 2.8rem;
   color: var(--color-label-neutral-primary);
 }
 
 .image {
-  margin: -10rem 0;
   grid-row: span 2;
   max-width: 59.9rem;
+  margin: -10rem 0;
 }
 
-@media (max-width: 1200px) {
+@media (width <= 1200px) {
   .wrapper {
     margin: 3.7rem auto 9.8rem;
   }
 
   .hero {
+    gap: 0;
+    justify-items: center;
     margin: 0;
     padding: 0 5.7rem 2.8rem;
-    justify-items: center;
-    gap: 0;
   }
 
   .title {
@@ -62,23 +64,24 @@
   }
 
   .image {
-    margin: -3rem 0 0;
     grid-row: span 1;
     max-width: 29.3rem;
+    margin: -3rem 0 0;
   }
 }
 
-@media (max-width: 720px) {
+@media (width <= 720px) {
   .wrapper {
     margin: 1.6rem auto 7.4rem;
   }
 
   .hero {
-    max-width: 144rem;
-    padding: 1.7rem 1rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
+
+    max-width: 144rem;
+    padding: 1.7rem 1rem;
   }
 
   .title {
@@ -93,37 +96,40 @@
   }
 
   .image {
-    margin: 0;
     max-width: 100%;
+    margin: 0;
   }
 }
 
 .listWrapper {
-  max-width: 144rem;
-  margin: 0 auto;
-  padding: 4.8rem 12rem 0;
   display: flex;
   flex-direction: column;
   gap: 3.9rem;
+
+  max-width: 144rem;
+  margin: 0 auto;
+  padding: 4.8rem 12rem 0;
 }
 
 .telegramBanner {
-  padding: 3.8rem 3.6rem 3rem;
   display: grid;
-  grid-template-rows: 1fr 1fr 1fr;
   grid-template-columns: 1fr 1fr;
-  align-items: center;
-  background-color: var(--color-fill-brand-quaternary);
-  border-radius: 1.6rem;
+  grid-template-rows: 1fr 1fr 1fr;
   gap: 2.9rem 5rem;
+  align-items: center;
+
+  padding: 3.8rem 3.6rem 3rem;
+  border-radius: 1.6rem;
+
+  background-color: var(--color-fill-brand-quaternary);
 }
 
 .telegramTitle {
-  font-weight: 600;
   font-size: 4rem;
+  font-weight: 600;
   line-height: 4.4rem;
-  letter-spacing: -0.04em;
   color: var(--color-interactive-neutral-primary);
+  letter-spacing: -0.04em;
 }
 
 .telegramText {
@@ -133,28 +139,33 @@
 }
 
 .telegramIcon {
-  grid-row: 1 / 4;
   grid-column: 2;
+  grid-row: 1 / 4;
   justify-self: center;
   max-width: 25.7rem;
+
   // width: 100%;
 }
 
 .telegramLink {
   justify-self: start;
-  border-radius: 1.6rem;
+
   padding: 1rem 3.5rem;
-  background-color: var(--color-fill-brand-primary);
-  text-decoration: none;
-  font-weight: 500;
+  border-radius: 1.6rem;
+
   font-size: 2rem;
+  font-weight: 500;
   line-height: 2.8rem;
   color: var(--color-label-neutral-inverted-primary);
+  text-decoration: none;
+
+  background-color: var(--color-fill-brand-primary);
+
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: var(--color-interactive-brand-hover);
     color: var(--color-label-neutral-inverted-primary);
+    background-color: var(--color-interactive-brand-hover);
   }
 
   &:active {
@@ -162,11 +173,11 @@
   }
 }
 
-@media (max-width: 1200px) {
+@media (width <= 1200px) {
   .listWrapper {
+    gap: 1.2rem;
     max-width: 107.4rem;
     padding: 3.6rem 5.7rem 0;
-    gap: 1.2rem;
   }
 
   .telegramBanner {
@@ -180,18 +191,18 @@
   }
 }
 
-@media (max-width: 720px) {
+@media (width <= 720px) {
   .listWrapper {
+    gap: 1.6rem;
     max-width: 62.6rem;
     padding: 2.2rem 1rem 0;
-    gap: 1.6rem;
   }
 
   .telegramBanner {
-    padding: 3.3rem 2.5rem 3.9rem;
     display: flex;
     flex-direction: column;
     gap: 3rem;
+    padding: 3.3rem 2.5rem 3.9rem;
   }
 
   .telegramTitle {
@@ -218,18 +229,19 @@
 // Но по хорошему в desktop-версии новости должны быть в 3 колонки, а баннер внизу
 // Иначе при большом количестве новостей баннер расползается
 // @media (min-width: 1201px) и все строчки внутри нужно удалить
-@media (min-width: 1201px) {
+@media (width >= 1201px) {
   .listWrapper {
     flex-direction: row;
     gap: 3.9rem;
   }
 
   .telegramBanner {
-    width: 36.7rem;
-    padding: 3.3rem 2.5rem 5.5rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
+    width: 36.7rem;
+    padding: 3.3rem 2.5rem 5.5rem;
   }
 
   .telegramIcon {
@@ -242,19 +254,24 @@
   .blue {
     background-color: var(--color-fill-neutral-primary);
   }
+
   .title {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .text {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .telegramTitle {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .telegramBanner {
-    background-color: transparent;
     border: 1px solid var(--color-border-neutral-inverted);
+    background-color: transparent;
   }
+
   .telegramText {
     color: color-mix(
       in srgb,
@@ -262,13 +279,16 @@
       var(--color-label-neutral-inverted-primary)
     );
   }
+
   .telegramLink {
-    background-color: var(--color-background-neutral-primary);
     color: var(--color-label-neutral-primary);
+    background-color: var(--color-background-neutral-primary);
   }
+
   .telegramLink:hover {
     background-color: var(--color-interactive-neutral-hover-secondary);
   }
+
   .telegramLink:active {
     background-color: var(--color-interactive-neutral-active-secondary);
   }

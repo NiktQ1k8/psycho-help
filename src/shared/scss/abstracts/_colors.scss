@@ -2,7 +2,7 @@
    Примитивы, в первую очередь используются для просчёта других переменных.
    Напрямую в макете их использовать не следует
 */
-$neutral-0: #ffffff;
+$neutral-0: #fff;
 $neutral-50: #f9f9f9;
 $neutral-100: #e5e5e7;
 $neutral-150: #d7d8da;
@@ -16,8 +16,7 @@ $neutral-800: #313235;
 $neutral-850: #252628;
 $neutral-900: #19191b;
 $neutral-950: #0c0d0d;
-$neutral-1000: #000000;
-
+$neutral-1000: #000;
 $accent-brand-50: #eef5ff;
 $accent-brand-100: #d9e7ff;
 $accent-brand-200: #bcd6ff;
@@ -29,7 +28,6 @@ $accent-brand-700: #153be1;
 $accent-brand-800: #1731b6;
 $accent-brand-900: #192f8f;
 $accent-brand-950: #141e57;
-
 $accent-status-red: #ff3b30;
 $accent-status-green: #34c759;
 $accent-status-yellow: #ffd000;

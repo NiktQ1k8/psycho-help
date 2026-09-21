@@ -1,6 +1,6 @@
-import styles from './question.module.css';
-import ButtonIcon from '@/shared/assets/images/main/question/button.svg?react';
 import clsx from 'clsx';
+import ButtonIcon from '@/shared/assets/images/main/question/button.svg?react';
+import styles from './Question.module.scss';
 
 const Question = ({
   id,

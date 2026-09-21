@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams, useNavigate, Navigate } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Input, message, Empty, Result } from 'antd';
-import dayjs from '@/shared/lib/dayjs';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Empty, Input, Result, message } from 'antd';
 import { AxiosError } from 'axios';
 import clsx from 'clsx';
 import {
@@ -13,12 +12,16 @@ import {
 import { Role } from '@/entities/role/helpers';
 import { useAuth } from '@/features/auth/api/useAuth';
 import { useCabinetTab } from '@/features/personal-cabinet/model/personal-cabinet-tab';
-import Sidebar from '@/features/personal-cabinet/ui/sidebar/Sidebar';
-import Loader from '@/shared/ui/loader/loader';
-import { AppointmentStatusTag } from '@/pages/personal-cabinet/constants';
-import { getTabsForRole, type TabId } from '@/pages/personal-cabinet/config/tabs';
-import PsychologistRejectModal from '@/features/personal-cabinet/ui/PsychologistRejectModal';
 import { usePsychologistDrafts } from '@/features/personal-cabinet/model/psychologist-drafts';
+import PsychologistRejectModal from '@/features/personal-cabinet/ui/PsychologistRejectModal';
+import Sidebar from '@/features/personal-cabinet/ui/sidebar/Sidebar';
+import {
+  type TabId,
+  getTabsForRole,
+} from '@/pages/personal-cabinet/config/tabs';
+import { AppointmentStatusTag } from '@/pages/personal-cabinet/constants';
+import dayjs from '@/shared/lib/dayjs';
+import Loader from '@/shared/ui/loader/loader';
 import styles from './PsychologistAppointmentPage.module.scss';
 
 const TYPE_LABELS: Record<string, string> = {
@@ -76,18 +79,35 @@ const PsychologistAppointmentPage = () => {
 
   const hasConclusionDraft = usePsychologistDrafts((state) =>
     appointmentId
-      ? Object.prototype.hasOwnProperty.call(state.conclusionDrafts, appointmentId)
+      ? Object.prototype.hasOwnProperty.call(
+          state.conclusionDrafts,
+          appointmentId,
+        )
       : false,
   );
 
-  const setConclusionDraft = usePsychologistDrafts((state) => state.setConclusionDraft);
-  const clearConclusionDraft = usePsychologistDrafts((state) => state.clearConclusionDraft);
+  const setConclusionDraft = usePsychologistDrafts(
+    (state) => state.setConclusionDraft,
+  );
+  const clearConclusionDraft = usePsychologistDrafts(
+    (state) => state.clearConclusionDraft,
+  );
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
 
   useEffect(() => {
-    if (!appointment?.id || hasConclusionDraft || appointment.conclusion === null) return;
+    if (
+      !appointment?.id ||
+      hasConclusionDraft ||
+      appointment.conclusion === null
+    )
+      return;
     setConclusionDraft(appointment.id, appointment.conclusion);
-  }, [appointment?.id, appointment?.conclusion, hasConclusionDraft, setConclusionDraft]);
+  }, [
+    appointment?.id,
+    appointment?.conclusion,
+    hasConclusionDraft,
+    setConclusionDraft,
+  ]);
 
   const completeMutation = useMutation({
     mutationFn: () => completeAppointment(id!, conclusion),
@@ -97,7 +117,9 @@ const PsychologistAppointmentPage = () => {
         clearConclusionDraft(appointmentId);
       }
       queryClient.invalidateQueries({ queryKey: [appointmentQueryKey.list] });
-      queryClient.invalidateQueries({ queryKey: [appointmentQueryKey.byId, id] });
+      queryClient.invalidateQueries({
+        queryKey: [appointmentQueryKey.byId, id],
+      });
       navigate(-1);
     },
     onError: (error: AxiosError<{ detail?: string }>) => {
@@ -109,14 +131,19 @@ const PsychologistAppointmentPage = () => {
   if (!isPsychologist) return <Navigate to="/" replace />;
   if (isLoading) return <Loader />;
   if (isError) {
-    const detail = (error as AxiosError<{ detail?: string }>)?.response?.data?.detail;
+    const detail = (error as AxiosError<{ detail?: string }>)?.response?.data
+      ?.detail;
     return (
       <Result
         status="error"
         title="Не удалось загрузить запись"
         subTitle={detail || 'Попробуйте обновить страницу или вернитесь назад'}
         extra={
-          <button className={styles.back} type="button" onClick={() => navigate(-1)}>
+          <button
+            className={styles.back}
+            type="button"
+            onClick={() => navigate(-1)}
+          >
             Вернуться назад
           </button>
         }
@@ -147,7 +174,11 @@ const PsychologistAppointmentPage = () => {
       </div>
 
       <article className={styles.wrapper}>
-        <button className={styles.back} onClick={() => navigate(-1)} type="button">
+        <button
+          className={styles.back}
+          onClick={() => navigate(-1)}
+          type="button"
+        >
           <span>&lt;</span>
           <span>Вернуться назад</span>
         </button>
@@ -157,7 +188,9 @@ const PsychologistAppointmentPage = () => {
         {appointment.status === 'cancelled' && appointment.cancel_reason && (
           <div className={styles.reasonBlockCancelled}>
             <span className={styles.reasonLabel}>Причина отмены:</span>
-            <span className={styles.reasonText}>{appointment.cancel_reason}</span>
+            <span className={styles.reasonText}>
+              {appointment.cancel_reason}
+            </span>
           </div>
         )}
 
@@ -172,7 +205,12 @@ const PsychologistAppointmentPage = () => {
             <div className={styles.infoRow}>
               <span className={styles.statusLabel}>Статус</span>
               <div className={styles['status']}>
-                <div className={clsx(styles['status-dot'], styles[statusUI.className])}></div>
+                <div
+                  className={clsx(
+                    styles['status-dot'],
+                    styles[statusUI.className],
+                  )}
+                ></div>
                 <span className={styles['status-text']}>{statusUI.text}</span>
               </div>
             </div>
@@ -181,7 +219,9 @@ const PsychologistAppointmentPage = () => {
           <div className={styles.infoGrid}>
             <div className={styles.infoRowGrid}>
               <span className={styles.infoLabel}>Email</span>
-              <span className={styles.infoValueGrid}>{appointment.patient?.email || '—'}</span>
+              <span className={styles.infoValueGrid}>
+                {appointment.patient?.email || '—'}
+              </span>
             </div>
             <div className={styles.infoRowGrid}>
               <span className={styles.infoLabel}>Телефон</span>
@@ -218,11 +258,15 @@ const PsychologistAppointmentPage = () => {
             </div>
             <div className={styles.infoRowGrid}>
               <span className={styles.infoLabel}>Формат</span>
-              <span className={styles.infoValueGrid}>{TYPE_LABELS[appointment.type] || '—'}</span>
+              <span className={styles.infoValueGrid}>
+                {TYPE_LABELS[appointment.type] || '—'}
+              </span>
             </div>
             <div className={styles.infoRowGrid}>
               <span className={styles.infoLabel}>Место</span>
-              <span className={styles.infoValueGrid}>{appointment.venue || '—'}</span>
+              <span className={styles.infoValueGrid}>
+                {appointment.venue || '—'}
+              </span>
             </div>
           </div>
 
@@ -254,7 +298,9 @@ const PsychologistAppointmentPage = () => {
                 <Input.TextArea
                   rows={4}
                   value={conclusion}
-                  onChange={(e) => setConclusionDraft(appointment.id, e.target.value)}
+                  onChange={(e) =>
+                    setConclusionDraft(appointment.id, e.target.value)
+                  }
                   placeholder="Введите заключение по консультации"
                   // maxLength={2000}
                   // showCount
@@ -277,7 +323,9 @@ const PsychologistAppointmentPage = () => {
             <button
               className={styles.actionButtonEnd}
               onClick={() => completeMutation.mutate()}
-              disabled={conclusion.trim().length === 0 || completeMutation.isPending}
+              disabled={
+                conclusion.trim().length === 0 || completeMutation.isPending
+              }
               type="button"
             >
               {completeMutation.isPending ? 'Завершение...' : 'Завершить'}
@@ -291,7 +339,9 @@ const PsychologistAppointmentPage = () => {
           onClose={() => setCancelModalOpen(false)}
           onSuccess={() => {
             message.success('Запись отменена');
-            queryClient.invalidateQueries({ queryKey: [appointmentQueryKey.byId, id] });
+            queryClient.invalidateQueries({
+              queryKey: [appointmentQueryKey.byId, id],
+            });
             navigate(-1);
           }}
         />

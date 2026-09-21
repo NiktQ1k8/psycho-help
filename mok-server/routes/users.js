@@ -1,16 +1,16 @@
 import { Router } from 'express';
+import { isAuthenticated } from '../lib/auth.js';
 import {
-  createUser,
-  findUserBy,
   authenticateUser,
+  createPsychologist,
+  createUser,
+  deletePsychologist,
+  findUserBy,
   generateTokenForUser,
   invalidateToken,
-  createPsychologist,
-  deletePsychologist,
-  updateUser,
   updateAvatar,
+  updateUser,
 } from '../services/user.js';
-import { isAuthenticated } from '../lib/auth.js';
 
 const router = Router();
 
@@ -147,22 +147,32 @@ router.post('/me/password', isAuthenticated, async (req, res) => {
   }
 });
 
-router.post('/psychologists', isAuthenticated, requireAdmin, async (req, res) => {
-  try {
-    const newPsychologist = await createPsychologist(req.body);
-    res.status(201).json(newPsychologist);
-  } catch (e) {
-    res.status(400).json({ detail: e.message });
-  }
-});
+router.post(
+  '/psychologists',
+  isAuthenticated,
+  requireAdmin,
+  async (req, res) => {
+    try {
+      const newPsychologist = await createPsychologist(req.body);
+      res.status(201).json(newPsychologist);
+    } catch (e) {
+      res.status(400).json({ detail: e.message });
+    }
+  },
+);
 
-router.delete('/psychologists/:id', isAuthenticated, requireAdmin, async (req, res) => {
-  try {
-    await deletePsychologist(req.params.id);
-    res.status(200).send();
-  } catch (e) {
-    res.status(404).json({ detail: e.message });
-  }
-});
+router.delete(
+  '/psychologists/:id',
+  isAuthenticated,
+  requireAdmin,
+  async (req, res) => {
+    try {
+      await deletePsychologist(req.params.id);
+      res.status(200).send();
+    } catch (e) {
+      res.status(404).json({ detail: e.message });
+    }
+  },
+);
 
 export default router;

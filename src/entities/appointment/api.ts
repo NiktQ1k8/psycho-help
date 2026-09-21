@@ -1,6 +1,9 @@
 import { queryOptions } from '@tanstack/react-query';
+import type {
+  Appointment,
+  AppointmentCreateRequest,
+} from '@/entities/appointment/types';
 import { $api } from '@/shared/api/http';
-import type { Appointment, AppointmentCreateRequest } from '@/entities/appointment/types';
 
 export const appointmentQueryKey = {
   list: 'appointment.list',
@@ -22,16 +25,24 @@ export const appointmentQueries = {
     }),
 };
 
-export const cancelAppointment = async (id: string, cancelReason: string): Promise<void> => {
+export const cancelAppointment = async (
+  id: string,
+  cancelReason: string,
+): Promise<void> => {
   await $api.put(`/appointments/${id}/cancel`, { cancel_reason: cancelReason });
 };
 
-export const completeAppointment = async (id: string, conclusion: string): Promise<Appointment> => {
+export const completeAppointment = async (
+  id: string,
+  conclusion: string,
+): Promise<Appointment> => {
   const { data } = await $api.put(`/appointments/${id}/done`, { conclusion });
   return data;
 };
 
-export const createAppointment = async (body: AppointmentCreateRequest): Promise<Appointment> => {
+export const createAppointment = async (
+  body: AppointmentCreateRequest,
+): Promise<Appointment> => {
   const { data } = await $api.post<Appointment>('/appointments/create', body);
   return data;
 };

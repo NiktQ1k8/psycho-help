@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import styles from './marker.module.css';
+import styles from './Marker.module.scss';
 
 type Props = {
   text: string;
@@ -15,7 +15,10 @@ const types: Record<string, string> = {
 const Marker: FC<Props> = ({ text, type }) => {
   return (
     <div className={styles.marker}>
-      <div className={styles.markerColor} style={{ backgroundColor: types[type] }}></div>
+      <div
+        className={styles.markerColor}
+        style={{ backgroundColor: types[type] }}
+      ></div>
       <div className={styles.markerText}>{text}</div>
     </div>
   );

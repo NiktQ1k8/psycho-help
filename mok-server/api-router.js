@@ -1,10 +1,10 @@
 import Router from 'express';
-import * as db from './services/db.js';
-import userRouter from './routes/users.js';
-import appointmentRouter from './routes/appointments.js';
-import rolesRouter from './routes/roles.js';
 import * as OpenApiValidator from 'express-openapi-validator';
 import openapi from './openapi.json' with { type: 'json' };
+import appointmentRouter from './routes/appointments.js';
+import rolesRouter from './routes/roles.js';
+import userRouter from './routes/users.js';
+import * as db from './services/db.js';
 
 const router = Router();
 
@@ -24,7 +24,10 @@ router.use(
 );
 router.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+  );
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.setHeader('Access-Control-Allow-Credentials', true);
   if (req.method === 'OPTIONS') {
@@ -59,7 +62,9 @@ router.get('/news/', (req, res) => {
   if (db.news.length === 0) {
     return res.status(404).json({ message: 'Данные не найдены' });
   }
-  const sorted = [...db.news].sort((a, b) => new Date(b.date) - new Date(a.date));
+  const sorted = [...db.news].sort(
+    (a, b) => new Date(b.date) - new Date(a.date),
+  );
   res.status(200).json(sorted.slice(skip, skip + limit));
 });
 router.get('/news/:slug', (req, res) => {

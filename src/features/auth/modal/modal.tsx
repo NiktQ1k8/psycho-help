@@ -1,10 +1,10 @@
 import React from 'react';
 import type { FC } from 'react';
 import { createPortal } from 'react-dom';
-import ModalRegistration from './modal-registration';
-import ModalLogin from './modal-login';
-import ModalForgotPassword from './modal-forgot-password';
 import ModalChangePassword from './modal-change-password';
+import ModalForgotPassword from './modal-forgot-password';
+import ModalLogin from './modal-login';
+import ModalRegistration from './modal-registration';
 
 interface ModalWindowProps {
   isOpen: boolean;
@@ -27,7 +27,11 @@ const ModalWindow: FC<ModalWindowProps> = ({ isOpen, onClose }) => {
   const renderContent = () => {
     if (modalWindow === 'log') {
       return (
-        <ModalLogin setWindow={setModalWindow} isOpen={isOpen} setModalOpen={handleSetModalOpen} />
+        <ModalLogin
+          setWindow={setModalWindow}
+          isOpen={isOpen}
+          setModalOpen={handleSetModalOpen}
+        />
       );
     }
     if (modalWindow === 'reg') {

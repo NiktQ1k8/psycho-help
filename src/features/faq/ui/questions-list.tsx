@@ -1,6 +1,6 @@
 import { useState } from 'react';
+import styles from './QuestionsList.module.scss';
 import Question from './question';
-import styles from './questions-list.module.css';
 
 const QuestionsList = ({
   questions,

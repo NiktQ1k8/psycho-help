@@ -1,5 +1,9 @@
+import {
+  SearchOutlined,
+  SortAscendingOutlined,
+  SortDescendingOutlined,
+} from '@ant-design/icons';
 import { AutoComplete, DatePicker, Input, Select } from 'antd';
-import { SortAscendingOutlined, SortDescendingOutlined, SearchOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 import type { SortDirection } from '@/features/personal-cabinet/model/psychologist-view';
@@ -97,7 +101,10 @@ const PsychologistListFilters = ({
           value={dateRange ? [dayjs(dateRange[0]), dayjs(dateRange[1])] : null}
           onChange={(dates: [Dayjs | null, Dayjs | null] | null) => {
             if (dates && dates[0] && dates[1]) {
-              onDateRangeChange([dates[0].toISOString(), dates[1].toISOString()]);
+              onDateRangeChange([
+                dates[0].toISOString(),
+                dates[1].toISOString(),
+              ]);
               return;
             }
             onDateRangeChange(null);
@@ -111,11 +118,17 @@ const PsychologistListFilters = ({
       <div className={styles['filters__bar__second']}>
         <button
           className={styles['filters__sort-button']}
-          onClick={() => onSortDirectionChange(sortDirection === 'asc' ? 'desc' : 'asc')}
+          onClick={() =>
+            onSortDirectionChange(sortDirection === 'asc' ? 'desc' : 'asc')
+          }
           type="button"
         >
           Сортировка по дате
-          {sortDirection === 'desc' ? <SortDescendingOutlined /> : <SortAscendingOutlined />}
+          {sortDirection === 'desc' ? (
+            <SortDescendingOutlined />
+          ) : (
+            <SortAscendingOutlined />
+          )}
         </button>
 
         {hasActiveFilters && (

@@ -2,11 +2,13 @@
   display: grid;
   grid-template-columns: 28.8rem 1fr;
   gap: 2.4rem;
+
   max-width: 122.4rem;
+  min-height: calc(100vh - 8rem);
   margin: 0 auto;
   padding: 4rem 2.4rem;
-  min-height: calc(100vh - 8rem);
-  @media (max-width: 1023px) {
+
+  @media (width <= 1023px) {
     grid-template-columns: 1fr;
     gap: 2.4rem;
     padding: 2.4rem 1.6rem;
@@ -15,11 +17,13 @@
 
 .sidebarWrapper {
   position: sticky;
+
   // top: 4rem;
   top: calc(var(--header-height) + 4rem);
   height: fit-content;
+
   // @media (max-width: 1023px) {
-  @media (max-height: 900px), (max-width: 1023px) {
+  @media (height <= 900px), (width <= 1023px) {
     position: static;
   }
 }
@@ -27,27 +31,31 @@
 .back {
   display: flex;
   gap: 1.2rem;
-  outline: none;
-  background: none;
+
   border: none;
-  color: var(--color-label-neutral-primary);
+
+  font-family: var(--font-text-medium);
   font-size: 1.6rem;
   line-height: 2.4rem;
-  font-family: var(--font-text-medium);
+  color: var(--color-label-neutral-primary);
+
+  background: none;
+  outline: none;
 }
 
 .title {
-  font-size: 3.2rem;
-  line-height: 3.6rem;
+  margin: 24px 0;
+
   font-family: var(--font-h4);
+  font-size: 3.2rem;
   font-weight: 700;
-  margin: 24px 0 24px 0;
+  line-height: 3.6rem;
 }
 
 .status {
   display: flex;
-  align-items: center;
   gap: 8px;
+  align-items: center;
   color: var(--color-label-primary);
 }
 
@@ -78,15 +86,16 @@
 .reasonBlockCancelled {
   margin-bottom: 24px;
   padding: 16px;
-  background-color: var(--color-bg-warning-light, #fffbeb);
   border-left: 4px solid var(--color-label-warning-primary, #f59e0b);
   border-radius: 4px;
 
+  background-color: var(--color-bg-warning-light, #fffbeb);
+
   .reasonLabel {
-    font-weight: 600;
-    font-size: 14px;
-    color: var(--color-label-warning-primary, #f59e0b);
     margin-right: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-label-warning-primary, #f59e0b);
   }
 
   .reasonText {
@@ -96,19 +105,21 @@
 }
 
 .infoBlock {
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 0;
-  overflow: hidden;
 }
 
 .infoRow {
   display: flex;
   flex-direction: column;
+
   padding: 1.6rem 0;
+
+  font-family: var(--font-text-medium);
   font-size: 1.6rem;
   line-height: 2.8rem;
-  font-family: var(--font-text-medium);
 
   &:last-child {
     border-bottom: none;
@@ -116,20 +127,21 @@
 }
 
 .infoLabel {
+  margin-bottom: 8px;
   font-size: 1.6rem;
   line-height: 2.4rem;
   color: var(--color-label-neutral-tetriary, #6b7280);
-  margin-bottom: 8px;
 }
 
 .infoValue,
 .infoValueGrid,
 .infoValue textarea {
+  padding: 1.2rem;
+
+  font-family: var(--font-text-medium);
   font-size: 1.6rem;
   line-height: 2.4rem;
   color: var(--color-label-neutral-primary, #111827);
-  font-family: var(--font-text-medium);
-  padding: 1.2rem;
 }
 
 .actions {
@@ -139,50 +151,54 @@
 }
 
 .infoGrid {
-  width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
-  padding: 1.6rem 0;
   justify-items: center;
+
+  width: 100%;
+  padding: 1.6rem 0;
 }
 
 .infoRowGrid {
-  width: 100%;
   display: flex;
   flex-direction: column;
+
+  width: 100%;
+
+  font-family: var(--font-text-medium);
   font-size: 1.6rem;
   line-height: 2.8rem;
-  font-family: var(--font-text-medium);
 }
 
 .infoValueGrid {
+  padding: 1.2rem;
   border: 1px solid var(--color-border-neutral-base, #e5e7eb);
   border-radius: 4px;
-  padding: 1.2rem;
 }
 
 .infoName {
+  font-family: var(--font-text-large);
   font-size: 2rem;
   line-height: 2.8rem;
-  font-family: var(--font-text-large);
   color: var(--color-label-neutral-primary, #111827);
 }
 
 .statusLabel {
+  margin-bottom: 8px;
+
+  font-family: var(--font-text-medium);
   font-size: 1.6rem;
   line-height: 2.4rem;
   color: var(--color-label-neutral-tetriary, #6b7280);
-  font-family: var(--font-text-medium);
-  margin-bottom: 8px;
 }
 
 .infoValueEmail,
 .infoValuePhone {
+  font-family: var(--font-text-large);
   font-size: 2rem;
   line-height: 2.8rem;
   color: var(--color-label-neutral-primary, #111827);
-  font-family: var(--font-text-large);
 }
 
 .actionButtonCancel,
@@ -193,16 +209,20 @@
 }
 
 .actionButtonEnd {
+  cursor: pointer;
+
   padding: 12px 50px;
-  background-color: var(--color-interactive-brand-primary, #2563eb);
-  color: #fff;
   border: none;
   border-radius: 16px;
-  font-size: 2rem;
-  line-height: 2.8rem;
+
   font-family: var(--font-text-large);
+  font-size: 2rem;
   font-weight: 500;
-  cursor: pointer;
+  line-height: 2.8rem;
+  color: #fff;
+
+  background-color: var(--color-interactive-brand-primary, #2563eb);
+
   transition: background-color 0.2s;
 
   &:hover {
@@ -210,22 +230,26 @@
   }
 
   &:disabled {
-    opacity: 0.5;
     cursor: not-allowed;
+    opacity: 0.5;
   }
 }
 
 .actionButtonCancel {
+  cursor: pointer;
+
   padding: 12px 50px;
-  background-color: var(--color-fill-danger-tetriary);
-  color: var(--color-label-danger-primary);
   border: none;
   border-radius: 16px;
-  font-size: 2rem;
-  line-height: 2.8rem;
+
   font-family: var(--font-text-large);
+  font-size: 2rem;
   font-weight: 500;
-  cursor: pointer;
+  line-height: 2.8rem;
+  color: var(--color-label-danger-primary);
+
+  background-color: var(--color-fill-danger-tetriary);
+
   transition: background-color 0.2s;
 
   &:hover {
@@ -235,14 +259,14 @@
 
 .actions {
   display: flex;
-  gap: 2.4rem;
   flex-direction: row-reverse;
+  gap: 2.4rem;
 }
 
-@media (max-width: 1023px) {
+@media (width <= 1023px) {
   .page {
-    padding: 24px 16px 64px;
     grid-template-columns: 1fr;
+    padding: 24px 16px 64px;
   }
 
   .sidebarWrapper {
@@ -253,43 +277,48 @@
     padding: 0;
   }
 }
-@media (max-width: 600px) {
+
+@media (width <= 600px) {
   .sidebarWrapper * {
     display: none;
   }
+
   .page {
-    padding: 0 10px 100px 10px;
     display: flex;
     flex-direction: column;
     gap: 20px;
+    padding: 0 10px 100px;
   }
+
   .infoGrid {
     display: flex;
     flex-direction: column;
   }
+
   .title {
-    font-size: 2rem;
-    line-height: 2.8rem;
     margin-top: 3rem;
     margin-bottom: 2rem;
+    font-size: 2rem;
+    line-height: 2.8rem;
   }
+
   .infoName {
+    font-family: var(--font-h5);
     font-size: 1.8rem;
     line-height: 2.4rem;
-    font-family: var(--font-h5);
   }
 }
 
-@media (min-width: 500px) and (max-width: 1024px)  {
+@media (width >= 500px) and (width <= 1024px) {
   .sidebarWrapper * {
     display: none;
   }
 
   .page {
-    padding: 0 24px;
-    padding-bottom: 4rem;
     display: flex;
     flex-direction: column;
+    padding: 0 24px;
+    padding-bottom: 4rem;
   }
 }
 
@@ -300,6 +329,7 @@
   .statusLabel {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .infoName,
   .status-text,
   .infoValueGrid,
@@ -310,10 +340,10 @@
       var(--color-label-neutral-inverted-primary)
     );
   }
+
   .status-dot {
     &--completed {
       background-color: var(--color-label-neutral-inverted-primary);
     }
   }
-  
 }

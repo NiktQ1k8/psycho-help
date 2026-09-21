@@ -1,15 +1,17 @@
-import express from 'express';
-import router from './api-router.js';
 import axios from 'axios';
-import { createProxyMiddleware } from 'http-proxy-middleware';
 import cookieParser from 'cookie-parser';
+import express from 'express';
 import fs from 'fs';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 import path from 'path';
+import router from './api-router.js';
 
 let should_reroute = true;
 
 if (process.env.NODE_ENV === 'production') {
-  console.error('Attempted to run development server in production mode. Exiting...');
+  console.error(
+    'Attempted to run development server in production mode. Exiting...',
+  );
   process.exit(1);
 }
 process.loadEnvFile('.env.development');
@@ -69,15 +71,22 @@ if (!should_reroute) {
   }
   app.use(apiPath, router);
   app.get('/image/*imagesPath', (req, res) => {
-    fs.access(path.join(process.cwd(), ...req.params.imagesPath), fs.constants.F_OK, (err) => {
-      if (err) {
-        return res.status(404).json({ message: 'Файл не найден' });
-      }
-      res.sendFile(path.join(process.cwd(), ...req.params.imagesPath));
-    });
+    fs.access(
+      path.join(process.cwd(), ...req.params.imagesPath),
+      fs.constants.F_OK,
+      (err) => {
+        if (err) {
+          return res.status(404).json({ message: 'Файл не найден' });
+        }
+        res.sendFile(path.join(process.cwd(), ...req.params.imagesPath));
+      },
+    );
   });
 }
 
 app.listen(8000, () => {
-  console.log('\x1b[32m%s\x1b[0m', 'Local server succesfully started as http://localhost:8000');
+  console.log(
+    '\x1b[32m%s\x1b[0m',
+    'Local server succesfully started as http://localhost:8000',
+  );
 });

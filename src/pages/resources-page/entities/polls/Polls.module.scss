@@ -10,28 +10,31 @@
     width: fit-content;
     padding-inline: 12.6rem;
   }
-  .passList {
-    grid-template-columns: 1fr;
 
+  .passList {
     display: grid;
-    padding-inline: 1rem;
+    grid-template-columns: 1fr;
     gap: 1.2rem;
-    justify-items: center;
     justify-content: center;
+    justify-items: center;
+
+    padding-inline: 1rem;
 
     .passBtn {
-      background: var(--color-interactive-brand-secondary);
-      color: var(--color-label-brand-primary);
       width: 100%;
       padding: 1.6rem;
       border-radius: 1.6rem;
+
+      color: var(--color-label-brand-primary);
+
+      background: var(--color-interactive-brand-secondary);
     }
 
     @include past-tablet {
       .passList {
         grid-template-columns: repeat(auto-fit, minmax(35rem, 1fr));
-        padding: 0;
         gap: 1.6rem;
+        padding: 0;
       }
     }
 
@@ -43,6 +46,7 @@
       }
     }
   }
+
   @include mobile-specific {
     .showMore {
       width: 100%;
@@ -51,14 +55,15 @@
   }
 }
 
-[data-theme="dark"]{
-  .wrapper{
-    .passList{
-      .passBtn{
-        &:hover{
+[data-theme='dark'] {
+  .wrapper {
+    .passList {
+      .passBtn {
+        &:hover {
           background-color: var(--color-interactive-neutral-hover-secondary);
         }
-        &:active{
+
+        &:active {
           background-color: var(--color-interactive-neutral-active-secondary);
         }
       }

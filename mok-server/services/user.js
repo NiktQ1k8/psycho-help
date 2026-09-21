@@ -3,7 +3,8 @@ import * as db from '../services/db.js';
 
 export async function createUser(userData) {
   const existingUser = db.users.find(
-    (u) => u.email === userData.email || u.phone_number === userData.phone_number,
+    (u) =>
+      u.email === userData.email || u.phone_number === userData.phone_number,
   );
   if (existingUser) {
     throw new Error('Пользователь с такой почтой или телефоном уже существует');

@@ -1,7 +1,7 @@
-import { create } from 'zustand';
-import AuthApi from './auth-api';
 import type { AxiosResponse } from 'axios';
-import type { User, RegistrationData } from '@/entities/auth';
+import { create } from 'zustand';
+import type { RegistrationData, User } from '@/entities/auth';
+import AuthApi from './auth-api';
 
 type Tauth = {
   isAuth: boolean;
@@ -21,7 +21,8 @@ export const useAuth = create<Tauth>((set, _get) => ({
 
   setAuth: (value: boolean) => set((state) => ({ ...state, isAuth: value })),
 
-  setUser: (user: User | null) => set((state) => ({ ...state, user: user ? { ...user } : null })),
+  setUser: (user: User | null) =>
+    set((state) => ({ ...state, user: user ? { ...user } : null })),
 
   async login(email: string, password: string): Promise<AxiosResponse<User>> {
     const res = await AuthApi.login(email, password);

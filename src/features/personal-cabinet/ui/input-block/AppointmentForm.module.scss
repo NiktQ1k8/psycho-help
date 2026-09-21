@@ -1,55 +1,63 @@
 .form {
-  max-width: 800px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 0 24px 24px 24px;
   display: flex;
   flex-direction: column;
   gap: 48px;
+
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 24px 24px;
 }
 
 .label {
   display: block;
-  font-size: 2.4rem;
-  color: var(--color-label-neutral-primary);
-  font-weight: 500;
+
   margin-bottom: 8px;
+
+  font-size: 2.4rem;
+  font-weight: 500;
+  color: var(--color-label-neutral-primary);
 }
 
 .format__btns {
   display: flex;
-  justify-content: space-between;
   gap: 16px;
+  justify-content: space-between;
+
   width: 40%;
   margin-top: 16px;
 }
 
 .formatButton {
+  cursor: pointer;
+
   flex: 1;
+
   padding: 10px;
   border: 1px solid #ccc;
-  background: #fff;
   border-radius: 8px;
+
   font-size: 16px;
-  cursor: pointer;
+
+  background: #fff;
 }
 
 .active {
-  background-color: var(--color-interactive-neutral-primary);
   color: var(--color-label-neutral-inverted-primary);
+  background-color: var(--color-interactive-neutral-primary);
 }
 
 .location__btns {
-  margin-top: 16px;
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
+  margin-top: 16px;
 }
 
 .location__element {
   display: flex;
-  align-items: center;
   gap: 8px;
+  align-items: center;
 }
 
 .location__element input[type='checkbox'] {
@@ -67,9 +75,9 @@
 
 .mainInfo {
   display: flex;
-  color: var(--color-label-neutral-primary);
   gap: 36px;
   margin-top: 24px;
+  color: var(--color-label-neutral-primary);
 }
 
 .imgWrapper {
@@ -79,14 +87,16 @@
 }
 
 .photo {
+  overflow: hidden;
+
   width: 244px;
   height: 267px;
+  border-radius: 16px;
+
   object-fit: cover;
   background-repeat: no-repeat;
-  border-radius: 16px;
-  overflow: hidden;
-  background-size: cover;
   background-position: center;
+  background-size: cover;
 }
 
 .name {
@@ -122,19 +132,21 @@
 
 .consultAreas {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
-  margin-top: 8px;
+
   width: 100%;
   max-width: 467px;
-  flex-wrap: wrap;
+  margin-top: 8px;
 }
 
 .consultArea {
-  color: var(--color-label-neutral-secondary);
-  border: var(--color-border-neutral-base) 1px solid;
   padding: 4px 16px;
+  border: var(--color-border-neutral-base) 1px solid;
   border-radius: 16px;
+
   font-size: 1.4rem;
+  color: var(--color-label-neutral-secondary);
 }
 
 /* Обёртка галереи для позиционирования кнопок */
@@ -144,24 +156,30 @@
 
 /* Кнопки навигации галереи (Вперед / Назад) */
 .galleryBtn {
+  cursor: pointer;
+
   position: absolute;
+  z-index: 2;
   top: 50%;
   transform: translateY(-50%);
-  background: var(--color-interactive-brand-primary, #0056b3);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+
+  color: white;
+
+  background: var(--color-interactive-brand-primary, #0056b3);
+  box-shadow: 0 4px 10px rgb(0 0 0 / 10%);
+
   transition:
     opacity 0.2s,
     transform 0.2s;
-  z-index: 2;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .galleryBtn img {
@@ -190,7 +208,7 @@
   transform: translateY(-50%) scale(0.95);
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .mainInfo {
     flex-direction: column;
     align-items: center;
@@ -199,8 +217,8 @@
   .galleryBtn {
     position: static;
     transform: none;
-    margin: 16px 8px 0;
     display: inline-flex;
+    margin: 16px 8px 0;
   }
 
   .galleryBtn:active {
@@ -209,11 +227,12 @@
 }
 
 .therapist .empty {
-  text-align: center;
-  color: var(--text-secondary, #666);
   padding: 24px;
-  font-style: italic;
+
   font-size: 1.6rem;
+  font-style: italic;
+  color: var(--text-secondary, #666);
+  text-align: center;
 }
 
 /* Элементы формы (календарь, дропдаун, текст) */
@@ -225,13 +244,16 @@
 
 .datePicker,
 .selectInput {
+  cursor: pointer;
+
   width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 8px;
+
   font-size: 1.6rem;
+
   background: #fff;
-  cursor: pointer;
 }
 
 .datePicker :global(.ant-picker-input > input) {
@@ -239,26 +261,33 @@
 }
 
 .textarea {
+  resize: none;
+
   width: 100%;
   height: 100px;
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 8px;
+
   font-size: 16px;
-  resize: none;
+
   background: #fff;
 }
 
 .subButton {
-  background-color: var(--color-interactive-brand-primary);
-  color: var(--color-label-neutral-inverted-primary);
-  border: none;
-  width: 289px;
-  font-size: 2rem;
-  padding: 16px 0;
-  border-radius: 16px;
-  align-self: self-end;
   cursor: pointer;
+
+  align-self: self-end;
+
+  width: 289px;
+  padding: 16px 0;
+  border: none;
+  border-radius: 16px;
+
+  font-size: 2rem;
+  color: var(--color-label-neutral-inverted-primary);
+
+  background-color: var(--color-interactive-brand-primary);
 }
 
 .subButton:hover,
@@ -268,16 +297,16 @@
 
 .subButton:disabled,
 .submitBtn:disabled {
-  opacity: 0.6;
   cursor: not-allowed;
+  opacity: 0.6;
 }
 
 /* Результаты */
 .backButton {
-  background: none;
-  border: none;
   cursor: pointer;
   margin-top: 4px;
+  border: none;
+  background: none;
 }
 
 .backArrow {
@@ -310,51 +339,63 @@
 }
 
 .results__textarea {
-  margin-top: 0;
   cursor: default;
+  margin-top: 0;
 }
 
 .submitBtn {
-  margin-top: 12px;
-  width: 214px;
-  align-self: flex-end;
-  background-color: var(--color-interactive-brand-primary);
-  color: var(--color-label-neutral-inverted-primary);
-  border: none;
-  padding: 16px 52px;
-  border-radius: 16px;
   cursor: pointer;
+
+  align-self: flex-end;
+
+  width: 214px;
+  margin-top: 12px;
+  padding: 16px 52px;
+  border: none;
+  border-radius: 16px;
+
   font-size: 2rem;
+  color: var(--color-label-neutral-inverted-primary);
+
+  background-color: var(--color-interactive-brand-primary);
 }
 
 [data-theme='dark'] {
   .label {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .formatButton {
     border: none;
-    background-color: var(--color-interactive-neutral-active);
     color: var(--color-label-neutral-inverted-primary);
+    background-color: var(--color-interactive-neutral-active);
   }
+
   .formatButton.active {
     background-color: var(--color-label-brand-primary);
   }
+
   .textarea {
-    background-color: var(--color-fill-neutral-primary);
     color: var(--color-label-neutral-inverted-primary);
+    background-color: var(--color-fill-neutral-primary);
   }
+
   .textarea::placeholder {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .location__element label {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .name {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .qual {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .exp {
     color: color-mix(
       in srgb,
@@ -362,6 +403,7 @@
       var(--color-label-neutral-inverted-primary)
     );
   }
+
   .office {
     color: color-mix(
       in srgb,
@@ -371,16 +413,18 @@
   }
 
   .consultArea {
-    color: var(--color-label-neutral-inverted-primary);
     border: 1px solid var(--color-border-neutral-inverted);
+    color: var(--color-label-neutral-inverted-primary);
   }
 
   .backArrow svg path {
     stroke: var(--color-border-neutral-inverted);
   }
+
   .results__title {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .results__textGray {
     color: color-mix(
       in srgb,

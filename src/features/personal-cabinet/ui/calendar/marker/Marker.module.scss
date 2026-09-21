@@ -1,13 +1,13 @@
 .marker {
   display: flex;
-  align-items: center;
   gap: 1rem;
+  align-items: center;
 }
 
 .markerColor {
-  border-radius: 50%;
-  height: 1.2rem;
   width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 50%;
 }
 
 .markerText {

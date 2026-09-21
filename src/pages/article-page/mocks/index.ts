@@ -1,5 +1,6 @@
-import type { IArticlePageData } from '../models';
 import CoverImage from '@/shared/assets/images/resources/articleCover.png';
+import type { IArticlePageData } from '../models';
+
 export const mockArticlePageData: IArticlePageData = {
   author: 'Иванов Иван',
   date: new Date('2025-10-11').toISOString(),

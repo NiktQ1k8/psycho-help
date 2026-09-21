@@ -1,7 +1,7 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { questionsData } from '@/pages/test-page/mocks';
 import styles from './Test-page.module.scss';
-import { useNavigate } from 'react-router-dom';
 
 export const TestPage = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);

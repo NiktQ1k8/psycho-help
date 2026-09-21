@@ -1,9 +1,9 @@
 import type { FC } from 'react';
-import type { Therapist } from '@/entities/therapist/types';
-import styles from './Doctor.module.scss';
-import Img from '@/shared/ui/img/Img';
-import altPhoto from '@/shared/assets/images/altPhotos/User_Accounts_alt.png';
 import { Link } from 'react-router-dom';
+import type { Therapist } from '@/entities/therapist/types';
+import altPhoto from '@/shared/assets/images/altPhotos/User_Accounts_alt.png';
+import Img from '@/shared/ui/img/Img';
+import styles from './Doctor.module.scss';
 
 interface Props {
   doctor: Therapist;
@@ -20,7 +20,9 @@ export const DoctorCard: FC<Props> = ({ doctor, linkToDetails = true }) => {
       />
 
       <div className={styles.info}>
-        <p className={styles.fio}>{[doctor.last_name, doctor.first_name].join(' ')}</p>
+        <p className={styles.fio}>
+          {[doctor.last_name, doctor.first_name].join(' ')}
+        </p>
 
         <p className={styles.speciality}>{doctor.qualification}</p>
         <p className={styles.experience}>Опыт {doctor.experience}</p>
@@ -35,7 +37,10 @@ export const DoctorCard: FC<Props> = ({ doctor, linkToDetails = true }) => {
   if (!linkToDetails) return content;
 
   return (
-    <Link to={`/therapists/${doctor.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+    <Link
+      to={`/therapists/${doctor.id}`}
+      style={{ textDecoration: 'none', color: 'inherit' }}
+    >
       {content}
     </Link>
   );

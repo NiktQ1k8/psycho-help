@@ -1,7 +1,7 @@
 import type { FC } from 'react';
+import type { News } from '@/entities/news/types';
 import { NewsCard } from '../news-card';
 import styles from './NewsList.module.scss';
-import type { News } from '@/entities/news/types';
 
 interface Props {
   news: News[];

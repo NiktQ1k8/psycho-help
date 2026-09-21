@@ -1,7 +1,7 @@
-import React, { useState, useRef, type KeyboardEvent } from 'react';
-import { type ITabItemProps, TabItem } from './components/tab-item';
-import styles from './Tabs.module.scss';
+import React, { type KeyboardEvent, useRef, useState } from 'react';
 import clsx from 'clsx';
+import styles from './Tabs.module.scss';
+import { type ITabItemProps, TabItem } from './components/tab-item';
 
 export interface ITab extends Omit<ITabItemProps, 'isActive' | 'tabRef'> {
   content: React.ReactNode;
@@ -24,7 +24,9 @@ export const Tabs: React.FC<ITabsProps> = ({
   className = '',
   contentClassName,
 }) => {
-  const [activeTab, setActiveTab] = useState<string>(defaultActiveTab || tabs[0]?.id || '');
+  const [activeTab, setActiveTab] = useState<string>(
+    defaultActiveTab || tabs[0]?.id || '',
+  );
   const tabRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
 
   const handleTabClick = (tabId: string, disabled?: boolean) => {
@@ -33,9 +35,14 @@ export const Tabs: React.FC<ITabsProps> = ({
     onChange?.(tabId);
   };
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLButtonElement>, tabId: string) => {
+  const handleKeyDown = (
+    e: KeyboardEvent<HTMLButtonElement>,
+    tabId: string,
+  ) => {
     const enabledTabs = tabs.filter((tab) => !tab.disabled);
-    const currentEnabledIndex = enabledTabs.findIndex((tab) => tab.id === tabId);
+    const currentEnabledIndex = enabledTabs.findIndex(
+      (tab) => tab.id === tabId,
+    );
 
     let nextTab: ITab | undefined;
 
@@ -48,7 +55,10 @@ export const Tabs: React.FC<ITabsProps> = ({
       case 'ArrowLeft':
       case 'ArrowUp':
         e.preventDefault();
-        nextTab = enabledTabs[(currentEnabledIndex - 1 + enabledTabs.length) % enabledTabs.length];
+        nextTab =
+          enabledTabs[
+            (currentEnabledIndex - 1 + enabledTabs.length) % enabledTabs.length
+          ];
         break;
       case 'Home':
         e.preventDefault();

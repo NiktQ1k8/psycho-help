@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import { isAuthenticated } from '../lib/auth.js';
 import {
-  createAppointment,
-  getAppointments,
-  getAppointmentById,
   cancelAppointment,
+  createAppointment,
+  getAppointmentById,
+  getAppointments,
 } from '../services/appointments.js';
 
 const router = Router();
@@ -35,7 +35,8 @@ router.post('/create', isAuthenticated, async (req, res) => {
 router.get('/:id', isAuthenticated, async (req, res) => {
   try {
     const appointment = await getAppointmentById(req.params.id);
-    if (!appointment) return res.status(404).json({ detail: 'Appointment not found' });
+    if (!appointment)
+      return res.status(404).json({ detail: 'Appointment not found' });
 
     if (
       appointment.patient_id !== req.user.id &&

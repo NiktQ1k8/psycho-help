@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import styles from './modal.module.css';
 import { useAuth } from '@/features/auth/api/useAuth';
 import { useFetch } from '@/shared/api/useFetch';
+import styles from './Modal.module.scss';
 import EyeIcon from './icons/Eye.svg?react';
 import EyeOffIcon from './icons/EyeOff.svg?react';
 
@@ -57,7 +57,8 @@ const ModalLogin: React.FC<Tprops> = ({ setWindow, isOpen, setModalOpen }) => {
       ? ''
       : 'Некорректный формат электронной почты';
 
-  const validatePassword = (password: string) => (password ? '' : 'Пароль не может быть пустым');
+  const validatePassword = (password: string) =>
+    password ? '' : 'Пароль не может быть пустым';
 
   const validateForm = () => {
     const newErrors = {
@@ -122,7 +123,9 @@ const ModalLogin: React.FC<Tprops> = ({ setWindow, isOpen, setModalOpen }) => {
               className={styles.input}
               aria-details="Строка для ввода электронной почты"
             />
-            {errors.email && <span className={styles.errorText}>{errors.email}</span>}
+            {errors.email && (
+              <span className={styles.errorText}>{errors.email}</span>
+            )}
           </label>
           <label>
             <span>Пароль</span>
@@ -145,7 +148,9 @@ const ModalLogin: React.FC<Tprops> = ({ setWindow, isOpen, setModalOpen }) => {
                 {showPassword ? <EyeIcon /> : <EyeOffIcon />}
               </button>
             </div>
-            {errors.password && <span className={styles.errorText}>{errors.password}</span>}
+            {errors.password && (
+              <span className={styles.errorText}>{errors.password}</span>
+            )}
           </label>
           <div className={styles.rememberContainer}>
             <div className={styles.rememberCheckbox}>
@@ -172,18 +177,27 @@ const ModalLogin: React.FC<Tprops> = ({ setWindow, isOpen, setModalOpen }) => {
           </div>
         </form>
 
-        {error.status === 401 && <p className={styles.errorMessage}>Неверный логин или пароль</p>}
+        {error.status === 401 && (
+          <p className={styles.errorMessage}>Неверный логин или пароль</p>
+        )}
         {error.message !== '' && error.status !== 401 && (
           <p className={styles.errorMessage}>{error.message}</p>
         )}
 
         <div className={styles.footer}>
-          <button className={styles.submitButton} onClick={handleOk} disabled={isLoading}>
+          <button
+            className={styles.submitButton}
+            onClick={handleOk}
+            disabled={isLoading}
+          >
             {isLoading ? 'Загрузка...' : 'Войти'}
           </button>
           <p className={styles.Suggestion}>
             <span>У вас еще нет учетной записи?</span>{' '}
-            <a className={styles.ModalSwitcher} onClick={() => setWindow('reg')}>
+            <a
+              className={styles.ModalSwitcher}
+              onClick={() => setWindow('reg')}
+            >
               Регистрация
             </a>
           </p>

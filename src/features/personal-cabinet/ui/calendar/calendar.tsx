@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import type { FC, CSSProperties } from 'react';
+import type { CSSProperties, FC } from 'react';
 import { Calendar, theme } from 'antd';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
-import styles from './calendar.module.css';
-import { useAppointment } from '@/features/personal-cabinet/model/appointment';
-import Marker from './marker/marker';
 import type { Appointment } from '@/entities/appointment/types';
+import { useAppointment } from '@/features/personal-cabinet/model/appointment';
+import styles from './Calendar.module.scss';
+import Marker from './marker/marker';
 
 // Accepted, Approved, Cancelled, Done
 const specialDatesTypes: Record<string, string> = {
@@ -40,7 +40,9 @@ const ACalendar: FC<Props> = ({ appointments }) => {
         Object.assign(
           {},
           ...appointments.map((el) => {
-            return { [dayjs(el.scheduled_time).format('YYYY-MM-DD')]: el.status };
+            return {
+              [dayjs(el.scheduled_time).format('YYYY-MM-DD')]: el.status,
+            };
           }),
         ),
       );
@@ -64,7 +66,11 @@ const ACalendar: FC<Props> = ({ appointments }) => {
 
     const style: CSSProperties = {
       // фон: выбранная, или спец., или дефолт
-      backgroundColor: isSelected ? '#1890ff' : specialBg ? specialBg : undefined,
+      backgroundColor: isSelected
+        ? '#1890ff'
+        : specialBg
+          ? specialBg
+          : undefined,
       ...(isToday ? { boxShadow: '0 0 0 1px #555555 inset' } : {}),
     };
 

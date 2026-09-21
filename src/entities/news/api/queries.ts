@@ -1,7 +1,7 @@
 import { type QueryObserverOptions, queryOptions } from '@tanstack/react-query';
-import { $api } from '@/shared/api/http.ts';
-import type { ResponseError } from '@/shared/api';
 import type { News } from '@/entities/news/types';
+import type { ResponseError } from '@/shared/api';
+import { $api } from '@/shared/api/http.ts';
 
 export const newsItemQueryKey = {
   list: 'newsItem.list',
@@ -16,7 +16,10 @@ export const newsItemQueries = {
       ...options,
     }),
 
-  bySlug: (slug: string, options?: Partial<QueryObserverOptions<News, ResponseError>>) =>
+  bySlug: (
+    slug: string,
+    options?: Partial<QueryObserverOptions<News, ResponseError>>,
+  ) =>
     queryOptions<News, ResponseError>({
       queryKey: [newsItemQueryKey.bySlug, slug],
       queryFn: async () => (await $api.get(`/news/${slug}`)).data,

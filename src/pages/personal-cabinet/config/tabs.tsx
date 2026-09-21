@@ -1,12 +1,12 @@
 import type { FC } from 'react';
 import type { User } from '@/entities/auth/types';
 import type { RoleCode } from '@/entities/role/types';
-import Dashboard from '../ui/dashboard/Dashboard';
+import AppointmentForm from '@/features/personal-cabinet/ui/input-block/AppointmentForm';
+import PersonalData from '@/features/personal-cabinet/ui/personal-data/PersonalData';
 import PsychologistApplications from '@/pages/personal-cabinet/ui/applications/PsychologistApplications';
 import PsychologistAppointments from '@/pages/personal-cabinet/ui/appointments/PsychologistAppointments';
-import AppointmentForm from '@/features/personal-cabinet/ui/input-block/AppointmentForm';
 import ComingSoon from '../ui/PlaceholderComponent';
-import PersonalData from '@/features/personal-cabinet/ui/personal-data/PersonalData';
+import Dashboard from '../ui/dashboard/Dashboard';
 
 export type TabId =
   | 'main'

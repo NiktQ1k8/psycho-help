@@ -1,21 +1,27 @@
 import type { FC } from 'react';
-import { useState, useMemo, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { message, DatePicker, ConfigProvider } from 'antd';
+import { ConfigProvider, DatePicker, message } from 'antd';
 import locale from 'antd/es/locale/ru_RU';
-import dayjs, { Dayjs } from 'dayjs';
 import clsx from 'clsx';
-import { useApplication } from '@/features/personal-cabinet/model/application';
+import dayjs, { Dayjs } from 'dayjs';
+import {
+  createApplication,
+  getUniversityStatuses,
+} from '@/entities/application/api';
+import type {
+  ApplicationCreateRequest,
+  UniversityStatus,
+} from '@/entities/application/types';
 import { therapistQueries } from '@/entities/therapist/api';
+import { useAuth } from '@/features/auth/api/useAuth';
+import { useApplication } from '@/features/personal-cabinet/model/application';
 import altPhoto from '@/shared/assets/images/altPhotos/User_Accounts_alt.png';
-import { Img } from '@/shared/ui';
 import arrow from '@/shared/assets/images/appointments/arrow.svg';
 import backArrow from '@/shared/assets/images/appointments/backArrow.svg';
-import { useAuth } from '@/features/auth/api/useAuth';
-import type { ApplicationCreateRequest, UniversityStatus } from '@/entities/application/types';
-import { createApplication, getUniversityStatuses } from '@/entities/application/api';
+import { Img } from '@/shared/ui';
 import Loader from '@/shared/ui/loader/loader';
-import styles from './AppointmentForm.module.css';
+import styles from './AppointmentForm.module.scss';
 
 const AppointmentForm: FC = () => {
   const { data: doctors = [], isLoading } = useQuery(therapistQueries.list());
@@ -25,9 +31,13 @@ const AppointmentForm: FC = () => {
 
   // 🎯 State для навигации по галерее и фильтров
   const [currentTherapistIndex, setCurrentTherapistIndex] = useState(0);
-  const [selectedOffices, setSelectedOffices] = useState<Set<string>>(new Set());
+  const [selectedOffices, setSelectedOffices] = useState<Set<string>>(
+    new Set(),
+  );
   const [window, setWindow] = useState<'form' | 'results'>('form');
-  const [meetingType, setMeetingType] = useState<'online' | 'offline' | null>(null);
+  const [meetingType, setMeetingType] = useState<'online' | 'offline' | null>(
+    null,
+  );
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
   const [universityStatuses, setUniversityStatuses] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -72,7 +82,12 @@ const AppointmentForm: FC = () => {
         const statuses = await getUniversityStatuses();
         setUniversityStatuses(statuses);
       } catch {
-        setUniversityStatuses(['студент', 'аспирант', 'преподаватель', 'сотрудник']);
+        setUniversityStatuses([
+          'студент',
+          'аспирант',
+          'преподаватель',
+          'сотрудник',
+        ]);
       }
     };
     fetchUniversityStatuses();
@@ -153,7 +168,8 @@ const AppointmentForm: FC = () => {
       psychologist_id: currentTherapist.id!,
       scheduled_at: selectedDate.toISOString(),
       problem_description: application.problem_description!,
-      preferred_campus: meetingType === 'offline' ? currentTherapist.office : undefined,
+      preferred_campus:
+        meetingType === 'offline' ? currentTherapist.office : undefined,
       university_status: application.university_status as UniversityStatus,
     };
 
@@ -181,7 +197,9 @@ const AppointmentForm: FC = () => {
             <div className={styles.format__btns}>
               <button
                 type="button"
-                className={clsx(styles.formatButton, { [styles.active]: meetingType === 'online' })}
+                className={clsx(styles.formatButton, {
+                  [styles.active]: meetingType === 'online',
+                })}
                 onClick={() => setMeetingType('online')}
               >
                 Онлайн
@@ -211,7 +229,10 @@ const AppointmentForm: FC = () => {
                       checked={selectedOffices.has(office)}
                       onChange={() => handleOfficeToggle(office)}
                     />
-                    <label htmlFor={`office-${office}`} className={styles.location__text}>
+                    <label
+                      htmlFor={`office-${office}`}
+                      className={styles.location__text}
+                    >
                       {office}
                     </label>
                   </div>
@@ -246,30 +267,44 @@ const AppointmentForm: FC = () => {
                           .filter(Boolean)
                           .join(' ')}
                       </p>
-                      <p className={styles.qual}>{currentTherapist.qualification}</p>
-                      <p className={styles.exp}>Опыт {currentTherapist.experience}</p>
+                      <p className={styles.qual}>
+                        {currentTherapist.qualification}
+                      </p>
+                      <p className={styles.exp}>
+                        Опыт {currentTherapist.experience}
+                      </p>
                     </div>
 
                     <div className={styles.infoBlock}>
                       <p className={styles.qual}>
-                        {isOnlineOnly ? 'Принимает только онлайн' : 'Принимает лично и онлайн'}
+                        {isOnlineOnly
+                          ? 'Принимает только онлайн'
+                          : 'Принимает лично и онлайн'}
                       </p>
                       {/* Если только онлайн, не дублируем слово "Онлайн" как адрес офиса */}
-                      {!isOnlineOnly && <p className={styles.office}>{currentTherapist.office}</p>}
+                      {!isOnlineOnly && (
+                        <p className={styles.office}>
+                          {currentTherapist.office}
+                        </p>
+                      )}
                     </div>
 
                     <div>
                       <p className={styles.qual}>С чем поможет</p>
                       <div className={styles.consultAreas}>
-                        {currentTherapist.consult_areas?.split(',').map((item) => {
-                          const text = item.trim().charAt(0).toUpperCase() + item.trim().slice(1);
-                          if (!text) return null;
-                          return (
-                            <span key={text} className={styles.consultArea}>
-                              {text}
-                            </span>
-                          );
-                        })}
+                        {currentTherapist.consult_areas
+                          ?.split(',')
+                          .map((item) => {
+                            const text =
+                              item.trim().charAt(0).toUpperCase() +
+                              item.trim().slice(1);
+                            if (!text) return null;
+                            return (
+                              <span key={text} className={styles.consultArea}>
+                                {text}
+                              </span>
+                            );
+                          })}
                       </div>
                     </div>
                   </div>
@@ -281,7 +316,10 @@ const AppointmentForm: FC = () => {
                     {currentTherapistIndex > 0 && (
                       <button
                         type="button"
-                        className={clsx(styles.galleryBtn, styles.galleryPrevBtn)}
+                        className={clsx(
+                          styles.galleryBtn,
+                          styles.galleryPrevBtn,
+                        )}
                         onClick={handlePrevTherapist}
                         aria-label="Предыдущий специалист"
                       >
@@ -291,7 +329,10 @@ const AppointmentForm: FC = () => {
                     {currentTherapistIndex < filteredDoctors.length - 1 && (
                       <button
                         type="button"
-                        className={clsx(styles.galleryBtn, styles.galleryNextBtn)}
+                        className={clsx(
+                          styles.galleryBtn,
+                          styles.galleryNextBtn,
+                        )}
                         onClick={handleNextTherapist}
                         aria-label="Следующий специалист"
                       >
@@ -320,7 +361,9 @@ const AppointmentForm: FC = () => {
               placeholder="Выберите время приема"
               onChange={(value) => setSelectedDate(value)}
               value={selectedDate}
-              disabledDate={(current) => current && current < dayjs().startOf('day')}
+              disabledDate={(current) =>
+                current && current < dayjs().startOf('day')
+              }
               hideDisabledOptions
             />
           </div>
@@ -331,7 +374,9 @@ const AppointmentForm: FC = () => {
             <select
               value={application.university_status || 'студент'}
               onChange={(e) =>
-                setApplication({ university_status: e.target.value as UniversityStatus })
+                setApplication({
+                  university_status: e.target.value as UniversityStatus,
+                })
               }
               className={styles.selectInput}
             >
@@ -348,19 +393,29 @@ const AppointmentForm: FC = () => {
             <label className={styles.label}>Ваш запрос</label>
             <textarea
               value={application.problem_description}
-              onChange={(e) => setApplication({ problem_description: e.target.value })}
+              onChange={(e) =>
+                setApplication({ problem_description: e.target.value })
+              }
               className={styles.textarea}
               placeholder="Опишите вашу проблему"
             />
           </div>
 
-          <button className={styles.subButton} type="button" onClick={handleNextButton}>
+          <button
+            className={styles.subButton}
+            type="button"
+            onClick={handleNextButton}
+          >
             Далее
           </button>
         </div>
       ) : (
         <div className={styles.results}>
-          <button className={styles.backButton} type="button" onClick={() => setWindow('form')}>
+          <button
+            className={styles.backButton}
+            type="button"
+            onClick={() => setWindow('form')}
+          >
             <div className={styles.backArrow}>
               <img src={backArrow} alt="backArrow" />
               <p className={styles.backArrow__text}>Назад</p>
@@ -370,14 +425,18 @@ const AppointmentForm: FC = () => {
             <h3 className={styles.results__title}>Запись</h3>
 
             <p className={styles.results__text}>
-              <span className={clsx(styles.results__text, styles.results__textGray)}>
+              <span
+                className={clsx(styles.results__text, styles.results__textGray)}
+              >
                 Дата и время:{' '}
               </span>
               {selectedDate?.format('DD MMMM YYYY, HH:mm')}
             </p>
 
             <p className={styles.results__text}>
-              <span className={clsx(styles.results__text, styles.results__textGray)}>
+              <span
+                className={clsx(styles.results__text, styles.results__textGray)}
+              >
                 Психолог:{' '}
               </span>
               {[
@@ -388,25 +447,37 @@ const AppointmentForm: FC = () => {
             </p>
 
             <p className={styles.results__text}>
-              <span className={clsx(styles.results__text, styles.results__textGray)}>Место: </span>
+              <span
+                className={clsx(styles.results__text, styles.results__textGray)}
+              >
+                Место:{' '}
+              </span>
               {meetingType === 'online' ? 'Онлайн' : currentTherapist.office}
             </p>
 
             <p className={styles.results__text}>
-              <span className={clsx(styles.results__text, styles.results__textGray)}>
+              <span
+                className={clsx(styles.results__text, styles.results__textGray)}
+              >
                 Статус в ВУЗе:{' '}
               </span>
               {application.university_status || 'студент'}
             </p>
 
-            <p className={clsx(styles.results__text, styles.results__textGray)}>Тема встречи:</p>
+            <p className={clsx(styles.results__text, styles.results__textGray)}>
+              Тема встречи:
+            </p>
             <textarea
               value={application.problem_description}
               readOnly
               className={clsx(styles.textarea, styles.results__textarea)}
             />
 
-            <button className={styles.submitBtn} onClick={handleSubmit} disabled={isSubmitting}>
+            <button
+              className={styles.submitBtn}
+              onClick={handleSubmit}
+              disabled={isSubmitting}
+            >
               {isSubmitting ? 'Отправка...' : 'Записаться'}
             </button>
           </div>

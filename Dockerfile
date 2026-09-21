@@ -5,10 +5,7 @@ FROM node:20-alpine AS build
 WORKDIR /app
 
 # HUSKY=0 - в контейнере нет .git, хуки ставить не нужно и не во что.
-# PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD - playwright лежит в dependencies, но
-# браузеры для сборки не нужны (это ~400 МБ и пара минут).
 ENV HUSKY=0 \
-    PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 \
     NODE_OPTIONS=--max-old-space-size=2048
 
 COPY package.json package-lock.json ./

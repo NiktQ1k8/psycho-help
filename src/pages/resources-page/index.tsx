@@ -1,13 +1,12 @@
-import styles from './ResourcesPage.module.scss';
-import { type ITab, Tabs } from '@/shared/ui/tabs';
-import { useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-
-import { TRANSLATES } from './consts/translates.ts';
+import { useSearchParams } from 'react-router-dom';
 import { ResourceEntities } from '@/pages/resources-page/consts/entities.ts';
 import { Articles } from '@/pages/resources-page/entities/articles';
-import { Tests } from '@/pages/resources-page/entities/tests';
 import { Polls } from '@/pages/resources-page/entities/polls';
+import { Tests } from '@/pages/resources-page/entities/tests';
+import { type ITab, Tabs } from '@/shared/ui/tabs';
+import styles from './ResourcesPage.module.scss';
+import { TRANSLATES } from './consts/translates.ts';
 
 const TABS = [
   {

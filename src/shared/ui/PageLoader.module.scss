@@ -1,19 +1,22 @@
 .loader__wrapper {
+  transform: translate(-50%);
+
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  transform: translate(-50%);
+  justify-content: center;
 }
 
 .loader__item {
+  display: inline-block;
+
+  box-sizing: border-box;
   width: 64px;
   height: 64px;
   border: 8px solid #fff;
   border-bottom-color: #5e8bf4;
   border-radius: 50%;
-  display: inline-block;
-  box-sizing: border-box;
+
   animation: rotation 1s linear infinite;
 }
 
@@ -34,6 +37,6 @@
 
 .loaderCenter {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }

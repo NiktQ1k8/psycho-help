@@ -1,15 +1,15 @@
-import styles from './calls-block.module.css';
 import CallsDesktop from '@/features/home/ui/5-calls-block/img/calls-desktop.png';
-import CallsTablet from '@/features/home/ui/5-calls-block/img/calls-tablet.png';
 import CallsMobile from '@/features/home/ui/5-calls-block/img/calls-mobile.png';
+import CallsTablet from '@/features/home/ui/5-calls-block/img/calls-tablet.png';
+import styles from './CallsBlock.module.scss';
 
 const CallsBlock = () => {
   return (
     <div className={styles.calls}>
       <div className={styles.calls__text_wrapper}>
         <span className={styles.calls__text}>
-          В выходные и праздничные дни, а также ночью за срочной психологической помощью можно
-          обратиться по следующим телефонам:
+          В выходные и праздничные дни, а также ночью за срочной психологической
+          помощью можно обратиться по следующим телефонам:
         </span>
       </div>
       <div className={styles.calls__content}>
@@ -17,7 +17,11 @@ const CallsBlock = () => {
           <picture>
             <source media="(max-width: 425px)" srcSet={CallsMobile} />
             <source media="(max-width: 768px)" srcSet={CallsTablet} />
-            <img src={CallsDesktop} className={styles.calls__image} alt="Иллюстрация диалога" />
+            <img
+              src={CallsDesktop}
+              className={styles.calls__image}
+              alt="Иллюстрация диалога"
+            />
           </picture>
         </div>
         <div className={styles.calls__block}>
@@ -32,8 +36,12 @@ const CallsBlock = () => {
               <a className={styles.calls__phone} href="tel:051">
                 051
               </a>
-              <span className={styles.calls__phone_text}>с городского телефона</span>
-              <span className={styles.calls__phone_text}>с мобильного телефона</span>
+              <span className={styles.calls__phone_text}>
+                с городского телефона
+              </span>
+              <span className={styles.calls__phone_text}>
+                с мобильного телефона
+              </span>
             </div>
           </div>
           <div className={styles.calls__item}>
@@ -59,7 +67,9 @@ const CallsBlock = () => {
             <a className={styles.calls__phone} href="tel:8 (495) 989-50-50">
               8 (495) 989-50-50
             </a>
-            <span className={styles.calls__phone_text}>бесплатно по Москве</span>
+            <span className={styles.calls__phone_text}>
+              бесплатно по Москве
+            </span>
           </div>
         </div>
       </div>

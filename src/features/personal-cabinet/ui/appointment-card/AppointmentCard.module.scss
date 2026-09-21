@@ -1,154 +1,189 @@
 .card {
-  border: 1px solid var(--color-border-neutral-base);
-  border-radius: 2.4rem;
-  padding: 1.6rem 0.8rem 1.6rem 1.6rem;
-  background-color: var(--color-background-neutral-primary);
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
+
   min-width: 0;
-  word-wrap: break-word;
+  padding: 1.6rem 0.8rem 1.6rem 1.6rem;
+  border: 1px solid var(--color-border-neutral-base);
+  border-radius: 2.4rem;
+
   overflow-wrap: break-word;
+
+  background-color: var(--color-background-neutral-primary);
 }
+
 .header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   gap: 1.2rem;
+  align-items: center;
+  justify-content: space-between;
 }
+
 .date {
   font: var(--font-h5);
-  letter-spacing: var(--font-header-letter-spacing-h5, -0.1rem);
   color: var(--color-label-neutral-primary);
+  letter-spacing: var(--font-header-letter-spacing-h5, -0.1rem);
 }
+
 .infoList {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
   margin-bottom: 0.8rem;
 }
+
 .infoItem {
   display: flex;
-  align-items: flex-start;
   gap: 1.2rem;
+  align-items: flex-start;
+
   font: var(--font-text-medium);
   color: var(--color-label-neutral-primary);
+
   span {
     white-space: normal;
   }
 }
+
 .icon {
-  color: var(--color-label-neutral-tetriary);
-  font-size: 1.6rem;
   margin-top: 0.4rem;
+  font-size: 1.6rem;
+  color: var(--color-label-neutral-tetriary);
 }
+
 .iconSuccess {
+  flex-shrink: 0;
+  font-size: 2rem;
   color: var(--color-label-success-primary);
-  font-size: 2rem;
-  flex-shrink: 0;
 }
+
 .iconDanger {
+  flex-shrink: 0;
+  font-size: 2rem;
   color: var(--color-label-danger-primary);
-  font-size: 2rem;
-  flex-shrink: 0;
 }
+
 .iconWarning {
-  color: var(--color-label-warning-primary);
-  font-size: 2rem;
   flex-shrink: 0;
+  font-size: 2rem;
+  color: var(--color-label-warning-primary);
 }
+
 .footer {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
 }
+
 .status {
   display: flex;
-  align-items: center;
   gap: 0.8rem;
+  align-items: center;
+
   font: var(--font-text-small);
   color: var(--color-label-neutral-secondary);
 }
+
 .statusDot {
+  flex-shrink: 0;
+
   width: 0.8rem;
   height: 0.8rem;
-  border-radius: 50%;
-  flex-shrink: 0;
   margin-bottom: 0.2rem;
+  border-radius: 50%;
 }
 
 /* Новая обертка для кнопок, чтобы они стояли рядом */
 .actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.8rem;
   margin-left: auto;
-  flex-wrap: wrap;
 }
 
-@media (max-width: 1023px) {
+@media (width <= 1023px) {
   .actions {
-    width: 100%;
     flex-direction: column;
+    width: 100%;
     margin-left: 0;
   }
+
   .rateButton,
   .commentLink,
   .confirmButton,
   .cancelButton {
     width: 100%;
-    padding-left: 0;
     padding-right: 0;
+    padding-left: 0;
   }
 }
 
 .rateButton {
+  cursor: pointer;
+
   padding: 1rem 7.5rem;
-  background-color: var(--color-interactive-brand-primary);
-  color: var(--color-label-neutral-inverted-primary);
   border: none;
   border-radius: 1.6rem;
+
   font: var(--font-text-medium);
-  cursor: pointer;
+  color: var(--color-label-neutral-inverted-primary);
+
+  background-color: var(--color-interactive-brand-primary);
+
   &:hover {
     background-color: var(--color-interactive-brand-hover);
   }
 }
+
 .commentLink {
+  cursor: pointer;
+
   padding: 1rem 1.6rem;
-  background-color: var(--color-interactive-brand-secondary);
-  color: var(--color-interactive-brand-primary);
   border: none;
   border-radius: 1.6rem;
+
   font: var(--font-text-medium);
-  cursor: pointer;
+  color: var(--color-interactive-brand-primary);
+
+  background-color: var(--color-interactive-brand-secondary);
+
   &:hover {
     background-color: var(--color-interactive-brand-hover-secondary);
   }
 }
 
 .confirmButton {
+  cursor: pointer;
+
   padding: 1rem 3rem;
-  background-color: var(--color-interactive-brand-primary);
-  color: var(--color-label-neutral-inverted-primary);
   border: none;
   border-radius: 1.6rem;
+
   font: var(--font-text-medium);
-  cursor: pointer;
+  color: var(--color-label-neutral-inverted-primary);
+
+  background-color: var(--color-interactive-brand-primary);
+
   &:hover {
     background-color: var(--color-interactive-brand-hover);
   }
 }
 
 .cancelButton {
+  cursor: pointer;
+
   padding: 1rem 3rem;
-  background-color: transparent;
-  color: var(--color-label-danger-primary);
   border: 1px solid var(--color-label-danger-primary);
   border-radius: 1.6rem;
+
   font: var(--font-text-medium);
-  cursor: pointer;
+  color: var(--color-label-danger-primary);
+
+  background-color: transparent;
+
   &:hover {
     background-color: #ffeef0;
   }
@@ -157,12 +192,15 @@
 .dotSuccess {
   background-color: var(--color-label-success-primary);
 }
+
 .dotDanger {
   background-color: var(--color-label-danger-primary);
 }
+
 .dotWarning {
   background-color: var(--color-label-warning-primary);
 }
+
 .dotNeutral {
   background-color: var(--color-label-neutral-quaternary);
 }
@@ -171,17 +209,21 @@
   .card {
     background-color: var(--color-fill-neutral-primary);
   }
+
   .date {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .icon {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .infoItem {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .commentLink {
-    background-color: var(--color-background-neutral-primary);
     color: var(--color-label-neutral-primary);
+    background-color: var(--color-background-neutral-primary);
   }
 }

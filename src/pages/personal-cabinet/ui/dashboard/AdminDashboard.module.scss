@@ -3,17 +3,21 @@
 }
 
 .sectionTitle {
+  margin-bottom: var(--spacing-md, 16px);
   font-size: var(--font-size-lg, 18px);
   font-weight: var(--font-weight-semibold, 600);
-  margin-bottom: var(--spacing-md, 16px);
 }
+
 .placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
+
   min-height: 16rem;
-  background: var(--color-bg-surface-secondary, #f5f5f5);
   border-radius: 1.2rem;
-  color: var(--color-text-secondary, #666);
+
   font-style: italic;
+  color: var(--color-text-secondary, #666);
+
+  background: var(--color-bg-surface-secondary, #f5f5f5);
 }

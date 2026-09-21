@@ -1,16 +1,21 @@
-import { useState, useMemo, useCallback, useEffect, type FC } from 'react';
+import { type FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useAuth } from '@/features/auth/api/useAuth';
+import clsx from 'clsx';
+import { applicationQueries } from '@/entities/application/api';
 import { Role } from '@/entities/role/helpers';
 import type { RoleCode } from '@/entities/role/types';
-import { applicationQueries } from '@/entities/application/api';
+import { useAuth } from '@/features/auth/api/useAuth';
 import { useCabinetTab } from '@/features/personal-cabinet/model/personal-cabinet-tab';
-import Loader from '@/shared/ui/loader/loader';
 import Sidebar from '@/features/personal-cabinet/ui/sidebar/Sidebar';
 import type { TabBadge } from '@/features/personal-cabinet/ui/sidebar/Sidebar';
-import { getTabsForRole, getDefaultTabForRole, type TabConfig, type TabId } from './config/tabs';
+import Loader from '@/shared/ui/loader/loader';
+import {
+  type TabConfig,
+  type TabId,
+  getDefaultTabForRole,
+  getTabsForRole,
+} from './config/tabs';
 import styles from './personal-cabinet.module.scss';
-import clsx from 'clsx';
 
 const PersonalCabinet: FC = () => {
   const authUser = useAuth((state) => state.user);
@@ -34,7 +39,10 @@ const PersonalCabinet: FC = () => {
   });
 
   const activeApplicationsCount = useMemo(
-    () => applications.filter((a) => a.status === 'new' || a.status === 'in_progress').length,
+    () =>
+      applications.filter(
+        (a) => a.status === 'new' || a.status === 'in_progress',
+      ).length,
     [applications],
   );
 
@@ -45,7 +53,12 @@ const PersonalCabinet: FC = () => {
       badges.push({
         tabId: 'applications',
         content: (isActive) => (
-          <span className={clsx(styles.countBage, isActive && styles.countBageActive)}>
+          <span
+            className={clsx(
+              styles.countBage,
+              isActive && styles.countBageActive,
+            )}
+          >
             {activeApplicationsCount}
           </span>
         ),
@@ -55,12 +68,17 @@ const PersonalCabinet: FC = () => {
     return badges;
   }, [isPsychologist, activeApplicationsCount]);
 
-  const tabs = useMemo(() => getTabsForRole(primaryRoleCode), [primaryRoleCode]);
+  const tabs = useMemo(
+    () => getTabsForRole(primaryRoleCode),
+    [primaryRoleCode],
+  );
 
   const savedTab = useCabinetTab((s) => s.activeTab);
   const setSavedTab = useCabinetTab((s) => s.setActiveTab);
   const defaultTab = getDefaultTabForRole(primaryRoleCode);
-  const [activeTab, setActiveTab] = useState<string>(() => savedTab ?? defaultTab);
+  const [activeTab, setActiveTab] = useState<string>(
+    () => savedTab ?? defaultTab,
+  );
 
   useEffect(() => {
     setSavedTab(activeTab as TabId);

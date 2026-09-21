@@ -1,40 +1,45 @@
 .wrapper {
-  height: auto;
   cursor: pointer;
+
   display: flex;
   flex-direction: column;
-  padding: 2.4rem 1.6rem 3.6rem 1.6rem;
+
+  height: auto;
+  padding: 2.4rem 1.6rem 3.6rem;
   border-radius: 2.4rem;
+
   transition:
     background-color 0.2s ease-out,
     padding-left 0.2s ease-out;
 }
 
 .ask {
-  width: 100%;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .button {
-  padding: 1.1rem;
   width: 4.4rem;
   height: 4.4rem;
+  padding: 1.1rem;
   transition: transform 0.2s ease-out;
 }
 
 .active {
-  background-color: var(--color-fill-brand-quaternary);
   padding-left: 3.2rem;
+  background-color: var(--color-fill-brand-quaternary);
 }
 
 .answer {
-  color: var(--color-label-neutral-primary);
-  font: var(--font-text-large);
+  display: none;
+
   margin-top: 2.4rem;
   margin-right: 2.4rem;
-  display: none;
+
+  font: var(--font-text-large);
+  color: var(--color-label-neutral-primary);
 }
 
 .active .answer {
@@ -47,17 +52,17 @@
 
 .p {
   font: var(--font-h5);
-  letter-spacing: var(--font-header-letter-spacing-h5);
   color: var(--color-label-neutral-primary);
+  letter-spacing: var(--font-header-letter-spacing-h5);
 }
 
-@media (max-width: 1024px) {
+@media (width <= 1024px) {
   .wrapper {
     padding: 2.4rem 1.6rem;
   }
 }
 
-@media (max-width: 634px) {
+@media (width <= 634px) {
   .wrapper {
     padding: 1.2rem 0.8rem 1.6rem 1.2rem;
     border-radius: 0.8rem;
@@ -84,10 +89,12 @@
   .wrapper.active {
     background-color: var(--color-fill-neutral-secondary);
   }
+
   .p,
   .answer {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .button path {
     stroke: var(--color-border-neutral-inverted);
   }

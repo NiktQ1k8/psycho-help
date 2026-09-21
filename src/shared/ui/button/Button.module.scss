@@ -1,19 +1,24 @@
 .button {
-  color: var(--color-label-neutral-inverted-primary);
-  font-size: 1.6rem;
-  font-weight: bold;
   user-select: none;
+
   display: flex;
-  border-radius: 1rem;
   align-items: center;
   justify-content: center;
+
   width: fit-content;
+  border-width: 0;
+  border-radius: 1rem;
+
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: var(--color-label-neutral-inverted-primary);
+
+  outline: 2px solid transparent;
+
   transition:
     outline 0.3s ease,
     background 0.3s ease,
     outline-offset 0.3s ease;
-  outline: 2px solid transparent;
-  border-width: 0;
 
   &.medium {
     padding: 1.4rem;
@@ -23,10 +28,11 @@
       height: 2.4rem;
     }
   }
+
   &.color-brand {
     &.secondary {
-      background-color: var(--color-interactive-brand-secondary);
       color: var(--color-label-brand-primary);
+      background-color: var(--color-interactive-brand-secondary);
 
       &:hover {
         background-color: var(--color-interactive-brand-hover-secondary);
@@ -37,8 +43,8 @@
       }
 
       &:disabled {
-        background-color: var(--color-interactive-neutral-disable);
         color: var(--color-label-neutral-quaternary);
+        background-color: var(--color-interactive-neutral-disable);
       }
     }
 
@@ -50,17 +56,17 @@
       }
 
       &:focus {
+        background: var(--color-fill-brand-primary);
         outline: 2px solid var(--color-border-brand-strong);
         outline-offset: 2px;
-        background: var(--color-fill-brand-primary);
       }
     }
   }
 
   &.color-neutral {
     &.primary {
-      background-color: var(--color-interactive-neutral-primary);
       color: var(--color-label-neutral-inverted-primary);
+      background-color: var(--color-interactive-neutral-primary);
 
       &:hover {
         background-color: var(--color-interactive-neutral-hover);
@@ -71,8 +77,8 @@
       }
 
       &:disabled {
-        background-color: var(--color-interactive-neutral-disable);
         color: var(--color-label-neutral-quaternary);
+        background-color: var(--color-interactive-neutral-disable);
       }
     }
   }
@@ -96,11 +102,13 @@
 [data-theme='dark'] {
   .button {
     &.color-brand {
-      background-color: var(--color-fill-neutral-none);
       color: var(--color-interactive-neutral-primary);
+      background-color: var(--color-fill-neutral-none);
+
       &:hover {
         background-color: var(--color-interactive-neutral-hover-secondary);
       }
+
       &:active {
         background-color: var(--color-interactive-neutral-active-secondary);
         outline: none;

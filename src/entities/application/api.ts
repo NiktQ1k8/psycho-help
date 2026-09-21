@@ -2,10 +2,10 @@ import { queryOptions } from '@tanstack/react-query';
 import { $api } from '@/shared/api/http';
 import type {
   Application,
-  ApplicationStatus,
-  MeetingType,
   ApplicationCreateRequest,
+  ApplicationStatus,
   CancelRequest,
+  MeetingType,
 } from './types';
 
 export const applicationQueryKey = {
@@ -26,7 +26,8 @@ export const applicationQueries = {
 
     return queryOptions<Application[]>({
       queryKey: [applicationQueryKey.list, requestParams],
-      queryFn: async () => (await $api.get('/applications/', { params: requestParams })).data,
+      queryFn: async () =>
+        (await $api.get('/applications/', { params: requestParams })).data,
     });
   },
 
@@ -38,10 +39,16 @@ export const applicationQueries = {
     }),
 };
 
-export const acceptApplication = async (applicationId: string, assignedTo: string) => {
-  const { data } = await $api.post<Application>(`/applications/${applicationId}/accept`, {
-    assigned_to: assignedTo,
-  });
+export const acceptApplication = async (
+  applicationId: string,
+  assignedTo: string,
+) => {
+  const { data } = await $api.post<Application>(
+    `/applications/${applicationId}/accept`,
+    {
+      assigned_to: assignedTo,
+    },
+  );
   return data;
 };
 
@@ -55,19 +62,34 @@ export const offerConsultation = async (
     meeting_url?: string | null;
   },
 ) => {
-  const { data } = await $api.post<Application>(`/applications/${applicationId}/offer`, body);
+  const { data } = await $api.post<Application>(
+    `/applications/${applicationId}/offer`,
+    body,
+  );
   return data;
 };
 
-export const rejectApplication = async (applicationId: string, rejectReason: string) => {
-  const { data } = await $api.post<Application>(`/applications/${applicationId}/reject`, {
-    reject_reason: rejectReason,
-  });
+export const rejectApplication = async (
+  applicationId: string,
+  rejectReason: string,
+) => {
+  const { data } = await $api.post<Application>(
+    `/applications/${applicationId}/reject`,
+    {
+      reject_reason: rejectReason,
+    },
+  );
   return data;
 };
 
-export const cancelApplication = async (applicationId: string, payload: CancelRequest) => {
-  const { data } = await $api.post<Application>(`/applications/${applicationId}/cancel`, payload);
+export const cancelApplication = async (
+  applicationId: string,
+  payload: CancelRequest,
+) => {
+  const { data } = await $api.post<Application>(
+    `/applications/${applicationId}/cancel`,
+    payload,
+  );
   return data;
 };
 
@@ -76,14 +98,23 @@ export const createApplication = async (body: ApplicationCreateRequest) => {
   return data;
 };
 
-export const confirmApplication = async (applicationId: string, appointmentId?: string) => {
-  const { data } = await $api.post<Application>(`/applications/${applicationId}/confirm`, null, {
-    params: appointmentId ? { appointment_id: appointmentId } : undefined,
-  });
+export const confirmApplication = async (
+  applicationId: string,
+  appointmentId?: string,
+) => {
+  const { data } = await $api.post<Application>(
+    `/applications/${applicationId}/confirm`,
+    null,
+    {
+      params: appointmentId ? { appointment_id: appointmentId } : undefined,
+    },
+  );
   return data;
 };
 
 export const getUniversityStatuses = async () => {
-  const { data } = await $api.get<string[]>('/applications/university-statuses');
+  const { data } = await $api.get<string[]>(
+    '/applications/university-statuses',
+  );
   return data;
 };

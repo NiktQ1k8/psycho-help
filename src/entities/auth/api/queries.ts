@@ -1,7 +1,7 @@
 import { type QueryObserverOptions, queryOptions } from '@tanstack/react-query';
+import { authApi } from '@/entities/auth/api/api.ts';
 import type { ResponseError } from '@/shared/api';
 import type { User } from '../types';
-import { authApi } from '@/entities/auth/api/api.ts';
 
 export const authQueryKey = {
   user: 'auth.user',

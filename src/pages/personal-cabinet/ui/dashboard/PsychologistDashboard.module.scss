@@ -1,31 +1,38 @@
 .headerRow {
   display: flex;
-  justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: 24px;
+  justify-content: space-between;
+
   width: 100%;
+  margin-bottom: 24px;
 }
 
 .pageTitle {
-  font-size: 28px;
-  line-height: 1;
-  font-weight: 500;
-  color: #1a1a1a;
   margin: 0;
+
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1;
+  color: #1a1a1a;
 }
 
 .btnAdd {
-  background: transparent;
+  cursor: pointer;
+
+  display: flex;
+  gap: 6px;
+  align-items: center;
+
+  margin-left: auto;
+  padding: 0;
   border: none;
-  color: #3b82f6;
+
   font-size: 15px;
   font-weight: 400;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 0;
-  margin-left: auto;
+  color: #3b82f6;
+
+  background: transparent;
+
   transition: opacity 0.2s;
 
   &:hover {
@@ -35,10 +42,11 @@
 
 .navigationRow {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 32px;
+  justify-content: space-between;
+
   width: 100%;
+  margin-bottom: 32px;
 }
 
 .weekSelector {
@@ -47,34 +55,39 @@
 }
 
 .dayItem {
-  display: flex;
-  align-items: center;
-  gap: 8px;
   cursor: pointer;
+
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
   padding: 4px;
 }
 
 .dayName {
-  text-transform: capitalize;
   font-size: 14px;
   color: #4a4a4a;
+  text-transform: capitalize;
 }
 
 .dayNumber {
   display: flex;
   align-items: center;
   justify-content: center;
+
   width: 28px;
   height: 28px;
   border-radius: 50%;
+
   font-size: 14px;
   color: #1a1a1a;
+
   transition: all 0.2s;
 }
 
 .dayActive .dayNumber {
+  color: #fff;
   background-color: #3b82f6;
-  color: #ffffff;
 }
 
 .dayItem:hover:not(.dayActive) .dayNumber {
@@ -82,22 +95,22 @@
 }
 
 .datePicker {
-  border-radius: 8px;
-  height: 40px;
   width: 160px;
+  height: 40px;
   margin-left: auto;
+  border-radius: 8px;
 }
 
 .wrapper {
   display: flex;
   gap: 32px;
-  width: 100%;
   align-items: flex-start;
+  width: 100%;
 }
 
 .mainContent {
-  flex: 1;
   display: flex;
+  flex: 1;
   flex-direction: column;
 }
 
@@ -113,45 +126,47 @@
 }
 
 .timeLabelRow {
+  position: relative;
   display: flex;
   align-items: flex-start;
-  position: relative;
 }
 
 .timeText {
+  transform: translateY(-8px);
   width: 50px;
   font-size: 13px;
   color: #888;
-  transform: translateY(-8px);
 }
 
 .gridLine {
   flex: 1;
-  border-top: 1px solid #f0f0f0;
   margin-left: 16px;
+  border-top: 1px solid #f0f0f0;
 }
 
 .eventsContainer {
-  position: absolute;
-  top: 0;
-  left: 66px;
-  right: 0;
-  bottom: 0;
   pointer-events: none;
+  position: absolute;
+  inset: 0 0 0 66px;
 }
 
 .eventCard {
-  position: absolute;
-  left: 0;
-  right: 0;
-  background-color: #f9fafb;
-  border-radius: 8px;
-  padding: 12px 16px;
   pointer-events: auto;
   cursor: pointer;
-  transition: all 0.2s ease;
+
+  position: absolute;
+  right: 0;
+  left: 0;
+
   overflow: hidden;
+
+  padding: 12px 16px;
   border-left: 3px solid transparent;
+  border-radius: 8px;
+
+  background-color: #f9fafb;
+
+  transition: all 0.2s ease;
 
   &:hover {
     background-color: #f3f4f6;
@@ -159,8 +174,8 @@
 }
 
 .eventCardActive {
-  background-color: #eff6ff;
   border-left: 3px solid #3b82f6;
+  background-color: #eff6ff;
 
   &:hover {
     background-color: #eff6ff;
@@ -168,41 +183,42 @@
 }
 
 .eventTime {
+  margin-bottom: 4px;
   font-size: 15px;
   font-weight: 500;
   color: #1a1a1a;
-  margin-bottom: 4px;
 }
 
 .eventName {
+  margin-bottom: 4px;
   font-size: 13px;
   color: #4a4a4a;
-  margin-bottom: 4px;
 }
 
 .eventVenue {
   font-size: 12px;
-  color: #888888;
+  color: #888;
 }
 
 .detailsPanel {
-  width: 340px;
   flex-shrink: 0;
+  width: 340px;
   padding-top: 8px;
 }
 
 .detailsCard {
-  background: #ffffff;
+  padding: 24px;
   border: 1px solid #f0f0f0;
   border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+
+  background: #fff;
+  box-shadow: 0 4px 20px rgb(0 0 0 / 3%);
 }
 
 .detailsTime {
+  margin: 0 0 20px;
   font-size: 20px;
   font-weight: 500;
-  margin: 0 0 20px 0;
   color: #1a1a1a;
 }
 
@@ -215,14 +231,15 @@
 
 .infoRow {
   display: flex;
-  align-items: center;
   gap: 12px;
-  color: #4a4a4a;
+  align-items: center;
+
   font-size: 14px;
+  color: #4a4a4a;
 
   .infoIcon {
-    color: #bfbfbf;
     font-size: 16px;
+    color: #bfbfbf;
   }
 }
 
@@ -231,32 +248,36 @@
 }
 
 .commentLabel {
+  margin: 0 0 8px;
   font-size: 14px;
   font-weight: 600;
-  margin: 0 0 8px 0;
   color: #1a1a1a;
 }
 
 .commentText {
-  font-size: 13px;
-  color: #6b7280;
-  line-height: 1.5;
-  margin: 0 0 8px 0;
-
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
   overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+
+  margin: 0 0 8px;
+
+  font-size: 13px;
+  line-height: 1.5;
+  color: #6b7280;
 }
 
 .btnReadMore {
-  background: transparent;
-  border: none;
-  padding: 0;
-  color: #888;
-  font-size: 13px;
-  text-decoration: underline;
   cursor: pointer;
+
+  padding: 0;
+  border: none;
+
+  font-size: 13px;
+  color: #888;
+  text-decoration: underline;
+
+  background: transparent;
 
   &:hover {
     color: #4a4a4a;
@@ -264,15 +285,19 @@
 }
 
 .btnNavigate {
+  cursor: pointer;
+
   width: 100%;
   height: 44px;
+  border: none;
   border-radius: 8px;
-  background-color: #2563eb;
+
   font-size: 15px;
   font-weight: 500;
-  border: none;
   color: #fff;
-  cursor: pointer;
+
+  background-color: #2563eb;
+
   transition: background-color 0.2s;
 
   &:hover {
@@ -281,15 +306,18 @@
 }
 
 .emptyDetails {
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #bfbfbf;
-  text-align: center;
+
+  height: 100%;
   padding: 40px;
   border: 1px dashed #e5e7eb;
   border-radius: 12px;
+
+  color: #bfbfbf;
+  text-align: center;
+
   background: #f9fafb;
 }
 
@@ -304,6 +332,7 @@
   .eventVenue {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .infoRow span:not(:first-child),
   .commentText,
   .eventTime {
@@ -313,86 +342,99 @@
       var(--color-label-neutral-inverted-primary)
     );
   }
+
   .dayItem:hover:not(.dayActive) .dayNumber {
     background-color: var(--color-interactive-brand-hover);
   }
+
   .emptyDetails {
-    background-color: var(--color-background-neutral-inverted);
     border: 1px solid var(--color-border-neutral-disable);
     color: color-mix(
       in srgb,
       var(--color-label-neutral-quaternary),
       var(--color-label-neutral-inverted-primary)
     );
-  }
-  .detailsCard {
     background-color: var(--color-background-neutral-inverted);
+  }
+
+  .detailsCard {
     border: 1px solid var(--color-border-neutral-disable);
+    background-color: var(--color-background-neutral-inverted);
   }
 
   .eventCard {
     background-color: var(--color-fill-neutral-primary);
+
     &:hover {
       background-color: var(--color-interactive-neutral-hover);
     }
   }
+
   .eventCardActive {
-    background-color: var(--color-fill-brand-derivable-quaternary);
     border-left: none;
+    background-color: var(--color-fill-brand-derivable-quaternary);
+
     &:hover {
       background-color: var(--color-fill-brand-derivable-quaternary);
     }
   }
 }
-@media (max-width: 600px) {
+
+@media (width <= 600px) {
   .layout {
-    padding: 0 10px 100px 10px;
     display: flex;
     flex-direction: column;
     gap: 20px;
+    padding: 0 10px 100px;
   }
+
   h2 {
     font-size: 2rem;
   }
+
   .detailsPanel {
     width: 100%;
   }
+
   .wrapper {
     flex-direction: column;
   }
+
   .dayItem {
     flex-direction: column;
   }
+
   .navigationRow {
-     flex-direction: column-reverse;
-     flex-wrap: wrap;
-     gap: 1.6rem;
-   }
+    flex-flow: column-reverse wrap;
+    gap: 1.6rem;
+  }
+
   .weekSelector {
-    justify-content: space-between;
     gap: 1rem;
+    justify-content: space-between;
     width: 100%;
   }
+
   .pageTitle {
     font-size: 2rem;
     line-height: 2.8rem;
   }
+
   .btnAdd {
     font-size: 1.6rem;
     line-height: 2.4rem;
   }
 }
 
-
-@media (min-width: 500px) and (max-width: 1024px) {
+@media (width >= 500px) and (width <= 1024px) {
   .sidebarWrapper * {
     display: none;
   }
 
   .page {
-    padding: 0 24px;
-    padding-bottom: 4rem;
     display: flex;
     flex-direction: column;
+    padding: 0 24px;
+    padding-bottom: 4rem;
   }
 }

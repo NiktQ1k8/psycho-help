@@ -1482,7 +1482,12 @@
           }
         },
         "type": "object",
-        "required": ["first_name", "last_name", "problem_description", "university_status"],
+        "required": [
+          "first_name",
+          "last_name",
+          "problem_description",
+          "university_status"
+        ],
         "title": "ApplicationCreateRequest"
       },
       "ApplicationResponse": {
@@ -2408,7 +2413,13 @@
           }
         },
         "type": "object",
-        "required": ["first_name", "last_name", "phone_number", "email", "password"],
+        "required": [
+          "first_name",
+          "last_name",
+          "phone_number",
+          "email",
+          "password"
+        ],
         "title": "UserCreateRequest"
       },
       "UserResponse": {

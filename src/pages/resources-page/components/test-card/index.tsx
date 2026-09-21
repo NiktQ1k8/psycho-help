@@ -1,4 +1,4 @@
-import type { ReactNode, MouseEvent, HTMLAttributes } from 'react';
+import type { HTMLAttributes, MouseEvent, ReactNode } from 'react';
 import clsx from 'clsx';
 import styles from './TestCard.module.scss';
 
@@ -44,7 +44,11 @@ export const TestCard = ({
       <div className={styles.content}>
         <h4 className={styles.title}>{title}</h4>
         {!!description && (
-          <p className={clsx(styles.description, { [styles.ellipse]: ellipseDescription })}>
+          <p
+            className={clsx(styles.description, {
+              [styles.ellipse]: ellipseDescription,
+            })}
+          >
             {description}
           </p>
         )}

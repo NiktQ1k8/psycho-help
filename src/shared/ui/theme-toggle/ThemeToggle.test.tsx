@@ -1,14 +1,18 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useTheme } from '@/shared/hooks/useTheme';
 import ThemeToggle from './ThemeToggle';
 
 vi.mock('@/shared/assets/images/header/moon.svg?react', () => ({
-  default: (props: Record<string, unknown>) => <svg data-testid="moon-icon" {...props} />,
+  default: (props: Record<string, unknown>) => (
+    <svg data-testid="moon-icon" {...props} />
+  ),
 }));
 vi.mock('@/shared/assets/images/header/sun.svg?react', () => ({
-  default: (props: Record<string, unknown>) => <svg data-testid="sun-icon" {...props} />,
+  default: (props: Record<string, unknown>) => (
+    <svg data-testid="sun-icon" {...props} />
+  ),
 }));
 
 vi.mock('@/shared/hooks/useTheme', () => ({ useTheme: vi.fn() }));

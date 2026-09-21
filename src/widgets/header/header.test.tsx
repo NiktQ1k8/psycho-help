@@ -1,10 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { MemoryRouter } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter } from 'react-router-dom';
-import Header from './header';
-import { navPages, CABINET_PATH } from '@/app/router/routes';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { CABINET_PATH, navPages } from '@/app/router/routes';
 import { useAuth } from '@/features/auth/api/useAuth';
+import Header from './header';
 
 vi.stubGlobal(
   'ResizeObserver',
@@ -12,13 +12,19 @@ vi.stubGlobal(
 );
 
 vi.mock('@/shared/assets/images/logo.svg?react', () => ({
-  default: (props: Record<string, unknown>) => <svg data-testid="logo" {...props} />,
+  default: (props: Record<string, unknown>) => (
+    <svg data-testid="logo" {...props} />
+  ),
 }));
 vi.mock('@/shared/assets/images/header/profile.svg?react', () => ({
-  default: (props: Record<string, unknown>) => <svg data-testid="profile-icon" {...props} />,
+  default: (props: Record<string, unknown>) => (
+    <svg data-testid="profile-icon" {...props} />
+  ),
 }));
 vi.mock('@/shared/assets/images/header/auth.svg?react', () => ({
-  default: (props: Record<string, unknown>) => <svg data-testid="auth-icon" {...props} />,
+  default: (props: Record<string, unknown>) => (
+    <svg data-testid="auth-icon" {...props} />
+  ),
 }));
 vi.mock('@/shared/ui/theme-toggle/ThemeToggle', () => ({
   default: ({ className }: { className?: string }) => (
@@ -48,7 +54,9 @@ const renderHeader = () =>
 
 describe('Header', () => {
   beforeEach(() => {
-    vi.mocked(useAuth).mockReturnValue({ isAuth: false } as ReturnType<typeof useAuth>);
+    vi.mocked(useAuth).mockReturnValue({ isAuth: false } as ReturnType<
+      typeof useAuth
+    >);
   });
 
   it('рендерит логотип и все навигационные ссылки', () => {
@@ -56,7 +64,9 @@ describe('Header', () => {
 
     expect(screen.getByTestId('logo')).toBeInTheDocument();
     navPages.forEach(({ navText }) => {
-      expect(screen.getByRole('link', { name: new RegExp(navText, 'i') })).toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: new RegExp(navText, 'i') }),
+      ).toBeInTheDocument();
     });
   });
 
@@ -64,10 +74,9 @@ describe('Header', () => {
     renderHeader();
 
     navPages.forEach(({ path, navText }) => {
-      expect(screen.getByRole('link', { name: new RegExp(navText, 'i') })).toHaveAttribute(
-        'href',
-        path,
-      );
+      expect(
+        screen.getByRole('link', { name: new RegExp(navText, 'i') }),
+      ).toHaveAttribute('href', path);
     });
   });
 
@@ -80,7 +89,9 @@ describe('Header', () => {
     });
 
     it('показывает ссылку на кабинет для авторизованного пользователя', () => {
-      vi.mocked(useAuth).mockReturnValue({ isAuth: true } as ReturnType<typeof useAuth>);
+      vi.mocked(useAuth).mockReturnValue({ isAuth: true } as ReturnType<
+        typeof useAuth
+      >);
       renderHeader();
 
       expect(screen.getByTestId('profile-icon')).toBeInTheDocument();
@@ -88,10 +99,15 @@ describe('Header', () => {
     });
 
     it('ссылка профиля ведёт в личный кабинет', () => {
-      vi.mocked(useAuth).mockReturnValue({ isAuth: true } as ReturnType<typeof useAuth>);
+      vi.mocked(useAuth).mockReturnValue({ isAuth: true } as ReturnType<
+        typeof useAuth
+      >);
       renderHeader();
 
-      expect(screen.getByTestId('profile-icon').closest('a')).toHaveAttribute('href', CABINET_PATH);
+      expect(screen.getByTestId('profile-icon').closest('a')).toHaveAttribute(
+        'href',
+        CABINET_PATH,
+      );
     });
   });
 
@@ -114,7 +130,9 @@ describe('Header', () => {
     });
 
     it('не рендерится для авторизованного пользователя', () => {
-      vi.mocked(useAuth).mockReturnValue({ isAuth: true } as ReturnType<typeof useAuth>);
+      vi.mocked(useAuth).mockReturnValue({ isAuth: true } as ReturnType<
+        typeof useAuth
+      >);
       renderHeader();
 
       expect(screen.queryByTestId('auth-modal')).not.toBeInTheDocument();
@@ -124,12 +142,18 @@ describe('Header', () => {
       renderHeader();
 
       await userEvent.click(screen.getByTestId('burger-button'));
-      expect(screen.getByTestId('burger-button')).toHaveAttribute('aria-expanded', 'true');
+      expect(screen.getByTestId('burger-button')).toHaveAttribute(
+        'aria-expanded',
+        'true',
+      );
 
       await userEvent.click(screen.getByTestId('auth-button'));
 
       expect(screen.getByTestId('auth-modal')).toBeInTheDocument();
-      expect(screen.getByTestId('burger-button')).toHaveAttribute('aria-expanded', 'false');
+      expect(screen.getByTestId('burger-button')).toHaveAttribute(
+        'aria-expanded',
+        'false',
+      );
     });
   });
 
@@ -173,7 +197,9 @@ describe('Header', () => {
 
       await userEvent.click(getBurger());
       await userEvent.click(
-        screen.getByRole('link', { name: new RegExp(navPages[0].navText, 'i') }),
+        screen.getByRole('link', {
+          name: new RegExp(navPages[0].navText, 'i'),
+        }),
       );
 
       expect(getBurger()).toHaveAttribute('aria-expanded', 'false');

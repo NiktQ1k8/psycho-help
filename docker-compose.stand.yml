@@ -26,7 +26,11 @@ services:
     networks:
       - stand
     healthcheck:
-      test: ['CMD-SHELL', 'wget -qO- --no-check-certificate https://127.0.0.1/ >/dev/null || exit 1']
+      test:
+        [
+          'CMD-SHELL',
+          'wget -qO- --no-check-certificate https://127.0.0.1/ >/dev/null || exit 1',
+        ]
       interval: 15s
       timeout: 5s
       retries: 5

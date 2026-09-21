@@ -1,21 +1,25 @@
+import { useEffect } from 'react';
 import { useParams } from 'react-router';
 import { Link, useNavigate } from 'react-router-dom';
-import styles from './NewsItemPage.module.scss';
-import Loader from '@/shared/ui/loader/loader';
-import { useQuery } from '@tanstack/react-query';
-import { newsItemQueries } from '@/entities/news/api/queries';
-import { Result } from 'antd';
-import { Button } from '@/shared/ui';
 import { LeftOutlined } from '@ant-design/icons';
-import chevronLeft from '@/shared/assets/images/news/chevron-left.svg';
+import { useQuery } from '@tanstack/react-query';
+import { Result } from 'antd';
 import dayjs from 'dayjs';
-import { useEffect } from 'react';
+import { newsItemQueries } from '@/entities/news/api/queries';
+import chevronLeft from '@/shared/assets/images/news/chevron-left.svg';
+import { Button } from '@/shared/ui';
+import Loader from '@/shared/ui/loader/loader';
+import styles from './NewsItemPage.module.scss';
 
 export const NewsItemPage = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
 
-  const { data: newsItem, isLoading, error } = useQuery(newsItemQueries.bySlug(slug!));
+  const {
+    data: newsItem,
+    isLoading,
+    error,
+  } = useQuery(newsItemQueries.bySlug(slug!));
 
   useEffect(() => {
     window.scroll(0, 0);
@@ -40,7 +44,11 @@ export const NewsItemPage = () => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.newsItemHeader}>
-        <Link to="/news" onClick={() => navigate(-1)} className={styles.backButton}>
+        <Link
+          to="/news"
+          onClick={() => navigate(-1)}
+          className={styles.backButton}
+        >
           <img src={chevronLeft} alt="Назад" />
           Новости
         </Link>
@@ -60,7 +68,10 @@ export const NewsItemPage = () => {
       )}
 
       {newsItem.text && (
-        <div className={styles.content} dangerouslySetInnerHTML={{ __html: newsItem.text }} />
+        <div
+          className={styles.content}
+          dangerouslySetInnerHTML={{ __html: newsItem.text }}
+        />
       )}
 
       <Button

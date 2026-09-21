@@ -1,14 +1,17 @@
 @use '@/shared/scss/abstracts/breakpoints' as *;
 
 .tab {
-  font: var(--font-text-medium);
-  background: var(--color-interactive-neutral-secondary);
-  color: var(--color-label-neutral-primary);
-  border-radius: 1.2rem;
-  padding-inline: 1.6rem;
   padding-block: 0.75rem;
-  transition: 0.3s ease;
+  padding-inline: 1.6rem;
   border-width: 0;
+  border-radius: 1.2rem;
+
+  font: var(--font-text-medium);
+  color: var(--color-label-neutral-primary);
+
+  background: var(--color-interactive-neutral-secondary);
+
+  transition: 0.3s ease;
 
   &.active {
     color: var(--color-label-neutral-inverted-primary);
@@ -17,8 +20,8 @@
 
   @include past-tablet {
     &:hover:not(.active) {
-      background: var(--color-interactive-brand-hover-secondary);
       color: var(--color-label-brand-primary);
+      background: var(--color-interactive-brand-hover-secondary);
     }
   }
 
@@ -28,20 +31,21 @@
   }
 
   @include past-desktop {
-    font: var(--font-text-large);
     padding: 1.6rem 6.4rem;
+    font: var(--font-text-large);
   }
 }
 
 [data-theme='dark'] {
   .tab {
     &:hover:not(.active) {
-      background-color: var(--color-interactive-brand-hover-secondary);
       color: var(--color-label-brand-primary);
+      background-color: var(--color-interactive-brand-hover-secondary);
     }
+
     &:active:not(.active) {
-      background-color: var(--color-interactive-brand-primary);
       color: var(--color-label-neutral-inverted-primary);
+      background-color: var(--color-interactive-brand-primary);
     }
   }
 }

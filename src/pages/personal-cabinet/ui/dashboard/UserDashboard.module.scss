@@ -3,9 +3,9 @@
 }
 
 .sectionTitle {
+  margin-bottom: var(--spacing-md, 16px);
   font-size: var(--font-size-lg, 18px);
   font-weight: var(--font-weight-semibold, 600);
-  margin-bottom: var(--spacing-md, 16px);
 }
 
 .cardsGrid {
@@ -15,35 +15,36 @@
 }
 
 .emptyText {
-  color: var(--color-text-secondary, #666);
   font-style: italic;
+  color: var(--color-text-secondary, #666);
 }
 
 .greetingTitle {
+  margin: 0 0 0.8rem;
   font-size: var(--font-size-xl, 24px);
   font-weight: var(--font-weight-semibold, 600);
-  margin: 0 0 0.8rem 0;
 }
 
 .greetingSubtitle {
+  margin: 0;
   font-size: var(--font-size-md, 16px);
   color: var(--color-text-secondary, #666);
-  margin: 0;
 }
 
 .pageLoaderWrapper {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   min-height: 60vh;
 }
 
 .modalInitiator {
-  font-size: var(--font-text-medium, 14px);
-  color: var(--color-text-primary, #333);
   margin-bottom: 12px;
   padding-bottom: 12px;
   border-bottom: 1px solid var(--color-border-neutral-base, #eee);
+
+  font-size: var(--font-text-medium, 14px);
+  color: var(--color-text-primary, #333);
 
   strong {
     font-weight: 600;
@@ -59,9 +60,10 @@
 
 [data-theme='dark'] {
   .modalInitiator {
-    color: var(--color-label-neutral-inverted-primary);
     border-bottom-color: var(--color-border-neutral-primary);
+    color: var(--color-label-neutral-inverted-primary);
   }
+
   .modalText {
     color: var(--color-label-neutral-inverted-secondary);
   }

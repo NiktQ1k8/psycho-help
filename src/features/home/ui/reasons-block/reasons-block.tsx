@@ -1,5 +1,5 @@
 import { REASONS_TO_VISIT } from '@/features/home/config/constants';
-import styles from './reasons-block.module.css';
+import styles from './ReasonsBlock.module.scss';
 
 const ReasonsBlock = () => {
   return (

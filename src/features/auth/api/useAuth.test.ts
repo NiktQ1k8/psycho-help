@@ -1,9 +1,9 @@
-import { useAuth } from './useAuth';
-import AuthApi from './auth-api';
 import { act } from '@testing-library/react';
-import type { User } from '@/entities/auth';
 import type { AxiosResponse } from 'axios';
-import { vi, describe, beforeEach, it, expect } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { User } from '@/entities/auth';
+import AuthApi from './auth-api';
+import { useAuth } from './useAuth';
 
 vi.mock('./auth-api', () => ({
   default: {
@@ -63,8 +63,12 @@ describe('useAuth Store', () => {
   });
 
   it('login() вызывает AuthApi.login и устанавливает пользователя', async () => {
-    vi.mocked(AuthApi.login).mockResolvedValueOnce({ data: mockUser } as AxiosResponse<User>);
-    vi.mocked(AuthApi.getUser).mockResolvedValueOnce({ data: mockUser } as AxiosResponse<User>);
+    vi.mocked(AuthApi.login).mockResolvedValueOnce({
+      data: mockUser,
+    } as AxiosResponse<User>);
+    vi.mocked(AuthApi.getUser).mockResolvedValueOnce({
+      data: mockUser,
+    } as AxiosResponse<User>);
 
     await act(async () => {
       await useAuth.getState().login('darklord@example.com', '666');
@@ -101,7 +105,9 @@ describe('useAuth Store', () => {
   });
 
   it('logout() вызывает AuthApi.logOut и очищает состояние', async () => {
-    vi.mocked(AuthApi.logOut).mockResolvedValueOnce({ data: {} } as AxiosResponse);
+    vi.mocked(AuthApi.logOut).mockResolvedValueOnce({
+      data: {},
+    } as AxiosResponse);
 
     await act(async () => {
       await useAuth.getState().logOut();

@@ -1,12 +1,14 @@
 .page {
-  max-width: 122.4rem;
-  margin: 0 auto;
-  padding: 4rem 2.4rem;
   display: grid;
   grid-template-columns: 28.8rem 1fr;
   gap: 2.4rem;
+
+  max-width: 122.4rem;
   min-height: calc(100vh - 8rem);
-  @media (max-width: 1023px) {
+  margin: 0 auto;
+  padding: 4rem 2.4rem;
+
+  @media (width <= 1023px) {
     grid-template-columns: 1fr;
     gap: 2.4rem;
     padding: 2.4rem 1.6rem;
@@ -17,7 +19,8 @@
   position: sticky;
   top: calc(var(--header-height) + 4rem);
   height: fit-content;
-  @media (max-height: 900px), (max-width: 1023px) {
+
+  @media (height <= 900px), (width <= 1023px) {
     position: static;
   }
 }
@@ -29,30 +32,35 @@
 .back {
   display: flex;
   gap: 1.2rem;
-  outline: none;
-  background: none;
+
   border: none;
-  color: var(--color-label-neutral-primary);
+
+  font-family: var(--font-text-medium);
   font-size: 1.6rem;
   line-height: 2.4rem;
-  font-family: var(--font-text-medium);
+  color: var(--color-label-neutral-primary);
+
+  background: none;
+  outline: none;
 }
 
 .pageTitle {
-  font-size: 3.2rem;
-  line-height: 3.6rem;
+  margin: 2.4rem 0;
+
   font-family: var(--font-h4);
+  font-size: 3.2rem;
   font-weight: 700;
+  line-height: 3.6rem;
   color: var(--color-label-neutral-primary, #111827);
-  margin: 2.4rem 0 2.4rem 0;
 }
 
 .userName {
+  margin: 0 0 2.4rem;
+
   font-size: 2rem;
-  line-height: 2.8rem;
   font-weight: 400;
+  line-height: 2.8rem;
   color: var(--color-label-neutral-primary, #111827);
-  margin: 0 0 2.4rem 0;
 }
 
 .statusRow {
@@ -62,17 +70,17 @@
 }
 
 .statusLabel {
-  font-size: 1.6rem;
-  line-height: 2.4rem;
   font-family: var(--font-text-medium);
+  font-size: 1.6rem;
   font-weight: 400;
+  line-height: 2.4rem;
   color: var(--color-label-neutral-secondary, #111827);
 }
 
 .status {
   display: flex;
-  align-items: center;
   gap: 0.8rem;
+  align-items: center;
 }
 
 .status-dot {
@@ -102,26 +110,27 @@
 }
 
 .status-text {
+  font-family: var(--font-text-medium);
   font-size: 1.6rem;
+  font-weight: 600;
   line-height: 2.4rem;
   color: var(--color-label-neutral-primary);
-  font-family: var(--font-text-medium);
-  font-weight: 600;
 }
 
 .reasonBlock {
   margin-bottom: 2rem;
   padding: 1.2rem 1.6rem;
-  background-color: var(--color-bg-danger-light, #fef2f2);
   border-left: 0.4rem solid var(--color-label-danger-primary, #ef4444);
   border-radius: 0.4rem;
+
+  background-color: var(--color-bg-danger-light, #fef2f2);
 }
 
 .reasonLabel {
-  font-weight: 600;
-  font-size: 1.4rem;
-  color: var(--color-label-danger-primary, #ef4444);
   margin-right: 0.8rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--color-label-danger-primary, #ef4444);
 }
 
 .reasonText {
@@ -130,49 +139,52 @@
 }
 
 .dataGrid {
-  margin: 2.4rem 0 0.8rem;
-  width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.6rem;
+
+  width: 100%;
+  margin: 2.4rem 0 0.8rem;
 }
 
 .dataItem {
-  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+  width: 100%;
 }
 
 .dataLabel {
+  font-family: var(--font-text-medium);
   font-size: 1.6rem;
   line-height: 2.4rem;
-  font-family: var(--font-text-medium);
   color: var(--color-label-neutral-secondary, #6b7280);
 }
 
 .dataValue {
-  font-size: 1.6rem;
-  font-family: var(--font-text-medium);
-  color: var(--color-label-neutral-primary, #111827);
-  line-height: 2.4rem;
+  padding: 1.2rem;
   border: 0.1rem solid var(--color-border-neutral-base, #e5e7eb);
   border-radius: 0.4rem;
-  padding: 1.2rem;
+
+  font-family: var(--font-text-medium);
+  font-size: 1.6rem;
+  line-height: 2.4rem;
+  color: var(--color-label-neutral-primary, #111827);
 }
 
 .divider {
+  margin: 2.4rem 0;
   border: none;
   border-top: 0.1rem solid var(--color-border-neutral-base, #e5e7eb);
-  margin: 2.4rem 0;
 }
 
 .dataItemFull {
-  width: 100%;
-  grid-column: 1 / -1;
   display: flex;
+  grid-column: 1 / -1;
   flex-direction: column;
   gap: 0.4rem;
+
+  width: 100%;
   margin-top: 2.4rem;
 }
 
@@ -182,38 +194,41 @@
 }
 
 .dataValueDescription {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+
   width: 100%;
-  font-size: 1.6rem;
-  font-family: var(--font-text-medium);
-  color: var(--color-label-neutral-primary, #111827);
-  line-height: 2.4rem;
   margin-top: 1.2rem;
 
-  display: -webkit-box;
-  line-clamp: 2;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  font-family: var(--font-text-medium);
+  font-size: 1.6rem;
+  line-height: 2.4rem;
+  color: var(--color-label-neutral-primary, #111827);
   text-overflow: ellipsis;
 }
 
 .dataValueDescription.expanded {
-  display: block;
-  line-clamp: unset;
-  -webkit-line-clamp: unset;
   overflow: visible;
+  display: block;
+  -webkit-line-clamp: unset;
+  line-clamp: unset;
 }
 
 .expandButton {
-  color: var(--color-label-brand-primary);
-  outline: none;
-  background: none;
-  border: none;
-  font-size: 1.6rem;
-  line-height: 2.4rem;
-  font-family: var(--font-text-medium);
   margin-top: 1rem;
   margin-left: auto;
+  border: none;
+
+  font-family: var(--font-text-medium);
+  font-size: 1.6rem;
+  line-height: 2.4rem;
+  color: var(--color-label-brand-primary);
+
+  background: none;
+  outline: none;
 }
 
 .actions {
@@ -224,16 +239,20 @@
 }
 
 .btnPrimary {
+  cursor: pointer;
+
   padding: 1rem 2.4rem;
-  background-color: var(--color-interactive-brand-primary, #2563eb);
-  color: #fff;
   border: none;
   border-radius: 1.6rem;
-  font-size: 2rem;
-  line-height: 2.8rem;
+
   font-family: var(--font-text-large-button);
+  font-size: 2rem;
   font-weight: 500;
-  cursor: pointer;
+  line-height: 2.8rem;
+  color: #fff;
+
+  background-color: var(--color-interactive-brand-primary, #2563eb);
+
   transition: background-color 0.2s;
 
   &:hover {
@@ -241,22 +260,26 @@
   }
 
   &:disabled {
-    opacity: 0.5;
     cursor: not-allowed;
+    opacity: 0.5;
   }
 }
 
 .btnSecondary {
+  cursor: pointer;
+
   padding: 1.2rem 3.6rem;
-  background-color: var(--color-fill-danger-tetriary);
-  color: var(--color-label-danger-primary);
   border: 0.1rem solid transparent;
   border-radius: 1.6rem;
-  font-size: 2rem;
-  line-height: 2.8rem;
+
   font-family: var(--font-text-large-button);
+  font-size: 2rem;
   font-weight: 500;
-  cursor: pointer;
+  line-height: 2.8rem;
+  color: var(--color-label-danger-primary);
+
+  background-color: var(--color-fill-danger-tetriary);
+
   transition: border-color 0.2s;
 
   &:hover {
@@ -265,16 +288,20 @@
 }
 
 .btnConfirm {
+  cursor: pointer;
+
   padding: 1.2rem 5rem;
-  background-color: var(--color-interactive-brand-primary, #2563eb);
-  color: #fff;
   border: none;
   border-radius: 1.6rem;
-  font-size: 2rem;
-  line-height: 2.8rem;
+
   font-family: var(--font-text-large);
+  font-size: 2rem;
   font-weight: 500;
-  cursor: pointer;
+  line-height: 2.8rem;
+  color: #fff;
+
+  background-color: var(--color-interactive-brand-primary, #2563eb);
+
   transition: background-color 0.2s;
 
   &:hover {
@@ -282,17 +309,18 @@
   }
 
   &:disabled {
-    opacity: 0.5;
     cursor: not-allowed;
+    opacity: 0.5;
   }
 }
 
 .scheduleFields {
-  width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
   gap: 1.6rem;
+
+  width: 100%;
 }
 
 .scheduleFields label {
@@ -300,14 +328,16 @@
 }
 
 .fieldLabel {
-  width: 100% !important;
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
+
+  width: 100% !important;
+
+  font-family: var(--font-text-medium);
   font-size: 1.6rem;
   line-height: 2.4rem;
   color: var(--color-label-neutral-secondary, #111827);
-  font-family: var(--font-text-medium);
 
   input {
     font-family: var(--font-text-medium);
@@ -315,13 +345,15 @@
 }
 
 .sidebarTitle {
-  font-size: 3.2rem;
-  line-height: 3.6rem;
-  font-family: var(--font-h4);
-  font-weight: 700;
-  color: var(--color-label-neutral-primary, #111827);
-  margin: 2.4rem 0 0.8rem 0;
   grid-column: 1 / -1;
+
+  margin: 2.4rem 0 0.8rem;
+
+  font-family: var(--font-h4);
+  font-size: 3.2rem;
+  font-weight: 700;
+  line-height: 3.6rem;
+  color: var(--color-label-neutral-primary, #111827);
 }
 
 .fieldPicker {
@@ -353,11 +385,13 @@
 // Базовые стили для обоих компонентов
 .fieldSelectWrapper :global(.customSelect-selector),
 .timeWrapper :global(.ant-picker) {
+  max-height: 5.06rem !important;
+  padding: 1.2rem !important;
   border: 0.1rem solid var(--color-border-neutral-base, #e5e7eb) !important;
   border-radius: 0.4rem !important;
-  padding: 1.2rem !important;
-  max-height: 5.06rem !important;
+
   background: #fff !important;
+
   transition: none !important;
 }
 
@@ -371,54 +405,58 @@
 .timeWrapper :global(.ant-picker):active,
 .timeWrapper :global(.ant-picker-focused) {
   border: 0.1rem solid var(--color-border-neutral-base, #e5e7eb) !important;
-  box-shadow: none !important;
-  outline: none !important;
   background: #fff !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 // Текст и плейсхолдер для Select
 .fieldSelectWrapper :global(.customSelect-selection-item),
 .fieldSelectWrapper :global(.customSelect-selection-placeholder) {
+  padding: 0 !important;
+  font-family: var(--font-text-medium) !important;
   font-size: 1.6rem !important;
   line-height: 2.4rem !important;
-  font-family: var(--font-text-medium) !important;
-  padding: 0 !important;
 }
 
 // Инпут и текст для DatePicker
 .timeWrapper :global(.ant-picker-input),
 .timeWrapper :global(.ant-picker-input input) {
+  height: 2.4rem !important;
+  padding: 0 !important;
+
+  font-family: var(--font-text-medium) !important;
   font-size: 1.6rem !important;
   line-height: 2.4rem !important;
-  font-family: var(--font-text-medium) !important;
-  padding: 0 !important;
-  height: 2.4rem !important;
 }
 
 .sectionTitle {
-  font-size: 2rem;
-  line-height: 2.8rem;
-  font-family: var(--font-text-large);
-  font-weight: 500;
-  color: var(--color-label-neutral-primary, #111827);
-  margin: 0 0 1rem 0;
+  margin: 0 0 1rem;
   padding: 0 2.4rem;
+
+  font-family: var(--font-text-large);
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: 2.8rem;
+  color: var(--color-label-neutral-primary, #111827);
 }
 
 .formRow {
-  width: 100%;
   display: flex;
-  align-items: flex-end;
   flex-wrap: wrap;
+  align-items: flex-end;
   justify-content: center;
+
+  width: 100%;
 }
 
 .formField {
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
-  min-width: 22rem;
+
   width: 100%;
+  min-width: 22rem;
   padding: 1rem 2.4rem;
 }
 
@@ -426,7 +464,7 @@
   flex: 1;
 }
 
-@media (max-width: 900px) {
+@media (width <= 900px) {
   .sidebar {
     width: 100%;
   }
@@ -450,43 +488,49 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (width <= 600px) {
   .sidebarWrapper * {
     display: none;
   }
+
   .page {
-    padding: 0 10px 100px 10px;
     display: flex;
     flex-direction: column;
     gap: 20px;
+    padding: 0 10px 100px;
   }
-  .pageTitle, .sidebarTitle  {
-    font-size: 2rem;
-    line-height: 2.8rem;
+
+  .pageTitle,
+  .sidebarTitle {
     margin-top: 3rem;
     margin-bottom: 2rem;
+    font-size: 2rem;
+    line-height: 2.8rem;
   }
+
   .dataGrid {
     gap: 2rem;
   }
-  .userName{
+
+  .userName {
     font-size: 1.8rem;
     line-height: 2.4rem;
   }
 }
 
-@media (min-width: 500px) and (max-width: 1024px) {
+@media (width >= 500px) and (width <= 1024px) {
   .sidebarWrapper * {
     display: none;
   }
 
   .page {
-    padding: 0 24px;
-    padding-bottom: 4rem;
     display: flex;
     flex-direction: column;
+    padding: 0 24px;
+    padding-bottom: 4rem;
   }
 }
+
 [data-theme='dark'] {
   .back,
   .pageTitle,
@@ -497,6 +541,7 @@
   .fieldLabel {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .status-text,
   .dataValue {
     color: color-mix(
@@ -505,11 +550,13 @@
       var(--color-label-neutral-inverted-primary)
     );
   }
+
   .status-dot {
     &--completed {
       background-color: var(--color-label-neutral-inverted-primary);
     }
   }
+
   .fieldSelectWrapper :global(.customSelect-selector),
   .timeWrapper :global(.ant-picker),
   .dataValue:global(.ant-input-outlined[disabled]) {
@@ -520,6 +567,7 @@
       var(--color-label-neutral-inverted-primary)
     ) !important;
     background: var(--color-background-neutral-inverted) !important;
+
     input[disabled] {
       color: color-mix(
         in srgb,
@@ -528,6 +576,7 @@
       ) !important;
     }
   }
+
   .dataValueDescription {
     color: color-mix(
       in srgb,

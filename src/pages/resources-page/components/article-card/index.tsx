@@ -1,4 +1,4 @@
-import type { ReactNode, MouseEvent } from 'react';
+import type { MouseEvent, ReactNode } from 'react';
 import clsx from 'clsx';
 import styles from './ArticleCard.module.scss';
 
@@ -42,7 +42,11 @@ export const ArticleCard = ({
       <div className={styles.content}>
         <h4 className={styles.title}>{title}</h4>
         {!!description && (
-          <p className={clsx(styles.description, { [styles.ellipse]: ellipseDescription })}>
+          <p
+            className={clsx(styles.description, {
+              [styles.ellipse]: ellipseDescription,
+            })}
+          >
             {description}
           </p>
         )}

@@ -1,7 +1,7 @@
 .mainInfo {
   display: flex;
-  color: var(--color-label-neutral-primary);
   gap: 36px;
+  color: var(--color-label-neutral-primary);
 }
 
 .imgWrapper {
@@ -11,23 +11,27 @@
 }
 
 .regBtn {
-  background-color: var(--color-interactive-brand-primary);
   padding: 16px 49px;
-  color: var(--color-label-neutral-inverted-primary);
-  font-size: 2rem;
-  border-radius: 16px;
   border-width: 0;
+  border-radius: 16px;
+
+  font-size: 2rem;
+  color: var(--color-label-neutral-inverted-primary);
+
+  background-color: var(--color-interactive-brand-primary);
 }
 
 .photo {
+  overflow: hidden;
+
   width: 244px;
   height: 267px;
+  border-radius: 16px;
+
   object-fit: cover;
   background-repeat: no-repeat;
-  border-radius: 16px;
-  overflow: hidden;
-  background-size: cover;
   background-position: center;
+  background-size: cover;
 }
 
 .name {
@@ -44,8 +48,8 @@
 .line {
   width: 100%;
   height: 1px;
-  background-color: var(--color-border-neutral-base);
   margin: 24px 0;
+  background-color: var(--color-border-neutral-base);
 }
 
 .qual {
@@ -64,36 +68,41 @@
 
 .consultAreas {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
-  margin-top: 8px;
+
   width: 100%;
   max-width: 467px;
-  flex-wrap: wrap;
+  margin-top: 8px;
 }
 
 .consultArea {
-  color: var(--color-label-neutral-secondary);
-  border: var(--color-border-neutral-base) 1px solid;
   padding: 4px 16px;
+  border: var(--color-border-neutral-base) 1px solid;
   border-radius: 16px;
+  color: var(--color-label-neutral-secondary);
 }
 
 .btns {
-  width: 100%;
-  max-width: 500px;
   display: flex;
   justify-content: space-between;
+
+  width: 100%;
+  max-width: 500px;
   margin-top: 24px;
 }
 
 .infoBtn {
-  color: var(--color-label-neutral-primary);
-  font-size: 2rem;
-  border-radius: 16px;
+  cursor: pointer;
+
   padding: 4px 16px;
   border: none;
+  border-radius: 16px;
+
+  font-size: 2rem;
+  color: var(--color-label-neutral-primary);
+
   background: none;
-  cursor: pointer;
 }
 
 .infoBtnActive {
@@ -103,30 +112,32 @@
 
 .supInfo {
   margin-top: 24px;
-  color: var(--color-label-neutral-secondary);
   font-size: 1.6rem;
+  color: var(--color-label-neutral-secondary);
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (width <= 768px) {
   .photo {
     width: 208px;
     height: 228px;
   }
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (width <= 480px) {
   .mainInfo {
     flex-direction: column;
   }
+
   .regBtnTablet {
     position: fixed;
+    z-index: 1;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
+
     width: 90%;
     height: 56px;
     margin-bottom: 10px;
-    z-index: 1;
   }
 
   .photo {
@@ -161,6 +172,7 @@
   .qual {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .exp,
   .office {
     color: color-mix(
@@ -169,17 +181,21 @@
       var(--color-label-neutral-inverted-primary)
     );
   }
+
   .consultArea {
-    color: var(--color-label-neutral-inverted-primary);
     border: 1px solid var(--color-border-neutral-inverted);
+    color: var(--color-label-neutral-inverted-primary);
   }
+
   .infoBtn {
     color: var(--color-label-neutral-inverted-primary);
   }
-  .infoBtnActive{
-    background-color: var(--color-fill-neutral-none);
+
+  .infoBtnActive {
     color: var(--color-label-neutral-primary);
+    background-color: var(--color-fill-neutral-none);
   }
+
   .supInfo {
     color: color-mix(
       in srgb,
@@ -189,15 +205,18 @@
   }
 
   .regBtn {
-    background-color: var(--color-background-neutral-primary);
     color: var(--color-label-neutral-primary);
+    background-color: var(--color-background-neutral-primary);
+
     &:hover {
       background-color: var(--color-interactive-neutral-hover-secondary);
     }
+
     &:active {
       background-color: var(--color-interactive-neutral-active-secondary);
     }
   }
+
   .photo {
     background-color: var(--color-fill-neutral-primary);
   }

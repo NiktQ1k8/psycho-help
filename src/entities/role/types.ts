@@ -8,8 +8,16 @@ export type Role =
       name: 'Пользователь';
       description: 'Студент или преподаватель - обычный пользователь системы';
     }
-  | { code: 'psychologist'; name: 'Психолог'; description: 'Психолог, проводящий консультации' }
-  | { code: 'admin'; name: 'Администратор'; description: 'Администратор системы' }
+  | {
+      code: 'psychologist';
+      name: 'Психолог';
+      description: 'Психолог, проводящий консультации';
+    }
+  | {
+      code: 'admin';
+      name: 'Администратор';
+      description: 'Администратор системы';
+    }
   | {
       code: 'content_manager';
       name: 'Контент-менеджер';

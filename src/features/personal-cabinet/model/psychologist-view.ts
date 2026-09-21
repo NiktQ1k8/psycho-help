@@ -1,7 +1,7 @@
 import { create } from 'zustand';
-import dayjs from '@/shared/lib/dayjs';
 import type { ApplicationStatus } from '@/entities/application/types';
 import type { AppointmentStatus } from '@/entities/appointment/types';
+import dayjs from '@/shared/lib/dayjs';
 
 export type SortDirection = 'asc' | 'desc';
 export type ApplicationStatusFilter = 'all' | ApplicationStatus | 'closed';
@@ -54,7 +54,9 @@ const getDefaultAppointmentFilters = (): BaseFilters => ({
   dateRange: getDefaultAppointmentDateRange(),
 });
 
-const filtersKey = (tab: ActiveTab): 'applicationFilters' | 'appointmentFilters' =>
+const filtersKey = (
+  tab: ActiveTab,
+): 'applicationFilters' | 'appointmentFilters' =>
   tab === 'applications' ? 'applicationFilters' : 'appointmentFilters';
 
 export const usePsychologistView = create<ViewState>((set, get) => {
@@ -74,11 +76,16 @@ export const usePsychologistView = create<ViewState>((set, get) => {
     },
 
     setCurrentPage: (tab, page) => updateFilter(tab, { currentPage: page }),
-    setSortDirection: (tab, dir) => updateFilter(tab, { sortDirection: dir, currentPage: 1 }),
-    setStatusFilter: (tab, filter) => updateFilter(tab, { statusFilter: filter, currentPage: 1 }),
-    setFormatFilter: (tab, filter) => updateFilter(tab, { formatFilter: filter, currentPage: 1 }),
-    setSearchQuery: (tab, query) => updateFilter(tab, { searchQuery: query, currentPage: 1 }),
-    setDateRange: (tab, range) => updateFilter(tab, { dateRange: range, currentPage: 1 }),
+    setSortDirection: (tab, dir) =>
+      updateFilter(tab, { sortDirection: dir, currentPage: 1 }),
+    setStatusFilter: (tab, filter) =>
+      updateFilter(tab, { statusFilter: filter, currentPage: 1 }),
+    setFormatFilter: (tab, filter) =>
+      updateFilter(tab, { formatFilter: filter, currentPage: 1 }),
+    setSearchQuery: (tab, query) =>
+      updateFilter(tab, { searchQuery: query, currentPage: 1 }),
+    setDateRange: (tab, range) =>
+      updateFilter(tab, { dateRange: range, currentPage: 1 }),
 
     resetFilters: (tab) => {
       const key = filtersKey(tab);

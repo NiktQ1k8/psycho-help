@@ -1,44 +1,52 @@
 @use '@/shared/scss/abstracts/breakpoints' as *;
 
 .footer {
-  background-color: var(--color-background-brand-primary);
-  color: var(--color-label-neutral-inverted-primary);
-  padding: 60px 0 30px 0;
   position: relative;
+
   overflow: hidden;
+
+  padding: 60px 0 30px;
+
+  color: var(--color-label-neutral-inverted-primary);
+
+  background-color: var(--color-background-brand-primary);
 }
 
 .container {
+  position: relative;
+  z-index: 2;
+
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
-  position: relative;
-  z-index: 2;
 }
 
 /* Фоновые буквы */
 .backgroundLetters {
+  pointer-events: none;
+
   position: absolute;
+  z-index: 1;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
+
   font-size: 200px;
   font-weight: 700;
   color: var(--color-label-brand-quaternary);
-  z-index: 1;
-  white-space: nowrap;
   letter-spacing: 0.1em;
-  pointer-events: none;
+  white-space: nowrap;
 }
 
 /* Верхняя секция */
 .topSection {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
+  justify-content: space-between;
+
   margin-bottom: 50px;
   padding-bottom: 30px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgb(255 255 255 / 20%);
 }
 
 .logoSection {
@@ -46,18 +54,20 @@
 }
 
 .logo {
+  margin: 0;
+
   font-size: 24px;
   font-weight: 700;
-  color: var(--color-label-neutral-inverted-primary);
-  margin: 0;
   line-height: 1.2;
+  color: var(--color-label-neutral-inverted-primary);
   text-transform: lowercase;
 }
 
 .contactInfo {
   display: flex;
-  gap: 20px;
   flex-wrap: wrap;
+  gap: 20px;
+
   width: fit-content;
   margin: 0 70px 0 auto;
 
@@ -73,15 +83,15 @@
 .contactItem {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   gap: 8px;
+  align-items: flex-start;
 }
 
 .contactLabel {
+  min-width: 80px;
   font-size: 16px;
   font-weight: 600;
   color: var(--color-label-brand-quaternary);
-  min-width: 80px;
 }
 
 .contactValue {
@@ -89,6 +99,7 @@
   font-weight: 400;
   color: var(--color-label-neutral-inverted-primary);
   text-decoration: none;
+
   transition: color 0.3s ease;
 }
 
@@ -98,26 +109,29 @@
 
 .socialSection {
   display: flex;
-  gap: 16px;
   flex-shrink: 0;
+  gap: 16px;
 }
 
 .socialLink {
   display: flex;
   align-items: center;
   justify-content: center;
+
   width: 48px;
   height: 48px;
-  background-color: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgb(255 255 255 / 30%);
   border-radius: 50%;
+
+  background-color: rgb(255 255 255 / 10%);
+
   transition: all 0.3s ease;
-  border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .socialLink:hover {
-  background-color: rgba(255, 255, 255, 0.2);
   transform: translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.5);
+  border-color: rgb(255 255 255 / 50%);
+  background-color: rgb(255 255 255 / 20%);
 }
 
 .socialIcon {
@@ -134,11 +148,13 @@
 }
 
 .addressItem {
-  text-align: left;
   position: relative;
+
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+
+  text-align: left;
 
   .adressItemContent {
     position: absolute;
@@ -147,53 +163,60 @@
   }
 
   .addressBackgroundLetters {
+    pointer-events: none;
+
     font-size: 23rem;
-    font-stretch: condensed;
+    font-weight: 900;
     line-height: 0.9;
     color: var(--color-label-brand-quaternary);
-    opacity: 0.1;
-    font-weight: 900;
-    pointer-events: none;
     white-space: nowrap;
+
+    opacity: 0.1;
+
+    font-stretch: condensed;
   }
 }
 
 .addressStreet {
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--color-label-neutral-inverted-primary);
-  margin: 0 0 4px 0;
-  line-height: 1.3;
   position: relative;
   z-index: 2;
+
+  margin: 0 0 4px;
+
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--color-label-neutral-inverted-primary);
 }
 
 .addressAuditorium {
-  font-size: 14px;
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.8);
-  margin: 0;
-  line-height: 1.3;
   position: relative;
   z-index: 2;
+
+  margin: 0;
+
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.3;
+  color: rgb(255 255 255 / 80%);
 }
 
 /* Копирайт */
 .copyright {
-  text-align: center;
   padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-top: 1px solid rgb(255 255 255 / 20%);
+  text-align: center;
 }
 
 .copyright p {
+  margin: 0;
   font-size: 14px;
   font-weight: 400;
   color: var(--color-label-neutral-inverted-primary);
-  margin: 0;
 }
 
 /* Адаптивность */
-@media (max-width: 1024px) {
+@media (width <= 1024px) {
   .topSection {
     flex-direction: column;
     gap: 30px;
@@ -201,14 +224,13 @@
   }
 
   .contactInfo {
-    margin: 0;
     width: 100%;
+    margin: 0;
   }
 
   .addressesSection {
     grid-template-columns: repeat(2, 1fr);
-    column-gap: 1.6rem;
-    row-gap: 1.2rem;
+    gap: 1.2rem 1.6rem;
   }
 
   .addressBackgroundLetters {
@@ -220,9 +242,9 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .footer {
-    padding: 40px 0 20px 0;
+    padding: 40px 0 20px;
   }
 
   .container {
@@ -241,8 +263,8 @@
 
   .contactItem {
     flex-direction: column;
-    align-items: flex-start;
     gap: 4px;
+    align-items: flex-start;
   }
 
   .contactLabel {

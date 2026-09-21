@@ -1,74 +1,88 @@
 @use '../abstracts/breakpoints';
 
 @font-face {
-  font-family: 'Geist';
+  font-family: Geist;
+  font-weight: 100 900;
+  font-style: normal;
+
+  font-display: swap;
   src: url('@/shared/assets/fonts/Geist[wght].woff2') format('woff2-variations');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
 }
 
 @font-face {
-  font-family: 'Geist';
-  src: url('@/shared/assets/fonts/Geist-Italic[wght].woff2') format('woff2-variations');
+  font-family: Geist;
   font-weight: 100 900;
   font-style: italic;
+
   font-display: swap;
+  src: url('@/shared/assets/fonts/Geist-Italic[wght].woff2')
+    format('woff2-variations');
 }
 
 @font-face {
-  font-display: swap;
-  font-family: 'Roboto';
-  font-style: normal;
+  font-family: Roboto;
   font-weight: 400;
-  src: url('@/shared/assets/fonts/roboto-v49-cyrillic_latin-regular.woff2') format('woff2');
+  font-style: normal;
+
+  font-display: swap;
+  src: url('@/shared/assets/fonts/roboto-v49-cyrillic_latin-regular.woff2')
+    format('woff2');
 }
 
 @font-face {
-  font-display: swap;
-  font-family: 'Roboto';
-  font-style: italic;
+  font-family: Roboto;
   font-weight: 400;
-  src: url('@/shared/assets/fonts/roboto-v49-cyrillic_latin-italic.woff2') format('woff2');
-}
-
-@font-face {
-  font-display: swap;
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 500;
-  src: url('@/shared/assets/fonts/roboto-v49-cyrillic_latin-500.woff2') format('woff2');
-}
-
-@font-face {
-  font-display: swap;
-  font-family: 'Roboto';
   font-style: italic;
+
+  font-display: swap;
+  src: url('@/shared/assets/fonts/roboto-v49-cyrillic_latin-italic.woff2')
+    format('woff2');
+}
+
+@font-face {
+  font-family: Roboto;
   font-weight: 500;
-  src: url('@/shared/assets/fonts/roboto-v49-cyrillic_latin-500italic.woff2') format('woff2');
-}
-
-@font-face {
-  font-display: swap;
-  font-family: 'Roboto';
   font-style: normal;
-  font-weight: 600;
-  src: url('@/shared/assets/fonts/roboto-v49-cyrillic_latin-600.woff2') format('woff2');
+
+  font-display: swap;
+  src: url('@/shared/assets/fonts/roboto-v49-cyrillic_latin-500.woff2')
+    format('woff2');
 }
 
 @font-face {
-  font-display: swap;
-  font-family: 'Roboto';
+  font-family: Roboto;
+  font-weight: 500;
   font-style: italic;
+
+  font-display: swap;
+  src: url('@/shared/assets/fonts/roboto-v49-cyrillic_latin-500italic.woff2')
+    format('woff2');
+}
+
+@font-face {
+  font-family: Roboto;
   font-weight: 600;
-  src: url('@/shared/assets/fonts/roboto-v49-cyrillic_latin-600italic.woff2') format('woff2');
+  font-style: normal;
+
+  font-display: swap;
+  src: url('@/shared/assets/fonts/roboto-v49-cyrillic_latin-600.woff2')
+    format('woff2');
+}
+
+@font-face {
+  font-family: Roboto;
+  font-weight: 600;
+  font-style: italic;
+
+  font-display: swap;
+  src: url('@/shared/assets/fonts/roboto-v49-cyrillic_latin-600italic.woff2')
+    format('woff2');
 }
 
 $font-family-header: 'Geist', sans-serif;
 $font-family-body: 'Roboto', sans-serif;
 $font-family-caption: 'Roboto', sans-serif;
 $font-family-footnote: 'Roboto', sans-serif;
-
 $font-weight-regular: 400;
 $font-weight-medium: 500;
 $font-weight-semi-bold: 600;
@@ -82,7 +96,8 @@ $font-weight-semi-bold: 600;
   --font-h4: #{$font-weight-medium 2rem/2.8rem $font-family-header};
   --font-h5: #{$font-weight-medium 1.8rem/2.4rem $font-family-header};
   --font-text-medium: #{$font-weight-regular 1.6rem/2.4rem $font-family-body};
-  --font-text-medium-button: #{$font-weight-semi-bold 1.6rem/2.4rem $font-family-body};
+  --font-text-medium-button: #{$font-weight-semi-bold 1.6rem/2.4rem
+    $font-family-body};
   --font-text-small: #{$font-weight-regular 1.2rem/1.6rem $font-family-body};
   --font-text-xsmall: #{$font-weight-regular 1rem/1.4rem $font-family-body};
 }
@@ -96,7 +111,8 @@ $font-weight-semi-bold: 600;
     --font-h4: #{$font-weight-medium 2.8rem/3.2rem $font-family-header};
     --font-h5: #{$font-weight-medium 2.4rem/2.8rem $font-family-header};
     --font-text-large: #{$font-weight-regular 2rem/2.8rem $font-family-body};
-    --font-text-large-button: #{$font-weight-medium 2rem/2.8rem $font-family-body};
+    --font-text-large-button: #{$font-weight-medium 2rem/2.8rem
+      $font-family-body};
     --font-text-medium: #{$font-weight-regular 1.6rem/2.4rem $font-family-body};
     --font-text-small: #{$font-weight-regular 1.4rem/2rem $font-family-body};
     --font-text-xsmall: #{$font-weight-regular 1.2rem/1.6rem $font-family-body};
@@ -112,20 +128,22 @@ $font-weight-semi-bold: 600;
     --font-h4: #{$font-weight-medium 3.2rem/3.6rem $font-family-header};
     --font-h5: #{$font-weight-medium 2.4rem/2.8rem $font-family-header};
     --font-text-large: #{$font-weight-regular 2rem/2.8rem $font-family-body};
-    --font-text-large-button: #{$font-weight-medium 2rem/2.8rem $font-family-body};
+    --font-text-large-button: #{$font-weight-medium 2rem/2.8rem
+      $font-family-body};
     --font-text-medium: #{$font-weight-regular 1.6rem/2.4rem $font-family-body};
     --font-text-small: #{$font-weight-regular 1.4rem/2rem $font-family-caption};
-    --font-text-xsmall: #{$font-weight-regular 1.2rem/1.6rem $font-family-footnote};
+    --font-text-xsmall: #{$font-weight-regular 1.2rem/1.6rem
+      $font-family-footnote};
   }
 }
 
 @mixin header($level) {
   font: var(--font-h#{$level});
+  letter-spacing: var(--font-header-letter-spacing);
+
   @if $level == 5 {
     letter-spacing: var(
       --font-header-letter-spacing-h5
     ); // the hell do i know why designers chose to use 0.1 specifically on h5
-  } @else {
-    letter-spacing: var(--font-header-letter-spacing);
   }
 }

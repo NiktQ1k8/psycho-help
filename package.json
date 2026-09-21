@@ -3,6 +3,23 @@
   "version": "0.1.0",
   "type": "module",
   "private": true,
+  "scripts": {
+    "dev": "vite",
+    "start": "concurrently --kill-others \"vite\" \"node mok-server/server.js\"",
+    "start:mock": "concurrently --kill-others \"vite\" \"node mok-server/server.js --skip-connect\"",
+    "build": "tsc -b && vite build",
+    "format": "prettier --check .",
+    "format:write": "prettier --write .",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prepare": "husky",
+    "preview": "vite preview",
+    "stylelint": "stylelint \"**/*.{css,scss}\" --ignore-path .gitignore",
+    "stylelint:fix": "stylelint \"**/*.{css,scss}\" --ignore-path .gitignore --fix",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "typecheck": "tsc -b"
+  },
   "dependencies": {
     "@ant-design/compatible": "5.1.4",
     "@ant-design/icons": "6.1.0",
@@ -13,51 +30,18 @@
     "clsx": "^2.1.1",
     "dayjs": "^1.11.10",
     "dayjs-plugin-utc": "0.1.2",
-    "playwright": "^1.57.0",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
     "react-router-dom": "^7.13.0",
     "swiper": "^12.0.2",
     "zustand": "^5.0.8"
   },
-  "scripts": {
-    "dev": "vite",
-    "start": "concurrently --kill-others \"vite\" \"node mok-server/server.js\"",
-    "start:mock": "concurrently --kill-others \"vite\" \"node mok-server/server.js --skip-connect\"",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "lint:fix": "eslint --fix .",
-    "lint:staged": "eslint --ext .ts,.tsx $(git diff --cached --name-only | grep -E '\\.(ts|tsx)$')",
-    "lint:staged:fix": "files=$(git diff --cached --name-only | grep -E '\\.(ts|tsx)$'); [ -n \"$files\" ] && eslint --fix $files || exit 0",
-    "lint:diff": "eslint $(git diff --name-only HEAD~1 | grep -E '\\.(ts|tsx)$')",
-    "lint:diff:fix": "eslint --fix $(git diff --name-only HEAD~1 | grep -E '\\.(ts|tsx)$')",
-    "format": "prettier --write .",
-    "format:staged": "prettier --write $(git diff --cached --name-only | grep -E '\\.(ts|tsx|js|jsx|json|css|scss|md)$')",
-    "format:diff": "prettier --write $(git diff --name-only HEAD~1 | grep -E '\\.(ts|tsx|js|jsx|json|css|scss|md)$')",
-    "prepare": "husky",
-    "preview": "vite preview",
-    "server": "node mok-server/server.js",
-    "test": "vitest",
-    "playwright": "npx playwright test --ui"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
-    "@playwright/test": "^1.57.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
+    "@trivago/prettier-plugin-sort-imports": "^6.0.2",
     "@types/css-modules": "^1.0.5",
     "@types/node": "24.6.2",
     "@types/react": "^18.3.0",
@@ -72,15 +56,32 @@
     "express": "^5.1.0",
     "express-openapi-validator": "^5.6.0",
     "http-proxy-middleware": "^3.0.5",
-    "husky": "^9.1.6",
+    "husky": "^9.1.7",
     "jsdom": "^27.0.0",
     "lint-staged": "^15.2.10",
-    "prettier": "^3.6.2",
+    "prettier": "^3.9.8",
     "sass": "^1.93.2",
+    "stylelint": "^17.15.0",
+    "stylelint-config-clean-order": "^10.0.0",
+    "stylelint-config-standard": "^40.0.0",
+    "stylelint-config-standard-scss": "^17.0.0",
+    "stylelint-scss": "^7.3.0",
     "typescript": "5.9.3",
     "typescript-eslint": "^8.45.0",
     "vite": "^7.1.9",
     "vite-plugin-svgr": "^4.5.0",
     "vitest": "^3.2.4"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

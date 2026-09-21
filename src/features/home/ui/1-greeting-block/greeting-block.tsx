@@ -1,11 +1,11 @@
-import styles from './greeting-block.module.css';
-import GreetingDesktop from '@/features/home/ui/1-greeting-block/img/greeting-desktop.png';
-import GreetingTablet from '@/features/home/ui/1-greeting-block/img/greeting-tablet.png';
-import GreetingMobile from '@/features/home/ui/1-greeting-block/img/greeting-mobile.png';
-import Personally from '@/features/home/ui/personally.svg?react';
-import Online from '@/features/home/ui/online.svg?react';
 import { useState } from 'react';
 import clsx from 'clsx';
+import GreetingDesktop from '@/features/home/ui/1-greeting-block/img/greeting-desktop.png';
+import GreetingMobile from '@/features/home/ui/1-greeting-block/img/greeting-mobile.png';
+import GreetingTablet from '@/features/home/ui/1-greeting-block/img/greeting-tablet.png';
+import Online from '@/features/home/ui/online.svg?react';
+import Personally from '@/features/home/ui/personally.svg?react';
+import styles from './GreetingBlock.module.scss';
 
 const GreetingBlock = () => {
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
@@ -35,8 +35,9 @@ const GreetingBlock = () => {
             </div>
             <div className={styles.greeting__subtitle_wrapper}>
               <span className={styles.greeting__subtitle}>
-                Иногда справляться с трудностями в одиночку бывает тяжело. Наши психологи помогут
-                вам найти выход. Консультации бесплатны, конфиденциальны и доступны очно или онлайн.
+                Иногда справляться с трудностями в одиночку бывает тяжело. Наши
+                психологи помогут вам найти выход. Консультации бесплатны,
+                конфиденциальны и доступны очно или онлайн.
               </span>
             </div>
           </div>
@@ -61,7 +62,10 @@ const GreetingBlock = () => {
                 <span className={styles.greeting__option_text}>онлайн</span>
               </button>
             </div>
-            <button onClick={handleAppointment} className={styles.greeting__submit}>
+            <button
+              onClick={handleAppointment}
+              className={styles.greeting__submit}
+            >
               Записаться
             </button>
           </div>

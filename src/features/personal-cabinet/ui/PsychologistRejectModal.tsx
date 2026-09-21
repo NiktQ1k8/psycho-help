@@ -1,11 +1,17 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Input, message, Modal } from 'antd';
+import { Input, Modal, message } from 'antd';
 import { AxiosError } from 'axios';
-import { applicationQueryKey, rejectApplication } from '@/entities/application/api';
-import { appointmentQueryKey, cancelAppointment } from '@/entities/appointment/api';
 import {
-  usePsychologistDrafts,
+  applicationQueryKey,
+  rejectApplication,
+} from '@/entities/application/api';
+import {
+  appointmentQueryKey,
+  cancelAppointment,
+} from '@/entities/appointment/api';
+import {
   type PsychologistReasonDraftType,
+  usePsychologistDrafts,
 } from '@/features/personal-cabinet/model/psychologist-drafts';
 
 type ModalType = PsychologistReasonDraftType;
@@ -62,11 +68,14 @@ const PsychologistRejectModal = ({
     entityId ? state.reasonDrafts[type]?.[entityId] || '' : '',
   );
   const setReasonDraft = usePsychologistDrafts((state) => state.setReasonDraft);
-  const clearReasonDraft = usePsychologistDrafts((state) => state.clearReasonDraft);
+  const clearReasonDraft = usePsychologistDrafts(
+    (state) => state.clearReasonDraft,
+  );
   const config = CONFIG[type];
 
   const mutation = useMutation({
-    mutationFn: ({ id, reason }: { id: string; reason: string }) => config.mutationFn(id, reason),
+    mutationFn: ({ id, reason }: { id: string; reason: string }) =>
+      config.mutationFn(id, reason),
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: [config.queryKey] });
       clearReasonDraft(type, variables.id);
@@ -106,7 +115,9 @@ const PsychologistRejectModal = ({
       }}
     >
       <p style={{ marginBottom: 5 }}>{config.label}</p>
-      <p style={{ color: 'var(--color-label-neutral-secondary)' }}>{config.sublabel}</p>
+      <p style={{ color: 'var(--color-label-neutral-secondary)' }}>
+        {config.sublabel}
+      </p>
       <Input.TextArea
         rows={6}
         value={reason}

@@ -1,6 +1,6 @@
 import { type QueryObserverOptions, queryOptions } from '@tanstack/react-query';
-import { $api } from '@/shared/api/http.ts';
 import type { ResponseError } from '@/shared/api';
+import { $api } from '@/shared/api/http.ts';
 import type { Therapist } from '../types';
 
 export const therapistQueryKey = {
@@ -16,7 +16,10 @@ export const therapistQueries = {
       ...options,
     }),
 
-  byId: (id: string, options?: Partial<QueryObserverOptions<Therapist, ResponseError>>) =>
+  byId: (
+    id: string,
+    options?: Partial<QueryObserverOptions<Therapist, ResponseError>>,
+  ) =>
     queryOptions<Therapist, ResponseError>({
       queryKey: [therapistQueryKey.byId],
       queryFn: async () => (await $api.get(`/therapists/${id}`)).data,

@@ -1,12 +1,19 @@
-import { useState, useCallback, useRef, useEffect, type ChangeEvent, type FormEvent } from 'react';
+import {
+  type ChangeEvent,
+  type FormEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import type { FC } from 'react';
 import { UserOutlined } from '@ant-design/icons';
-import { Modal, message, Input } from 'antd';
-import { useAuth } from '@/features/auth/api/useAuth';
+import { Input, Modal, message } from 'antd';
+import type { User, UserProfileUpdate } from '@/entities/auth';
 import AuthApi from '@/features/auth/api/auth-api';
+import { useAuth } from '@/features/auth/api/useAuth';
 import EditIcon from '@/shared/assets/images/cabinet/edit.svg?react';
 import ExitIcon from '@/shared/assets/images/cabinet/exit.svg?react';
-import type { User, UserProfileUpdate } from '@/entities/auth';
 import styles from './PersonalData.module.scss';
 
 interface PersonalDataProps {
@@ -77,37 +84,48 @@ const PersonalData: FC<PersonalDataProps> = ({ user }) => {
     setFormData(newOriginalData);
   }, [user]);
 
-  const validateField = useCallback((name: keyof FormData, value: string): string | undefined => {
-    switch (name) {
-      case 'first_name':
-      case 'last_name':
-        if (!value.trim()) return 'Обязательное поле';
-        if (value.length < 2) return 'Минимум 2 символа';
-        if (!/^[а-яА-ЯёЁa-zA-Z-]+$/.test(value)) return 'Только буквы и дефис';
-        break;
-      case 'email':
-        if (!value.trim()) return 'Обязательное поле';
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Некорректный email';
-        break;
-      case 'phone_number':
-        if (!value.trim()) return 'Обязательное поле';
-        if (!/^\+?[\d\s()-]{10,}$/.test(value)) return 'Некорректный номер телефона';
-        break;
-    }
-    return undefined;
-  }, []);
+  const validateField = useCallback(
+    (name: keyof FormData, value: string): string | undefined => {
+      switch (name) {
+        case 'first_name':
+        case 'last_name':
+          if (!value.trim()) return 'Обязательное поле';
+          if (value.length < 2) return 'Минимум 2 символа';
+          if (!/^[а-яА-ЯёЁa-zA-Z-]+$/.test(value))
+            return 'Только буквы и дефис';
+          break;
+        case 'email':
+          if (!value.trim()) return 'Обязательное поле';
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+            return 'Некорректный email';
+          break;
+        case 'phone_number':
+          if (!value.trim()) return 'Обязательное поле';
+          if (!/^\+?[\d\s()-]{10,}$/.test(value))
+            return 'Некорректный номер телефона';
+          break;
+      }
+      return undefined;
+    },
+    [],
+  );
 
   const validateNameField = useCallback(
-    (name: 'first_name' | 'last_name' | 'middle_name', value: string): string | undefined => {
+    (
+      name: 'first_name' | 'last_name' | 'middle_name',
+      value: string,
+    ): string | undefined => {
       switch (name) {
         case 'first_name':
         case 'last_name':
           if (!value.trim()) return 'Обязательное поле';
           if (value.trim() && value.length < 2) return 'Минимум 2 символа';
-          if (value.trim() && !/^[а-яА-ЯёЁa-zA-Z-]+$/.test(value)) return 'Только буквы и дефис';
+          if (value.trim() && !/^[а-яА-ЯёЁa-zA-Z-]+$/.test(value))
+            return 'Только буквы и дефис';
           break;
         case 'middle_name':
-          if (value.trim() && !/^[а-яА-ЯёЁa-zA-Z-]+$/.test(value)) return 'Только буквы и дефис';
+          if (value.trim() && !/^[а-яА-ЯёЁa-zA-Z-]+$/.test(value))
+            return 'Только буквы и дефис';
           break;
       }
       return undefined;
@@ -120,7 +138,10 @@ const PersonalData: FC<PersonalDataProps> = ({ user }) => {
       const { name, value } = e.target;
       setFormData((prev) => ({ ...prev, [name]: value }));
 
-      const error = validateNameField(name as 'first_name' | 'last_name' | 'middle_name', value);
+      const error = validateNameField(
+        name as 'first_name' | 'last_name' | 'middle_name',
+        value,
+      );
       setNameErrors((prev) => ({ ...prev, [name]: error }));
     },
     [validateNameField],
@@ -142,7 +163,11 @@ const PersonalData: FC<PersonalDataProps> = ({ user }) => {
   }, [isEditingName]);
 
   const validateNameFields = useCallback((): boolean => {
-    const newErrors: { first_name?: string; last_name?: string; middle_name?: string } = {};
+    const newErrors: {
+      first_name?: string;
+      last_name?: string;
+      middle_name?: string;
+    } = {};
     let isValid = true;
 
     const firstNameError = validateNameField('first_name', formData.first_name);
@@ -157,7 +182,10 @@ const PersonalData: FC<PersonalDataProps> = ({ user }) => {
       isValid = false;
     }
 
-    const middleNameError = validateNameField('middle_name', formData.middle_name);
+    const middleNameError = validateNameField(
+      'middle_name',
+      formData.middle_name,
+    );
     if (middleNameError) {
       newErrors.middle_name = middleNameError;
       isValid = false;
@@ -268,7 +296,11 @@ const PersonalData: FC<PersonalDataProps> = ({ user }) => {
       });
       messageApi.success('Пароль успешно изменён');
       setIsPasswordModalOpen(false);
-      setPasswordData({ old_password: '', new_password: '', confirm_password: '' });
+      setPasswordData({
+        old_password: '',
+        new_password: '',
+        confirm_password: '',
+      });
     } catch (error: unknown) {
       console.error('Failed to update password:', error);
       messageApi.error('Ошибка при смене пароля');
@@ -332,10 +364,14 @@ const PersonalData: FC<PersonalDataProps> = ({ user }) => {
                         value={formData.last_name}
                         onChange={handleNameInputChange}
                         placeholder="Фамилия"
-                        className={nameErrors.last_name ? styles.inputError : ''}
+                        className={
+                          nameErrors.last_name ? styles.inputError : ''
+                        }
                       />
                       {nameErrors.last_name && (
-                        <span className={styles.nameErrorText}>{nameErrors.last_name}</span>
+                        <span className={styles.nameErrorText}>
+                          {nameErrors.last_name}
+                        </span>
                       )}
                     </div>
                     <div className={styles.nameInputWrapper}>
@@ -345,10 +381,14 @@ const PersonalData: FC<PersonalDataProps> = ({ user }) => {
                         value={formData.first_name}
                         onChange={handleNameInputChange}
                         placeholder="Имя"
-                        className={nameErrors.first_name ? styles.inputError : ''}
+                        className={
+                          nameErrors.first_name ? styles.inputError : ''
+                        }
                       />
                       {nameErrors.first_name && (
-                        <span className={styles.nameErrorText}>{nameErrors.first_name}</span>
+                        <span className={styles.nameErrorText}>
+                          {nameErrors.first_name}
+                        </span>
                       )}
                     </div>
                     <div className={styles.nameInputWrapper}>
@@ -358,10 +398,14 @@ const PersonalData: FC<PersonalDataProps> = ({ user }) => {
                         value={formData.middle_name}
                         onChange={handleNameInputChange}
                         placeholder="Отчество"
-                        className={nameErrors.middle_name ? styles.inputError : ''}
+                        className={
+                          nameErrors.middle_name ? styles.inputError : ''
+                        }
                       />
                       {nameErrors.middle_name && (
-                        <span className={styles.nameErrorText}>{nameErrors.middle_name}</span>
+                        <span className={styles.nameErrorText}>
+                          {nameErrors.middle_name}
+                        </span>
                       )}
                     </div>
                   </div>
@@ -389,7 +433,8 @@ const PersonalData: FC<PersonalDataProps> = ({ user }) => {
                 </div>
               ) : (
                 <h2 className={styles.name}>
-                  {formData.last_name} {formData.first_name} {formData.middle_name}
+                  {formData.last_name} {formData.first_name}{' '}
+                  {formData.middle_name}
                 </h2>
               )}
               {!isEditingName && (
@@ -422,7 +467,9 @@ const PersonalData: FC<PersonalDataProps> = ({ user }) => {
                   <EditIcon />
                 </button>
               </div>
-              {errors.study_group && <span className={styles.errorText}>{errors.study_group}</span>}
+              {errors.study_group && (
+                <span className={styles.errorText}>{errors.study_group}</span>
+              )}
             </div>
 
             <div className={styles.field}>
@@ -462,7 +509,9 @@ const PersonalData: FC<PersonalDataProps> = ({ user }) => {
                   <EditIcon />
                 </button>
               </div>
-              {errors.email && <span className={styles.errorText}>{errors.email}</span>}
+              {errors.email && (
+                <span className={styles.errorText}>{errors.email}</span>
+              )}
             </div>
 
             <div className={styles.field}>
@@ -486,7 +535,11 @@ const PersonalData: FC<PersonalDataProps> = ({ user }) => {
           </div>
 
           <div className={styles.actions}>
-            <button type="submit" className={styles.saveButton} disabled={isSaving}>
+            <button
+              type="submit"
+              className={styles.saveButton}
+              disabled={isSaving}
+            >
               {isSaving ? 'Сохранение...' : 'Сохранить изменения'}
             </button>
             <button
@@ -508,16 +561,29 @@ const PersonalData: FC<PersonalDataProps> = ({ user }) => {
         onOk={handlePasswordSubmit}
         onCancel={() => {
           setIsPasswordModalOpen(false);
-          setPasswordData({ old_password: '', new_password: '', confirm_password: '' });
+          setPasswordData({
+            old_password: '',
+            new_password: '',
+            confirm_password: '',
+          });
         }}
         confirmLoading={isSavingPassword}
         okText="Сохранить"
         cancelText="Отмена"
         destroyOnHidden
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '20px' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px',
+            marginTop: '20px',
+          }}
+        >
           <div>
-            <label style={{ display: 'block', marginBottom: '8px', color: '#666' }}>
+            <label
+              style={{ display: 'block', marginBottom: '8px', color: '#666' }}
+            >
               Старый пароль
             </label>
             <Input.Password
@@ -525,12 +591,17 @@ const PersonalData: FC<PersonalDataProps> = ({ user }) => {
               placeholder="Введите старый пароль"
               value={passwordData.old_password}
               onChange={(e) =>
-                setPasswordData((prev) => ({ ...prev, old_password: e.target.value }))
+                setPasswordData((prev) => ({
+                  ...prev,
+                  old_password: e.target.value,
+                }))
               }
             />
           </div>
           <div>
-            <label style={{ display: 'block', marginBottom: '8px', color: '#666' }}>
+            <label
+              style={{ display: 'block', marginBottom: '8px', color: '#666' }}
+            >
               Новый пароль
             </label>
             <Input.Password
@@ -538,12 +609,17 @@ const PersonalData: FC<PersonalDataProps> = ({ user }) => {
               placeholder="Введите новый пароль"
               value={passwordData.new_password}
               onChange={(e) =>
-                setPasswordData((prev) => ({ ...prev, new_password: e.target.value }))
+                setPasswordData((prev) => ({
+                  ...prev,
+                  new_password: e.target.value,
+                }))
               }
             />
           </div>
           <div>
-            <label style={{ display: 'block', marginBottom: '8px', color: '#666' }}>
+            <label
+              style={{ display: 'block', marginBottom: '8px', color: '#666' }}
+            >
               Подтвердите пароль
             </label>
             <Input.Password
@@ -551,7 +627,10 @@ const PersonalData: FC<PersonalDataProps> = ({ user }) => {
               placeholder="Повторите новый пароль"
               value={passwordData.confirm_password}
               onChange={(e) =>
-                setPasswordData((prev) => ({ ...prev, confirm_password: e.target.value }))
+                setPasswordData((prev) => ({
+                  ...prev,
+                  confirm_password: e.target.value,
+                }))
               }
             />
           </div>

@@ -4,14 +4,18 @@
   --container-max-width: 100%;
   --container-inline-padding: 1.2rem;
   --container-block-padding: 7.4rem 10.2rem;
+
   display: flex;
   flex-direction: column;
-  width: 100%;
-  max-width: calc(var(--container-max-width) + var(--container-inline-padding) * 2);
   gap: 1.2rem;
+
+  width: 100%;
+  max-width: calc(
+    var(--container-max-width) + var(--container-inline-padding) * 2
+  );
   margin: 0 auto;
-  padding-inline: var(--container-inline-padding);
   padding-block: var(--container-block-padding);
+  padding-inline: var(--container-inline-padding);
 }
 
 .counter {
@@ -33,12 +37,15 @@
 }
 
 .option {
+  cursor: pointer;
+
   padding: 1.6rem 2.4rem;
   border-radius: 0.9rem;
-  cursor: pointer;
-  transition: 0.3s ease;
+
   background-color: var(--color-interactive-neutral-secondary);
   outline: 1px solid transparent;
+
+  transition: 0.3s ease;
 
   &:hover {
     background-color: var(--color-interactive-neutral-hover-secondary);
@@ -51,8 +58,8 @@
 
 .buttons {
   display: flex;
-  justify-content: space-between;
   gap: 2rem;
+  justify-content: space-between;
 }
 
 .buttonAction {
@@ -65,14 +72,15 @@
   &Next {
     color: var(--color-background-neutral-primary);
     background-color: var(--color-interactive-brand-primary);
+
     &:hover {
       background-color: var(--color-border-brand-base);
     }
   }
 
   &Back {
-    background-color: var(--color-interactive-brand-secondary);
     color: var(--color-label-brand-primary);
+    background-color: var(--color-interactive-brand-secondary);
 
     &:hover {
       background-color: var(--color-border-brand-base);
@@ -86,13 +94,16 @@
     --container-inline-padding: 1.6rem;
     --container-block-padding: 6rem 8.4rem;
   }
+
   .title {
     font: var(--font-h4);
     letter-spacing: var(--font-header-letter-spacing);
   }
+
   .option {
     font: var(--font-text-large-button);
   }
+
   .buttonAction {
     border-radius: 1.2rem;
   }
@@ -103,6 +114,7 @@
     --container-max-width: 79.6rem;
     --container-block-padding: 8.1rem 8.5rem;
   }
+
   .title {
     font: var(--font-h4);
   }
@@ -114,6 +126,7 @@
   .buttonAction {
     border-radius: 1.6rem;
   }
+
   .question {
     gap: 2.3rem;
   }
@@ -155,35 +168,44 @@
   .counter {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .title {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .option {
-    background-color: var(--color-fill-neutral-primary);
     color: var(--color-label-neutral-inverted-primary);
-    &:hover:not(.selected){
+    background-color: var(--color-fill-neutral-primary);
+
+    &:hover:not(.selected) {
       background-color: var(--color-fill-neutral-tetriary);
     }
   }
+
   .buttonAction {
     &Back {
-      background-color: var(--color-background-neutral-primary);
       color: var(--color-label-brand-primary);
+      background-color: var(--color-background-neutral-primary);
+
       &:hover {
         background-color: var(--color-interactive-neutral-hover-secondary);
       }
+
       &:active {
         background-color: var(--color-interactive-neutral-active-secondary);
       }
     }
+
     &Next,
     &Complete {
       border: var(--color-interactive-brand-primary);
-      background-color: var(--color-interactive-brand-primary);
       color: var(--color-label-neutral-inverted-primary);
+      background-color: var(--color-interactive-brand-primary);
+
       &:hover {
         background-color: var(--color-interactive-brand-hover);
       }
+
       &:active {
         background-color: var(--color-interactive-brand-active);
       }

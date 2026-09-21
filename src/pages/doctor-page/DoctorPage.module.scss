@@ -6,7 +6,7 @@
 .wrapper {
   width: 100%;
   max-width: 1200px;
-  margin: 74px auto 148px auto;
+  margin: 74px auto 148px;
 }
 
 .links {
@@ -19,17 +19,17 @@
 }
 
 .contentWrapper {
-  background-color: var(--color-background-neutral-secondary);
+  margin-top: 60px;
   padding: 24px;
   border-radius: 32px;
-  margin-top: 60px;
+  background-color: var(--color-background-neutral-secondary);
 }
 
 .mobileLink {
   display: none;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (width <= 768px) {
   .thirsname {
     font-size: 40px;
     font-weight: 600;
@@ -42,9 +42,9 @@
 
   .textBold {
     margin-top: 60px;
+    margin-bottom: 12px;
     font-size: 28px;
     font-weight: 600;
-    margin-bottom: 12px;
   }
 
   .text {
@@ -66,11 +66,12 @@
   }
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (width <= 480px) {
   .wrapper {
-    margin-top: 21px;
     width: 93.65%;
+    margin-top: 21px;
   }
+
   .img {
     width: 351px;
     height: 351px;
@@ -87,9 +88,9 @@
   }
 
   .contentWrapper {
-    background-color: inherit;
-    padding: 0;
     margin-top: 48px;
+    padding: 0;
+    background-color: inherit;
   }
 
   .link {
@@ -102,6 +103,7 @@
   .links span {
     color: var(--color-label-neutral-inverted-primary);
   }
+
   .links a:hover {
     color: var(--color-label-brand-secondary);
   }

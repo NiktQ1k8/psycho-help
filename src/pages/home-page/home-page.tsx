@@ -2,12 +2,12 @@ import React, { useEffect, useRef } from 'react';
 import type { FC } from 'react';
 import { useLocation } from 'react-router-dom';
 import GreetingBlock from '@/features/home/ui/1-greeting-block/greeting-block';
-import ReasonsBlock from '@/features/home/ui/reasons-block/reasons-block';
 import FeaturesBlock from '@/features/home/ui/3-features-block/features-block';
-import ChartBlock from '@/features/home/ui/chart-block/schedule-block';
 import CallsBlock from '@/features/home/ui/5-calls-block/calls-block';
+import ChartBlock from '@/features/home/ui/chart-block/schedule-block';
+import ReasonsBlock from '@/features/home/ui/reasons-block/reasons-block';
 // import TherapistsBlock from './components/doctors-block/doctors-block';
-import styles from './home-page.module.css';
+import styles from './HomePage.module.scss';
 
 const ContentWrapper: FC<{ children: React.ReactNode }> = ({ children }) => (
   <div className={styles.contentWrapper}>{children}</div>
@@ -28,7 +28,11 @@ interface BlockWrapperProps {
 
 const blocks: BlockWrapperProps[] = [
   { component: GreetingBlock, name: 'Greeting' },
-  { component: ReasonsBlock, title: 'Чем психолог может помочь?', name: 'reasons' },
+  {
+    component: ReasonsBlock,
+    title: 'Чем психолог может помочь?',
+    name: 'reasons',
+  },
   { component: FeaturesBlock, title: 'Особенности работы', name: 'features' },
   { component: ChartBlock, title: 'График работы', name: 'chart' },
   { component: CallsBlock, title: 'Мы всегда рядом', name: 'calls' },
@@ -53,7 +57,9 @@ const HomePage: FC = () => {
   useEffect(() => {
     if (location.hash) {
       window.history.replaceState(null, '', window.location.pathname);
-      const targetIndex = blocks.findIndex((block) => `#${block.name}` === location.hash);
+      const targetIndex = blocks.findIndex(
+        (block) => `#${block.name}` === location.hash,
+      );
       if (targetIndex !== -1 && refs.current[targetIndex]) {
         refs.current[targetIndex]?.scrollIntoView({ behavior: 'smooth' });
       }

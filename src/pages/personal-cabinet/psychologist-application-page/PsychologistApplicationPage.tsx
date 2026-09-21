@@ -1,26 +1,29 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams, useNavigate, Navigate } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { DatePicker, Empty, Input, message, Result, Select } from 'antd';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { DatePicker, Empty, Input, Result, Select, message } from 'antd';
 import { AxiosError } from 'axios';
-import dayjs from '@/shared/lib/dayjs';
-import { MOSCOW_TZ } from '@/shared/lib/dayjs';
 import clsx from 'clsx';
 import {
+  acceptApplication,
   applicationQueries,
   applicationQueryKey,
   offerConsultation,
-  acceptApplication,
 } from '@/entities/application/api';
 import type { Application, MeetingType } from '@/entities/application/types';
 import { Role } from '@/entities/role/helpers';
 import { useAuth } from '@/features/auth/api/useAuth';
 import { useCabinetTab } from '@/features/personal-cabinet/model/personal-cabinet-tab';
-import Sidebar from '@/features/personal-cabinet/ui/sidebar/Sidebar';
-import Loader from '@/shared/ui/loader/loader';
-import { ApplicationStatusTag } from '@/pages/personal-cabinet/constants';
-import { getTabsForRole, type TabId } from '@/pages/personal-cabinet/config/tabs';
 import PsychologistRejectModal from '@/features/personal-cabinet/ui/PsychologistRejectModal';
+import Sidebar from '@/features/personal-cabinet/ui/sidebar/Sidebar';
+import {
+  type TabId,
+  getTabsForRole,
+} from '@/pages/personal-cabinet/config/tabs';
+import { ApplicationStatusTag } from '@/pages/personal-cabinet/constants';
+import dayjs from '@/shared/lib/dayjs';
+import { MOSCOW_TZ } from '@/shared/lib/dayjs';
+import Loader from '@/shared/ui/loader/loader';
 import styles from './PsychologistApplicationPage.module.scss';
 
 const MEETING_TYPE_OPTIONS = [
@@ -47,7 +50,12 @@ const CABINET_PATH = '/cabinet';
 const getMoscowDateTime = (date: dayjs.Dayjs, time: string) => {
   const [hours, minutes] = time.split(':').map(Number);
 
-  return date.tz(MOSCOW_TZ, true).hour(hours).minute(minutes).second(0).millisecond(0);
+  return date
+    .tz(MOSCOW_TZ, true)
+    .hour(hours)
+    .minute(minutes)
+    .second(0)
+    .millisecond(0);
 };
 
 const PsychologistApplicationPage = () => {
@@ -81,13 +89,19 @@ const PsychologistApplicationPage = () => {
     enabled: isPsychologist && !!id,
   });
 
-  const [userMeetingType, setUserMeetingType] = useState<MeetingType | null>(null);
+  const [userMeetingType, setUserMeetingType] = useState<MeetingType | null>(
+    null,
+  );
   const [userDate, setUserDate] = useState<dayjs.Dayjs | null>(null);
   const [userTime, setUserTime] = useState<string | null>(null);
 
-  const [userLocationAddress, setUserLocationAddress] = useState<string | null>(null);
+  const [userLocationAddress, setUserLocationAddress] = useState<string | null>(
+    null,
+  );
   const [userMeetingUrl, setUserMeetingUrl] = useState<string | null>(null);
-  const [formInitializedForId, setFormInitializedForId] = useState<string | null>(null);
+  const [formInitializedForId, setFormInitializedForId] = useState<
+    string | null
+  >(null);
 
   const [rejectModalOpen, setRejectModalOpen] = useState(false);
 
@@ -103,7 +117,8 @@ const PsychologistApplicationPage = () => {
   }, [application?.id, formInitializedForId]);
 
   const applicationScheduledAt = useMemo(
-    () => (application?.scheduled_at ? dayjs(application.scheduled_at).tz() : null),
+    () =>
+      application?.scheduled_at ? dayjs(application.scheduled_at).tz() : null,
     [application?.scheduled_at],
   );
 
@@ -122,9 +137,13 @@ const PsychologistApplicationPage = () => {
     () => userDate || applicationScheduledAt?.startOf('day') || null,
     [applicationScheduledAt, userDate],
   );
-  const selectedTime = userTime || applicationScheduledAt?.format('HH:mm') || null;
+  const selectedTime =
+    userTime || applicationScheduledAt?.format('HH:mm') || null;
   const locationAddress =
-    userLocationAddress ?? application?.location_address ?? application?.preferred_campus ?? '';
+    userLocationAddress ??
+    application?.location_address ??
+    application?.preferred_campus ??
+    '';
   const meetingUrl = userMeetingUrl ?? application?.meeting_url ?? '';
 
   const selectedDateTime = useMemo(() => {
@@ -142,15 +161,20 @@ const PsychologistApplicationPage = () => {
     return options.map((slot) => ({
       value: slot,
       label: slot,
-      disabled: selectedDate ? getMoscowDateTime(selectedDate, slot).isBefore(nowMoscow) : false,
+      disabled: selectedDate
+        ? getMoscowDateTime(selectedDate, slot).isBefore(nowMoscow)
+        : false,
     }));
   }, [selectedDate, selectedTime]);
 
   const acceptMutation = useMutation({
-    mutationFn: (applicationId: string) => acceptApplication(applicationId, userId!),
+    mutationFn: (applicationId: string) =>
+      acceptApplication(applicationId, userId!),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [applicationQueryKey.list] });
-      queryClient.invalidateQueries({ queryKey: [applicationQueryKey.byId, id] });
+      queryClient.invalidateQueries({
+        queryKey: [applicationQueryKey.byId, id],
+      });
     },
     onError: (error: AxiosError<{ detail?: string }>) => {
       const detail = error.response?.data?.detail;
@@ -164,13 +188,18 @@ const PsychologistApplicationPage = () => {
         psychologist_id: user!.id,
         meeting_type: meetingType!,
         scheduled_at: selectedDateTime!.toISOString(),
-        location_address: meetingType === 'offline' ? locationAddress.trim() : null,
+        location_address:
+          meetingType === 'offline' ? locationAddress.trim() : null,
         meeting_url: meetingType === 'online' ? meetingUrl.trim() : null,
       }),
     onSuccess: () => {
-      message.success('Консультация предложена, ожидаем подтверждения пользователя');
+      message.success(
+        'Консультация предложена, ожидаем подтверждения пользователя',
+      );
       queryClient.invalidateQueries({ queryKey: [applicationQueryKey.list] });
-      queryClient.invalidateQueries({ queryKey: [applicationQueryKey.byId, id] });
+      queryClient.invalidateQueries({
+        queryKey: [applicationQueryKey.byId, id],
+      });
       navigate(-1);
     },
     onError: (error: AxiosError<{ detail?: string }>) => {
@@ -182,14 +211,19 @@ const PsychologistApplicationPage = () => {
   if (!isPsychologist) return <Navigate to="/" replace />;
   if (isLoading) return <Loader />;
   if (isError) {
-    const detail = (error as AxiosError<{ detail?: string }>)?.response?.data?.detail;
+    const detail = (error as AxiosError<{ detail?: string }>)?.response?.data
+      ?.detail;
     return (
       <Result
         status="error"
         title="Не удалось загрузить заявку"
         subTitle={detail || 'Попробуйте обновить страницу или вернитесь назад'}
         extra={
-          <button className={styles.back} type="button" onClick={() => navigate(-1)}>
+          <button
+            className={styles.back}
+            type="button"
+            onClick={() => navigate(-1)}
+          >
             Вернуться назад
           </button>
         }
@@ -200,7 +234,8 @@ const PsychologistApplicationPage = () => {
 
   const canAccept = application.status === 'new';
   const canChange =
-    application.status === 'in_progress' || application.status === 'awaiting_user_confirmation';
+    application.status === 'in_progress' ||
+    application.status === 'awaiting_user_confirmation';
   const canReject =
     application.status === 'new' ||
     application.status === 'in_progress' ||
@@ -211,10 +246,14 @@ const PsychologistApplicationPage = () => {
     meetingType &&
     selectedDateTime &&
     selectedDateTime.isAfter(dayjs.tz()) &&
-    (meetingType === 'offline' ? locationAddress.trim().length > 0 : meetingUrl.trim().length > 0);
+    (meetingType === 'offline'
+      ? locationAddress.trim().length > 0
+      : meetingUrl.trim().length > 0);
 
   const disabledDates = (current: dayjs.Dayjs) => {
-    return current ? current.tz(MOSCOW_TZ, true).isBefore(dayjs.tz().startOf('day'), 'day') : false;
+    return current
+      ? current.tz(MOSCOW_TZ, true).isBefore(dayjs.tz().startOf('day'), 'day')
+      : false;
   };
 
   interface ExpandableTextProps {
@@ -226,7 +265,9 @@ const PsychologistApplicationPage = () => {
     if (!text) return null;
     return (
       <div className={styles.dataValueDescriptionWrapper}>
-        <span className={`${styles.dataValueDescription} ${isExpanded ? styles.expanded : ''}`}>
+        <span
+          className={`${styles.dataValueDescription} ${isExpanded ? styles.expanded : ''}`}
+        >
           {text}
         </span>
         {text.length > 100 && (
@@ -244,7 +285,11 @@ const PsychologistApplicationPage = () => {
 
   const statusUI = ApplicationStatusTag[application.status];
   const userName =
-    [application.user?.last_name, application.user?.first_name, application.user?.middle_name]
+    [
+      application.user?.last_name,
+      application.user?.first_name,
+      application.user?.middle_name,
+    ]
       .filter(Boolean)
       .join(' ') || 'Имя не указано';
   const preferPsychologistName =
@@ -268,7 +313,11 @@ const PsychologistApplicationPage = () => {
       </div>
 
       <main className={styles.content}>
-        <button className={styles.back} onClick={() => navigate(-1)} type="button">
+        <button
+          className={styles.back}
+          onClick={() => navigate(-1)}
+          type="button"
+        >
           <span>&lt;</span>
           <span>Вернуться назад</span>
         </button>
@@ -280,7 +329,9 @@ const PsychologistApplicationPage = () => {
         <div className={styles.statusRow}>
           <p className={styles.statusLabel}>Статус</p>
           <div className={styles['status']}>
-            <div className={clsx(styles['status-dot'], styles[statusUI.className])}></div>
+            <div
+              className={clsx(styles['status-dot'], styles[statusUI.className])}
+            ></div>
             <span className={styles['status-text']}>{statusUI.text}</span>
           </div>
         </div>
@@ -295,36 +346,48 @@ const PsychologistApplicationPage = () => {
         {application.status === 'rejected' && application.reject_reason && (
           <div className={styles.reasonBlock}>
             <span className={styles.reasonLabel}>Причина отказа:</span>
-            <span className={styles.reasonText}>{application.reject_reason}</span>
+            <span className={styles.reasonText}>
+              {application.reject_reason}
+            </span>
           </div>
         )}
 
         {application.status === 'cancelled' && application.cancel_reason && (
           <div className={styles.reasonBlock}>
             <span className={styles.reasonLabel}>Причина отмены:</span>
-            <span className={styles.reasonText}>{application.cancel_reason}</span>
+            <span className={styles.reasonText}>
+              {application.cancel_reason}
+            </span>
           </div>
         )}
 
         <div className={styles.dataGrid}>
           <div className={styles.dataItem}>
             <span className={styles.dataLabel}>Email:</span>
-            <span className={styles.dataValue}>{application.user?.email || '—'}</span>
+            <span className={styles.dataValue}>
+              {application.user?.email || '—'}
+            </span>
           </div>
 
           <div className={styles.dataItem}>
             <span className={styles.dataLabel}>Телефон:</span>
-            <span className={styles.dataValue}>{application.user?.phone_number || '—'}</span>
+            <span className={styles.dataValue}>
+              {application.user?.phone_number || '—'}
+            </span>
           </div>
 
           <div className={styles.dataItem}>
             <span className={styles.dataLabel}>Статус пациента:</span>
-            <span className={styles.dataValue}>{application.university_status || '—'}</span>
+            <span className={styles.dataValue}>
+              {application.university_status || '—'}
+            </span>
           </div>
 
           <div className={styles.dataItem}>
             <span className={styles.dataLabel}>Группа:</span>
-            <span className={styles.dataValue}>{application.user?.study_group || '—'}</span>
+            <span className={styles.dataValue}>
+              {application.user?.study_group || '—'}
+            </span>
           </div>
 
           <h3 className={styles.sidebarTitle}>Запись на сессию</h3>
@@ -336,7 +399,9 @@ const PsychologistApplicationPage = () => {
                 id="field-date"
                 className={styles.fieldPicker}
                 value={selectedDate}
-                onChange={(date) => setUserDate(date ? date.startOf('day') : null)}
+                onChange={(date) =>
+                  setUserDate(date ? date.startOf('day') : null)
+                }
                 disabledDate={disabledDates}
                 format="DD.MM.YYYY"
                 placeholder="—"
@@ -440,7 +505,9 @@ const PsychologistApplicationPage = () => {
                 disabled={!canSave}
                 type="button"
               >
-                {offerMutation.isPending ? 'Сохранение...' : 'Запросить подтверждение'}
+                {offerMutation.isPending
+                  ? 'Сохранение...'
+                  : 'Запросить подтверждение'}
               </button>
             )}
           </div>
@@ -453,7 +520,9 @@ const PsychologistApplicationPage = () => {
         onClose={() => setRejectModalOpen(false)}
         onSuccess={() => {
           message.success('Заявка отклонена');
-          queryClient.invalidateQueries({ queryKey: [applicationQueryKey.byId, id] });
+          queryClient.invalidateQueries({
+            queryKey: [applicationQueryKey.byId, id],
+          });
           navigate(-1);
         }}
       />

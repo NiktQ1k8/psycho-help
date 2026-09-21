@@ -1,15 +1,15 @@
 .calls {
-  max-width: 1200px;
   width: 100%;
-  margin-left: auto;
+  max-width: 1200px;
   margin-right: auto;
   margin-bottom: 96px;
+  margin-left: auto;
 }
 
 .calls__text_wrapper {
-  text-align: center;
   display: flex;
   justify-content: center;
+  text-align: center;
 }
 
 .calls__text {
@@ -32,30 +32,32 @@
 }
 
 .calls__item {
-  padding: 24px;
-  border-radius: 24px;
-  border: 2px solid var(--color-border-neutral-base);
   display: flex;
   flex-direction: column;
   gap: 12px;
+
+  padding: 24px;
+  border: 2px solid var(--color-border-neutral-base);
+  border-radius: 24px;
 }
 
 .calls__title {
   font-size: 1.6rem;
+  font-weight: 500;
   line-height: 2.4rem;
   color: var(--color-label-neutral-primary);
-  font-weight: 500;
 }
 
 .calls__phone {
+  width: fit-content;
+  padding: 4px;
+  border: 2px solid transparent;
+  border-radius: 12px;
+
   font-size: 2.4rem;
+  font-weight: 500;
   line-height: 2.8rem;
   color: var(--color-label-brand-primary);
-  font-weight: 500;
-  border: 2px solid transparent;
-  padding: 4px;
-  width: fit-content;
-  border-radius: 12px;
 }
 
 .calls__phone:hover {
@@ -65,14 +67,14 @@
 
 .calls__phone:active,
 .calls__phone:active:hover {
-  background: none;
   border-color: var(--color-border-brand-strong);
   color: var(--color-label-brand-primary);
+  background: none;
 }
 
 .calls__phone:focus-visible {
-  border-radius: 4px;
   border-color: var(--color-border-brand-strong);
+  border-radius: 4px;
 }
 
 .calls__phone_text {
@@ -88,14 +90,14 @@
   gap: 8px;
 }
 
-@media (max-width: 1200px) {
+@media (width <= 1200px) {
   .calls {
-    padding-left: 16px;
     padding-right: 16px;
+    padding-left: 16px;
   }
 }
 
-@media (max-width: 1152px) {
+@media (width <= 1152px) {
   .calls__content {
     display: flex;
     flex-direction: column;
@@ -103,14 +105,13 @@
 
   .calls__block {
     display: grid;
-    display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
   }
 
   .calls__image_wrapper {
-    margin-left: auto;
     margin-right: auto;
+    margin-left: auto;
   }
 
   .calls__text {
@@ -118,7 +119,7 @@
   }
 }
 
-@media (max-width: 767px) {
+@media (width <= 767px) {
   .calls__content {
     grid-template-columns: repeat(1, 1fr);
     grid-template-rows: repeat(2, 1fr);
@@ -135,22 +136,22 @@
   }
 }
 
-@media (max-width: 425px) {
+@media (width <= 425px) {
   .calls__block {
     grid-template-columns: repeat(1, fit-content(100%));
     grid-template-rows: repeat(4, fit-content(100%));
   }
 
   .calls__image_wrapper {
-    margin-left: auto;
     margin-right: auto;
+    margin-left: auto;
   }
 
   .calls__text {
     width: 90%;
   }
 
-  @media (max-width: 425px) {
+  @media (width <= 425px) {
     .calls__1_grid {
       grid-template-columns: 1fr;
       grid-template-rows: repeat(4, auto);
@@ -183,6 +184,7 @@
       var(--color-label-neutral-inverted-primary)
     );
   }
+
   .calls__title {
     color: var(--color-label-neutral-inverted-primary);
   }

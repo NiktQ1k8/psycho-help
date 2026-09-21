@@ -7,20 +7,23 @@ const getInitialTheme = (): Theme => {
   const stored = localStorage.getItem('theme');
   if (stored === 'dark') return 'dark';
   if (stored === 'light') return 'light';
-  return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+  return window.matchMedia &&
+    window.matchMedia('(prefers-color-scheme: dark)').matches
     ? 'dark'
     : 'light';
 };
 
 const getSystemTheme = (): Theme => {
   if (typeof window === 'undefined') return 'light';
-  return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+  return window.matchMedia &&
+    window.matchMedia('(prefers-color-scheme: dark)').matches
     ? 'dark'
     : 'light';
 };
 
 const updateFavicon = (theme: Theme) => {
-  const faviconLink = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
+  const faviconLink =
+    document.querySelector<HTMLLinkElement>('link[rel="icon"]');
   if (faviconLink) {
     faviconLink.href = theme === 'dark' ? '/favicon_dark.ico' : '/favicon.ico';
   }
@@ -63,13 +66,17 @@ export function useTheme() {
     const observer = new MutationObserver((mutations) => {
       for (const m of mutations) {
         if (m.type === 'attributes' && m.attributeName === 'data-theme') {
-          const current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+          const current =
+            root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
           setThemeState(current);
         }
       }
     });
 
-    observer.observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+    observer.observe(root, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
 
     const onStorage = (e: StorageEvent) => {
       if (e.key === 'theme') {

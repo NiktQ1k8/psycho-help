@@ -1,12 +1,12 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { CABINET_PATH, navPages } from '@/app/router/routes';
 import { useAuth } from '@/features/auth/api/useAuth';
 import ModalWindow from '@/features/auth/modal/modal';
-import ThemeToggle from '@/shared/ui/theme-toggle/ThemeToggle';
-import { navPages, CABINET_PATH } from '@/app/router/routes';
-import { Link } from 'react-router-dom';
-import Logo from '@/shared/assets/images/logo.svg?react';
-import Profile from '@/shared/assets/images/header/profile.svg?react';
 import Auth from '@/shared/assets/images/header/auth.svg?react';
+import Profile from '@/shared/assets/images/header/profile.svg?react';
+import Logo from '@/shared/assets/images/logo.svg?react';
+import ThemeToggle from '@/shared/ui/theme-toggle/ThemeToggle';
 import styles from './header.module.scss';
 
 const Header = () => {
@@ -43,8 +43,12 @@ const Header = () => {
     if (!header) return;
     const observer = new ResizeObserver(() => {
       const { marginTop, marginBottom } = getComputedStyle(header);
-      const totalHeight = header.offsetHeight + parseFloat(marginTop) + parseFloat(marginBottom);
-      document.documentElement.style.setProperty('--header-height', `${totalHeight}px`);
+      const totalHeight =
+        header.offsetHeight + parseFloat(marginTop) + parseFloat(marginBottom);
+      document.documentElement.style.setProperty(
+        '--header-height',
+        `${totalHeight}px`,
+      );
     });
     observer.observe(header);
     return () => observer.disconnect();
@@ -82,7 +86,11 @@ const Header = () => {
   return (
     <header className={styles.header} ref={headerRef}>
       <nav className={styles.header__nav} aria-label="Основная навигация">
-        <Link className={styles.header__logo} to="/" aria-label="Вернуться на главную страницу">
+        <Link
+          className={styles.header__logo}
+          to="/"
+          aria-label="Вернуться на главную страницу"
+        >
           <Logo aria-hidden="true" />
         </Link>
         <button
@@ -105,7 +113,11 @@ const Header = () => {
         >
           {navPages.map((item, index) => (
             <li className={styles.header__item} key={index}>
-              <Link className={styles.header__link} to={item.path} onClick={closeMenu}>
+              <Link
+                className={styles.header__link}
+                to={item.path}
+                onClick={closeMenu}
+              >
                 {item.navText}
               </Link>
             </li>
@@ -136,7 +148,9 @@ const Header = () => {
           </li>
         </ul>
       </nav>
-      {!isAuth && <ModalWindow isOpen={isModalOpen} onClose={() => setModalOpen(false)} />}
+      {!isAuth && (
+        <ModalWindow isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+      )}
     </header>
   );
 };

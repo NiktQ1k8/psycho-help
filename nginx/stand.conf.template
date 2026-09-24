@@ -1,0 +1,100 @@
+# Шаблон конфига стенда. Подставляется на старте контейнера через envsubst:
+#   PUBLIC_BASE_URL - канонический адрес стенда
+#                     (https://<IP> для prod, https://<IP>:8443 для dev)
+#
+# Контейнер всегда слушает 80 и 443, наружу их мапит compose:
+# prod 80->80, 443->443; dev 8080->80, 8443->443.
+
+server {
+    listen 80 default_server;
+    server_name _;
+
+    # Порт в редиректе обязан быть явным: $host его не содержит, и без
+    # PUBLIC_BASE_URL дев на 8080 увёл бы пользователя на 443, то есть в прод.
+    return 301 ${PUBLIC_BASE_URL}$request_uri;
+}
+
+server {
+    listen 443 ssl default_server;
+    http2 on;
+    server_name _;
+
+    ssl_certificate     /etc/nginx/certs/stand.crt;
+    ssl_certificate_key /etc/nginx/certs/stand.key;
+    ssl_protocols       TLSv1.2 TLSv1.3;
+    ssl_session_cache   shared:SSL:10m;
+    ssl_session_timeout 1d;
+
+    # HSTS намеренно не ставим: сертификат самоподписанный, а заголовок
+    # намертво залипает в браузере и потом мешает ходить по HTTP.
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    # Загрузка фотографий психологов и картинок к новостям.
+    client_max_body_size 25m;
+
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 1024;
+    gzip_types text/plain text/css application/javascript application/json
+               image/svg+xml font/woff2;
+
+    # Встроенный DNS докера. Без резолвера nginx разрешает имя api один раз
+    # при загрузке конфига и падает, если бэкенд стенда ещё не поднялся.
+    resolver 127.0.0.11 valid=10s ipv6=off;
+
+    location /api/ {
+        # ВАЖЕН ПОРЯДОК: set - директива модуля rewrite, а флаг break ниже
+        # прекращает обработку директив этого модуля в location. Если
+        # поменять эти две строки местами, $upstream останется пустым,
+        # nginx не соберёт URL и отдаст 500, даже не дойдя до бэкенда.
+        set $upstream http://api:8000;
+
+        # У бэкенда роуты лежат в корне (/users/..., /image/...),
+        # поэтому префикс /api срезаем.
+        rewrite ^/api/(.*)$ /$1 break;
+
+        proxy_pass $upstream;
+
+        proxy_http_version 1.1;
+        # Именно $http_host, а не $host: $host отбрасывает порт, и тогда
+        # FastAPI соберёт редирект без :8443 - то есть уведёт пользователя
+        # с дев-стенда прямиком на прод.
+        proxy_set_header Host              $http_host;
+        proxy_set_header X-Real-IP         $remote_addr;
+        proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header X-Forwarded-Port  $server_port;
+
+        # Бэкенд не знает про срезанный префикс и строит Location от своего
+        # корня (/therapists/). Возвращаем /api на место, иначе 307 от
+        # FastAPI на путях без слеша (их зовёт, например, страница новостей)
+        # уводит клиента в SPA вместо API.
+        # Негативный lookahead страхует от повторной вставки префикса.
+        proxy_redirect ~^(https?://[^/]+)(?!/api/)(/.*)$ $1/api$2;
+        proxy_redirect ~^(?!/api/)(/.*)$                 /api$1;
+
+        proxy_connect_timeout 5s;
+        proxy_read_timeout    60s;
+
+        # Бэкенд отдал 502/504 - пусть это видит фронт, а не страница nginx.
+        proxy_intercept_errors off;
+    }
+
+    # Ассеты Vite содержат хеш в имени, их можно кешировать надолго.
+    location /assets/ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+        try_files $uri =404;
+    }
+
+    location = /index.html {
+        add_header Cache-Control "no-store";
+    }
+
+    # SPA: любой неизвестный путь отдаём роутеру на клиенте.
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}

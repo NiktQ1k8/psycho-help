@@ -1,0 +1,87 @@
+name: Deploy
+
+# Только main и develop. Существующий run-tests.yml и прочие ветки
+# этим workflow не затрагиваются.
+#
+# SSH до сервера доступен только через WireGuard, поэтому раннер сначала
+# поднимает туннель из конфига в секретах, а потом уже ходит по ssh.
+#
+# Нужные секреты репозитория:
+#   WG_CONFIG      - конфиг ОТДЕЛЬНОГО пира WireGuard, выданного этому
+#                    репозиторию (не тот, которым ходят люди, и не тот же,
+#                    что у репозитория бэкенда: один ключ, используемый
+#                    одновременно с двух машин, роняет соединение обеим)
+#   DEPLOY_HOST    - адрес сервера ВНУТРИ туннеля
+#   DEPLOY_USER    - deploy
+#   DEPLOY_SSH_KEY - приватный ключ для входа под deploy
+#
+# Секреты не выдаются workflow, запущенным из форков, а триггер здесь только
+# push в main/develop - то есть код выполняется лишь от тех, у кого уже есть
+# доступ на запись.
+on:
+  push:
+    branches: [main, develop]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Определить стенд
+        id: stand
+        run: |
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            echo "name=prod" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=dev" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Поднять туннель WireGuard
+        env:
+          WG_CONFIG: ${{ secrets.WG_CONFIG }}
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq wireguard-tools
+          umask 077
+          printf '%s\n' "$WG_CONFIG" | sudo tee /etc/wireguard/wg0.conf >/dev/null
+          sudo chmod 600 /etc/wireguard/wg0.conf
+          sudo wg-quick up wg0
+          # wg show не печатает приватный ключ, только публичные и эндпоинт
+          sudo wg show wg0
+
+      - name: Дождаться SSH через туннель
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+        run: |
+          timeout 60 bash -c 'until nc -z -w2 "$DEPLOY_HOST" 22; do sleep 2; done' || {
+            echo "Порт 22 недоступен через туннель за 60 секунд" >&2
+            sudo wg show wg0
+            exit 1
+          }
+
+      - name: Подготовить SSH
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Деплой
+        run: |
+          ssh -i ~/.ssh/id_ed25519 \
+            "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" \
+            "set -e
+             cd /opt/psycho/${{ steps.stand.outputs.name }}/frontend
+             git fetch --prune origin
+             git reset --hard origin/${{ github.ref_name }}
+             ./deploy/deploy.sh"
+
+      - name: Опустить туннель
+        if: always()
+        run: sudo wg-quick down wg0 || true

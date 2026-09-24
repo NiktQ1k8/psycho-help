@@ -1,0 +1,45 @@
+# Compose для стенда (prod или dev). Стенд выбирается переменной STAND в .env.
+#
+#   docker compose -f docker-compose.stand.yml up -d
+#
+# Это единственный контейнер стенда, публикующий порты наружу.
+name: psycho-front-${STAND}
+
+services:
+  web:
+    build:
+      context: .
+      args:
+        VITE_REACT_APP_PUBLIC_URL: /
+        VITE_REACT_APP_API_URL: /api/
+        VITE_REACT_APP_IMAGE_URL: /api/image/
+    image: psycho-web:${STAND}
+    restart: unless-stopped
+    environment:
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL}
+    ports:
+      - '${HTTP_PORT}:80'
+      - '${HTTPS_PORT}:443'
+    volumes:
+      # Самоподписанный сертификат общий для обоих стендов.
+      - ${CERT_DIR}:/etc/nginx/certs:ro
+    networks:
+      - stand
+    healthcheck:
+      test: ['CMD-SHELL', 'wget -qO- --no-check-certificate https://127.0.0.1/ >/dev/null || exit 1']
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '5'
+
+networks:
+  # Создаётся один раз руками: docker network create psycho-prod / psycho-dev
+  # В ней же живёт api из репозитория бэкенда.
+  stand:
+    name: psycho-${STAND}
+    external: true

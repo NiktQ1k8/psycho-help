@@ -1,0 +1,8 @@
+@mixin header($level) {
+  font: var(--font-h#{$level});
+  letter-spacing: var(--font-header-letter-spacing);
+
+  @if $level == 5 {
+    letter-spacing: var(--font-header-letter-spacing-h5);
+  }
+}

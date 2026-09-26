@@ -2,10 +2,6 @@ import { createContext, useContext } from 'react';
 
 export interface IAppContext {
   isAppLoading: boolean;
-  isError?: boolean;
-  error?: string;
-
-  setAppLoading: (val: boolean) => void;
 }
 
 export const AppContext = createContext<IAppContext | undefined>(undefined);

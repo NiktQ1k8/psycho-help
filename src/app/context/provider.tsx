@@ -1,24 +1,22 @@
 import { useEffect, useMemo, useState } from 'react';
-import type { ReactElement } from 'react';
+import type { ReactNode } from 'react';
 import { useAuth } from '@/features/auth/api/useAuth';
 import { useFetch } from '@/shared/api/useFetch';
 import { AppContext } from './';
 
 interface IProps {
-  children: ReactElement;
+  children: ReactNode;
 }
 
 export const AppContextProvider = ({ children }: IProps) => {
   const [isAppLoading, setAppLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
 
-  const { getUser } = useAuth();
+  const getUser = useAuth((state) => state.getUser);
 
-  const { fetching, error } = useFetch(async () => {
+  const { fetching } = useFetch(async () => {
     try {
       setAppLoading(true);
       await getUser();
-      setIsError(true);
     } finally {
       setAppLoading(false);
     }
@@ -28,15 +26,7 @@ export const AppContextProvider = ({ children }: IProps) => {
     fetching();
   }, [fetching]);
 
-  const memoizedValues = useMemo(
-    () => ({
-      isError,
-      isAppLoading,
-      error: error?.message,
-      setAppLoading,
-    }),
-    [error, isAppLoading, isError],
-  );
+  const memoizedValues = useMemo(() => ({ isAppLoading }), [isAppLoading]);
 
   return (
     <AppContext.Provider value={memoizedValues}>{children}</AppContext.Provider>

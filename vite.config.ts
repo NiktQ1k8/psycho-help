@@ -4,6 +4,14 @@ import svgr from 'vite-plugin-svgr';
 
 export default defineConfig({
   plugins: [react(), svgr()],
+  css: {
+    preprocessorOptions: {
+      scss: {
+        // Make CSS-free mixins available to each SCSS entry point.
+        additionalData: "@use '@/shared/scss/abstracts' as *;\n",
+      },
+    },
+  },
   resolve: {
     alias: {
       '@': '/src',

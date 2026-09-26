@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ConfigProvider, Layout, theme } from 'antd';
+import { ConfigProvider, theme } from 'antd';
 import ru_RU from 'antd/locale/ru_RU';
 import { AppContextProvider } from '@/app/context/provider';
 import { appTheme } from '@/app/theme';
@@ -11,32 +11,33 @@ import Header from '@/widgets/header/header';
 import styles from './App.module.scss';
 import AppRouter from './router/AppRouter';
 
+const client = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+    },
+  },
+});
+
 function App() {
   const { currentTheme } = useTheme();
-  const client = new QueryClient({
-    defaultOptions: {
-      queries: {
-        retry: 1,
-      },
-    },
-  });
+
   const themeConfig = {
     ...appTheme,
     algorithm:
       currentTheme === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm,
   };
+
   return (
     <QueryClientProvider client={client}>
       <ConfigProvider locale={ru_RU} theme={themeConfig}>
         <AppContextProvider>
-          <Layout className={styles.layout}>
-            <Header />
-            <Layout.Content>
-              <AppRouter />
-            </Layout.Content>
-            <Footer />
-            <BackToTop />
-          </Layout>
+          <Header />
+          <main className={styles.content}>
+            <AppRouter />
+          </main>
+          <Footer />
+          <BackToTop />
         </AppContextProvider>
       </ConfigProvider>
     </QueryClientProvider>

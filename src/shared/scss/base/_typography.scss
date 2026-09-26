@@ -81,8 +81,6 @@
 
 $font-family-header: 'Geist', sans-serif;
 $font-family-body: 'Roboto', sans-serif;
-$font-family-caption: 'Roboto', sans-serif;
-$font-family-footnote: 'Roboto', sans-serif;
 $font-weight-regular: 400;
 $font-weight-medium: 500;
 $font-weight-semi-bold: 600;
@@ -95,6 +93,8 @@ $font-weight-semi-bold: 600;
   --font-h3: #{$font-weight-medium 2.4rem/3.2rem $font-family-header};
   --font-h4: #{$font-weight-medium 2rem/2.8rem $font-family-header};
   --font-h5: #{$font-weight-medium 1.8rem/2.4rem $font-family-header};
+  --font-text-large: #{$font-weight-regular 2rem/2.8rem $font-family-body};
+  --font-text-large-button: #{$font-weight-medium 2rem/2.8rem $font-family-body};
   --font-text-medium: #{$font-weight-regular 1.6rem/2.4rem $font-family-body};
   --font-text-medium-button: #{$font-weight-semi-bold 1.6rem/2.4rem
     $font-family-body};
@@ -110,10 +110,6 @@ $font-weight-semi-bold: 600;
     --font-h3: #{$font-weight-semi-bold 3.2rem/4rem $font-family-header};
     --font-h4: #{$font-weight-medium 2.8rem/3.2rem $font-family-header};
     --font-h5: #{$font-weight-medium 2.4rem/2.8rem $font-family-header};
-    --font-text-large: #{$font-weight-regular 2rem/2.8rem $font-family-body};
-    --font-text-large-button: #{$font-weight-medium 2rem/2.8rem
-      $font-family-body};
-    --font-text-medium: #{$font-weight-regular 1.6rem/2.4rem $font-family-body};
     --font-text-small: #{$font-weight-regular 1.4rem/2rem $font-family-body};
     --font-text-xsmall: #{$font-weight-regular 1.2rem/1.6rem $font-family-body};
   }
@@ -121,29 +117,9 @@ $font-weight-semi-bold: 600;
 
 @include breakpoints.past-desktop {
   :root {
-    --font-header-letter-spacing: -0.15rem;
     --font-h1: #{$font-weight-semi-bold 6rem/6.8rem $font-family-header};
     --font-h2: #{$font-weight-semi-bold 4.8rem/5.2rem $font-family-header};
     --font-h3: #{$font-weight-semi-bold 4rem/4.4rem $font-family-header};
     --font-h4: #{$font-weight-medium 3.2rem/3.6rem $font-family-header};
-    --font-h5: #{$font-weight-medium 2.4rem/2.8rem $font-family-header};
-    --font-text-large: #{$font-weight-regular 2rem/2.8rem $font-family-body};
-    --font-text-large-button: #{$font-weight-medium 2rem/2.8rem
-      $font-family-body};
-    --font-text-medium: #{$font-weight-regular 1.6rem/2.4rem $font-family-body};
-    --font-text-small: #{$font-weight-regular 1.4rem/2rem $font-family-caption};
-    --font-text-xsmall: #{$font-weight-regular 1.2rem/1.6rem
-      $font-family-footnote};
-  }
-}
-
-@mixin header($level) {
-  font: var(--font-h#{$level});
-  letter-spacing: var(--font-header-letter-spacing);
-
-  @if $level == 5 {
-    letter-spacing: var(
-      --font-header-letter-spacing-h5
-    ); // the hell do i know why designers chose to use 0.1 specifically on h5
   }
 }

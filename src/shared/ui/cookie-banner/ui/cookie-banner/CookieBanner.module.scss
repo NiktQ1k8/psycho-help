@@ -1,0 +1,40 @@
+.root {
+  position: fixed;
+  z-index: 999;
+  right: 50%;
+  bottom: 24px;
+  transform: translateX(50%);
+
+  display: flex;
+  gap: 20px;
+  align-items: center;
+
+  width: calc(100% - 20px);
+  max-width: 400px;
+  padding: 14px 16px;
+  border: 1px solid var(--color-border-neutral-base);
+  border-radius: 12px;
+
+  font: var(--font-text-medium);
+  color: var(--color-interactive-neutral-primary);
+
+  background-color: var(--color-background-neutral-primary);
+}
+
+.link {
+  color: var(--color-interactive-brand-primary);
+}
+
+@media (width <= 425px) {
+  .root {
+    gap: 10px;
+    padding: 10px;
+  }
+}
+
+[data-theme='dark'] {
+  .root {
+    color: var(--color-label-neutral-inverted-primary);
+    background-color: var(--color-label-neutral-primary);
+  }
+}

@@ -6,6 +6,7 @@ import { appTheme } from '@/app/theme';
 import { useTheme } from '@/shared/hooks/useTheme';
 import '@/shared/lib/dayjs';
 import { BackToTop } from '@/shared/ui';
+import { CookieBanner } from '@/shared/ui/cookie-banner/ui/cookie-banner/CookieBanner';
 import { Footer } from '@/widgets/footer/ui/Footer/Footer';
 import Header from '@/widgets/header/header';
 import styles from './App.module.scss';
@@ -36,6 +37,7 @@ function App() {
             </main>
             <Footer />
             <BackToTop />
+            <CookieBanner />
           </div>
         </AppContextProvider>
       </ConfigProvider>

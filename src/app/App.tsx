@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ConfigProvider, Layout, theme } from 'antd';
+import { ConfigProvider, theme } from 'antd';
 import ru_RU from 'antd/locale/ru_RU';
 import { AppContextProvider } from '@/app/context/provider';
 import { appTheme } from '@/app/theme';
@@ -29,14 +29,14 @@ function App() {
     <QueryClientProvider client={client}>
       <ConfigProvider locale={ru_RU} theme={themeConfig}>
         <AppContextProvider>
-          <Layout className={styles.layout}>
+          <div className={styles.layout}>
             <Header />
-            <Layout.Content>
+            <main className={styles.content}>
               <AppRouter />
-            </Layout.Content>
+            </main>
             <Footer />
             <BackToTop />
-          </Layout>
+          </div>
         </AppContextProvider>
       </ConfigProvider>
     </QueryClientProvider>

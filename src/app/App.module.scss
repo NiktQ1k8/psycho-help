@@ -1,7 +1,19 @@
 .layout {
   overflow: clip;
+  display: flex;
+  flex-direction: column;
+
   min-height: 100vh;
+
+  font-family: Roboto, sans-serif;
+
   background: var(--color-background-neutral-primary);
+}
+
+.content {
+  flex: auto;
+  min-height: 0;
+  color: var(--color-label-neutral-primary);
 }
 
 [data-theme='dark'] {
@@ -9,5 +21,9 @@
 
   .layout {
     background: var(--color-background-neutral-inverted);
+  }
+
+  .content {
+    color: var(--color-label-neutral-inverted-primary);
   }
 }

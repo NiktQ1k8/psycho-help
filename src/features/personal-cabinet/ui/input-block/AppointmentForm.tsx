@@ -1,5 +1,6 @@
 import type { FC } from 'react';
 import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ConfigProvider, DatePicker, message } from 'antd';
 import locale from 'antd/es/locale/ru_RU';
@@ -11,6 +12,7 @@ import {
 } from '@/entities/application/api';
 import type {
   ApplicationCreateRequest,
+  MeetingType,
   UniversityStatus,
 } from '@/entities/application/types';
 import { therapistQueries } from '@/entities/therapist/api';
@@ -24,6 +26,10 @@ import Loader from '@/shared/ui/loader/loader';
 import styles from './AppointmentForm.module.scss';
 
 const AppointmentForm: FC = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const formatParam = searchParams.get('format');
+  const formatFromQuery: MeetingType | null =
+    formatParam === 'online' || formatParam === 'offline' ? formatParam : null;
   const { data: doctors = [], isLoading } = useQuery(therapistQueries.list());
   const user = useAuth((s) => s.user);
   const application = useApplication((state) => state.application);
@@ -35,12 +41,23 @@ const AppointmentForm: FC = () => {
     new Set(),
   );
   const [window, setWindow] = useState<'form' | 'results'>('form');
-  const [meetingType, setMeetingType] = useState<'online' | 'offline' | null>(
-    null,
+  const [meetingType, setMeetingType] = useState<MeetingType | null>(
+    formatFromQuery,
   );
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
   const [universityStatuses, setUniversityStatuses] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    setMeetingType(formatFromQuery);
+  }, [formatFromQuery]);
+
+  const handleMeetingTypeChange = (nextType: MeetingType) => {
+    setMeetingType(nextType);
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.set('format', nextType);
+    setSearchParams(nextParams, { replace: true });
+  };
 
   // 🔍 Фильтрация врачей по формату и выбранным офисам
   const filteredDoctors = useMemo(() => {
@@ -179,6 +196,9 @@ const AppointmentForm: FC = () => {
       useApplication.getState().resetApplication();
       setSelectedDate(null);
       setMeetingType(null);
+      const nextParams = new URLSearchParams(searchParams);
+      nextParams.delete('format');
+      setSearchParams(nextParams, { replace: true });
       setWindow('form');
     } catch {
       message.error('Не удалось отправить заявку');
@@ -200,7 +220,7 @@ const AppointmentForm: FC = () => {
                 className={clsx(styles.formatButton, {
                   [styles.active]: meetingType === 'online',
                 })}
-                onClick={() => setMeetingType('online')}
+                onClick={() => handleMeetingTypeChange('online')}
               >
                 Онлайн
               </button>
@@ -209,7 +229,7 @@ const AppointmentForm: FC = () => {
                 className={clsx(styles.formatButton, {
                   [styles.active]: meetingType === 'offline',
                 })}
-                onClick={() => setMeetingType('offline')}
+                onClick={() => handleMeetingTypeChange('offline')}
               >
                 Очно
               </button>

@@ -28,6 +28,12 @@ export interface TabConfig {
   render: FC<TabRenderProps>;
 }
 
+const bookingTab: TabConfig = {
+  id: 'userAppointments',
+  label: 'Запись на сессию',
+  render: () => <AppointmentForm />,
+};
+
 export const roleBasedTabs: Record<string, TabConfig[]> = {
   user: [
     {
@@ -41,11 +47,7 @@ export const roleBasedTabs: Record<string, TabConfig[]> = {
         />
       ),
     },
-    {
-      id: 'userAppointments',
-      label: 'Запись на сессию',
-      render: () => <AppointmentForm />,
-    },
+    bookingTab,
     {
       id: 'profile',
       label: 'Профиль',
@@ -64,6 +66,7 @@ export const roleBasedTabs: Record<string, TabConfig[]> = {
         />
       ),
     },
+    bookingTab,
     {
       id: 'applications',
       label: 'Заявки',
@@ -92,6 +95,7 @@ export const roleBasedTabs: Record<string, TabConfig[]> = {
         />
       ),
     },
+    bookingTab,
     {
       id: 'psychologistAppointments',
       label: 'Записи',
@@ -115,6 +119,7 @@ export const roleBasedTabs: Record<string, TabConfig[]> = {
         />
       ),
     },
+    bookingTab,
     {
       id: 'profile',
       label: 'Профиль',

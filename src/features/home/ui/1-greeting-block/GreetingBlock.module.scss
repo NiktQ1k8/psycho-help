@@ -43,79 +43,6 @@
   height: 100%;
 }
 
-.greeting__controls {
-  display: inline-flex;
-  flex-direction: column;
-  gap: 1rem;
-  align-items: stretch;
-
-  max-width: 100%;
-}
-
-.greeting__options {
-  display: flex;
-  gap: 4px;
-}
-
-.greeting__option {
-  user-select: none;
-
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  align-items: center;
-
-  padding: 16px 64px;
-  border: 2px solid transparent;
-  border-radius: 12px;
-
-  font-size: 2rem;
-
-  background: var(--color-interactive-neutral-secondary);
-}
-
-.greeting__option_icon {
-  stroke: currentcolor;
-}
-
-.greeting__option:hover {
-  background-color: var(--color-interactive-neutral-hover-secondary);
-}
-
-.greeting__option:active,
-.greeting__selected,
-.greeting__option:active:hover {
-  color: var(--color-border-brand-strong);
-  background: var(--color-interactive-brand-secondary);
-}
-
-.greeting__option:focus-visible {
-  border-color: var(--color-border-brand-strong);
-  border-radius: 4px;
-}
-
-.greeting__submit {
-  cursor: pointer;
-
-  width: 100%;
-  padding: 16px;
-  border: solid;
-  border-radius: 12px;
-
-  font-size: 2rem;
-  color: var(--color-label-neutral-inverted-primary);
-
-  background-color: var(--color-interactive-brand-primary);
-}
-
-.greeting__submit:hover {
-  background-color: var(--color-interactive-brand-hover);
-}
-
-.greeting__submit:active {
-  background-color: var(--color-interactive-brand-active);
-}
-
 @media (width <= 1206px) {
   .greeting {
     padding-right: 16px;
@@ -132,6 +59,7 @@
   .greeting__content {
     display: flex;
     flex-direction: column;
+    gap: 16px;
   }
 
   .greeting__block {
@@ -197,24 +125,13 @@
 
   .greeting__text {
     gap: 10px;
-    margin-bottom: 22px;
-  }
-
-  .greeting__option_icon {
-    width: 24px;
-    height: 24px;
+    margin-bottom: 24px;
   }
 
   .greeting__image_wrapper {
     width: 90%;
     margin-right: auto;
     margin-left: auto;
-  }
-
-  .greeting__option {
-    padding: 10px 40px;
-    border-radius: 12px;
-    font-size: 2rem;
   }
 }
 
@@ -229,38 +146,5 @@
       var(--color-label-neutral-secondary),
       var(--color-label-neutral-inverted-primary)
     );
-  }
-
-  .greeting__option {
-    background: var(--color-interactive-neutral-active);
-
-    &:hover:not(.greeting__selected) {
-      color: var(--color-interactive-neutral-primary);
-      background: var(--color-background-neutral-primary);
-    }
-
-    &:active:not(.greeting__selected) {
-      border: 1px solid var(--color-border-brand-strong);
-      color: var(--color-interactive-brand-active);
-      background: none;
-    }
-  }
-
-  .greeting__selected {
-    color: var(--color-label-neutral-inverted-primary);
-    background: var(--color-interactive-brand-primary);
-  }
-
-  .greeting__submit {
-    color: var(--color-interactive-neutral-primary);
-    background-color: var(--color-fill-neutral-none);
-
-    &:hover {
-      background-color: var(--color-interactive-neutral-hover-secondary);
-    }
-
-    &:active {
-      background-color: var(--color-interactive-neutral-active-secondary);
-    }
   }
 }

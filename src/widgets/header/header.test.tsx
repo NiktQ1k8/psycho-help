@@ -8,7 +8,9 @@ import Header from './header';
 
 vi.stubGlobal(
   'ResizeObserver',
-  vi.fn(() => ({ observe: vi.fn(), unobserve: vi.fn(), disconnect: vi.fn() })),
+  vi.fn().mockImplementation(function () {
+    return { observe: vi.fn(), unobserve: vi.fn(), disconnect: vi.fn() };
+  }),
 );
 
 vi.mock('@/shared/assets/images/logo.svg?react', () => ({

@@ -226,6 +226,12 @@ const UserDashboard: FC<UserDashboardProps> = ({ userName, onBookClick }) => {
     <>
       <GreetingCard userName={userName} onBookClick={onBookClick} />
 
+      <div className={styles.contactNotice}>
+        *По любым организационным вопросам или в случае чрезвычайной ситуации вы
+        можете связаться с психологом по тем контактам, что указаны в
+        заявке/записи.
+      </div>
+
       <section className={styles.section}>
         <h3 className={styles.sectionTitle}>Ваши записи</h3>
         <div className={styles.cardsGrid}>

@@ -67,4 +67,14 @@
   .modalText {
     color: var(--color-label-neutral-inverted-secondary);
   }
+
+  .contactNotice {
+    color: var(--color-label-neutral-inverted-secondary);
+  }
+}
+
+.contactNotice {
+  margin-bottom: 24px;
+  font-size: var(--font-text-medium, 14px);
+  color: var(--color-label-neutral-secondary);
 }

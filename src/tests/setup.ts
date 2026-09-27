@@ -1,2 +1,2 @@
 //Здесь будут какие-либо действие перед кампиляцией тестов
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';

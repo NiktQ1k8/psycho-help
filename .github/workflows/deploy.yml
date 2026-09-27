@@ -24,7 +24,12 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: deploy-${{ github.ref }}
+  # Группируем по РЕПОЗИТОРИЮ, а не по ветке. Секрет WG_CONFIG один на
+  # репозиторий, поэтому два одновременных прогона (main и develop) поднимут
+  # WireGuard с одним приватным ключом с разных адресов. Пир держит ровно один
+  # endpoint - тот, чей handshake пришёл последним, - и второй прогон теряет
+  # связь посреди деплоя.
+  group: deploy-${{ github.repository }}
   cancel-in-progress: false
 
 jobs:

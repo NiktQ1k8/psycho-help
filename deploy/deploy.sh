@@ -5,6 +5,15 @@ set -euo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
+# Деплои обоих репозиториев идут на один сервер. Одновременная сборка фронта
+# и бэкенда не влезает в память, а два "docker image prune" начинают гонку.
+# Замок выстраивает деплои в очередь независимо от того, кто их запустил.
+exec 9>/tmp/psycho-deploy.lock
+flock -w 900 9 || {
+    echo "Другой деплой идёт дольше 15 минут, выхожу" >&2
+    exit 1
+}
+
 COMPOSE=(docker compose -f docker-compose.stand.yml)
 
 if [[ ! -f .env ]]; then

@@ -24,6 +24,7 @@ import backArrow from '@/shared/assets/images/appointments/backArrow.svg';
 import { Img } from '@/shared/ui';
 import Loader from '@/shared/ui/loader/loader';
 import styles from './AppointmentForm.module.scss';
+import privacyFile from './assets/Privacy_police.pdf';
 
 const AppointmentForm: FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -419,6 +420,16 @@ const AppointmentForm: FC = () => {
               className={styles.textarea}
               placeholder="Опишите вашу проблему"
             />
+          </div>
+
+          <div className={styles.privacy_block}>
+            <p className={styles.privacy_text}>
+              *Все данные пользователя надежно защищены и строго
+              конфиденциальны. Доступны для просмотра исключительно психологу.
+            </p>
+            <a href={privacyFile} className={styles.privacy_link}>
+              Правила обработки специальных категорий персональных данных
+            </a>
           </div>
 
           <button

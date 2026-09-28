@@ -301,6 +301,17 @@
   opacity: 0.6;
 }
 
+/* Политика конфиденциальности */
+.privacy_text {
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: var(--color-label-neutral-secondary);
+}
+
+.privacy_link {
+  font-size: 14px;
+}
+
 /* Результаты */
 .backButton {
   cursor: pointer;
@@ -421,6 +432,22 @@
     stroke: var(--color-border-neutral-inverted);
   }
 
+  .datePicker {
+    background: var(--color-fill-neutral-primary);
+  }
+
+  .selectInput {
+    background: var(--color-fill-neutral-primary);
+  }
+
+  .privacy_text {
+    color: color-mix(
+      in srgb,
+      var(--color-label-neutral-secondary),
+      var(--color-label-neutral-inverted-primary)
+    );
+  }
+
   .results__title {
     color: var(--color-label-neutral-inverted-primary);
   }
@@ -431,5 +458,9 @@
       var(--color-label-neutral-secondary),
       var(--color-label-neutral-inverted-primary)
     );
+  }
+
+  .backArrow__text {
+    color: var(--color-label-neutral-inverted-primary);
   }
 }

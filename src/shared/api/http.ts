@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { SLUG } from '@/shared/config/slug';
 
 export const $serviceClient = axios.create({
   baseURL: import.meta.env.VITE_REACT_APP_API_URL,
@@ -67,7 +68,7 @@ $api.interceptors.response.use(
         processQueue(refreshError, null);
 
         // logout
-        window.location.href = '/';
+        window.location.href = SLUG.MAIN;
 
         return Promise.reject(refreshError);
       } finally {

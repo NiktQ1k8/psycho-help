@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { CABINET_PATH, navPages } from '@/app/router/routes';
+import { navPages } from '@/app/router/routes';
 import { useAuth } from '@/features/auth/api/useAuth';
 import ModalWindow from '@/features/auth/modal/modal';
 import Auth from '@/shared/assets/images/header/auth.svg?react';
 import Profile from '@/shared/assets/images/header/profile.svg?react';
 import Logo from '@/shared/assets/images/logo.svg?react';
+import { SLUG } from '@/shared/config/slug';
 import ThemeToggle from '@/shared/ui/theme-toggle/ThemeToggle';
 import styles from './header.module.scss';
 
@@ -88,7 +89,7 @@ const Header = () => {
       <nav className={styles.header__nav} aria-label="Основная навигация">
         <Link
           className={styles.header__logo}
-          to="/"
+          to={SLUG.MAIN}
           aria-label="Вернуться на главную страницу"
         >
           <Logo aria-hidden="true" />
@@ -127,7 +128,7 @@ const Header = () => {
             {isAuth ? (
               <Link
                 className={`${styles.header__link}`}
-                to={CABINET_PATH}
+                to={SLUG.CABINET}
                 onClick={closeMenu}
                 aria-label="Личный кабинет"
               >

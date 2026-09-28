@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArticleCard } from '@/pages/resources-page/components';
 import { TRANSLATES } from '@/pages/resources-page/consts';
 import { articleMocks } from '@/pages/resources-page/entities/articles/mocks.ts';
+import { SLUG } from '@/shared/config/slug';
 import { Button } from '@/shared/ui/button';
 import styles from './Articles.module.scss';
 
@@ -20,7 +21,7 @@ export const Articles = () => {
   const isShowMoreVisible = articles.length < articleMocks.length;
 
   const handleOpenArticle = (id: number | string) => {
-    navigate(`/article/${id}`);
+    navigate(`${SLUG.ARTICLE}/${id}`);
   };
 
   return (

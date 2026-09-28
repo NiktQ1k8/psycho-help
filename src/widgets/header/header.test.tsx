@@ -2,8 +2,9 @@ import { MemoryRouter } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { CABINET_PATH, navPages } from '@/app/router/routes';
+import { navPages } from '@/app/router/routes';
 import { useAuth } from '@/features/auth/api/useAuth';
+import { SLUG } from '@/shared/config/slug';
 import Header from './header';
 
 vi.stubGlobal(
@@ -108,7 +109,7 @@ describe('Header', () => {
 
       expect(screen.getByTestId('profile-icon').closest('a')).toHaveAttribute(
         'href',
-        CABINET_PATH,
+        SLUG.CABINET,
       );
     });
   });

@@ -2,6 +2,7 @@ import type { FC } from 'react';
 import { Link } from 'react-router-dom';
 import type { Therapist } from '@/entities/therapist/types';
 import altPhoto from '@/shared/assets/images/altPhotos/User_Accounts_alt.png';
+import { SLUG } from '@/shared/config/slug';
 import Img from '@/shared/ui/img/Img';
 import styles from './Doctor.module.scss';
 
@@ -38,7 +39,7 @@ export const DoctorCard: FC<Props> = ({ doctor, linkToDetails = true }) => {
 
   return (
     <Link
-      to={`/therapists/${doctor.id}`}
+      to={`${SLUG.THERAPISTS}/${doctor.id}`}
       style={{ textDecoration: 'none', color: 'inherit' }}
     >
       {content}

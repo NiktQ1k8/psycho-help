@@ -21,6 +21,7 @@ import {
   getTabsForRole,
 } from '@/pages/personal-cabinet/config/tabs';
 import { ApplicationStatusTag } from '@/pages/personal-cabinet/constants';
+import { SLUG } from '@/shared/config/slug';
 import dayjs from '@/shared/lib/dayjs';
 import { MOSCOW_TZ } from '@/shared/lib/dayjs';
 import Loader from '@/shared/ui/loader/loader';
@@ -45,7 +46,6 @@ const TIME_SLOTS = [
 ];
 
 const PSYCHOLOGIST_TABS = getTabsForRole('psychologist');
-const CABINET_PATH = '/cabinet';
 
 const getMoscowDateTime = (date: dayjs.Dayjs, time: string) => {
   const [hours, minutes] = time.split(':').map(Number);
@@ -74,7 +74,7 @@ const PsychologistApplicationPage = () => {
   const handleSidebarTabChange = useCallback(
     (tabId: string) => {
       setSavedTab(tabId as TabId);
-      navigate(CABINET_PATH);
+      navigate(SLUG.CABINET);
     },
     [navigate, setSavedTab],
   );
@@ -208,7 +208,7 @@ const PsychologistApplicationPage = () => {
     },
   });
 
-  if (!isPsychologist) return <Navigate to="/" replace />;
+  if (!isPsychologist) return <Navigate to={SLUG.MAIN} replace />;
   if (isLoading) return <Loader />;
   if (isError) {
     const detail = (error as AxiosError<{ detail?: string }>)?.response?.data

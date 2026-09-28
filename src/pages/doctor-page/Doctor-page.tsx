@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Result } from 'antd';
 import { therapistQueries } from '@/entities/therapist/api';
 import InfoBlock from '@/features/therapist/info-block/InfoBlock';
+import { SLUG } from '@/shared/config/slug';
 import Loader from '@/shared/ui/loader/loader';
 import styles from './DoctorPage.module.scss';
 
@@ -40,11 +41,11 @@ const DoctorPage = () => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.links}>
-        <Link to={'/'} className={styles.link}>
+        <Link to={SLUG.MAIN} className={styles.link}>
           Главная
         </Link>
         <span>/</span>
-        <Link to={'/therapists'} className={styles.link}>
+        <Link to={SLUG.THERAPISTS} className={styles.link}>
           Психологи
         </Link>
         <span>/</span>
@@ -53,7 +54,7 @@ const DoctorPage = () => {
         </p>
       </div>
       <Link
-        to={'/therapists'}
+        to={SLUG.THERAPISTS}
         className={[styles.link, styles.mobileLink].join(' ')}
       >
         Вернуться к списку

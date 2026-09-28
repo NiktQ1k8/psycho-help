@@ -13,6 +13,7 @@ import {
 } from '@/pages';
 import PsychologistApplicationPage from '@/pages/personal-cabinet/psychologist-application-page/PsychologistApplicationPage';
 import PsychologistAppointmentPage from '@/pages/personal-cabinet/psychologist-appointment-page/PsychologistAppointmentPage';
+import { SLUG } from '@/shared/config/slug';
 
 interface RoutePath {
   path: string;
@@ -21,63 +22,61 @@ interface RoutePath {
   authOnly?: boolean;
 }
 
-export const CABINET_PATH = '/cabinet';
-
 // Порядок маршрутов определяет порядок ссылок в шапке.
 export const routes: RoutePath[] = [
   {
-    path: '/',
+    path: SLUG.MAIN,
     Component: HomePage,
     navText: 'Главная',
   },
   {
-    path: '/therapists/',
+    path: SLUG.THERAPISTS,
     Component: DoctorsPage,
     navText: 'Психологи',
   },
   {
-    path: '/therapists/:id',
+    path: `${SLUG.THERAPISTS}/:id`,
     Component: DoctorPage,
   },
   {
-    path: '/article/:id',
-    Component: ArticlePage,
-  },
-  {
-    path: '/news/',
+    path: SLUG.NEWS,
     Component: NewsPage,
     navText: 'Новости',
   },
   {
-    path: '/news/:slug',
+    path: `${SLUG.NEWS}/:slug`,
     Component: NewsItemPage,
   },
   {
-    path: '/resources',
+    path: SLUG.RESOURCES,
     Component: ResourcesPage,
     navText: 'Полезные материалы',
   },
   {
-    path: '/test/:id',
+    path: `${SLUG.ARTICLE}/:id`,
+    Component: ArticlePage,
+  },
+  {
+    path: `${SLUG.TEST}/:id`,
     Component: TestPage,
   },
   {
-    path: '/faq',
+    path: SLUG.FAQ,
     Component: FaqPage,
     navText: 'FAQ',
   },
   {
-    path: CABINET_PATH,
+    path: SLUG.CABINET,
     Component: PersonalCabinet,
     authOnly: true,
   },
   {
-    path: `${CABINET_PATH}/appointment/:id`,
+    path: `${SLUG.CABINET_APPOINTMENT}/:id`,
     Component: PsychologistAppointmentPage,
     authOnly: true,
   },
   {
-    path: `${CABINET_PATH}/application/:id`,
+    path: `${SLUG.CABINET_APPLICATION}/:id`,
     Component: PsychologistApplicationPage,
     authOnly: true,
   },

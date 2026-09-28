@@ -7,6 +7,7 @@ import { Result } from 'antd';
 import dayjs from 'dayjs';
 import { newsItemQueries } from '@/entities/news/api/queries';
 import chevronLeft from '@/shared/assets/images/news/chevron-left.svg';
+import { SLUG } from '@/shared/config/slug';
 import { Button } from '@/shared/ui';
 import Loader from '@/shared/ui/loader/loader';
 import styles from './NewsItemPage.module.scss';
@@ -45,7 +46,7 @@ export const NewsItemPage = () => {
     <div className={styles.wrapper}>
       <div className={styles.newsItemHeader}>
         <Link
-          to="/news"
+          to={SLUG.NEWS}
           onClick={() => navigate(-1)}
           className={styles.backButton}
         >

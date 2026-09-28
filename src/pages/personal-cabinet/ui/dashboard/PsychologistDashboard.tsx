@@ -11,6 +11,7 @@ import clsx from 'clsx';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 import { appointmentQueries } from '@/entities/appointment/api';
+import { SLUG } from '@/shared/config/slug';
 import Loader from '@/shared/ui/loader/loader';
 import styles from './PsychologistDashboard.module.scss';
 
@@ -205,7 +206,9 @@ const PsychologistDashboard: React.FC<PsychologistDashboardProps> = ({
                 type="primary"
                 className={styles.btnNavigate}
                 onClick={() =>
-                  navigate(`/cabinet/appointment/${selectedAppointment.id}`)
+                  navigate(
+                    `${SLUG.CABINET_APPOINTMENT}/${selectedAppointment.id}`,
+                  )
                 }
               >
                 Перейти к записи

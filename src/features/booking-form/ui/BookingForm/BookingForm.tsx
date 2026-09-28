@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import { useAuth } from '@/features/auth/api/useAuth';
 import ModalWindow from '@/features/auth/modal/modal';
+import { SLUG } from '@/shared/config/slug';
 import { Button } from '@/shared/ui/button';
 import OfflineIcon from '../../assets/offline.svg?react';
 import OnlineIcon from '../../assets/online.svg?react';
@@ -22,8 +23,8 @@ export const BookingForm = () => {
     const hasOtherRole = roles?.some(({ code }) => code !== 'user');
     navigate(
       hasOtherRole
-        ? '/cabinet?tab=main'
-        : `/cabinet?tab=userAppointments&format=${format}`,
+        ? `${SLUG.CABINET}?tab=main`
+        : `${SLUG.CABINET}?tab=userAppointments&format=${format}`,
     );
   };
 

@@ -1,4 +1,5 @@
 import { type FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { applicationQueries } from '@/entities/application/api';
@@ -10,7 +11,6 @@ import Sidebar from '@/features/personal-cabinet/ui/sidebar/Sidebar';
 import type { TabBadge } from '@/features/personal-cabinet/ui/sidebar/Sidebar';
 import Loader from '@/shared/ui/loader/loader';
 import {
-  type TabConfig,
   type TabId,
   getDefaultTabForRole,
   getTabsForRole,
@@ -19,6 +19,7 @@ import styles from './personal-cabinet.module.scss';
 
 const PersonalCabinet: FC = () => {
   const authUser = useAuth((state) => state.user);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const primaryRoleCode = useMemo<RoleCode>(() => {
     if (!authUser?.roles || authUser.roles.length === 0) {
@@ -76,30 +77,42 @@ const PersonalCabinet: FC = () => {
   const savedTab = useCabinetTab((s) => s.activeTab);
   const setSavedTab = useCabinetTab((s) => s.setActiveTab);
   const defaultTab = getDefaultTabForRole(primaryRoleCode);
-  const [activeTab, setActiveTab] = useState<string>(
-    () => savedTab ?? defaultTab,
+  const tabFromQuery = tabs.find(
+    (tab) => tab.id === searchParams.get('tab'),
+  )?.id;
+  const [selectedTab, setSelectedTab] = useState<TabId>(() =>
+    savedTab && tabs.some((tab) => tab.id === savedTab) ? savedTab : defaultTab,
   );
+  const activeTab =
+    tabFromQuery ??
+    (tabs.some((tab) => tab.id === selectedTab) ? selectedTab : defaultTab);
 
   useEffect(() => {
-    setSavedTab(activeTab as TabId);
+    setSavedTab(activeTab);
   }, [activeTab, setSavedTab]);
 
   const handleTabChange = useCallback(
     (tabId: string) => {
-      const availableTabIds = tabs.map((t: TabConfig) => t.id);
-      if (availableTabIds.includes(tabId as TabId)) {
-        setActiveTab(tabId);
+      const nextTab = tabs.find((tab) => tab.id === tabId)?.id;
+      if (nextTab) {
+        setSelectedTab(nextTab);
+        if (searchParams.has('tab') || searchParams.has('format')) {
+          const nextParams = new URLSearchParams(searchParams);
+          nextParams.delete('tab');
+          nextParams.delete('format');
+          setSearchParams(nextParams, { replace: true });
+        }
       }
     },
-    [tabs],
+    [tabs, searchParams, setSearchParams],
   );
 
   const handleBookClick = useCallback(() => {
-    handleTabChange('appointments');
+    handleTabChange('userAppointments');
   }, [handleTabChange]);
 
   const activeTabConfig = useMemo(() => {
-    return tabs.find((t: TabConfig) => t.id === activeTab);
+    return tabs.find((tab) => tab.id === activeTab);
   }, [tabs, activeTab]);
 
   if (!authUser) {

@@ -1,0 +1,99 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(100%, 392px);
+}
+
+.options {
+  display: grid;
+  grid-auto-columns: 1fr 1fr;
+  gap: 4px;
+  border: none;
+}
+
+.legend,
+.radio {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  clip-path: inset(50%);
+}
+
+.option {
+  cursor: pointer;
+
+  position: relative;
+
+  display: flex;
+  grid-row: 1;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+
+  height: 100px;
+  border-radius: 16px;
+
+  font: var(--font-text-medium);
+  color: var(--color-label-neutral-primary);
+
+  background-color: var(--color-interactive-neutral-secondary);
+
+  transition:
+    color 0.3s,
+    background-color 0.3s;
+
+  &:hover {
+    background-color: var(--color-interactive-neutral-hover-secondary);
+  }
+
+  &:has(.radio:focus-visible) {
+    outline: 2px solid var(--color-border-brand-strong);
+  }
+
+  &__selected,
+  &__selected:hover {
+    cursor: default;
+    color: var(--color-label-brand-primary);
+    background-color: var(--color-interactive-brand-secondary);
+  }
+}
+
+.icon {
+  aspect-ratio: 1 / 1;
+  height: 40px;
+}
+
+.submit {
+  width: 100%;
+}
+
+@media (width <= 425px) {
+  .option {
+    gap: 0;
+    height: 72px;
+    border-radius: 12px;
+  }
+
+  .icon {
+    height: 24px;
+  }
+}
+
+[data-theme='dark'] {
+  .option {
+    color: var(--color-label-neutral-inverted-primary);
+    background-color: var(--color-interactive-neutral-active);
+
+    &:hover {
+      background-color: var(--color-interactive-neutral-hover);
+    }
+
+    &__selected,
+    &__selected:hover {
+      color: var(--color-label-brand-quaternary);
+      background-color: var(--color-fill-brand-derivable-secondary);
+    }
+  }
+}

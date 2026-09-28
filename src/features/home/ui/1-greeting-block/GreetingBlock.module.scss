@@ -116,10 +116,10 @@
   background-color: var(--color-interactive-brand-active);
 }
 
-@media (width <= 1206px) {
+@media (width <= 1300px) {
   .greeting {
-    padding-right: 16px;
-    padding-left: 16px;
+    padding-right: 20px;
+    padding-left: 20px;
   }
 }
 

@@ -98,7 +98,7 @@ const ModalLogin: React.FC<Tprops> = ({ setWindow, isOpen, setModalOpen }) => {
   if (!open) return null;
 
   return (
-    <div className={styles.modalOverlay} onClick={handleCancel}>
+    <div className={styles.modalOverlay}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeaderAuth}>
           <h2 className={styles.modalTitle}>Вход</h2>

@@ -52,7 +52,7 @@ const ModalForgotPassword: React.FC<Tprops> = ({
   if (!open) return null;
 
   return (
-    <div className={styles.modalOverlay} onClick={handleCancel}>
+    <div className={styles.modalOverlay}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeaderPassword}>
           <h2 className={styles.modalTitle}>Забыли пароль?</h2>

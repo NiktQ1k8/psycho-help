@@ -19,7 +19,7 @@ import { therapistQueries } from '@/entities/therapist/api';
 import { useAuth } from '@/features/auth/api/useAuth';
 import { useApplication } from '@/features/personal-cabinet/model/application';
 import altPhoto from '@/shared/assets/images/altPhotos/User_Accounts_alt.png';
-import arrow from '@/shared/assets/images/appointments/arrow.svg';
+import Arrow from '@/shared/assets/images/appointments/arrow.svg?react';
 import backArrow from '@/shared/assets/images/appointments/backArrow.svg';
 import { Img } from '@/shared/ui';
 import Loader from '@/shared/ui/loader/loader';
@@ -264,7 +264,40 @@ const AppointmentForm: FC = () => {
 
           {/* Галерея специалистов */}
           <div className={styles.therapist}>
-            <p className={styles.label}>Выберите специалиста</p>
+            <div className={styles.galleryHeader}>
+              <p className={styles.label}>Выберите специалиста</p>
+
+              {filteredDoctors.length > 1 && (
+                <div className={styles.galleryNav}>
+                  <button
+                    type="button"
+                    className={styles.galleryBtn}
+                    onClick={handlePrevTherapist}
+                    disabled={currentTherapistIndex === 0}
+                    aria-label="Предыдущий специалист"
+                  >
+                    <Arrow
+                      className={clsx(
+                        styles.galleryArrow,
+                        styles.galleryArrow__prev,
+                      )}
+                      aria-hidden
+                    />
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.galleryBtn}
+                    onClick={handleNextTherapist}
+                    disabled={
+                      currentTherapistIndex === filteredDoctors.length - 1
+                    }
+                    aria-label="Следующий специалист"
+                  >
+                    <Arrow className={styles.galleryArrow} aria-hidden />
+                  </button>
+                </div>
+              )}
+            </div>
 
             {filteredDoctors.length > 0 && currentTherapist ? (
               <div className={styles.galleryWrapper}>
@@ -330,38 +363,6 @@ const AppointmentForm: FC = () => {
                     </div>
                   </div>
                 </div>
-
-                {/* Кнопки навигации */}
-                {filteredDoctors.length > 1 && (
-                  <>
-                    {currentTherapistIndex > 0 && (
-                      <button
-                        type="button"
-                        className={clsx(
-                          styles.galleryBtn,
-                          styles.galleryPrevBtn,
-                        )}
-                        onClick={handlePrevTherapist}
-                        aria-label="Предыдущий специалист"
-                      >
-                        <img src={arrow} alt="prev" />
-                      </button>
-                    )}
-                    {currentTherapistIndex < filteredDoctors.length - 1 && (
-                      <button
-                        type="button"
-                        className={clsx(
-                          styles.galleryBtn,
-                          styles.galleryNextBtn,
-                        )}
-                        onClick={handleNextTherapist}
-                        aria-label="Следующий специалист"
-                      >
-                        <img src={arrow} alt="next" />
-                      </button>
-                    )}
-                  </>
-                )}
               </div>
             ) : (
               <p className={styles.empty}>

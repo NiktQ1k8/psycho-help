@@ -149,19 +149,24 @@
   color: var(--color-label-neutral-secondary);
 }
 
-/* Обёртка галереи для позиционирования кнопок */
 .therapist .galleryWrapper {
   position: relative;
 }
 
-/* Кнопки навигации галереи (Вперед / Назад) */
+.galleryHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.galleryNav {
+  display: flex;
+  gap: 12px;
+}
+
 .galleryBtn {
   cursor: pointer;
-
-  position: absolute;
-  z-index: 2;
-  top: 50%;
-  transform: translateY(-50%);
 
   display: flex;
   align-items: center;
@@ -172,57 +177,31 @@
   border: none;
   border-radius: 50%;
 
-  color: white;
+  background-color: var(--color-background-neutral-primary);
 
-  background: var(--color-interactive-brand-primary, #0056b3);
-  box-shadow: 0 4px 10px rgb(0 0 0 / 10%);
+  transition: background-color 0.3s opacity 0.3s;
 
-  transition:
-    opacity 0.2s,
-    transform 0.2s;
-}
-
-.galleryBtn img {
-  /* Делаем внутреннюю SVG стрелку белой через инверсию цветов */
-  filter: brightness(0) invert(1);
-}
-
-.galleryPrevBtn {
-  left: -20px;
-}
-
-.galleryPrevBtn img {
-  /* Разворачиваем стрелку для левой кнопки */
-  transform: scaleX(-1);
-}
-
-.galleryNextBtn {
-  right: -20px;
-}
-
-.galleryBtn:hover {
-  opacity: 0.9;
-}
-
-.galleryBtn:active {
-  transform: translateY(-50%) scale(0.95);
-}
-
-@media (width <= 768px) {
-  .mainInfo {
-    flex-direction: column;
-    align-items: center;
+  &:hover:not(:disabled) {
+    background-color: var(--color-interactive-neutral-hover-secondary);
   }
 
-  .galleryBtn {
-    position: static;
-    transform: none;
-    display: inline-flex;
-    margin: 16px 8px 0;
+  &:active:not(:disabled) {
+    background-color: var(--color-interactive-neutral-active-secondary);
   }
 
-  .galleryBtn:active {
-    transform: scale(0.95);
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+  }
+}
+
+.galleryArrow {
+  width: 20px;
+  height: 20px;
+  color: var(--color-interactive-neutral-primary);
+
+  &__prev {
+    transform: scaleX(-1);
   }
 }
 
@@ -369,6 +348,19 @@
   color: var(--color-label-neutral-inverted-primary);
 
   background-color: var(--color-interactive-brand-primary);
+}
+
+@media (width <= 768px) {
+  .mainInfo {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .galleryHeader {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
 }
 
 [data-theme='dark'] {

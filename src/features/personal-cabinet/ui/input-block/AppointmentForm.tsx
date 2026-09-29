@@ -264,7 +264,34 @@ const AppointmentForm: FC = () => {
 
           {/* Галерея специалистов */}
           <div className={styles.therapist}>
-            <p className={styles.label}>Выберите специалиста</p>
+            <div className={styles.galleryHeader}>
+              <p className={styles.label}>Выберите специалиста</p>
+
+              {filteredDoctors.length > 1 && (
+                <div className={styles.galleryNav}>
+                  <button
+                    type="button"
+                    className={clsx(styles.galleryBtn, styles.galleryPrevBtn)}
+                    onClick={handlePrevTherapist}
+                    disabled={currentTherapistIndex === 0}
+                    aria-label="Предыдущий специалист"
+                  >
+                    <img src={arrow} alt="prev" />
+                  </button>
+                  <button
+                    type="button"
+                    className={clsx(styles.galleryBtn, styles.galleryNextBtn)}
+                    onClick={handleNextTherapist}
+                    disabled={
+                      currentTherapistIndex === filteredDoctors.length - 1
+                    }
+                    aria-label="Следующий специалист"
+                  >
+                    <img src={arrow} alt="next" />
+                  </button>
+                </div>
+              )}
+            </div>
 
             {filteredDoctors.length > 0 && currentTherapist ? (
               <div className={styles.galleryWrapper}>
@@ -330,38 +357,6 @@ const AppointmentForm: FC = () => {
                     </div>
                   </div>
                 </div>
-
-                {/* Кнопки навигации */}
-                {filteredDoctors.length > 1 && (
-                  <>
-                    {currentTherapistIndex > 0 && (
-                      <button
-                        type="button"
-                        className={clsx(
-                          styles.galleryBtn,
-                          styles.galleryPrevBtn,
-                        )}
-                        onClick={handlePrevTherapist}
-                        aria-label="Предыдущий специалист"
-                      >
-                        <img src={arrow} alt="prev" />
-                      </button>
-                    )}
-                    {currentTherapistIndex < filteredDoctors.length - 1 && (
-                      <button
-                        type="button"
-                        className={clsx(
-                          styles.galleryBtn,
-                          styles.galleryNextBtn,
-                        )}
-                        onClick={handleNextTherapist}
-                        aria-label="Следующий специалист"
-                      >
-                        <img src={arrow} alt="next" />
-                      </button>
-                    )}
-                  </>
-                )}
               </div>
             ) : (
               <p className={styles.empty}>

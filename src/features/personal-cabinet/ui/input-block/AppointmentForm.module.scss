@@ -149,19 +149,27 @@
   color: var(--color-label-neutral-secondary);
 }
 
-/* Обёртка галереи для позиционирования кнопок */
+/* Обёртка галереи */
 .therapist .galleryWrapper {
   position: relative;
+}
+
+/* Шапка галереи: заголовок + кнопки навигации */
+.galleryHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.galleryNav {
+  display: flex;
+  gap: 12px;
 }
 
 /* Кнопки навигации галереи (Вперед / Назад) */
 .galleryBtn {
   cursor: pointer;
-
-  position: absolute;
-  z-index: 2;
-  top: 50%;
-  transform: translateY(-50%);
 
   display: flex;
   align-items: center;
@@ -172,10 +180,8 @@
   border: none;
   border-radius: 50%;
 
-  color: white;
-
-  background: var(--color-interactive-brand-primary, #0056b3);
-  box-shadow: 0 4px 10px rgb(0 0 0 / 10%);
+  /* Белый фон кнопки */
+  background: #fff;
 
   transition:
     opacity 0.2s,
@@ -183,12 +189,19 @@
 }
 
 .galleryBtn img {
-  /* Делаем внутреннюю SVG стрелку белой через инверсию цветов */
-  filter: brightness(0) invert(1);
-}
+  display: block;
 
-.galleryPrevBtn {
-  left: -20px;
+  width: 20px;
+  height: 20px;
+
+  /* Цвет стрелки = бывший цвет фона кнопки */
+  background-color: var(--color-interactive-brand-primary, #0056b3);
+
+  /* SVG-стрелка используется как маска → красится через background-color */
+  mask: url('../../../../shared/assets/images/appointments/arrow.svg')
+    no-repeat center / contain;
+  mask: url('../../../../shared/assets/images/appointments/arrow.svg') no-repeat
+    center / contain;
 }
 
 .galleryPrevBtn img {
@@ -196,34 +209,17 @@
   transform: scaleX(-1);
 }
 
-.galleryNextBtn {
-  right: -20px;
-}
-
-.galleryBtn:hover {
+.galleryBtn:hover:not(:disabled) {
   opacity: 0.9;
 }
 
-.galleryBtn:active {
-  transform: translateY(-50%) scale(0.95);
+.galleryBtn:active:not(:disabled) {
+  transform: scale(0.95);
 }
 
-@media (width <= 768px) {
-  .mainInfo {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .galleryBtn {
-    position: static;
-    transform: none;
-    display: inline-flex;
-    margin: 16px 8px 0;
-  }
-
-  .galleryBtn:active {
-    transform: scale(0.95);
-  }
+.galleryBtn:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
 }
 
 .therapist .empty {
@@ -462,5 +458,18 @@
 
   .backArrow__text {
     color: var(--color-label-neutral-inverted-primary);
+  }
+}
+
+@media (width <= 768px) {
+  .mainInfo {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .galleryHeader {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
   }
 }

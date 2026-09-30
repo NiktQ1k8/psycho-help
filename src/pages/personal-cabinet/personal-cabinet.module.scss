@@ -15,15 +15,11 @@
   }
 }
 
-// Из-за новой шапки всё сломалось, это моя попытка починить (в комментариях указано, что было до изменений):
 .sidebarWrapper {
   position: sticky;
-
-  // top: 4rem;
   top: calc(var(--header-height) + 4rem);
   height: fit-content;
 
-  // @media (max-width: 1023px) {
   @media (height <= 900px), (width <= 1023px) {
     position: static;
   }
@@ -34,78 +30,6 @@
   flex-direction: column;
   width: 100%;
   min-width: 0;
-}
-
-.section {
-  margin-bottom: 6.4rem;
-}
-
-.sectionTitle {
-  margin: 0 0 2.4rem;
-  font: var(--font-h5);
-  color: var(--color-label-neutral-primary);
-  letter-spacing: var(--font-header-letter-spacing-h5);
-}
-
-.cardsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(28rem, 1fr));
-  gap: 1.6rem;
-
-  @media (width <= 633px) {
-    grid-template-columns: 1fr;
-  }
-}
-
-.emptyText {
-  font: var(--font-text-large);
-  color: var(--color-label-neutral-secondary);
-}
-
-.h1 {
-  margin-bottom: 2.4rem;
-  font: var(--font-h2);
-}
-
-.dateInput {
-  display: flex;
-  flex-direction: column;
-  gap: 2.4rem;
-}
-
-.subButton {
-  cursor: pointer;
-
-  margin-top: 1.6rem;
-  padding: 1.6rem;
-  border: none;
-  border-radius: 1.2rem;
-
-  font: var(--font-text-large-button);
-  color: var(--color-label-neutral-inverted-primary);
-
-  background-color: var(--color-interactive-brand-primary);
-
-  &:hover {
-    background-color: var(--color-interactive-brand-hover);
-  }
-}
-
-.mainTab,
-.appointmentsTab,
-.profileTab,
-.clientsTab,
-.adminTab {
-  width: 100%;
-}
-
-.comingSoon {
-  padding: 4rem 0;
-
-  font: var(--font-text-large);
-  font-style: italic;
-  color: var(--color-label-neutral-secondary);
-  text-align: center;
 }
 
 .countBage {
@@ -132,22 +56,6 @@
 }
 
 [data-theme='dark'] {
-  .title {
-    color: var(--color-label-neutral-inverted-primary) !important;
-  }
-
-  .sectionTitle {
-    color: var(--color-label-neutral-inverted-primary);
-  }
-
-  .emptyText {
-    color: color-mix(
-      in srgb,
-      var(--color-label-neutral-secondary),
-      var(--color-label-neutral-inverted-primary)
-    ) !important;
-  }
-
   .countBage {
     color: var(--color-label-neutral-inverted-primary);
   }
@@ -163,18 +71,5 @@
 
   h2 {
     font-size: 2rem;
-  }
-
-  .detailsPanel {
-    max-width: 100px;
-  }
-}
-
-@media (width >= 500px) and (width <= 1024px) {
-  .page {
-    display: flex;
-    flex-direction: column;
-    padding: 0 24px;
-    padding-bottom: 4rem;
   }
 }

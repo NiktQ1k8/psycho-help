@@ -90,7 +90,7 @@ const AppointmentCard: FC<AppointmentCardProps> = ({
             </button>
           )}
 
-          {/* Пока что убрал кнопку с оценкой */}
+          {/* TODO: добавить кнопку с оценкой */}
           {type === 'past' && hasComment && (
             <button className={styles.commentLink} onClick={onComment}>
               Посмотреть комментарий

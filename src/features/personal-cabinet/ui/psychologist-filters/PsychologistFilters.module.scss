@@ -47,12 +47,6 @@
   border-radius: 6px;
 }
 
-.filters__actions {
-  display: flex;
-  gap: 1.6rem;
-  align-items: center;
-}
-
 .filters__sort-button {
   cursor: pointer;
 
@@ -73,10 +67,6 @@
 
   &:hover {
     color: var(--color-label-neutral-secondary);
-  }
-
-  .anticon {
-    font-size: 14px;
   }
 }
 
@@ -128,7 +118,6 @@
     min-width: 100%;
   }
 
-  .filters__actions,
   .filters__date-range,
   .filters__format-select,
   .filters__status-select,

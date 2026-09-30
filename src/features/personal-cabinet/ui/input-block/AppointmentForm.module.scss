@@ -214,7 +214,6 @@
   text-align: center;
 }
 
-/* Элементы формы (календарь, дропдаун, текст) */
 .field {
   display: flex;
   flex-direction: column;
@@ -280,7 +279,6 @@
   opacity: 0.6;
 }
 
-/* Политика конфиденциальности */
 .privacy_text {
   margin-bottom: 8px;
   font-size: 14px;
@@ -291,7 +289,6 @@
   font-size: 14px;
 }
 
-/* Результаты */
 .backButton {
   cursor: pointer;
   margin-top: 4px;

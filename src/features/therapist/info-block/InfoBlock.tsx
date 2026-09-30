@@ -43,7 +43,7 @@ const InfoBlock: FC<Props> = ({ therapist: therapist }) => {
           <div className={styles.line}></div>
           <div className={styles.infoBlock}>
             <p className={styles.qual}>Принимает лично и онлайн</p>{' '}
-            {/*Потом будет браться из бд*/}
+            {/* TODO: Потом будет браться из бд*/}
             <p className={styles.office}>{therapist.office}</p>
           </div>
           <div className={styles.line}></div>

@@ -69,11 +69,6 @@
     box-shadow: 0 0 0 3px rgb(64 123 254 / 15%);
   }
 
-  &.editing {
-    border-color: var(--color-label-brand-secondary);
-    box-shadow: 0 0 0 3px rgb(64 123 254 / 15%);
-  }
-
   input {
     flex: 1;
 
@@ -427,30 +422,6 @@
       outline: none;
     }
   }
-
-  .togglePassword {
-    cursor: pointer;
-
-    display: flex;
-    flex-shrink: 0;
-    align-items: center;
-    justify-content: center;
-
-    padding: 0.4rem;
-    border: none;
-
-    background: none;
-
-    svg {
-      width: 2rem;
-      height: 2rem;
-      color: var(--color-label-neutral-tetriary);
-    }
-
-    &:hover svg {
-      color: var(--color-interactive-neutral-hover);
-    }
-  }
 }
 
 .changePasswordLink {
@@ -608,29 +579,6 @@
 
   .fieldsGrid label {
     color: var(--color-label-neutral-inverted-primary);
-  }
-
-  .selectDropdown {
-    border: none;
-  }
-
-  .customSelect {
-    color: var(--color-label-neutral-inverted-primary);
-    background-color: var(--color-fill-neutral-primary);
-  }
-
-  .selectArrow {
-    color: var(--color-label-neutral-inverted-primary);
-  }
-
-  .selectOption {
-    color: var(--color-label-neutral-inverted-primary);
-    background-color: var(--color-interactive-neutral-hover);
-
-    &.selected {
-      color: var(--color-interactive-brand-primary);
-      background-color: var(--color-fill-neutral-primary);
-    }
   }
 
   .editableField {

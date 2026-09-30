@@ -26,37 +26,6 @@
 }
 
 @media screen and (width <= 768px) {
-  .thirsname {
-    font-size: 40px;
-    font-weight: 600;
-  }
-
-  .IF {
-    font-size: 30px;
-    font-weight: 500;
-  }
-
-  .textBold {
-    margin-top: 60px;
-    margin-bottom: 12px;
-    font-size: 28px;
-    font-weight: 600;
-  }
-
-  .text {
-    font-size: 22px;
-  }
-
-  .subtitle {
-    margin-top: 103px;
-    font-size: 40px;
-    font-weight: 600;
-  }
-
-  .qualif__wrapper {
-    flex-wrap: wrap;
-  }
-
   .mobileLink {
     display: none;
   }
@@ -66,12 +35,6 @@
   .wrapper {
     width: 93.65%;
     margin-top: 21px;
-  }
-
-  .img {
-    width: 351px;
-    height: 351px;
-    margin: 0 auto;
   }
 
   .links {

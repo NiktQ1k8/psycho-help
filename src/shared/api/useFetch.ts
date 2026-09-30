@@ -8,8 +8,6 @@ export type UseFetchReturn = {
   fetching: () => Promise<boolean>;
 };
 
-// Вместо "any" используем дженерик T
-// Теперь можно строго типизировать возвращаемое значение функции
 export function useFetch<T>(foo: () => Promise<T>): UseFetchReturn {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ResponseError>({

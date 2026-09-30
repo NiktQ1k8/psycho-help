@@ -17,12 +17,9 @@
 
 .sidebarWrapper {
   position: sticky;
-
-  // top: 4rem;
   top: calc(var(--header-height) + 4rem);
   height: fit-content;
 
-  // @media (max-width: 1023px) {
   @media (height <= 900px), (width <= 1023px) {
     position: static;
   }
@@ -191,14 +188,6 @@
   font-size: 1.6rem;
   line-height: 2.4rem;
   color: var(--color-label-neutral-tetriary, #6b7280);
-}
-
-.infoValueEmail,
-.infoValuePhone {
-  font-family: var(--font-text-large);
-  font-size: 2rem;
-  line-height: 2.8rem;
-  color: var(--color-label-neutral-primary, #111827);
 }
 
 .actionButtonCancel,

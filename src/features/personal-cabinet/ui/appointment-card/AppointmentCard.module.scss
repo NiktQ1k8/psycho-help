@@ -52,18 +52,6 @@
   color: var(--color-label-neutral-tetriary);
 }
 
-.iconSuccess {
-  flex-shrink: 0;
-  font-size: 2rem;
-  color: var(--color-label-success-primary);
-}
-
-.iconDanger {
-  flex-shrink: 0;
-  font-size: 2rem;
-  color: var(--color-label-danger-primary);
-}
-
 .iconWarning {
   flex-shrink: 0;
   font-size: 2rem;
@@ -96,7 +84,6 @@
   border-radius: 50%;
 }
 
-/* Новая обертка для кнопок, чтобы они стояли рядом */
 .actions {
   display: flex;
   flex-wrap: wrap;
@@ -111,30 +98,12 @@
     margin-left: 0;
   }
 
-  .rateButton,
   .commentLink,
   .confirmButton,
   .cancelButton {
     width: 100%;
     padding-right: 0;
     padding-left: 0;
-  }
-}
-
-.rateButton {
-  cursor: pointer;
-
-  padding: 1rem 7.5rem;
-  border: none;
-  border-radius: 1.6rem;
-
-  font: var(--font-text-medium);
-  color: var(--color-label-neutral-inverted-primary);
-
-  background-color: var(--color-interactive-brand-primary);
-
-  &:hover {
-    background-color: var(--color-interactive-brand-hover);
   }
 }
 

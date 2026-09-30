@@ -4,4 +4,4 @@ const TherapistReviews = () => {
 
 export default TherapistReviews;
 
-// Компонент будет разработан позже
+// TODO: Компонент будет разработан позже

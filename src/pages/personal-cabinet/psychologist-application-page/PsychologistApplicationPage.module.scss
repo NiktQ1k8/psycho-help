@@ -172,12 +172,6 @@
   color: var(--color-label-neutral-primary, #111827);
 }
 
-.divider {
-  margin: 2.4rem 0;
-  border: none;
-  border-top: 0.1rem solid var(--color-border-neutral-base, #e5e7eb);
-}
-
 .dataItemFull {
   display: flex;
   grid-column: 1 / -1;
@@ -314,19 +308,6 @@
   }
 }
 
-.scheduleFields {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 1.6rem;
-
-  width: 100%;
-}
-
-.scheduleFields label {
-  width: 100%;
-}
-
 .fieldLabel {
   display: flex;
   flex-direction: column;
@@ -361,7 +342,6 @@
   padding: 1.2rem;
 }
 
-/* Контейнер селекта */
 .fieldSelect {
   width: 100%;
   height: 100%;
@@ -430,45 +410,7 @@
   line-height: 2.4rem !important;
 }
 
-.sectionTitle {
-  margin: 0 0 1rem;
-  padding: 0 2.4rem;
-
-  font-family: var(--font-text-large);
-  font-size: 2rem;
-  font-weight: 500;
-  line-height: 2.8rem;
-  color: var(--color-label-neutral-primary, #111827);
-}
-
-.formRow {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: center;
-
-  width: 100%;
-}
-
-.formField {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-
-  width: 100%;
-  min-width: 22rem;
-  padding: 1rem 2.4rem;
-}
-
-.formFieldGrow {
-  flex: 1;
-}
-
 @media (width <= 900px) {
-  .sidebar {
-    width: 100%;
-  }
-
   .page {
     grid-template-columns: 1fr;
     padding: 2.4rem 1.6rem;

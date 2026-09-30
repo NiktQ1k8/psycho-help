@@ -21,9 +21,6 @@ const HINTS = {
   password: 'Пароль не менее 8 символов, с цифрой, буквой и спецсимволом',
 };
 
-// Здесь тоже самое что и с modal-login.tsx
-// Заменяем any на конкретные union типы, т.к известно какие значения реально передаются
-
 type Tprops = {
   setWindow: (param: 'log' | 'reg' | 'forgot' | 'change') => void;
   isOpen: boolean;
@@ -44,15 +41,12 @@ const ModalRegistration: React.FC<Tprops> = ({
   };
   const [open, setOpen] = useState(isOpen);
 
-  //импортируем функции регистрации, изменения состояния и мидлвар
   const { registration } = useAuth();
 
   const { fetching, isLoading, error } = useFetch(async () => {
     const { confirm_password, ...dataForServer } = formValue;
     await registration(dataForServer as RegistrationData);
   });
-
-  //Функции для валидации полей формы
 
   const validateFirst_name = (name: string) =>
     /^[a-zа-я]+$/i.test(name) ? '' : 'Имя не должно содержать цифр';
@@ -94,8 +88,6 @@ const ModalRegistration: React.FC<Tprops> = ({
   const validateConfirm_password = (confirm_password: string) =>
     confirm_password === formValue.password ? '' : 'Пароли не совпадают';
 
-  //Применение функций валидаций и возвращение true, если нет ошибок, иначе false
-
   const validateForm = () => {
     const newErrors = {
       first_name: validateFirst_name(formValue.first_name),
@@ -109,8 +101,6 @@ const ModalRegistration: React.FC<Tprops> = ({
     return Object.values(newErrors).every((error) => error === '');
   };
 
-  //Если все правильно, то модалка закрывается
-
   const handleOk = async () => {
     if (!validateForm()) return;
     const ok = await fetching();
@@ -121,14 +111,11 @@ const ModalRegistration: React.FC<Tprops> = ({
     }
   };
 
-  //Закрытие модалки
   const handleCancel = () => {
     setOpen(false);
     setModalOpen(false);
   };
 
-  //Функция, возвращающая true, если все поля формы заполнены (кроме middle_name),
-  //иначе false (При изменении формы)
   const formComplete = useMemo(() => {
     return Object.entries(formValue).every(([key, value]) => {
       if (key === 'middle_name') return true;

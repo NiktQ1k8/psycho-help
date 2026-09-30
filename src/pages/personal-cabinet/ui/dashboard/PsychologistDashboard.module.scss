@@ -267,23 +267,6 @@
   color: #6b7280;
 }
 
-.btnReadMore {
-  cursor: pointer;
-
-  padding: 0;
-  border: none;
-
-  font-size: 13px;
-  color: #888;
-  text-decoration: underline;
-
-  background: transparent;
-
-  &:hover {
-    color: #4a4a4a;
-  }
-}
-
 .btnNavigate {
   cursor: pointer;
 
@@ -381,13 +364,6 @@
 }
 
 @media (width <= 600px) {
-  .layout {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 0 10px 100px;
-  }
-
   h2 {
     font-size: 2rem;
   }
@@ -423,18 +399,5 @@
   .btnAdd {
     font-size: 1.6rem;
     line-height: 2.4rem;
-  }
-}
-
-@media (width >= 500px) and (width <= 1024px) {
-  .sidebarWrapper * {
-    display: none;
-  }
-
-  .page {
-    display: flex;
-    flex-direction: column;
-    padding: 0 24px;
-    padding-bottom: 4rem;
   }
 }

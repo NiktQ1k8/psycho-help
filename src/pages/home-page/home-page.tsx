@@ -6,7 +6,6 @@ import FeaturesBlock from '@/features/home/ui/3-features-block/features-block';
 import CallsBlock from '@/features/home/ui/5-calls-block/calls-block';
 import ChartBlock from '@/features/home/ui/chart-block/schedule-block';
 import ReasonsBlock from '@/features/home/ui/reasons-block/reasons-block';
-// import TherapistsBlock from './components/doctors-block/doctors-block';
 import styles from './HomePage.module.scss';
 
 const ContentWrapper: FC<{ children: React.ReactNode }> = ({ children }) => (
@@ -19,7 +18,6 @@ const Title: FC<{ text: string }> = ({ text }) => (
   </div>
 );
 
-//Объект с компонентами, используемыми на home-page
 interface BlockWrapperProps {
   component: FC;
   title?: string;

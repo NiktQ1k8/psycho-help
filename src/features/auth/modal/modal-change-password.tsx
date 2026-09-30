@@ -30,7 +30,7 @@ const ModalChangePassword: React.FC<Tprops> = ({
     isLoading,
     error: fetchError,
   } = useFetch(async () => {
-    // Заглушка — здесь должен быть вызов API по смене пароля
+    // TODO: Заглушка — здесь должен быть вызов API по смене пароля
     await new Promise((res) => setTimeout(res, 700));
   });
 

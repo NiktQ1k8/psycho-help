@@ -22,8 +22,7 @@ const ModalForgotPassword: React.FC<Tprops> = ({
     isLoading,
     error: fetchError,
   } = useFetch(async () => {
-    // Здесь можно вызвать реальный API, например AuthApi.forgotPassword(email)
-    // Сейчас делаем заглушку
+    // TODO: Заглушка — здесь можно вызвать реальный API, например AuthApi.forgotPassword(email)
     await new Promise((res) => setTimeout(res, 700));
   });
 

@@ -297,7 +297,6 @@
   color: var(--color-interactive-brand-hover);
 }
 
-/* Password field with show/hide button */
 .passwordWrapper {
   position: relative;
   display: flex;
@@ -375,19 +374,6 @@
 
   .closeButton {
     color: var(--color-label-neutral-inverted-primary);
-  }
-
-  .button {
-    color: var(--color-label-neutral-inverted-primary);
-
-    &:hover {
-      color: var(--color-interactive-brand-hover);
-      background-color: var(--color-interactive-neutral-hover-secondary);
-    }
-
-    &:active {
-      color: var(--color-interactive-brand-active);
-    }
   }
 
   .showPassButton {

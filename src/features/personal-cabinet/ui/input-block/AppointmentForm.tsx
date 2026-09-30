@@ -212,7 +212,6 @@ const AppointmentForm: FC = () => {
     <ConfigProvider locale={locale}>
       {window === 'form' ? (
         <div className={styles.form}>
-          {/* Формат встречи */}
           <div className={styles.format}>
             <h3 className={styles.label}>Выберите формат консультации</h3>
             <div className={styles.format__btns}>
@@ -237,7 +236,6 @@ const AppointmentForm: FC = () => {
             </div>
           </div>
 
-          {/* Фильтр по офисам (только для Offline) */}
           {meetingType === 'offline' && uniqueOffices.length > 0 && (
             <div className={styles.location}>
               <p className={styles.label}>Выберите место консультации</p>
@@ -262,7 +260,6 @@ const AppointmentForm: FC = () => {
             </div>
           )}
 
-          {/* Галерея специалистов */}
           <div className={styles.therapist}>
             <div className={styles.galleryHeader}>
               <p className={styles.label}>Выберите специалиста</p>
@@ -373,7 +370,6 @@ const AppointmentForm: FC = () => {
             )}
           </div>
 
-          {/* Выбор времени (календарь) */}
           <div className={styles.field}>
             <label className={styles.label}>Выберите дату и время</label>
             <DatePicker
@@ -390,7 +386,6 @@ const AppointmentForm: FC = () => {
             />
           </div>
 
-          {/* Статус в университете (необходим для бэка) */}
           <div className={styles.field}>
             <label className={styles.label}>Ваш статус в университете</label>
             <select
@@ -410,7 +405,6 @@ const AppointmentForm: FC = () => {
             </select>
           </div>
 
-          {/* Запрос */}
           <div className={styles.field}>
             <label className={styles.label}>Ваш запрос</label>
             <textarea

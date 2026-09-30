@@ -31,7 +31,6 @@ const ScheduleBlock = () => {
               className={styles.scheduleImage}
             />
           </picture>
-          {/* <span className={styles.illustrationPlaceholder}>Иллюстрация предметов</span> */}
         </div>
       </div>
     </section>

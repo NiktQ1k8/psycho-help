@@ -19,18 +19,6 @@
   color: var(--color-text-secondary, #666);
 }
 
-.greetingTitle {
-  margin: 0 0 0.8rem;
-  font-size: var(--font-size-xl, 24px);
-  font-weight: var(--font-weight-semibold, 600);
-}
-
-.greetingSubtitle {
-  margin: 0;
-  font-size: var(--font-size-md, 16px);
-  color: var(--color-text-secondary, #666);
-}
-
 .pageLoaderWrapper {
   display: flex;
   align-items: center;

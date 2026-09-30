@@ -65,6 +65,13 @@
   white-space: pre-line;
 }
 
+@media (width <= 1300px) {
+  .section {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+}
+
 @media (width <= 1024px) {
   .grid {
     grid-template-columns: repeat(2, 1fr);
@@ -118,6 +125,12 @@
 
   .text {
     font-size: 16px;
+  }
+}
+
+@media (width <= 425px) {
+  .grid {
+    padding: 0 12px;
   }
 }
 

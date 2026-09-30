@@ -31,10 +31,10 @@ const CallsBlock = () => {
             </span>
             <div className={styles.calls__1_grid}>
               <a className={styles.calls__phone} href="tel:8 (495) 051">
-                8 (495) 051
+                051
               </a>
               <a className={styles.calls__phone} href="tel:051">
-                051
+                8 (495) 051
               </a>
               <span className={styles.calls__phone_text}>
                 с городского телефона

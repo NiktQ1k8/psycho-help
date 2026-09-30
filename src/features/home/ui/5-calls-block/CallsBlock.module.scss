@@ -91,6 +91,13 @@
   gap: 8px;
 }
 
+@media (width <= 1300px) {
+  .calls {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+}
+
 @media (width <= 1200px) {
   .calls {
     padding-right: 16px;
@@ -137,7 +144,7 @@
   }
 }
 
-@media (width <= 425px) {
+@media (width <= 600px) {
   .calls__block {
     grid-template-columns: repeat(1, fit-content(100%));
     grid-template-rows: repeat(4, fit-content(100%));
@@ -150,6 +157,10 @@
 
   .calls__text {
     width: 90%;
+  }
+
+  .calls {
+    padding: 12px;
   }
 
   @media (width <= 425px) {

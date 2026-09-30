@@ -5,6 +5,7 @@ import FeatureTablet_1 from '@/features/home/ui/3-features-block/img/1/features-
 import FeatureDesktop_2 from '@/features/home/ui/3-features-block/img/2/features-desktop.png';
 import FeatureMobile_2 from '@/features/home/ui/3-features-block/img/2/features-mobile.png';
 import FeatureTablet_2 from '@/features/home/ui/3-features-block/img/2/features-tablet.png';
+import { SLUG } from '@/shared/config/slug';
 import { Button } from '@/shared/ui';
 import styles from './features-block.module.scss';
 
@@ -12,7 +13,7 @@ const FeaturesBlock = () => {
   const navigate = useNavigate();
 
   const handleShowAllTherapists = () => {
-    navigate('/therapists');
+    navigate(SLUG.THERAPISTS);
   };
 
   return (

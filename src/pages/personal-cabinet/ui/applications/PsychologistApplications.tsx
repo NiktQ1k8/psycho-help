@@ -18,6 +18,7 @@ import { useAuth } from '@/features/auth/api/useAuth';
 import { usePsychologistView } from '@/features/personal-cabinet/model/psychologist-view';
 import PsychologistListFilters from '@/features/personal-cabinet/ui/psychologist-filters/PsychologistFilters';
 import { ApplicationStatusTag } from '@/pages/personal-cabinet/constants';
+import { SLUG } from '@/shared/config/slug';
 import dayjs from '@/shared/lib/dayjs';
 import Loader from '@/shared/ui/loader/loader';
 import styles from './PsychologistApplications.module.scss';
@@ -296,7 +297,9 @@ const PsychologistApplications = () => {
           )}
           <button
             className={styles.btnOpen}
-            onClick={() => navigate(`/cabinet/application/${application.id}`)}
+            onClick={() =>
+              navigate(`${SLUG.CABINET_APPLICATION}/${application.id}`)
+            }
             type="button"
           >
             Открыть

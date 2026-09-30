@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TestCard } from '@/pages/resources-page/components';
 import { testMocks } from '@/pages/resources-page/entities/tests/mocks.ts';
+import { SLUG } from '@/shared/config/slug';
 import { Button } from '@/shared/ui/button';
 import styles from './Tests.module.scss';
 
@@ -17,7 +18,7 @@ export const Tests = () => {
   const isShowMoreVisible = tests.length < testMocks.length;
 
   const handleTestClick = (testId: string) => {
-    navigate(`/test/${testId}`);
+    navigate(`${SLUG.TEST}/${testId}`);
   };
 
   return (

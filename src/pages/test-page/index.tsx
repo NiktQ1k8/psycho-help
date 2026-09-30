@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { questionsData } from '@/pages/test-page/mocks';
+import { SLUG } from '@/shared/config/slug';
 import styles from './Test-page.module.scss';
 
 export const TestPage = () => {
@@ -29,13 +30,13 @@ export const TestPage = () => {
     if (!isFirstQuestion) {
       setCurrentQuestionIndex((prev) => prev - 1);
     } else {
-      navigate(`/resources?entity=tests`);
+      navigate(`${SLUG.RESOURCES}?entity=tests`);
     }
   };
 
   const handleFinish = () => {
     console.log('Ответы:', answers);
-    navigate(`/resources?entity=tests`);
+    navigate(`${SLUG.RESOURCES}?entity=tests`);
   };
 
   if (!currentQuestion) {

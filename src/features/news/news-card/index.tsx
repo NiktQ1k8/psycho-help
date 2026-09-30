@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import type { News } from '@/entities/news/types';
 import newsLink from '@/shared/assets/images/news/news-link.svg';
+import { SLUG } from '@/shared/config/slug';
 import styles from './NewsCard.module.scss';
 
 // import Img from '@/shared/ui/img/Img';
@@ -44,7 +45,7 @@ export const NewsCard: FC<Props> = ({ newsItem, linkToDetails = true }) => {
 
   return (
     <Link
-      to={`/news/${newsItem.slug}`}
+      to={`${SLUG.NEWS}/${newsItem.slug}`}
       className={styles.link}
       style={{ textDecoration: 'none', color: 'inherit' }}
     >

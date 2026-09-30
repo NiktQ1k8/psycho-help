@@ -8,6 +8,7 @@ import type { Appointment } from '@/entities/appointment/types';
 import { usePsychologistView } from '@/features/personal-cabinet/model/psychologist-view';
 import PsychologistListFilters from '@/features/personal-cabinet/ui/psychologist-filters/PsychologistFilters';
 import { AppointmentStatusTag } from '@/pages/personal-cabinet/constants';
+import { SLUG } from '@/shared/config/slug';
 import dayjs from '@/shared/lib/dayjs';
 import Loader from '@/shared/ui/loader/loader';
 import styles from './PsychologistAppointments.module.scss';
@@ -210,7 +211,9 @@ const PsychologistAppointments = () => {
         <div className={styles.actionsCol}>
           <button
             className={styles.btnPrimary}
-            onClick={() => navigate(`/cabinet/appointment/${appointment.id}`)}
+            onClick={() =>
+              navigate(`${SLUG.CABINET_APPOINTMENT}/${appointment.id}`)
+            }
             type="button"
           >
             Открыть

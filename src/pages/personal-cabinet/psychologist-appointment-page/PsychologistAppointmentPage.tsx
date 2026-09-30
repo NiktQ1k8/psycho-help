@@ -20,6 +20,7 @@ import {
   getTabsForRole,
 } from '@/pages/personal-cabinet/config/tabs';
 import { AppointmentStatusTag } from '@/pages/personal-cabinet/constants';
+import { SLUG } from '@/shared/config/slug';
 import dayjs from '@/shared/lib/dayjs';
 import Loader from '@/shared/ui/loader/loader';
 import styles from './PsychologistAppointmentPage.module.scss';
@@ -30,7 +31,6 @@ const TYPE_LABELS: Record<string, string> = {
 };
 
 const PSYCHOLOGIST_TABS = getTabsForRole('psychologist');
-const CABINET_PATH = '/cabinet';
 
 const formatDate = (iso?: string | null) => {
   if (!iso) return null;
@@ -58,7 +58,7 @@ const PsychologistAppointmentPage = () => {
   const handleSidebarTabChange = useCallback(
     (tabId: string) => {
       setSavedTab(tabId as TabId);
-      navigate(CABINET_PATH);
+      navigate(SLUG.CABINET);
     },
     [navigate, setSavedTab],
   );
@@ -128,7 +128,7 @@ const PsychologistAppointmentPage = () => {
     },
   });
 
-  if (!isPsychologist) return <Navigate to="/" replace />;
+  if (!isPsychologist) return <Navigate to={SLUG.MAIN} replace />;
   if (isLoading) return <Loader />;
   if (isError) {
     const detail = (error as AxiosError<{ detail?: string }>)?.response?.data

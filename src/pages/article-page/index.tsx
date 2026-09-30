@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { LeftOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
+import { SLUG } from '@/shared/config/slug';
 import { Button } from '@/shared/ui';
 import styles from './ArticlePage.module.scss';
 import { TRANSLATES as t } from './constants';
@@ -60,13 +61,13 @@ export const ArticlePage = () => {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    navigate('/resources');
+    navigate(SLUG.RESOURCES);
   };
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.top}>
-        <Link to="/resources" className={styles.backButton}>
+        <Link to={SLUG.RESOURCES} className={styles.backButton}>
           <LeftOutlined />
           {t.materials}
         </Link>

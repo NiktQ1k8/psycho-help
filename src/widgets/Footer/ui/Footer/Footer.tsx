@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '@/shared/assets/images/logo.svg?react';
+import { SLUG } from '@/shared/config/slug';
 import { locations, socials } from '../../model/constants';
 import styles from './Footer.module.scss';
 
@@ -9,7 +10,7 @@ export const Footer: FC = () => {
     <footer className={styles.footer}>
       <div className={styles.inner}>
         <div className={styles.top}>
-          <Link className={styles.logo} to="/">
+          <Link className={styles.logo} to={SLUG.MAIN}>
             <Logo className={styles.svg} />
           </Link>
           <div className={styles.contacts}>

@@ -54,6 +54,17 @@ export const Footer: FC = () => {
             </li>
           ))}
         </ul>
+        <p className={styles.issuesPlank}>
+          Если вы заметили ошибку или хотите предложить изменения, пожалуйста,{' '}
+          <a
+            className={styles.issuesLink}
+            href="https://github.com/NiktQ1k8/psycho-help/issues"
+            target="_blank"
+          >
+            создайте issue
+          </a>{' '}
+          в репозитории
+        </p>
         <p className={styles.copyright}>
           © {new Date().getFullYear()} Служба психологической помощи (СПП)
           Московского Политеха.

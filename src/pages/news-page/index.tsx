@@ -4,6 +4,7 @@ import { newsItemQueries } from '@/entities/news/api/queries';
 import NewsList from '@/features/news/news-list';
 import newsHeroImage from '@/shared/assets/images/news/news-hero-image.png';
 import telegramIcon from '@/shared/assets/images/news/telegram-icon.svg';
+import { EXTERNAL_LINKS } from '@/shared/config/externalLinks';
 import Loader from '@/shared/ui/loader/loader';
 import styles from './NewsPage.module.scss';
 
@@ -58,7 +59,7 @@ export const NewsPage = () => {
             className={styles.telegramIcon}
           />
           <a
-            href="https://vk.com/spp_polytech"
+            href={EXTERNAL_LINKS.TG}
             target="_blank"
             rel="noopener noreferrer"
             className={styles.telegramLink}

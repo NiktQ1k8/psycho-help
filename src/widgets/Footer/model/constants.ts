@@ -1,12 +1,13 @@
+import { EXTERNAL_LINKS } from '@/shared/config/externalLinks';
 // import Max from '../assets/max.svg?react';
 import Tg from '../assets/tg.svg?react';
 import Vk from '../assets/vk.svg?react';
 import type { location, social } from './types';
 
 export const socials: social[] = [
-  // { icon: Max, link: 'https://max.ru/spp_mospolytech' },
-  { icon: Vk, link: 'https://vk.com/spp_polytech' },
-  { icon: Tg, link: 'https://t.me/spp_mospolytech' },
+  // { icon: Max, link: EXTERNAL_LINKS.MAX },
+  { icon: Vk, link: EXTERNAL_LINKS.VK },
+  { icon: Tg, link: EXTERNAL_LINKS.TG },
 ];
 
 export const locations: location[] = [

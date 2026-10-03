@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '@/shared/assets/images/logo.svg?react';
+import { EXTERNAL_LINKS } from '@/shared/config/externalLinks';
 import { SLUG } from '@/shared/config/slug';
 import { locations, socials } from '../../model/constants';
 import styles from './Footer.module.scss';
@@ -58,7 +59,7 @@ export const Footer: FC = () => {
           Если вы заметили ошибку или хотите предложить изменения, пожалуйста,{' '}
           <a
             className={styles.issuesLink}
-            href="https://github.com/NiktQ1k8/psycho-help/issues"
+            href={EXTERNAL_LINKS.ISSUE}
             target="_blank"
           >
             создайте issue

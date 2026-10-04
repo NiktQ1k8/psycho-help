@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { LeftOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { SLUG } from '@/shared/config/slug';
-import { Button } from '@/shared/ui';
+import { ButtonLink } from '@/shared/ui/button-link/ButtonLink';
 import styles from './ArticlePage.module.scss';
 import { TRANSLATES as t } from './constants';
 import { mockArticlePageData } from './mocks';
@@ -60,10 +60,6 @@ export const ArticlePage = () => {
   const data = mockArticlePageData;
   const navigate = useNavigate();
 
-  const handleBack = () => {
-    navigate(SLUG.RESOURCES);
-  };
-
   return (
     <div className={styles.wrapper}>
       <div className={styles.top}>
@@ -82,14 +78,14 @@ export const ArticlePage = () => {
         {data?.content?.map(parseContentData)}
       </div>
 
-      <Button
+      <ButtonLink
         className={styles.bottomBtn}
         icon={<LeftOutlined />}
         variant="secondary"
-        onClick={handleBack}
+        onClick={() => navigate(-1)}
       >
         {t.other}
-      </Button>
+      </ButtonLink>
     </div>
   );
 };

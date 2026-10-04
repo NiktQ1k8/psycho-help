@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import FeatureDesktop_1 from '@/features/home/ui/3-features-block/img/1/features-desktop.png';
 import FeatureMobile_1 from '@/features/home/ui/3-features-block/img/1/features-mobile.png';
 import FeatureTablet_1 from '@/features/home/ui/3-features-block/img/1/features-tablet.png';
@@ -6,16 +5,10 @@ import FeatureDesktop_2 from '@/features/home/ui/3-features-block/img/2/features
 import FeatureMobile_2 from '@/features/home/ui/3-features-block/img/2/features-mobile.png';
 import FeatureTablet_2 from '@/features/home/ui/3-features-block/img/2/features-tablet.png';
 import { SLUG } from '@/shared/config/slug';
-import { Button } from '@/shared/ui';
+import { ButtonLink } from '@/shared/ui/button-link/ButtonLink';
 import styles from './features-block.module.scss';
 
 const FeaturesBlock = () => {
-  const navigate = useNavigate();
-
-  const handleShowAllTherapists = () => {
-    navigate(SLUG.THERAPISTS);
-  };
-
   return (
     <div className={styles.features}>
       <div className={styles.features__grid}>
@@ -39,9 +32,9 @@ const FeaturesBlock = () => {
               помощь.
             </span>
           </div>
-          <Button onClick={handleShowAllTherapists} color="neutral">
+          <ButtonLink to={SLUG.THERAPISTS} color="neutral">
             Смотреть всех
-          </Button>
+          </ButtonLink>
         </div>
         <div className={styles.features__grid_2}>
           <span className={styles.features__2_title}>График работы</span>

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { TestCard } from '@/pages/resources-page/components';
 import { testMocks } from '@/pages/resources-page/entities/tests/mocks.ts';
 import { SLUG } from '@/shared/config/slug';
-import { Button } from '@/shared/ui/button';
+import { ButtonLink } from '@/shared/ui/button-link/ButtonLink';
 import styles from './Tests.module.scss';
 
 const initialTests = testMocks.slice(0, 6);
@@ -43,13 +43,9 @@ export const Tests = () => {
         })}
       </div>
       {isShowMoreVisible && (
-        <Button
-          data-testid="show-more-tests"
-          className={styles.showMore}
-          onClick={handleShowMore}
-        >
+        <ButtonLink className={styles.showMore} onClick={handleShowMore}>
           Показать ещё
-        </Button>
+        </ButtonLink>
       )}
     </div>
   );

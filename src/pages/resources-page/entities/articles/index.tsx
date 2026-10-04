@@ -4,7 +4,7 @@ import { ArticleCard } from '@/pages/resources-page/components';
 import { TRANSLATES } from '@/pages/resources-page/consts';
 import { articleMocks } from '@/pages/resources-page/entities/articles/mocks.ts';
 import { SLUG } from '@/shared/config/slug';
-import { Button } from '@/shared/ui/button';
+import { ButtonLink } from '@/shared/ui/button-link/ButtonLink';
 import styles from './Articles.module.scss';
 
 const initialArticles = articleMocks.slice(0, 6);
@@ -39,15 +39,14 @@ export const Articles = () => {
               }}
               description={item.description}
               bottomSlot={
-                <Button
-                  data-testid="read-article"
+                <ButtonLink
                   variant="secondary"
                   // TODO: добавить настоящий id, когда появится бэк
                   onClick={handleOpenArticle.bind(null, MOCK_ARTICLE_ID)}
                   className={styles.readBtn}
                 >
                   {TRANSLATES.read}
-                </Button>
+                </ButtonLink>
               }
               hasHorizontalDesktopVersion
               key={`articles-${index}`}
@@ -57,9 +56,9 @@ export const Articles = () => {
       </div>
 
       {isShowMoreVisible && (
-        <Button className={styles.showMore} onClick={handleShowMore}>
+        <ButtonLink className={styles.showMore} onClick={handleShowMore}>
           Показать ещё
-        </Button>
+        </ButtonLink>
       )}
     </div>
   );

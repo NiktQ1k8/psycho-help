@@ -28,7 +28,7 @@
   border-radius: 50%;
 
   font-size: 5.4rem;
-  color: var(--label-neutral-secondary);
+  color: var(--labels-neutral-secondary);
 
   background-color: var(--border-neutral-soft);
 }
@@ -36,7 +36,7 @@
 .name {
   max-width: 15rem;
   font: var(--font-text-medium);
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
   text-align: center;
 }
 
@@ -60,7 +60,7 @@
   border-radius: 0.8rem;
 
   font: var(--font-text-large);
-  color: var(--label-neutral-secondary);
+  color: var(--labels-neutral-secondary);
   text-align: left;
 
   background: none;
@@ -68,7 +68,7 @@
   transition: all 0.2s;
 
   &:hover {
-    color: var(--label-neutral-primary);
+    color: var(--labels-neutral-primary);
   }
 
   &.active {
@@ -140,17 +140,17 @@
   .avatar {
     color: color-mix(
       in srgb,
-      var(--label-neutral-secondary),
-      var(--label-neutral-inverted-primary)
+      var(--labels-neutral-secondary),
+      var(--labels-neutral-inverted-primary)
     );
   }
 
   .name {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .navItem {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
 
     &:hover:not(.active) {
       color: var(--interactive-brand-primary);

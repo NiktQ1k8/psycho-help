@@ -39,7 +39,7 @@
   margin-right: 2.4rem;
 
   font: var(--font-text-large);
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
 }
 
 .active .answer {
@@ -52,7 +52,7 @@
 
 .p {
   font: var(--font-h5);
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
   letter-spacing: var(--font-header-letter-spacing-h5);
 }
 
@@ -92,7 +92,7 @@
 
   .p,
   .answer {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .button path {

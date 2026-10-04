@@ -45,7 +45,7 @@
 
     .description {
       font: var(--font-text-medium);
-      color: var(--label-neutral-secondary);
+      color: var(--labels-neutral-secondary);
 
       &.ellipse {
         overflow: hidden;
@@ -133,14 +133,14 @@
   }
 
   .title {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .description {
     color: color-mix(
       in srgb,
-      var(--label-neutral-secondary),
-      var(--label-neutral-inverted-primary)
+      var(--labels-neutral-secondary),
+      var(--labels-neutral-inverted-primary)
     ) !important;
   }
 }

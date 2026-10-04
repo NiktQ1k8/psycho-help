@@ -20,7 +20,7 @@
 .dateHeader {
   margin-bottom: 0.8rem;
   font: var(--font-h5);
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
 }
 
 .dateGroup:not(:first-child) {
@@ -51,7 +51,7 @@
 
 .timeCol {
   font: var(--font-text-medium);
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
 }
 
 .infoCol {
@@ -75,13 +75,13 @@
   flex-shrink: 0;
   max-width: 370px;
   font: var(--font-text-large);
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
 }
 
 .location {
   display: block;
   font: var(--font-text-large);
-  color: var(--label-neutral-secondary);
+  color: var(--labels-neutral-secondary);
 }
 
 .location::before {
@@ -109,29 +109,29 @@
   border-radius: 100%;
 
   &--new {
-    background-color: var(--label-success-primary);
+    background-color: var(--labels-success-primary);
   }
 
   &--in-progress {
-    background-color: var(--label-brand-primary);
+    background-color: var(--labels-brand-primary);
   }
 
   &--awaiting-user-confirmation {
-    background-color: var(--label-neutral-secondary);
+    background-color: var(--labels-neutral-secondary);
   }
 
   &--completed {
-    background-color: var(--label-neutral-primary);
+    background-color: var(--labels-neutral-primary);
   }
 
   &--cancelled {
-    background-color: var(--label-danger-primary);
+    background-color: var(--labels-danger-primary);
   }
 }
 
 .status-text {
   font: var(--font-text-medium);
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
 }
 
 .btnConfirm {
@@ -142,7 +142,7 @@
   border-radius: 12px;
 
   font: var(--font-text-medium);
-  color: var(--label-brand-primary);
+  color: var(--labels-brand-primary);
   white-space: nowrap;
 
   background-color: var(--interactive-brand-secondary);
@@ -171,7 +171,7 @@
   border-radius: 12px;
 
   font: var(--font-text-medium);
-  color: var(--label-neutral-inverted-primary);
+  color: var(--labels-neutral-inverted-primary);
   white-space: nowrap;
 
   background-color: var(--interactive-brand-primary);
@@ -203,11 +203,11 @@
   margin-bottom: 2.4rem;
 
   :global(.ant-pagination-item-active) {
-    border-color: var(--label-brand-primary);
-    background-color: var(--label-brand-primary);
+    border-color: var(--labels-brand-primary);
+    background-color: var(--labels-brand-primary);
 
     a {
-      color: var(--label-neutral-inverted-primary) !important;
+      color: var(--labels-neutral-inverted-primary) !important;
     }
   }
 }
@@ -238,14 +238,14 @@
   .timeCol,
   .patientName,
   .status-text {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .location {
     color: color-mix(
       in srgb,
-      var(--label-neutral-quaternary),
-      var(--label-neutral-inverted-primary)
+      var(--labels-neutral-quaternary),
+      var(--labels-neutral-inverted-primary)
     );
   }
 
@@ -255,7 +255,7 @@
 
   .status-dot {
     &--completed {
-      background-color: var(--label-neutral-inverted-primary);
+      background-color: var(--labels-neutral-inverted-primary);
     }
   }
 }

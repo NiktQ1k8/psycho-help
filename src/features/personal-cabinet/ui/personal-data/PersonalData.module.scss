@@ -6,7 +6,7 @@
   border-radius: 0.8rem;
 
   font-size: 1.6rem;
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
 
   background-color: var(--backgrounds-neutral-primary);
   outline: none;
@@ -16,7 +16,7 @@
     box-shadow 0.2s ease;
 
   &::placeholder {
-    color: var(--label-neutral-quaternary);
+    color: var(--labels-neutral-quaternary);
   }
 
   &:hover {
@@ -24,7 +24,7 @@
   }
 
   &:focus {
-    border-color: var(--label-brand-secondary);
+    border-color: var(--labels-brand-secondary);
     box-shadow: 0 0 0 3px rgb(64 123 254 / 15%);
   }
 
@@ -39,7 +39,7 @@
   display: block;
   margin-bottom: 0.6rem;
   font-weight: 500;
-  color: var(--label-neutral-secondary);
+  color: var(--labels-neutral-secondary);
 }
 
 // Миксин для редактируемого поля
@@ -65,7 +65,7 @@
   }
 
   &:focus-within {
-    border-color: var(--label-brand-secondary);
+    border-color: var(--labels-brand-secondary);
     box-shadow: 0 0 0 3px rgb(64 123 254 / 15%);
   }
 
@@ -76,13 +76,13 @@
     border: none;
 
     font-size: 1.6rem;
-    color: var(--label-neutral-primary);
+    color: var(--labels-neutral-primary);
 
     background: transparent;
     outline: none;
 
     &::placeholder {
-      color: var(--label-neutral-quaternary);
+      color: var(--labels-neutral-quaternary);
     }
   }
 }
@@ -130,7 +130,7 @@
 
   .avatarIcon {
     font-size: 16.4rem;
-    color: var(--label-neutral-secondary);
+    color: var(--labels-neutral-secondary);
 
     @media (width >= 634px) and (width <= 1023px) {
       font-size: 12rem;
@@ -168,19 +168,19 @@
 
   &:hover {
     label {
-      border-bottom: 1px solid var(--label-brand-primary);
+      border-bottom: 1px solid var(--labels-brand-primary);
     }
   }
 
   label {
     cursor: pointer;
     font: var(--font-text-medium);
-    color: var(--label-brand-primary);
+    color: var(--labels-brand-primary);
   }
 
   svg {
     path {
-      stroke: var(--label-brand-primary);
+      stroke: var(--labels-brand-primary);
     }
   }
 }
@@ -209,7 +209,7 @@
     margin: 0;
     font-size: 2rem;
     font-weight: 600;
-    color: var(--label-neutral-primary);
+    color: var(--labels-neutral-primary);
   }
 }
 
@@ -221,7 +221,7 @@
   .name {
     font-size: 2rem;
     font-weight: 600;
-    color: var(--label-neutral-primary);
+    color: var(--labels-neutral-primary);
   }
 }
 
@@ -254,10 +254,10 @@
     padding: 1.2rem 1.6rem;
 
     &.inputError {
-      border-color: var(--label-danger-primary);
+      border-color: var(--labels-danger-primary);
 
       &:focus {
-        border-color: var(--label-danger-primary);
+        border-color: var(--labels-danger-primary);
         box-shadow: 0 0 0 3px rgb(255 77 79 / 15%);
       }
     }
@@ -267,7 +267,7 @@
 .nameErrorText {
   padding-left: 0.4rem;
   font-size: 1.2rem;
-  color: var(--label-danger-primary);
+  color: var(--labels-danger-primary);
 }
 
 .nameActions {
@@ -305,7 +305,7 @@
 
   font-size: 1.4rem;
   font-weight: 500;
-  color: var(--label-neutral-secondary);
+  color: var(--labels-neutral-secondary);
 
   background-color: transparent;
 
@@ -354,7 +354,7 @@
 
   &:focus-within {
     label {
-      color: var(--label-brand-secondary);
+      color: var(--labels-brand-secondary);
     }
   }
 
@@ -371,7 +371,7 @@
   .errorText {
     margin-top: 0.4rem;
     font-size: 1.2rem;
-    color: var(--label-danger-primary);
+    color: var(--labels-danger-primary);
   }
 }
 
@@ -397,7 +397,7 @@
   }
 
   &:focus-within {
-    border-color: var(--label-brand-secondary);
+    border-color: var(--labels-brand-secondary);
     box-shadow: 0 0 0 3px rgb(64 123 254 / 15%);
   }
 
@@ -409,13 +409,13 @@
     border: none;
 
     font-size: 1.6rem;
-    color: var(--label-neutral-primary);
+    color: var(--labels-neutral-primary);
 
     background: transparent;
     outline: none;
 
     &::placeholder {
-      color: var(--label-neutral-quaternary);
+      color: var(--labels-neutral-quaternary);
     }
 
     &:focus {
@@ -463,7 +463,7 @@
   border-radius: 0.8rem;
 
   font: var(--font-text-large);
-  color: var(--label-danger-primary);
+  color: var(--labels-danger-primary);
 
   background-color: transparent;
 
@@ -514,7 +514,7 @@
 
 [data-theme='dark'] {
   .name {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .avatarSection {
@@ -524,8 +524,8 @@
   .avatarIcon {
     color: color-mix(
       in srgb,
-      var(--label-neutral-secondary),
-      var(--label-neutral-inverted-primary)
+      var(--labels-neutral-secondary),
+      var(--labels-neutral-inverted-primary)
     );
   }
 
@@ -550,15 +550,15 @@
   }
 
   .nameFieldsRow input {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
     background-color: var(--fill-neutral-primary);
   }
 
   .nameFieldsRow input::placeholder {
     color: color-mix(
       in srgb,
-      var(--label-neutral-secondary),
-      var(--label-neutral-inverted-primary)
+      var(--labels-neutral-secondary),
+      var(--labels-neutral-inverted-primary)
     );
   }
 
@@ -566,10 +566,10 @@
     border: 1px solid
       color-mix(
         in srgb,
-        var(--label-neutral-secondary),
-        var(--label-neutral-inverted-primary)
+        var(--labels-neutral-secondary),
+        var(--labels-neutral-inverted-primary)
       );
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .cancelNameButton:hover {
@@ -578,34 +578,34 @@
   }
 
   .fieldsGrid label {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .editableField {
     background-color: var(--fill-neutral-primary);
 
     input {
-      color: var(--label-neutral-inverted-primary);
+      color: var(--labels-neutral-inverted-primary);
 
       &::placeholder {
         color: color-mix(
           in srgb,
-          var(--label-neutral-secondary),
-          var(--label-neutral-inverted-primary)
+          var(--labels-neutral-secondary),
+          var(--labels-neutral-inverted-primary)
         );
       }
     }
   }
 
   .passwordField {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
     background-color: var(--fill-neutral-primary);
 
     input::placeholder {
       color: color-mix(
         in srgb,
-        var(--label-neutral-secondary),
-        var(--label-neutral-inverted-primary)
+        var(--labels-neutral-secondary),
+        var(--labels-neutral-inverted-primary)
       );
     }
   }

@@ -42,13 +42,13 @@
   border-radius: 0.6rem;
 
   font: var(--font-text-medium);
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
 
   background-color: var(--fill-neutral-primary);
 }
 
 .countBageActive {
-  color: var(--label-neutral-inverted-primary);
+  color: var(--labels-neutral-inverted-primary);
   background-color: var(--fill-brand-primary);
   transition:
     background-color 0.3s,
@@ -57,7 +57,7 @@
 
 [data-theme='dark'] {
   .countBage {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 }
 

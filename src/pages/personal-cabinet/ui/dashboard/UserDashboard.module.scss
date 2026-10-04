@@ -49,20 +49,20 @@
 [data-theme='dark'] {
   .modalInitiator {
     border-bottom-color: var(--border-neutral-primary);
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .modalText {
-    color: var(--label-neutral-inverted-secondary);
+    color: var(--labels-neutral-inverted-secondary);
   }
 
   .contactNotice {
-    color: var(--label-neutral-inverted-secondary);
+    color: var(--labels-neutral-inverted-secondary);
   }
 }
 
 .contactNotice {
   margin-bottom: 24px;
   font-size: var(--font-text-medium, 14px);
-  color: var(--label-neutral-secondary);
+  color: var(--labels-neutral-secondary);
 }

@@ -10,7 +10,7 @@
 }
 
 .link {
-  color: var(--label-neutral-secondary);
+  color: var(--labels-neutral-secondary);
   text-decoration: none;
 }
 
@@ -60,11 +60,11 @@
 [data-theme='dark'] {
   .links .link,
   .links span {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .links a:hover {
-    color: var(--label-brand-secondary);
+    color: var(--labels-brand-secondary);
   }
 
   .contentWrapper {

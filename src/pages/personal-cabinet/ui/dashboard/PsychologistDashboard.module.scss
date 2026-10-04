@@ -313,7 +313,7 @@
   .commentLabel,
   .eventName,
   .eventVenue {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .infoRow span:not(:first-child),
@@ -321,8 +321,8 @@
   .eventTime {
     color: color-mix(
       in srgb,
-      var(--label-neutral-quaternary),
-      var(--label-neutral-inverted-primary)
+      var(--labels-neutral-quaternary),
+      var(--labels-neutral-inverted-primary)
     );
   }
 
@@ -334,8 +334,8 @@
     border: 1px solid var(--border-neutral-disable);
     color: color-mix(
       in srgb,
-      var(--label-neutral-quaternary),
-      var(--label-neutral-inverted-primary)
+      var(--labels-neutral-quaternary),
+      var(--labels-neutral-inverted-primary)
     );
     background-color: var(--backgrounds-neutral-inverted);
   }

@@ -10,7 +10,7 @@
   font: var(--font-text-medium);
   font-size: 16px;
 
-  background-color: var(--label-neutral-tetriary);
+  background-color: var(--labels-neutral-tetriary);
 }
 
 .modalContent {
@@ -52,7 +52,7 @@
 
   font-size: clamp(12px, 2.5vw, 14px);
   font-weight: 400;
-  color: var(--label-neutral-secondary);
+  color: var(--labels-neutral-secondary);
   text-align: center;
 }
 
@@ -127,14 +127,14 @@
 
 .hintText {
   font-size: 12px;
-  color: var(--label-neutral-secondary);
+  color: var(--labels-neutral-secondary);
   opacity: 0.5;
 }
 
 .errorText {
   font-size: 12px;
   font-weight: 500;
-  color: var(--label-danger-primary);
+  color: var(--labels-danger-primary);
 }
 
 .checkboxLabel {
@@ -221,7 +221,7 @@
 }
 
 .forgotLink {
-  color: var(--label-brand-primary);
+  color: var(--labels-brand-primary);
   text-decoration: none;
   transition: color 0.3s;
 }
@@ -235,7 +235,7 @@
   padding: 12px 16px;
   border-radius: 6px;
 
-  color: var(--label-danger-primary);
+  color: var(--labels-danger-primary);
 
   background-color: var(--fill-danger-secondary);
 }
@@ -254,7 +254,7 @@
 
   font-size: clamp(16px, 2.5vw, 20px);
   font-weight: 600;
-  color: var(--label-neutral-inverted-primary);
+  color: var(--labels-neutral-inverted-primary);
 
   background-color: var(--interactive-brand-primary);
 
@@ -283,7 +283,7 @@
   margin-top: 12px;
 
   font-size: clamp(12px, 2.5vw, 16px);
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
 }
 
 .ModalSwitcher {
@@ -337,7 +337,7 @@
   padding: 6px;
   border: none;
 
-  color: var(--label-neutral-secondary);
+  color: var(--labels-neutral-secondary);
 
   background: none;
 
@@ -345,12 +345,12 @@
 }
 
 .showPassButton:hover {
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
 }
 
 .required::after {
   content: ' *';
-  color: var(--label-danger-primary);
+  color: var(--labels-danger-primary);
 }
 
 .names {
@@ -373,7 +373,7 @@
   }
 
   .closeButton {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .showPassButton {
@@ -389,8 +389,8 @@
   .Suggestion span {
     color: color-mix(
       in srgb,
-      var(--label-neutral-secondary),
-      var(--label-neutral-inverted-primary)
+      var(--labels-neutral-secondary),
+      var(--labels-neutral-inverted-primary)
     );
   }
 

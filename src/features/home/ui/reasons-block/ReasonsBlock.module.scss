@@ -51,7 +51,7 @@
   font-size: 18px;
   font-weight: 500;
   line-height: 1.4;
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
   text-align: center;
   white-space: pre-line;
 }
@@ -122,6 +122,6 @@
   }
 
   .text {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 }

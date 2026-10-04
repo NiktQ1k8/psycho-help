@@ -24,14 +24,14 @@
 .title {
   margin: 0 0 1.2rem;
   font: var(--font-h4);
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
   letter-spacing: var(--font-header-letter-spacing);
 }
 
 .text {
   margin: 0 0 3.6rem;
   font: var(--font-text-large);
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
 }
 
 .button {
@@ -42,7 +42,7 @@
   border-radius: 1.6rem;
 
   font: var(--font-text-large-button);
-  color: var(--label-neutral-inverted-primary);
+  color: var(--labels-neutral-inverted-primary);
 
   background-color: var(--interactive-brand-primary);
 
@@ -65,11 +65,11 @@
 
 [data-theme='dark'] {
   .title {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .text {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .card {

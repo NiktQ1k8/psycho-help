@@ -21,7 +21,7 @@
       justify-content: center;
 
       font: var(--font-text-medium);
-      color: var(--label-brand-primary);
+      color: var(--labels-brand-primary);
       text-decoration: none;
     }
   }
@@ -32,13 +32,13 @@
     align-items: center;
 
     font: var(--font-text-small);
-    color: var(--label-neutral-secondary);
+    color: var(--labels-neutral-secondary);
   }
 
   .title {
     margin-block: 0.9rem;
     font: var(--font-h2);
-    color: var(--label-neutral-primary);
+    color: var(--labels-neutral-primary);
     letter-spacing: var(--font-header-letter-spacing);
   }
 
@@ -60,21 +60,21 @@
     & > h1 {
       margin-bottom: 2.4rem;
       font: var(--font-h2);
-      color: var(--label-neutral-primary);
+      color: var(--labels-neutral-primary);
       letter-spacing: var(--font-header-letter-spacing);
     }
 
     & > h2 {
       margin-bottom: 2.4rem;
       font: var(--font-h3);
-      color: var(--label-neutral-primary);
+      color: var(--labels-neutral-primary);
       letter-spacing: var(--font-header-letter-spacing);
     }
 
     & > p {
       margin-bottom: 2.4rem;
       font: var(--font-text-medium);
-      color: var(--label-neutral-primary);
+      color: var(--labels-neutral-primary);
     }
 
     .block {
@@ -82,7 +82,7 @@
 
       & > p {
         font: var(--font-text-medium);
-        color: var(--label-neutral-primary);
+        color: var(--labels-neutral-primary);
       }
 
       & > ul {
@@ -91,7 +91,7 @@
         & > li {
           margin-bottom: 0.4rem;
           font: var(--font-text-medium);
-          color: var(--label-neutral-primary);
+          color: var(--labels-neutral-primary);
 
           // list-style-position: inside;
           list-style-type: disc;
@@ -162,7 +162,7 @@
   .wrapper {
     .info,
     .title {
-      color: var(--label-neutral-inverted-primary);
+      color: var(--labels-neutral-inverted-primary);
     }
   }
 
@@ -170,16 +170,16 @@
     & > h1,
     & > h2,
     & > p {
-      color: var(--label-neutral-inverted-primary);
+      color: var(--labels-neutral-inverted-primary);
     }
 
     .block {
       & > p {
-        color: var(--label-neutral-inverted-primary);
+        color: var(--labels-neutral-inverted-primary);
       }
 
       & > ul > li {
-        color: var(--label-neutral-inverted-primary) !important;
+        color: var(--labels-neutral-inverted-primary) !important;
       }
     }
   }

@@ -5,7 +5,7 @@
 
   font-size: 2rem;
   line-height: 2.8rem;
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
 }
 
 .newsItemHeader {
@@ -17,7 +17,7 @@
 .backButton {
   display: flex;
   align-items: center;
-  color: var(--label-brand-primary);
+  color: var(--labels-brand-primary);
   transition: color 0.3s;
 
   img {
@@ -33,7 +33,7 @@
   display: flex;
   gap: 3.7rem;
   align-items: center;
-  color: var(--label-neutral-secondary);
+  color: var(--labels-neutral-secondary);
 }
 
 .title {
@@ -79,7 +79,7 @@
   font-size: 2rem;
   font-weight: 500;
   line-height: 2.8rem;
-  color: var(--label-brand-primary);
+  color: var(--labels-brand-primary);
 }
 
 @media (width <= 720px) {
@@ -138,16 +138,16 @@
   .info {
     color: color-mix(
       in srgb,
-      var(--label-neutral-secondary),
-      var(--label-neutral-inverted-primary)
+      var(--labels-neutral-secondary),
+      var(--labels-neutral-inverted-primary)
     );
   }
 
   .title {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .content {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 }

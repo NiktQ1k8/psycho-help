@@ -16,7 +16,7 @@
   width: 60%;
   font-size: 2rem;
   line-height: 2.8rem;
-  color: var(--label-neutral-tetriary);
+  color: var(--labels-neutral-tetriary);
 }
 
 .calls__content {
@@ -45,7 +45,7 @@
   font-size: 1.6rem;
   font-weight: 500;
   line-height: 2.4rem;
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
 }
 
 .calls__phone {
@@ -57,19 +57,19 @@
   font-size: 2.4rem;
   font-weight: 500;
   line-height: 2.8rem;
-  color: var(--label-brand-primary);
+  color: var(--labels-brand-primary);
   text-decoration: none;
 }
 
 .calls__phone:hover {
-  color: var(--label-brand-primary);
+  color: var(--labels-brand-primary);
   background-color: var(--fill-brand-quaternary);
 }
 
 .calls__phone:active,
 .calls__phone:active:hover {
   border-color: var(--border-brand-strong);
-  color: var(--label-brand-primary);
+  color: var(--labels-brand-primary);
   background: none;
 }
 
@@ -81,7 +81,7 @@
 .calls__phone_text {
   font-size: 1.2rem;
   line-height: 1.6rem;
-  color: var(--label-neutral-tetriary);
+  color: var(--labels-neutral-tetriary);
 }
 
 .calls__1_grid {
@@ -192,12 +192,12 @@
   .calls__phone_text {
     color: color-mix(
       in srgb,
-      var(--label-neutral-secondary),
-      var(--label-neutral-inverted-primary)
+      var(--labels-neutral-secondary),
+      var(--labels-neutral-inverted-primary)
     );
   }
 
   .calls__title {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 }

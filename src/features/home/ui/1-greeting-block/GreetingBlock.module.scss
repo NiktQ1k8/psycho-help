@@ -29,13 +29,13 @@
   font-size: 4.4rem;
   font-weight: 500;
   line-height: 52px;
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
 }
 
 .greeting__subtitle {
   font-family: Roboto, sans-serif;
   font-size: 2rem;
-  color: var(--label-neutral-secondary);
+  color: var(--labels-neutral-secondary);
 }
 
 .greeting__image {
@@ -138,14 +138,14 @@
 
 [data-theme='dark'] {
   .greeting__title {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .greeting__subtitle {
     color: color-mix(
       in srgb,
-      var(--label-neutral-secondary),
-      var(--label-neutral-inverted-primary)
+      var(--labels-neutral-secondary),
+      var(--labels-neutral-inverted-primary)
     );
   }
 }

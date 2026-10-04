@@ -32,7 +32,7 @@
   }
 
   &:disabled {
-    color: var(--label-neutral-quaternary);
+    color: var(--labels-neutral-quaternary);
     background-color: var(--interactive-brand-disable);
   }
 
@@ -43,14 +43,14 @@
 
   &_brand_ {
     &_primary_ {
-      --default: var(--label-neutral-inverted-primary);
+      --default: var(--labels-neutral-inverted-primary);
       --backgrounds-color-default: var(--interactive-brand-primary);
       --backgrounds-color-hover: var(--interactive-brand-hover);
       --backgrounds-color-active: var(--interactive-brand-active);
     }
 
     &_secondary {
-      --default: var(--label-brand-primary);
+      --default: var(--labels-brand-primary);
       --backgrounds-color-default: var(--interactive-brand-secondary);
       --backgrounds-color-hover: var(--interactive-brand-hover-secondary);
       --backgrounds-color-active: var(--interactive-brand-active-secondary);
@@ -59,14 +59,14 @@
 
   &_neutral {
     &_primary_ {
-      --default: var(--label-neutral-inverted-primary);
+      --default: var(--labels-neutral-inverted-primary);
       --backgrounds-color-default: var(--interactive-neutral-primary);
       --backgrounds-color-hover: var(--interactive-neutral-hover);
       --backgrounds-color-active: var(--interactive-neutral-active);
     }
 
     &_secondary {
-      --default: var(--label-neutral-primary);
+      --default: var(--labels-neutral-primary);
       --backgrounds-color-default: var(--interactive-neutral-secondary);
       --backgrounds-color-hover: var(--interactive-neutral-hover-secondary);
       --backgrounds-color-active: var(--interactive-neutral-active-secondary);

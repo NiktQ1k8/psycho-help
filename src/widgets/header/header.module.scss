@@ -57,7 +57,7 @@
   border: 1px solid transparent;
   border-radius: 1.2rem;
 
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
 
   transition:
     border-color 0.3s,
@@ -76,7 +76,7 @@
     }
 
     @media (hover: none) {
-      color: var(--label-neutral-primary);
+      color: var(--labels-neutral-primary);
     }
   }
 
@@ -127,7 +127,7 @@
 
   font-size: 1.6rem;
   line-height: 2.4rem;
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
   text-decoration: none;
 
   background-color: transparent;
@@ -165,7 +165,7 @@
     }
 
     @media (hover: none) {
-      color: var(--label-neutral-primary);
+      color: var(--labels-neutral-primary);
     }
   }
 
@@ -214,7 +214,7 @@
       width: 1.8rem;
       height: 0.2rem;
 
-      background-color: var(--label-neutral-primary);
+      background-color: var(--labels-neutral-primary);
 
       transition: all 0.3s;
 
@@ -242,7 +242,7 @@
 
     &--open {
       span {
-        background-color: var(--label-neutral-inverted-primary);
+        background-color: var(--labels-neutral-inverted-primary);
 
         &:nth-child(1) {
           top: 2.3rem;
@@ -264,10 +264,10 @@
       }
 
       &:focus-visible {
-        outline: 1px solid var(--label-neutral-inverted-primary);
+        outline: 1px solid var(--labels-neutral-inverted-primary);
 
         span {
-          background-color: var(--label-neutral-inverted-primary);
+          background-color: var(--labels-neutral-inverted-primary);
         }
       }
     }
@@ -316,7 +316,7 @@
   }
 
   .header__link {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
 
     svg {
       width: 2.4rem;
@@ -331,19 +331,19 @@
     &:hover {
       @media (hover: hover) {
         border-color: var(--interactive-brand-hover);
-        color: var(--label-neutral-inverted-primary);
+        color: var(--labels-neutral-inverted-primary);
         background-color: var(--interactive-brand-hover);
       }
 
       @media (hover: none) {
-        color: var(--label-neutral-inverted-primary);
+        color: var(--labels-neutral-inverted-primary);
       }
     }
 
     &:active,
     &:focus-visible {
-      border-color: var(--label-neutral-inverted-primary);
-      color: var(--label-neutral-inverted-primary);
+      border-color: var(--labels-neutral-inverted-primary);
+      color: var(--labels-neutral-inverted-primary);
       background-color: transparent;
     }
   }
@@ -391,7 +391,7 @@
   }
 
   .header__logo {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
 
     &:hover {
       @media (hover: hover) {
@@ -399,7 +399,7 @@
       }
 
       @media (hover: none) {
-        color: var(--label-neutral-inverted-primary);
+        color: var(--labels-neutral-inverted-primary);
       }
     }
 
@@ -411,7 +411,7 @@
   }
 
   .header__link {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
 
     &:hover {
       @media (hover: hover) {
@@ -421,7 +421,7 @@
       }
 
       @media (hover: none) {
-        color: var(--label-neutral-inverted-primary);
+        color: var(--labels-neutral-inverted-primary);
       }
     }
 
@@ -435,7 +435,7 @@
 
   @media (width <= 1300px) {
     .header__burger span {
-      background-color: var(--label-neutral-inverted-primary);
+      background-color: var(--labels-neutral-inverted-primary);
     }
 
     .header__list {
@@ -443,26 +443,26 @@
     }
 
     .header__link {
-      color: var(--label-neutral-inverted-primary);
+      color: var(--labels-neutral-inverted-primary);
 
       &:hover {
         @media (hover: hover) {
           border-color: var(--fill-brand-primary);
-          color: var(--label-neutral-inverted-primary);
+          color: var(--labels-neutral-inverted-primary);
           background-color: var(--fill-brand-primary);
         }
 
         @media (hover: none) {
           border-color: transparent;
-          color: var(--label-neutral-inverted-primary);
+          color: var(--labels-neutral-inverted-primary);
           background-color: transparent;
         }
       }
 
       &:active,
       &:focus-visible {
-        border-color: var(--label-neutral-inverted-primary);
-        color: var(--label-neutral-inverted-primary);
+        border-color: var(--labels-neutral-inverted-primary);
+        color: var(--labels-neutral-inverted-primary);
         background-color: transparent;
       }
     }

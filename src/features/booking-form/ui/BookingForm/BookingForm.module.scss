@@ -36,7 +36,7 @@
   border-radius: 16px;
 
   font: var(--font-text-medium);
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
 
   background-color: var(--interactive-neutral-secondary);
 
@@ -55,7 +55,7 @@
   &__selected,
   &__selected:hover {
     cursor: default;
-    color: var(--label-brand-primary);
+    color: var(--labels-brand-primary);
     background-color: var(--interactive-brand-secondary);
   }
 }
@@ -83,7 +83,7 @@
 
 [data-theme='dark'] {
   .option {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
     background-color: var(--interactive-neutral-active);
 
     &:hover {
@@ -92,7 +92,7 @@
 
     &__selected,
     &__selected:hover {
-      color: var(--label-brand-quaternary);
+      color: var(--labels-brand-quaternary);
       background-color: var(--interactive-brand);
     }
   }

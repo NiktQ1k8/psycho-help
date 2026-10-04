@@ -83,7 +83,7 @@
 
   font-size: 1.6rem;
   line-height: 2.4rem;
-  color: var(--label-neutral-tetriary);
+  color: var(--labels-neutral-tetriary);
 }
 
 .externalLink {
@@ -151,18 +151,18 @@
   }
 
   .type {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .date {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .title {
     color: color-mix(
       in srgb,
-      var(--label-neutral-secondary),
-      var(--label-neutral-inverted-primary)
+      var(--labels-neutral-secondary),
+      var(--labels-neutral-inverted-primary)
     );
   }
 }

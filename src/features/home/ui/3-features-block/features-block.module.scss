@@ -78,13 +78,13 @@
   font-size: 3.2rem;
   font-weight: var(--title-font-weight);
   line-height: 3.6rem;
-  color: var(--label-neutral-inverted-primary);
+  color: var(--labels-neutral-inverted-primary);
 }
 
 .features__1_text {
   font-size: 1.6rem;
   line-height: 2.4rem;
-  color: var(--label-neutral-inverted-primary);
+  color: var(--labels-neutral-inverted-primary);
 }
 
 .features__grid_2 {
@@ -105,7 +105,7 @@
   font-size: 3.2rem;
   font-weight: var(--title-font-weight);
   line-height: 3.6rem;
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
 }
 
 .features__2_text,
@@ -114,7 +114,7 @@
   font-family: var(--text-font-family);
   font-size: 1.6rem;
   font-weight: 2.4rem;
-  color: var(--label-neutral-tetriary);
+  color: var(--labels-neutral-tetriary);
 }
 
 .features__grid_3 {
@@ -303,7 +303,7 @@
   .features__2_title,
   .features__3_title,
   .features__4_title {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .features__2_text,
@@ -313,8 +313,8 @@
     line-height: 2.4rem;
     color: color-mix(
       in srgb,
-      var(--label-neutral-secondary),
-      var(--label-neutral-inverted-primary)
+      var(--labels-neutral-secondary),
+      var(--labels-neutral-inverted-primary)
     );
   }
 }

@@ -5,20 +5,20 @@
   border-radius: 1.2rem;
 
   font: var(--font-text-medium);
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
 
   background: var(--interactive-neutral-secondary);
 
   transition: 0.3s ease;
 
   &.active {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
     background: var(--interactive-brand-primary);
   }
 
   @include past-tablet {
     &:hover:not(.active) {
-      color: var(--label-brand-primary);
+      color: var(--labels-brand-primary);
       background: var(--interactive-brand-hover-secondary);
     }
   }
@@ -37,12 +37,12 @@
 [data-theme='dark'] {
   .tab {
     &:hover:not(.active) {
-      color: var(--label-brand-primary);
+      color: var(--labels-brand-primary);
       background-color: var(--interactive-brand-hover-secondary);
     }
 
     &:active:not(.active) {
-      color: var(--label-neutral-inverted-primary);
+      color: var(--labels-neutral-inverted-primary);
       background-color: var(--interactive-brand-primary);
     }
   }

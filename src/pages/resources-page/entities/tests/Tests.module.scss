@@ -7,7 +7,7 @@
   .showMore {
     width: fit-content;
     padding-inline: 12.6rem;
-    color: var(--label-brand-primary);
+    color: var(--labels-brand-primary);
     background-color: var(--interactive-brand-hover-secondary);
 
     &:hover {
@@ -29,7 +29,7 @@
       padding: 1.6rem;
       border-radius: 1.6rem;
 
-      color: var(--label-brand-primary);
+      color: var(--labels-brand-primary);
 
       background: var(--interactive-brand-secondary);
     }

@@ -17,7 +17,7 @@
   border-radius: 50%;
 
   font-size: 1.5rem;
-  color: var(--label-neutral-inverted-primary);
+  color: var(--labels-neutral-inverted-primary);
 
   visibility: hidden;
   opacity: 0;
@@ -57,7 +57,7 @@
 
 [data-theme='dark'] {
   .button {
-    color: var(--label-neutral-primary);
+    color: var(--labels-neutral-primary);
     background-color: var(--fill-neutral-none);
   }
 }

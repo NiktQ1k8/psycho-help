@@ -1,7 +1,7 @@
 .mainInfo {
   display: flex;
   gap: 36px;
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
 }
 
 .imgWrapper {
@@ -16,7 +16,7 @@
   border-radius: 16px;
 
   font-size: 2rem;
-  color: var(--label-neutral-inverted-primary);
+  color: var(--labels-neutral-inverted-primary);
 
   background-color: var(--interactive-brand-primary);
 }
@@ -58,12 +58,12 @@
 
 .exp {
   font-size: 2rem;
-  color: var(--label-neutral-secondary);
+  color: var(--labels-neutral-secondary);
 }
 
 .office {
   font-size: 1.6rem;
-  color: var(--label-neutral-secondary);
+  color: var(--labels-neutral-secondary);
 }
 
 .consultAreas {
@@ -80,7 +80,7 @@
   padding: 4px 16px;
   border: var(--border-neutral-base) 1px solid;
   border-radius: 16px;
-  color: var(--label-neutral-secondary);
+  color: var(--labels-neutral-secondary);
 }
 
 .btns {
@@ -100,20 +100,20 @@
   border-radius: 16px;
 
   font-size: 2rem;
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
 
   background: none;
 }
 
 .infoBtnActive {
-  color: var(--label-neutral-inverted-primary);
+  color: var(--labels-neutral-inverted-primary);
   background-color: var(--interactive-neutral-hover);
 }
 
 .supInfo {
   margin-top: 24px;
   font-size: 1.6rem;
-  color: var(--label-neutral-secondary);
+  color: var(--labels-neutral-secondary);
 }
 
 @media screen and (width <= 768px) {
@@ -170,42 +170,42 @@
 [data-theme='dark'] {
   .name,
   .qual {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .exp,
   .office {
     color: color-mix(
       in srgb,
-      var(--label-neutral-secondary),
-      var(--label-neutral-inverted-primary)
+      var(--labels-neutral-secondary),
+      var(--labels-neutral-inverted-primary)
     );
   }
 
   .consultArea {
     border: 1px solid var(--border-neutral-inverted);
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .infoBtn {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .infoBtnActive {
-    color: var(--label-neutral-primary);
+    color: var(--labels-neutral-primary);
     background-color: var(--fill-neutral-none);
   }
 
   .supInfo {
     color: color-mix(
       in srgb,
-      var(--label-neutral-secondary),
-      var(--label-neutral-inverted-primary)
+      var(--labels-neutral-secondary),
+      var(--labels-neutral-inverted-primary)
     );
   }
 
   .regBtn {
-    color: var(--label-neutral-primary);
+    color: var(--labels-neutral-primary);
     background-color: var(--backgrounds-neutral-primary);
 
     &:hover {

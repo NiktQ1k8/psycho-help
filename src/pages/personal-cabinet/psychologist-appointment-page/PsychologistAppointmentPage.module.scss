@@ -34,7 +34,7 @@
   font-family: var(--font-text-medium);
   font-size: 1.6rem;
   line-height: 2.4rem;
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
 
   background: none;
   outline: none;
@@ -53,7 +53,7 @@
   display: flex;
   gap: 8px;
   align-items: center;
-  color: var(--label-primary);
+  color: var(--labels-primary);
 }
 
 .status-dot {
@@ -62,28 +62,28 @@
   border-radius: 100%;
 
   &--awaiting {
-    background-color: var(--label-neutral-secondary);
+    background-color: var(--labels-neutral-secondary);
   }
 
   &--done {
-    background-color: var(--label-success-primary);
+    background-color: var(--labels-success-primary);
   }
 
   &--cancelled {
-    background-color: var(--label-danger-primary);
+    background-color: var(--labels-danger-primary);
   }
 }
 
 .status-text {
   font-size: 1.6rem;
   line-height: 2.4rem;
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
 }
 
 .reasonBlockCancelled {
   margin-bottom: 24px;
   padding: 16px;
-  border-left: 4px solid var(--label-warning-primary, #f59e0b);
+  border-left: 4px solid var(--labels-warning-primary, #f59e0b);
   border-radius: 4px;
 
   background-color: var(--bg-warning-light, #fffbeb);
@@ -92,12 +92,12 @@
     margin-right: 8px;
     font-size: 14px;
     font-weight: 600;
-    color: var(--label-warning-primary, #f59e0b);
+    color: var(--labels-warning-primary, #f59e0b);
   }
 
   .reasonText {
     font-size: 14px;
-    color: var(--label-neutral-primary, #111827);
+    color: var(--labels-neutral-primary, #111827);
   }
 }
 
@@ -127,7 +127,7 @@
   margin-bottom: 8px;
   font-size: 1.6rem;
   line-height: 2.4rem;
-  color: var(--label-neutral-tetriary, #6b7280);
+  color: var(--labels-neutral-tetriary, #6b7280);
 }
 
 .infoValue,
@@ -138,7 +138,7 @@
   font-family: var(--font-text-medium);
   font-size: 1.6rem;
   line-height: 2.4rem;
-  color: var(--label-neutral-primary, #111827);
+  color: var(--labels-neutral-primary, #111827);
 }
 
 .actions {
@@ -178,7 +178,7 @@
   font-family: var(--font-text-large);
   font-size: 2rem;
   line-height: 2.8rem;
-  color: var(--label-neutral-primary, #111827);
+  color: var(--labels-neutral-primary, #111827);
 }
 
 .statusLabel {
@@ -187,7 +187,7 @@
   font-family: var(--font-text-medium);
   font-size: 1.6rem;
   line-height: 2.4rem;
-  color: var(--label-neutral-tetriary, #6b7280);
+  color: var(--labels-neutral-tetriary, #6b7280);
 }
 
 .actionButtonCancel,
@@ -235,7 +235,7 @@
   font-size: 2rem;
   font-weight: 500;
   line-height: 2.8rem;
-  color: var(--label-danger-primary);
+  color: var(--labels-danger-primary);
 
   background-color: var(--fill-danger-tetriary);
 
@@ -316,7 +316,7 @@
   .title,
   .infoLabel,
   .statusLabel {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .infoName,
@@ -325,14 +325,14 @@
   .infoValue {
     color: color-mix(
       in srgb,
-      var(--label-neutral-secondary),
-      var(--label-neutral-inverted-primary)
+      var(--labels-neutral-secondary),
+      var(--labels-neutral-inverted-primary)
     );
   }
 
   .status-dot {
     &--completed {
-      background-color: var(--label-neutral-inverted-primary);
+      background-color: var(--labels-neutral-inverted-primary);
     }
   }
 }

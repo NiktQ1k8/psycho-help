@@ -18,7 +18,7 @@
 
 .counter {
   font: var(--font-text-large);
-  color: var(--label-neutral-tetriary);
+  color: var(--labels-neutral-tetriary);
 }
 
 .question {
@@ -77,7 +77,7 @@
   }
 
   &Back {
-    color: var(--label-brand-primary);
+    color: var(--labels-brand-primary);
     background-color: var(--interactive-brand-secondary);
 
     &:hover {
@@ -164,15 +164,15 @@
 
 [data-theme='dark'] {
   .counter {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .title {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .option {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
     background-color: var(--fill-neutral-primary);
 
     &:hover:not(.selected) {
@@ -182,7 +182,7 @@
 
   .buttonAction {
     &Back {
-      color: var(--label-brand-primary);
+      color: var(--labels-brand-primary);
       background-color: var(--backgrounds-neutral-primary);
 
       &:hover {
@@ -197,7 +197,7 @@
     &Next,
     &Complete {
       border: var(--interactive-brand-primary);
-      color: var(--label-neutral-inverted-primary);
+      color: var(--labels-neutral-inverted-primary);
       background-color: var(--interactive-brand-primary);
 
       &:hover {

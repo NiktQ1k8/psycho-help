@@ -32,14 +32,14 @@
 .fridayLabel {
   font-size: 20px;
   font-weight: 600;
-  color: var(--label-neutral-tetriary);
+  color: var(--labels-neutral-tetriary);
 }
 
 .lunchTime,
 .fridayTime {
   font-size: 22px;
   font-weight: 600;
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
 }
 
 .scheduleIllustration {
@@ -100,6 +100,6 @@
 
   .fridayInfo span,
   .lunchInfo span {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 }

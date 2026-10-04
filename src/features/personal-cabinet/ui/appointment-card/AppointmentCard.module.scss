@@ -22,7 +22,7 @@
 
 .date {
   font: var(--font-h5);
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
   letter-spacing: var(--font-header-letter-spacing-h5, -0.1rem);
 }
 
@@ -39,7 +39,7 @@
   align-items: flex-start;
 
   font: var(--font-text-medium);
-  color: var(--label-neutral-primary);
+  color: var(--labels-neutral-primary);
 
   span {
     white-space: normal;
@@ -49,13 +49,13 @@
 .icon {
   margin-top: 0.4rem;
   font-size: 1.6rem;
-  color: var(--label-neutral-tetriary);
+  color: var(--labels-neutral-tetriary);
 }
 
 .iconWarning {
   flex-shrink: 0;
   font-size: 2rem;
-  color: var(--label-warning-primary);
+  color: var(--labels-warning-primary);
 }
 
 .footer {
@@ -72,7 +72,7 @@
   align-items: center;
 
   font: var(--font-text-small);
-  color: var(--label-neutral-secondary);
+  color: var(--labels-neutral-secondary);
 }
 
 .statusDot {
@@ -132,7 +132,7 @@
   border-radius: 1.6rem;
 
   font: var(--font-text-medium);
-  color: var(--label-neutral-inverted-primary);
+  color: var(--labels-neutral-inverted-primary);
 
   background-color: var(--interactive-brand-primary);
 
@@ -145,11 +145,11 @@
   cursor: pointer;
 
   padding: 1rem 3rem;
-  border: 1px solid var(--label-danger-primary);
+  border: 1px solid var(--labels-danger-primary);
   border-radius: 1.6rem;
 
   font: var(--font-text-medium);
-  color: var(--label-danger-primary);
+  color: var(--labels-danger-primary);
 
   background-color: transparent;
 
@@ -159,19 +159,19 @@
 }
 
 .dotSuccess {
-  background-color: var(--label-success-primary);
+  background-color: var(--labels-success-primary);
 }
 
 .dotDanger {
-  background-color: var(--label-danger-primary);
+  background-color: var(--labels-danger-primary);
 }
 
 .dotWarning {
-  background-color: var(--label-warning-primary);
+  background-color: var(--labels-warning-primary);
 }
 
 .dotNeutral {
-  background-color: var(--label-neutral-quaternary);
+  background-color: var(--labels-neutral-quaternary);
 }
 
 [data-theme='dark'] {
@@ -180,19 +180,19 @@
   }
 
   .date {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .icon {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .infoItem {
-    color: var(--label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .commentLink {
-    color: var(--label-neutral-primary);
+    color: var(--labels-neutral-primary);
     background-color: var(--backgrounds-neutral-primary);
   }
 }

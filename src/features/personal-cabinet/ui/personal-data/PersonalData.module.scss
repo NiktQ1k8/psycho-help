@@ -20,7 +20,7 @@
   }
 
   &:hover {
-    border-color: var(--fill-neutral-primary);
+    border-color: var(--fills-neutral-primary);
   }
 
   &:focus {
@@ -61,7 +61,7 @@
     box-shadow 0.2s ease;
 
   &:hover {
-    border-color: var(--fill-neutral-primary);
+    border-color: var(--fills-neutral-primary);
   }
 
   &:focus-within {
@@ -312,7 +312,7 @@
   transition: all 0.2s ease;
 
   &:hover {
-    border-color: var(--fill-neutral-primary);
+    border-color: var(--fills-neutral-primary);
     background-color: var(--backgrounds-neutral-secondary);
   }
 }
@@ -393,7 +393,7 @@
     box-shadow 0.2s ease;
 
   &:hover {
-    border-color: var(--fill-neutral-primary);
+    border-color: var(--fills-neutral-primary);
   }
 
   &:focus-within {
@@ -551,7 +551,7 @@
 
   .nameFieldsRow input {
     color: var(--labels-neutral-inverted-primary);
-    background-color: var(--fill-neutral-primary);
+    background-color: var(--fills-neutral-primary);
   }
 
   .nameFieldsRow input::placeholder {
@@ -582,7 +582,7 @@
   }
 
   .editableField {
-    background-color: var(--fill-neutral-primary);
+    background-color: var(--fills-neutral-primary);
 
     input {
       color: var(--labels-neutral-inverted-primary);
@@ -599,7 +599,7 @@
 
   .passwordField {
     color: var(--labels-neutral-inverted-primary);
-    background-color: var(--fill-neutral-primary);
+    background-color: var(--fills-neutral-primary);
 
     input::placeholder {
       color: color-mix(

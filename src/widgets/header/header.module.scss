@@ -1,7 +1,7 @@
 /* Это нужно для того, чтобы на компе при открытии бургер-меню не прыгала сама кнопка бургера */
 :global(html):has(.header__list--open) {
   scrollbar-gutter: stable;
-  background-color: var(--fill-brand-primary);
+  background-color: var(--fills-brand-primary);
   transition: background-color 0.3s;
 }
 
@@ -46,7 +46,7 @@
   padding: 0 3.6rem;
   border-radius: 2.8rem;
 
-  background-color: var(--fill-neutral-quaternary);
+  background-color: var(--fills-neutral-quaternary);
 }
 
 .header__logo {
@@ -285,7 +285,7 @@
     padding: 0 0 0 4rem;
 
     opacity: 0;
-    background-color: var(--fill-brand-primary);
+    background-color: var(--fills-brand-primary);
 
     &--animating {
       transition:
@@ -387,7 +387,7 @@
   }
 
   .header__nav {
-    background-color: var(--fill-neutral-primary);
+    background-color: var(--fills-neutral-primary);
   }
 
   .header__logo {
@@ -447,9 +447,9 @@
 
       &:hover {
         @media (hover: hover) {
-          border-color: var(--fill-brand-primary);
+          border-color: var(--fills-brand-primary);
           color: var(--labels-neutral-inverted-primary);
-          background-color: var(--fill-brand-primary);
+          background-color: var(--fills-brand-primary);
         }
 
         @media (hover: none) {

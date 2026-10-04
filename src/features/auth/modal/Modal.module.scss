@@ -24,7 +24,7 @@
   border-radius: 20px;
 
   background: var(--backgrounds-neutral-primary);
-  box-shadow: 0 4px 16px var(--fill-neutral-primary);
+  box-shadow: 0 4px 16px var(--fills-neutral-primary);
 }
 
 .modalHeaderAuth {
@@ -122,7 +122,7 @@
 .input:focus {
   border-color: var(--border-brand-strong);
   outline: none;
-  box-shadow: 0 0 0 2px var(--fill-neutral-primary);
+  box-shadow: 0 0 0 2px var(--fills-neutral-primary);
 }
 
 .hintText {
@@ -210,13 +210,13 @@
 }
 
 .checkbox + .checkbox_custom:hover {
-  box-shadow: 0 0 0 4.5px var(--fill-brand-tetriary);
+  box-shadow: 0 0 0 4.5px var(--fills-brand-tetriary);
   transition: all 0.3s ease;
 }
 
 .checkbox:disabled + .checkbox_custom {
   border-color: var(--border-neutral-base);
-  background-color: var(--fill-neutral-primary);
+  background-color: var(--fills-neutral-primary);
   box-shadow: none;
 }
 
@@ -237,7 +237,7 @@
 
   color: var(--labels-danger-primary);
 
-  background-color: var(--fill-danger-secondary);
+  background-color: var(--fills-danger-secondary);
 }
 
 .footer {
@@ -321,7 +321,7 @@
 .passwordInput:focus {
   border-color: var(--interactive-brand-hover);
   outline: none;
-  box-shadow: 0 0 0 2px var(--fill-neutral-primary);
+  box-shadow: 0 0 0 2px var(--fills-neutral-primary);
 }
 
 .showPassButton {
@@ -377,7 +377,7 @@
   }
 
   .showPassButton {
-    color: var(--fill-neutral-none);
+    color: var(--fills-neutral-none);
 
     &:hover {
       color: var(--interactive-neutral-active-secondary);

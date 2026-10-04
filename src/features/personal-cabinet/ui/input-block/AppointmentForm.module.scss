@@ -377,7 +377,7 @@
 
   .textarea {
     color: var(--labels-neutral-inverted-primary);
-    background-color: var(--fill-neutral-primary);
+    background-color: var(--fills-neutral-primary);
   }
 
   .textarea::placeholder {
@@ -422,11 +422,11 @@
   }
 
   .datePicker {
-    background: var(--fill-neutral-primary);
+    background: var(--fills-neutral-primary);
   }
 
   .selectInput {
-    background: var(--fill-neutral-primary);
+    background: var(--fills-neutral-primary);
   }
 
   .privacy_text {

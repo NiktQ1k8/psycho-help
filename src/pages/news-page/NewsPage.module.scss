@@ -3,7 +3,7 @@
 }
 
 .blue {
-  background-color: var(--fill-brand-tetriary);
+  background-color: var(--fills-brand-tetriary);
 }
 
 .hero {
@@ -121,7 +121,7 @@
   padding: 3.8rem 3.6rem 3rem;
   border-radius: 1.6rem;
 
-  background-color: var(--fill-brand-quaternary);
+  background-color: var(--fills-brand-quaternary);
 }
 
 .telegramTitle {
@@ -159,7 +159,7 @@
   color: var(--labels-neutral-inverted-primary);
   text-decoration: none;
 
-  background-color: var(--fill-brand-primary);
+  background-color: var(--fills-brand-primary);
 
   transition: background-color 0.3s;
 
@@ -252,7 +252,7 @@
 
 [data-theme='dark'] {
   .blue {
-    background-color: var(--fill-neutral-primary);
+    background-color: var(--fills-neutral-primary);
   }
 
   .title {

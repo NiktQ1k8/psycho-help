@@ -29,7 +29,7 @@
 
 .active {
   padding-left: 3.2rem;
-  background-color: var(--fill-brand-quaternary);
+  background-color: var(--fills-brand-quaternary);
 }
 
 .answer {
@@ -87,7 +87,7 @@
 
 [data-theme='dark'] {
   .wrapper.active {
-    background-color: var(--fill-neutral-secondary);
+    background-color: var(--fills-neutral-secondary);
   }
 
   .p,

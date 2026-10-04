@@ -20,7 +20,7 @@
   padding: 1.6rem 2.5rem 8rem;
   border-radius: 2rem;
 
-  background-color: var(--fill-brand-quaternary);
+  background-color: var(--fills-brand-quaternary);
 }
 
 .photoWrapper {
@@ -147,7 +147,7 @@
 
 [data-theme='dark'] {
   .wrapper {
-    background-color: var(--fill-neutral-primary);
+    background-color: var(--fills-neutral-primary);
   }
 
   .type {

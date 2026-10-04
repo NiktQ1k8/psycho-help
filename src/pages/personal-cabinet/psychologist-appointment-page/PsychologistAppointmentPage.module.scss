@@ -237,12 +237,12 @@
   line-height: 2.8rem;
   color: var(--labels-danger-primary);
 
-  background-color: var(--fill-danger-tetriary);
+  background-color: var(--fills-danger-tetriary);
 
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: var(--fill-danger-secondary);
+    background-color: var(--fills-danger-secondary);
   }
 }
 

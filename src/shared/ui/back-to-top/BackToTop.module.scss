@@ -23,7 +23,7 @@
   opacity: 0;
   background: var(--interactive-neutral-primary);
   outline: 2px solid transparent;
-  box-shadow: 0 6px 18px var(--fill-neutral-primary);
+  box-shadow: 0 6px 18px var(--fills-neutral-primary);
 
   transition:
     opacity 320ms ease,
@@ -41,7 +41,7 @@
 .button:hover {
   transform: translateY(0) scale(1.06);
   background: var(--interactive-neutral-primary);
-  box-shadow: 0 12px 28px var(--fill-neutral-primary);
+  box-shadow: 0 12px 28px var(--fills-neutral-primary);
 }
 
 .button:focus-visible {
@@ -58,6 +58,6 @@
 [data-theme='dark'] {
   .button {
     color: var(--labels-neutral-primary);
-    background-color: var(--fill-neutral-none);
+    background-color: var(--fills-neutral-none);
   }
 }

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { PollCard } from '@/pages/resources-page/components/poll-card';
 import { TRANSLATES } from '@/pages/resources-page/consts';
 import { pollMocks } from '@/pages/resources-page/entities/polls/mocks.ts';
-import { Button } from '@/shared/ui/button';
+import { ButtonLink } from '@/shared/ui/button-link/ButtonLink';
 import styles from './Polls.module.scss';
 
 const initialPolls = pollMocks.slice(0, 6);
@@ -38,9 +38,9 @@ export const Polls = () => {
         })}
       </div>
       {isShowMoreVisible && (
-        <Button className={styles.showMore} onClick={handleShowMore}>
+        <ButtonLink className={styles.showMore} onClick={handleShowMore}>
           Показать ещё
-        </Button>
+        </ButtonLink>
       )}
     </div>
   );

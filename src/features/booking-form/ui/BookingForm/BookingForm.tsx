@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { useAuth } from '@/features/auth/api/useAuth';
 import ModalWindow from '@/features/auth/modal/modal';
 import { SLUG } from '@/shared/config/slug';
-import { Button } from '@/shared/ui/button';
+import { ButtonLink } from '@/shared/ui/button-link/ButtonLink';
 import OfflineIcon from '../../assets/offline.svg?react';
 import OnlineIcon from '../../assets/online.svg?react';
 import styles from './BookingForm.module.scss';
@@ -83,9 +83,9 @@ export const BookingForm = () => {
             <span>онлайн</span>
           </label>
         </fieldset>
-        <Button className={styles.submit} type="button" onClick={handleBooking}>
+        <ButtonLink className={styles.submit} onClick={handleBooking}>
           Записаться
-        </Button>
+        </ButtonLink>
       </div>
       <ModalWindow isOpen={isModalOpen} onClose={handleModalClose} />
     </>

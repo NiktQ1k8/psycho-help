@@ -1,5 +1,5 @@
 import { type FC, useState } from 'react';
-import { Button } from '@/shared/ui/button';
+import { ButtonLink } from '@/shared/ui/button-link/ButtonLink';
 import styles from './CookieBanner.module.scss';
 import CookieDocumet from './assets/cookie.pdf';
 
@@ -23,14 +23,14 @@ export const CookieBanner: FC = () => {
         </a>{' '}
         для лучшей работы
       </p>
-      <Button
+      <ButtonLink
         onClick={() => {
           localStorage.setItem(LOCAL_STORAGE_KEY, 'true');
           setIsShown(false);
         }}
       >
         Хорошо
-      </Button>
+      </ButtonLink>
     </div>
   );
 };

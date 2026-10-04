@@ -5,10 +5,9 @@ import NewsList from '@/features/news/news-list';
 import newsHeroImage from '@/shared/assets/images/news/news-hero-image.png';
 import telegramIcon from '@/shared/assets/images/news/telegram-icon.svg';
 import { EXTERNAL_LINKS } from '@/shared/config/externalLinks';
+import { ButtonLink } from '@/shared/ui/button-link/ButtonLink';
 import Loader from '@/shared/ui/loader/loader';
 import styles from './NewsPage.module.scss';
-
-// import { Button } from '@/shared/ui';
 
 export const NewsPage = () => {
   const { data: news, isLoading, error } = useQuery(newsItemQueries.list());
@@ -58,15 +57,13 @@ export const NewsPage = () => {
             alt="Telegram"
             className={styles.telegramIcon}
           />
-          <a
+          <ButtonLink
+            className={styles.telegramLink}
             href={EXTERNAL_LINKS.TG}
             target="_blank"
-            rel="noopener noreferrer"
-            className={styles.telegramLink}
           >
             Подписаться
-            {/* <Button variant="primary">Подписаться</Button> */}
-          </a>
+          </ButtonLink>
         </div>
       </div>
     </div>

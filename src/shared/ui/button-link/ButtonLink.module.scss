@@ -1,0 +1,101 @@
+.buttonLink {
+  cursor: pointer;
+  user-select: none;
+
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+
+  width: fit-content;
+  max-width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 16px;
+
+  font: var(--font-text-large-button);
+  color: var(--color-default);
+  text-decoration: none;
+
+  background-color: var(--background-color-default);
+
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+
+  &:hover {
+    background-color: var(--background-color-hover);
+  }
+
+  &:active {
+    background-color: var(--background-color-active);
+  }
+
+  &:disabled {
+    color: var(--color-label-neutral-quaternary);
+    background-color: var(--color-interactive-brand-disable);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-border-brand-strong);
+    outline-offset: 2px;
+  }
+
+  &_brand_ {
+    &_primary_ {
+      --color-default: var(--color-label-neutral-inverted-primary);
+      --background-color-default: var(--color-interactive-brand-primary);
+      --background-color-hover: var(--color-interactive-brand-hover);
+      --background-color-active: var(--color-interactive-brand-active);
+    }
+
+    &_secondary {
+      --color-default: var(--color-label-brand-primary);
+      --background-color-default: var(--color-interactive-brand-secondary);
+      --background-color-hover: var(--color-interactive-brand-hover-secondary);
+      --background-color-active: var(
+        --color-interactive-brand-active-secondary
+      );
+    }
+  }
+
+  &_neutral {
+    &_primary_ {
+      --color-default: var(--color-label-neutral-inverted-primary);
+      --background-color-default: var(--color-interactive-neutral-primary);
+      --background-color-hover: var(--color-interactive-neutral-hover);
+      --background-color-active: var(--color-interactive-neutral-active);
+    }
+
+    &_secondary {
+      --color-default: var(--color-label-neutral-primary);
+      --background-color-default: var(--color-interactive-neutral-secondary);
+      --background-color-hover: var(
+        --color-interactive-neutral-hover-secondary
+      );
+      --background-color-active: var(
+        --color-interactive-neutral-active-secondary
+      );
+    }
+  }
+
+  svg {
+    aspect-ratio: 1 / 1;
+    height: 24px;
+  }
+}
+
+[data-theme='dark'] {
+  .buttonLink {
+    &_brand__primary_ {
+      --color-default: var(--color-interactive-neutral-primary);
+      --background-color-default: var(--color-fill-neutral-none);
+      --background-color-hover: var(
+        --color-interactive-neutral-hover-secondary
+      );
+      --background-color-active: var(
+        --color-interactive-neutral-active-secondary
+      );
+    }
+  }
+}

@@ -14,7 +14,7 @@
   border-radius: 16px;
 
   font: var(--font-text-large-button);
-  color: var(--color-default);
+  color: var(--default);
   text-decoration: none;
 
   background-color: var(--backgrounds-color-default);
@@ -32,50 +32,44 @@
   }
 
   &:disabled {
-    color: var(--color-label-neutral-quaternary);
-    background-color: var(--color-interactive-brand-disable);
+    color: var(--label-neutral-quaternary);
+    background-color: var(--interactive-brand-disable);
   }
 
   &:focus-visible {
-    outline: 2px solid var(--color-border-brand-strong);
+    outline: 2px solid var(--border-brand-strong);
     outline-offset: 2px;
   }
 
   &_brand_ {
     &_primary_ {
-      --color-default: var(--color-label-neutral-inverted-primary);
-      --backgrounds-color-default: var(--color-interactive-brand-primary);
-      --backgrounds-color-hover: var(--color-interactive-brand-hover);
-      --backgrounds-color-active: var(--color-interactive-brand-active);
+      --default: var(--label-neutral-inverted-primary);
+      --backgrounds-color-default: var(--interactive-brand-primary);
+      --backgrounds-color-hover: var(--interactive-brand-hover);
+      --backgrounds-color-active: var(--interactive-brand-active);
     }
 
     &_secondary {
-      --color-default: var(--color-label-brand-primary);
-      --backgrounds-color-default: var(--color-interactive-brand-secondary);
-      --backgrounds-color-hover: var(--color-interactive-brand-hover-secondary);
-      --backgrounds-color-active: var(
-        --color-interactive-brand-active-secondary
-      );
+      --default: var(--label-brand-primary);
+      --backgrounds-color-default: var(--interactive-brand-secondary);
+      --backgrounds-color-hover: var(--interactive-brand-hover-secondary);
+      --backgrounds-color-active: var(--interactive-brand-active-secondary);
     }
   }
 
   &_neutral {
     &_primary_ {
-      --color-default: var(--color-label-neutral-inverted-primary);
-      --backgrounds-color-default: var(--color-interactive-neutral-primary);
-      --backgrounds-color-hover: var(--color-interactive-neutral-hover);
-      --backgrounds-color-active: var(--color-interactive-neutral-active);
+      --default: var(--label-neutral-inverted-primary);
+      --backgrounds-color-default: var(--interactive-neutral-primary);
+      --backgrounds-color-hover: var(--interactive-neutral-hover);
+      --backgrounds-color-active: var(--interactive-neutral-active);
     }
 
     &_secondary {
-      --color-default: var(--color-label-neutral-primary);
-      --backgrounds-color-default: var(--color-interactive-neutral-secondary);
-      --backgrounds-color-hover: var(
-        --color-interactive-neutral-hover-secondary
-      );
-      --backgrounds-color-active: var(
-        --color-interactive-neutral-active-secondary
-      );
+      --default: var(--label-neutral-primary);
+      --backgrounds-color-default: var(--interactive-neutral-secondary);
+      --backgrounds-color-hover: var(--interactive-neutral-hover-secondary);
+      --backgrounds-color-active: var(--interactive-neutral-active-secondary);
     }
   }
 
@@ -88,14 +82,10 @@
 [data-theme='dark'] {
   .buttonLink {
     &_brand__primary_ {
-      --color-default: var(--color-interactive-neutral-primary);
-      --backgrounds-color-default: var(--color-fill-neutral-none);
-      --backgrounds-color-hover: var(
-        --color-interactive-neutral-hover-secondary
-      );
-      --backgrounds-color-active: var(
-        --color-interactive-neutral-active-secondary
-      );
+      --default: var(--interactive-neutral-primary);
+      --backgrounds-color-default: var(--fill-neutral-none);
+      --backgrounds-color-hover: var(--interactive-neutral-hover-secondary);
+      --backgrounds-color-active: var(--interactive-neutral-active-secondary);
     }
   }
 }

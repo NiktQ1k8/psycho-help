@@ -31,7 +31,7 @@
 .faq {
   margin: 0;
   font: var(--font-h1);
-  color: var(--color-label-brand-primary);
+  color: var(--label-brand-primary);
   letter-spacing: var(--font-header-letter-spacing);
 }
 
@@ -70,14 +70,14 @@
 
 [data-theme='dark'] {
   .faq {
-    color: var(--color-label-brand-secondary);
+    color: var(--label-brand-secondary);
   }
 
   .description {
     color: color-mix(
       in srgb,
-      var(--color-label-neutral-secondary),
-      var(--color-label-neutral-inverted-primary)
+      var(--label-neutral-secondary),
+      var(--label-neutral-inverted-primary)
     ) !important;
   }
 }

@@ -18,7 +18,7 @@
 
 .counter {
   font: var(--font-text-large);
-  color: var(--color-label-neutral-tetriary);
+  color: var(--label-neutral-tetriary);
 }
 
 .question {
@@ -40,17 +40,17 @@
   padding: 1.6rem 2.4rem;
   border-radius: 0.9rem;
 
-  background-color: var(--color-interactive-neutral-secondary);
+  background-color: var(--interactive-neutral-secondary);
   outline: 1px solid transparent;
 
   transition: 0.3s ease;
 
   &:hover {
-    background-color: var(--color-interactive-neutral-hover-secondary);
+    background-color: var(--interactive-neutral-hover-secondary);
   }
 
   &.selected {
-    outline-color: var(--color-interactive-brand-primary);
+    outline-color: var(--interactive-brand-primary);
   }
 }
 
@@ -68,20 +68,20 @@
 
   &Complete,
   &Next {
-    color: var(--color-background-neutral-primary);
-    background-color: var(--color-interactive-brand-primary);
+    color: var(--background-neutral-primary);
+    background-color: var(--interactive-brand-primary);
 
     &:hover {
-      background-color: var(--color-border-brand-base);
+      background-color: var(--border-brand-base);
     }
   }
 
   &Back {
-    color: var(--color-label-brand-primary);
-    background-color: var(--color-interactive-brand-secondary);
+    color: var(--label-brand-primary);
+    background-color: var(--interactive-brand-secondary);
 
     &:hover {
-      background-color: var(--color-border-brand-base);
+      background-color: var(--border-brand-base);
     }
   }
 }
@@ -164,48 +164,48 @@
 
 [data-theme='dark'] {
   .counter {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--label-neutral-inverted-primary);
   }
 
   .title {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--label-neutral-inverted-primary);
   }
 
   .option {
-    color: var(--color-label-neutral-inverted-primary);
-    background-color: var(--color-fill-neutral-primary);
+    color: var(--label-neutral-inverted-primary);
+    background-color: var(--fill-neutral-primary);
 
     &:hover:not(.selected) {
-      background-color: var(--color-fill-neutral-tetriary);
+      background-color: var(--fill-neutral-tetriary);
     }
   }
 
   .buttonAction {
     &Back {
-      color: var(--color-label-brand-primary);
-      background-color: var(--color-background-neutral-primary);
+      color: var(--label-brand-primary);
+      background-color: var(--background-neutral-primary);
 
       &:hover {
-        background-color: var(--color-interactive-neutral-hover-secondary);
+        background-color: var(--interactive-neutral-hover-secondary);
       }
 
       &:active {
-        background-color: var(--color-interactive-neutral-active-secondary);
+        background-color: var(--interactive-neutral-active-secondary);
       }
     }
 
     &Next,
     &Complete {
-      border: var(--color-interactive-brand-primary);
-      color: var(--color-label-neutral-inverted-primary);
-      background-color: var(--color-interactive-brand-primary);
+      border: var(--interactive-brand-primary);
+      color: var(--label-neutral-inverted-primary);
+      background-color: var(--interactive-brand-primary);
 
       &:hover {
-        background-color: var(--color-interactive-brand-hover);
+        background-color: var(--interactive-brand-hover);
       }
 
       &:active {
-        background-color: var(--color-interactive-brand-active);
+        background-color: var(--interactive-brand-active);
       }
     }
   }

@@ -11,7 +11,7 @@
 
   font-size: 1.6rem;
   font-weight: bold;
-  color: var(--color-label-neutral-inverted-primary);
+  color: var(--label-neutral-inverted-primary);
 
   outline: 2px solid transparent;
 
@@ -31,33 +31,33 @@
 
   &.color-brand {
     &.secondary {
-      color: var(--color-label-brand-primary);
-      background-color: var(--color-interactive-brand-secondary);
+      color: var(--label-brand-primary);
+      background-color: var(--interactive-brand-secondary);
 
       &:hover {
-        background-color: var(--color-interactive-brand-hover-secondary);
+        background-color: var(--interactive-brand-hover-secondary);
       }
 
       &:active {
-        background-color: var(--color-interactive-brand-active-secondary);
+        background-color: var(--interactive-brand-active-secondary);
       }
 
       &:disabled {
-        color: var(--color-label-neutral-quaternary);
-        background-color: var(--color-interactive-neutral-disable);
+        color: var(--label-neutral-quaternary);
+        background-color: var(--interactive-neutral-disable);
       }
     }
 
     &.primary {
-      background: var(--color-fill-brand-primary);
+      background: var(--fill-brand-primary);
 
       &:hover {
-        background: var(--color-interactive-neutral-hover);
+        background: var(--interactive-neutral-hover);
       }
 
       &:focus {
-        background: var(--color-fill-brand-primary);
-        outline: 2px solid var(--color-border-brand-strong);
+        background: var(--fill-brand-primary);
+        outline: 2px solid var(--border-brand-strong);
         outline-offset: 2px;
       }
     }
@@ -65,20 +65,20 @@
 
   &.color-neutral {
     &.primary {
-      color: var(--color-label-neutral-inverted-primary);
-      background-color: var(--color-interactive-neutral-primary);
+      color: var(--label-neutral-inverted-primary);
+      background-color: var(--interactive-neutral-primary);
 
       &:hover {
-        background-color: var(--color-interactive-neutral-hover);
+        background-color: var(--interactive-neutral-hover);
       }
 
       &:active {
-        background-color: var(--color-interactive-neutral-active);
+        background-color: var(--interactive-neutral-active);
       }
 
       &:disabled {
-        color: var(--color-label-neutral-quaternary);
-        background-color: var(--color-interactive-neutral-disable);
+        color: var(--label-neutral-quaternary);
+        background-color: var(--interactive-neutral-disable);
       }
     }
   }
@@ -102,15 +102,15 @@
 [data-theme='dark'] {
   .button {
     &.color-brand {
-      color: var(--color-interactive-neutral-primary);
-      background-color: var(--color-fill-neutral-none);
+      color: var(--interactive-neutral-primary);
+      background-color: var(--fill-neutral-none);
 
       &:hover {
-        background-color: var(--color-interactive-neutral-hover-secondary);
+        background-color: var(--interactive-neutral-hover-secondary);
       }
 
       &:active {
-        background-color: var(--color-interactive-neutral-active-secondary);
+        background-color: var(--interactive-neutral-active-secondary);
         outline: none;
       }
     }

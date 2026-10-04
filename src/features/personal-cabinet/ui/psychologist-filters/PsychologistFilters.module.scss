@@ -59,14 +59,14 @@
   border: none;
 
   font: var(--font-text-medium);
-  color: var(--color-label-neutral-primary);
+  color: var(--label-neutral-primary);
 
   background: none;
 
   transition: color 0.2s;
 
   &:hover {
-    color: var(--color-label-neutral-secondary);
+    color: var(--label-neutral-secondary);
   }
 }
 
@@ -83,23 +83,23 @@
 
   font: var(--font-text-small);
   line-height: 100%;
-  color: var(--color-label-neutral-primary);
+  color: var(--label-neutral-primary);
 
   background: none;
 
   &:hover {
-    color: var(--color-label-neutral-primary);
+    color: var(--label-neutral-primary);
     text-decoration: underline;
   }
 }
 
 [data-theme='dark'] {
   .filters__sort-button {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--label-neutral-inverted-primary);
   }
 
   .filters__reset-button {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--label-neutral-inverted-primary);
   }
 }
 

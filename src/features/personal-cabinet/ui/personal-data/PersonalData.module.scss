@@ -2,13 +2,13 @@
 @mixin input-field {
   width: 100%;
   padding: 1.2rem 1.6rem;
-  border: 1px solid var(--color-border-neutral-soft);
+  border: 1px solid var(--border-neutral-soft);
   border-radius: 0.8rem;
 
   font-size: 1.6rem;
-  color: var(--color-label-neutral-primary);
+  color: var(--label-neutral-primary);
 
-  background-color: var(--color-background-neutral-primary);
+  background-color: var(--background-neutral-primary);
   outline: none;
 
   transition:
@@ -16,21 +16,21 @@
     box-shadow 0.2s ease;
 
   &::placeholder {
-    color: var(--color-label-neutral-quaternary);
+    color: var(--label-neutral-quaternary);
   }
 
   &:hover {
-    border-color: var(--color-fill-neutral-primary);
+    border-color: var(--fill-neutral-primary);
   }
 
   &:focus {
-    border-color: var(--color-label-brand-secondary);
+    border-color: var(--label-brand-secondary);
     box-shadow: 0 0 0 3px rgb(64 123 254 / 15%);
   }
 
   &:disabled {
     cursor: not-allowed;
-    background-color: var(--color-background-neutral-secondary);
+    background-color: var(--background-neutral-secondary);
   }
 }
 
@@ -39,7 +39,7 @@
   display: block;
   margin-bottom: 0.6rem;
   font-weight: 500;
-  color: var(--color-label-neutral-secondary);
+  color: var(--label-neutral-secondary);
 }
 
 // Миксин для редактируемого поля
@@ -51,21 +51,21 @@
   align-items: center;
 
   padding: 1.2rem;
-  border: 1px solid var(--color-border-neutral-soft);
+  border: 1px solid var(--border-neutral-soft);
   border-radius: 0.8rem;
 
-  background-color: var(--color-background-neutral-primary);
+  background-color: var(--background-neutral-primary);
 
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
 
   &:hover {
-    border-color: var(--color-fill-neutral-primary);
+    border-color: var(--fill-neutral-primary);
   }
 
   &:focus-within {
-    border-color: var(--color-label-brand-secondary);
+    border-color: var(--label-brand-secondary);
     box-shadow: 0 0 0 3px rgb(64 123 254 / 15%);
   }
 
@@ -76,13 +76,13 @@
     border: none;
 
     font-size: 1.6rem;
-    color: var(--color-label-neutral-primary);
+    color: var(--label-neutral-primary);
 
     background: transparent;
     outline: none;
 
     &::placeholder {
-      color: var(--color-label-neutral-quaternary);
+      color: var(--label-neutral-quaternary);
     }
   }
 }
@@ -105,7 +105,7 @@
   gap: 1.6rem;
   align-items: center;
 
-  background-color: var(--color-background-neutral-primary);
+  background-color: var(--background-neutral-primary);
 }
 
 .avatar {
@@ -120,7 +120,7 @@
   height: 28.8rem;
   border-radius: 50%;
 
-  background-color: var(--color-border-neutral-soft);
+  background-color: var(--border-neutral-soft);
 
   img {
     width: 100%;
@@ -130,7 +130,7 @@
 
   .avatarIcon {
     font-size: 16.4rem;
-    color: var(--color-label-neutral-secondary);
+    color: var(--label-neutral-secondary);
 
     @media (width >= 634px) and (width <= 1023px) {
       font-size: 12rem;
@@ -168,19 +168,19 @@
 
   &:hover {
     label {
-      border-bottom: 1px solid var(--color-label-brand-primary);
+      border-bottom: 1px solid var(--label-brand-primary);
     }
   }
 
   label {
     cursor: pointer;
     font: var(--font-text-medium);
-    color: var(--color-label-brand-primary);
+    color: var(--label-brand-primary);
   }
 
   svg {
     path {
-      stroke: var(--color-label-brand-primary);
+      stroke: var(--label-brand-primary);
     }
   }
 }
@@ -196,7 +196,7 @@
 
   font: var(--font-text-medium);
 
-  background-color: var(--color-background-neutral-primary);
+  background-color: var(--background-neutral-primary);
 }
 
 .header {
@@ -209,7 +209,7 @@
     margin: 0;
     font-size: 2rem;
     font-weight: 600;
-    color: var(--color-label-neutral-primary);
+    color: var(--label-neutral-primary);
   }
 }
 
@@ -221,7 +221,7 @@
   .name {
     font-size: 2rem;
     font-weight: 600;
-    color: var(--color-label-neutral-primary);
+    color: var(--label-neutral-primary);
   }
 }
 
@@ -254,10 +254,10 @@
     padding: 1.2rem 1.6rem;
 
     &.inputError {
-      border-color: var(--color-label-danger-primary);
+      border-color: var(--label-danger-primary);
 
       &:focus {
-        border-color: var(--color-label-danger-primary);
+        border-color: var(--label-danger-primary);
         box-shadow: 0 0 0 3px rgb(255 77 79 / 15%);
       }
     }
@@ -267,7 +267,7 @@
 .nameErrorText {
   padding-left: 0.4rem;
   font-size: 1.2rem;
-  color: var(--color-label-danger-primary);
+  color: var(--label-danger-primary);
 }
 
 .nameActions {
@@ -285,14 +285,14 @@
 
   font-size: 1.4rem;
   font-weight: 500;
-  color: var(--color-background-neutral-primary);
+  color: var(--background-neutral-primary);
 
-  background-color: var(--color-interactive-brand-primary);
+  background-color: var(--interactive-brand-primary);
 
   transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: var(--color-interactive-brand-hover);
+    background-color: var(--interactive-brand-hover);
   }
 }
 
@@ -300,20 +300,20 @@
   cursor: pointer;
 
   padding: 0.8rem 1.6rem;
-  border: 1px solid var(--color-border-neutral-soft);
+  border: 1px solid var(--border-neutral-soft);
   border-radius: 0.8rem;
 
   font-size: 1.4rem;
   font-weight: 500;
-  color: var(--color-label-neutral-secondary);
+  color: var(--label-neutral-secondary);
 
   background-color: transparent;
 
   transition: all 0.2s ease;
 
   &:hover {
-    border-color: var(--color-fill-neutral-primary);
-    background-color: var(--color-background-neutral-secondary);
+    border-color: var(--fill-neutral-primary);
+    background-color: var(--background-neutral-secondary);
   }
 }
 
@@ -328,13 +328,13 @@
   transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: var(--color-interactive-brand-disable);
+    background-color: var(--interactive-brand-disable);
   }
 
   svg {
     width: 2.4rem;
     height: 2.4rem;
-    color: var(--color-interactive-neutral-hover);
+    color: var(--interactive-neutral-hover);
   }
 }
 
@@ -354,7 +354,7 @@
 
   &:focus-within {
     label {
-      color: var(--color-label-brand-secondary);
+      color: var(--label-brand-secondary);
     }
   }
 
@@ -371,7 +371,7 @@
   .errorText {
     margin-top: 0.4rem;
     font-size: 1.2rem;
-    color: var(--color-label-danger-primary);
+    color: var(--label-danger-primary);
   }
 }
 
@@ -383,21 +383,21 @@
   box-sizing: border-box;
   height: 4.8rem;
   padding: 1.2rem;
-  border: 1px solid var(--color-border-neutral-soft);
+  border: 1px solid var(--border-neutral-soft);
   border-radius: 0.8rem;
 
-  background-color: var(--color-background-neutral-primary);
+  background-color: var(--background-neutral-primary);
 
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
 
   &:hover {
-    border-color: var(--color-fill-neutral-primary);
+    border-color: var(--fill-neutral-primary);
   }
 
   &:focus-within {
-    border-color: var(--color-label-brand-secondary);
+    border-color: var(--label-brand-secondary);
     box-shadow: 0 0 0 3px rgb(64 123 254 / 15%);
   }
 
@@ -409,13 +409,13 @@
     border: none;
 
     font-size: 1.6rem;
-    color: var(--color-label-neutral-primary);
+    color: var(--label-neutral-primary);
 
     background: transparent;
     outline: none;
 
     &::placeholder {
-      color: var(--color-label-neutral-quaternary);
+      color: var(--label-neutral-quaternary);
     }
 
     &:focus {
@@ -432,12 +432,12 @@
   border: none;
 
   font: var(--font-text-medium);
-  color: var(--color-interactive-brand-primary);
+  color: var(--interactive-brand-primary);
 
   background: none;
 
   &:hover {
-    color: var(--color-interactive-brand-hover);
+    color: var(--interactive-brand-hover);
   }
 }
 
@@ -463,19 +463,19 @@
   border-radius: 0.8rem;
 
   font: var(--font-text-large);
-  color: var(--color-label-danger-primary);
+  color: var(--label-danger-primary);
 
   background-color: transparent;
 
   transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: var(--color-interactive-brand-disable);
+    background-color: var(--interactive-brand-disable);
   }
 
   &:disabled {
     cursor: not-allowed;
-    background-color: var(--color-interactive-neutral-disable);
+    background-color: var(--interactive-neutral-disable);
   }
 
   svg {
@@ -496,25 +496,25 @@
   border-radius: 0.8rem;
 
   font: var(--font-text-medium);
-  color: var(--color-background-neutral-primary);
+  color: var(--background-neutral-primary);
 
-  background-color: var(--color-interactive-brand-primary);
+  background-color: var(--interactive-brand-primary);
 
   transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: var(--color-interactive-brand-hover);
+    background-color: var(--interactive-brand-hover);
   }
 
   &:disabled {
     cursor: not-allowed;
-    background-color: var(--color-interactive-neutral-disable);
+    background-color: var(--interactive-neutral-disable);
   }
 }
 
 [data-theme='dark'] {
   .name {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--label-neutral-inverted-primary);
   }
 
   .avatarSection {
@@ -524,8 +524,8 @@
   .avatarIcon {
     color: color-mix(
       in srgb,
-      var(--color-label-neutral-secondary),
-      var(--color-label-neutral-inverted-primary)
+      var(--label-neutral-secondary),
+      var(--label-neutral-inverted-primary)
     );
   }
 
@@ -542,23 +542,23 @@
   }
 
   .editButton path {
-    stroke: var(--color-border-neutral-inverted);
+    stroke: var(--border-neutral-inverted);
   }
 
   .editButton:hover {
-    background-color: var(--color-interactive-neutral-hover);
+    background-color: var(--interactive-neutral-hover);
   }
 
   .nameFieldsRow input {
-    color: var(--color-label-neutral-inverted-primary);
-    background-color: var(--color-fill-neutral-primary);
+    color: var(--label-neutral-inverted-primary);
+    background-color: var(--fill-neutral-primary);
   }
 
   .nameFieldsRow input::placeholder {
     color: color-mix(
       in srgb,
-      var(--color-label-neutral-secondary),
-      var(--color-label-neutral-inverted-primary)
+      var(--label-neutral-secondary),
+      var(--label-neutral-inverted-primary)
     );
   }
 
@@ -566,46 +566,46 @@
     border: 1px solid
       color-mix(
         in srgb,
-        var(--color-label-neutral-secondary),
-        var(--color-label-neutral-inverted-primary)
+        var(--label-neutral-secondary),
+        var(--label-neutral-inverted-primary)
       );
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--label-neutral-inverted-primary);
   }
 
   .cancelNameButton:hover {
-    color: var(--color-interactive-neutral-active);
-    background-color: var(--color-interactive-neutral-hover-secondary);
+    color: var(--interactive-neutral-active);
+    background-color: var(--interactive-neutral-hover-secondary);
   }
 
   .fieldsGrid label {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--label-neutral-inverted-primary);
   }
 
   .editableField {
-    background-color: var(--color-fill-neutral-primary);
+    background-color: var(--fill-neutral-primary);
 
     input {
-      color: var(--color-label-neutral-inverted-primary);
+      color: var(--label-neutral-inverted-primary);
 
       &::placeholder {
         color: color-mix(
           in srgb,
-          var(--color-label-neutral-secondary),
-          var(--color-label-neutral-inverted-primary)
+          var(--label-neutral-secondary),
+          var(--label-neutral-inverted-primary)
         );
       }
     }
   }
 
   .passwordField {
-    color: var(--color-label-neutral-inverted-primary);
-    background-color: var(--color-fill-neutral-primary);
+    color: var(--label-neutral-inverted-primary);
+    background-color: var(--fill-neutral-primary);
 
     input::placeholder {
       color: color-mix(
         in srgb,
-        var(--color-label-neutral-secondary),
-        var(--color-label-neutral-inverted-primary)
+        var(--label-neutral-secondary),
+        var(--label-neutral-inverted-primary)
       );
     }
   }

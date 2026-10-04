@@ -1,12 +1,12 @@
 /* Это нужно для того, чтобы на компе при открытии бургер-меню не прыгала сама кнопка бургера */
 :global(html):has(.header__list--open) {
   scrollbar-gutter: stable;
-  background-color: var(--color-fill-brand-primary);
+  background-color: var(--fill-brand-primary);
   transition: background-color 0.3s;
 }
 
 :global(html[data-theme='dark']):has(.header__list--open) {
-  background-color: var(--color-interactive-brand-hover);
+  background-color: var(--interactive-brand-hover);
 }
 
 @keyframes theme-icon-enter {
@@ -32,7 +32,7 @@
 
   margin-top: 2rem;
 
-  background-color: var(--color-background-neutral-primary);
+  background-color: var(--background-neutral-primary);
 }
 
 .header__nav {
@@ -46,7 +46,7 @@
   padding: 0 3.6rem;
   border-radius: 2.8rem;
 
-  background-color: var(--color-fill-neutral-quaternary);
+  background-color: var(--fill-neutral-quaternary);
 }
 
 .header__logo {
@@ -57,7 +57,7 @@
   border: 1px solid transparent;
   border-radius: 1.2rem;
 
-  color: var(--color-label-neutral-primary);
+  color: var(--label-neutral-primary);
 
   transition:
     border-color 0.3s,
@@ -72,18 +72,18 @@
 
   &:hover {
     @media (hover: hover) {
-      color: var(--color-interactive-brand-primary);
+      color: var(--interactive-brand-primary);
     }
 
     @media (hover: none) {
-      color: var(--color-label-neutral-primary);
+      color: var(--label-neutral-primary);
     }
   }
 
   &:active,
   &:focus-visible {
-    border-color: var(--color-border-brand-strong);
-    color: var(--color-interactive-brand-primary);
+    border-color: var(--border-brand-strong);
+    color: var(--interactive-brand-primary);
   }
 }
 
@@ -127,7 +127,7 @@
 
   font-size: 1.6rem;
   line-height: 2.4rem;
-  color: var(--color-label-neutral-primary);
+  color: var(--label-neutral-primary);
   text-decoration: none;
 
   background-color: transparent;
@@ -159,20 +159,20 @@
 
   &:hover {
     @media (hover: hover) {
-      border-color: var(--color-interactive-brand-secondary);
-      color: var(--color-interactive-brand-primary);
-      background-color: var(--color-interactive-brand-secondary);
+      border-color: var(--interactive-brand-secondary);
+      color: var(--interactive-brand-primary);
+      background-color: var(--interactive-brand-secondary);
     }
 
     @media (hover: none) {
-      color: var(--color-label-neutral-primary);
+      color: var(--label-neutral-primary);
     }
   }
 
   &:active,
   & :focus-visible {
-    border-color: var(--color-border-brand-strong);
-    color: var(--color-interactive-brand-primary);
+    border-color: var(--border-brand-strong);
+    color: var(--interactive-brand-primary);
     background-color: transparent;
   }
 }
@@ -214,7 +214,7 @@
       width: 1.8rem;
       height: 0.2rem;
 
-      background-color: var(--color-label-neutral-primary);
+      background-color: var(--label-neutral-primary);
 
       transition: all 0.3s;
 
@@ -233,16 +233,16 @@
 
     &:focus-visible {
       border-radius: 1.6rem;
-      outline: 1px solid var(--color-border-brand-strong);
+      outline: 1px solid var(--border-brand-strong);
 
       span {
-        background-color: var(--color-interactive-brand-primary);
+        background-color: var(--interactive-brand-primary);
       }
     }
 
     &--open {
       span {
-        background-color: var(--color-label-neutral-inverted-primary);
+        background-color: var(--label-neutral-inverted-primary);
 
         &:nth-child(1) {
           top: 2.3rem;
@@ -264,10 +264,10 @@
       }
 
       &:focus-visible {
-        outline: 1px solid var(--color-label-neutral-inverted-primary);
+        outline: 1px solid var(--label-neutral-inverted-primary);
 
         span {
-          background-color: var(--color-label-neutral-inverted-primary);
+          background-color: var(--label-neutral-inverted-primary);
         }
       }
     }
@@ -285,7 +285,7 @@
     padding: 0 0 0 4rem;
 
     opacity: 0;
-    background-color: var(--color-fill-brand-primary);
+    background-color: var(--fill-brand-primary);
 
     &--animating {
       transition:
@@ -316,7 +316,7 @@
   }
 
   .header__link {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--label-neutral-inverted-primary);
 
     svg {
       width: 2.4rem;
@@ -330,20 +330,20 @@
 
     &:hover {
       @media (hover: hover) {
-        border-color: var(--color-interactive-brand-hover);
-        color: var(--color-label-neutral-inverted-primary);
-        background-color: var(--color-interactive-brand-hover);
+        border-color: var(--interactive-brand-hover);
+        color: var(--label-neutral-inverted-primary);
+        background-color: var(--interactive-brand-hover);
       }
 
       @media (hover: none) {
-        color: var(--color-label-neutral-inverted-primary);
+        color: var(--label-neutral-inverted-primary);
       }
     }
 
     &:active,
     &:focus-visible {
-      border-color: var(--color-label-neutral-inverted-primary);
-      color: var(--color-label-neutral-inverted-primary);
+      border-color: var(--label-neutral-inverted-primary);
+      color: var(--label-neutral-inverted-primary);
       background-color: transparent;
     }
   }
@@ -383,86 +383,86 @@
 
 [data-theme='dark'] {
   .header {
-    background-color: var(--color-background-neutral-inverted);
+    background-color: var(--background-neutral-inverted);
   }
 
   .header__nav {
-    background-color: var(--color-fill-neutral-primary);
+    background-color: var(--fill-neutral-primary);
   }
 
   .header__logo {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--label-neutral-inverted-primary);
 
     &:hover {
       @media (hover: hover) {
-        color: var(--color-interactive-brand-hover);
+        color: var(--interactive-brand-hover);
       }
 
       @media (hover: none) {
-        color: var(--color-label-neutral-inverted-primary);
+        color: var(--label-neutral-inverted-primary);
       }
     }
 
     &:active,
     &:focus-visible {
-      border-color: var(--color-border-brand-strong);
-      color: var(--color-interactive-brand-primary);
+      border-color: var(--border-brand-strong);
+      color: var(--interactive-brand-primary);
     }
   }
 
   .header__link {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--label-neutral-inverted-primary);
 
     &:hover {
       @media (hover: hover) {
-        border-color: var(--color-interactive-neutral-hover);
-        color: var(--color-interactive-brand-primary);
-        background-color: var(--color-interactive-neutral-hover);
+        border-color: var(--interactive-neutral-hover);
+        color: var(--interactive-brand-primary);
+        background-color: var(--interactive-neutral-hover);
       }
 
       @media (hover: none) {
-        color: var(--color-label-neutral-inverted-primary);
+        color: var(--label-neutral-inverted-primary);
       }
     }
 
     &:active,
     &:focus-visible {
-      border-color: var(--color-border-brand-strong);
-      color: var(--color-interactive-brand-primary);
+      border-color: var(--border-brand-strong);
+      color: var(--interactive-brand-primary);
       background-color: transparent;
     }
   }
 
   @media (width <= 1300px) {
     .header__burger span {
-      background-color: var(--color-label-neutral-inverted-primary);
+      background-color: var(--label-neutral-inverted-primary);
     }
 
     .header__list {
-      background-color: var(--color-interactive-brand-hover);
+      background-color: var(--interactive-brand-hover);
     }
 
     .header__link {
-      color: var(--color-label-neutral-inverted-primary);
+      color: var(--label-neutral-inverted-primary);
 
       &:hover {
         @media (hover: hover) {
-          border-color: var(--color-fill-brand-primary);
-          color: var(--color-label-neutral-inverted-primary);
-          background-color: var(--color-fill-brand-primary);
+          border-color: var(--fill-brand-primary);
+          color: var(--label-neutral-inverted-primary);
+          background-color: var(--fill-brand-primary);
         }
 
         @media (hover: none) {
           border-color: transparent;
-          color: var(--color-label-neutral-inverted-primary);
+          color: var(--label-neutral-inverted-primary);
           background-color: transparent;
         }
       }
 
       &:active,
       &:focus-visible {
-        border-color: var(--color-label-neutral-inverted-primary);
-        color: var(--color-label-neutral-inverted-primary);
+        border-color: var(--label-neutral-inverted-primary);
+        color: var(--label-neutral-inverted-primary);
         background-color: transparent;
       }
     }

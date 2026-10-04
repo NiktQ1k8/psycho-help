@@ -42,14 +42,14 @@
   border-radius: 0.6rem;
 
   font: var(--font-text-medium);
-  color: var(--color-label-neutral-primary);
+  color: var(--label-neutral-primary);
 
-  background-color: var(--color-fill-neutral-primary);
+  background-color: var(--fill-neutral-primary);
 }
 
 .countBageActive {
-  color: var(--color-label-neutral-inverted-primary);
-  background-color: var(--color-fill-brand-primary);
+  color: var(--label-neutral-inverted-primary);
+  background-color: var(--fill-brand-primary);
   transition:
     background-color 0.3s,
     color 0.3s;
@@ -57,7 +57,7 @@
 
 [data-theme='dark'] {
   .countBage {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--label-neutral-inverted-primary);
   }
 }
 

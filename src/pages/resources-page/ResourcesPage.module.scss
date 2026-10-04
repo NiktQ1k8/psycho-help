@@ -45,13 +45,13 @@
 
       .title {
         font: var(--font-h2);
-        color: var(--color-label-neutral-primary);
+        color: var(--label-neutral-primary);
       }
 
       .features {
         display: flex;
         font: var(--font-text-large);
-        color: var(--color-label-neutral-secondary);
+        color: var(--label-neutral-secondary);
         list-style: none;
       }
     }
@@ -123,14 +123,14 @@
 
 [data-theme='dark'] {
   .title {
-    color: var(--color-label-neutral-inverted-primary) !important;
+    color: var(--label-neutral-inverted-primary) !important;
   }
 
   .features {
     color: color-mix(
       in srgb,
-      var(--color-label-neutral-secondary),
-      var(--color-label-neutral-inverted-primary)
+      var(--label-neutral-secondary),
+      var(--label-neutral-inverted-primary)
     ) !important;
   }
 }

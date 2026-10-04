@@ -115,7 +115,7 @@ const PsychologistRejectModal = ({
       }}
     >
       <p style={{ marginBottom: 5 }}>{config.label}</p>
-      <p style={{ color: 'var(--color-label-neutral-secondary)' }}>
+      <p style={{ color: 'var(--label-neutral-secondary)' }}>
         {config.sublabel}
       </p>
       <Input.TextArea

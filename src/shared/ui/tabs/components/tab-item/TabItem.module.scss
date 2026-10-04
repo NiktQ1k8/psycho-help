@@ -5,21 +5,21 @@
   border-radius: 1.2rem;
 
   font: var(--font-text-medium);
-  color: var(--color-label-neutral-primary);
+  color: var(--label-neutral-primary);
 
-  background: var(--color-interactive-neutral-secondary);
+  background: var(--interactive-neutral-secondary);
 
   transition: 0.3s ease;
 
   &.active {
-    color: var(--color-label-neutral-inverted-primary);
-    background: var(--color-interactive-brand-primary);
+    color: var(--label-neutral-inverted-primary);
+    background: var(--interactive-brand-primary);
   }
 
   @include past-tablet {
     &:hover:not(.active) {
-      color: var(--color-label-brand-primary);
-      background: var(--color-interactive-brand-hover-secondary);
+      color: var(--label-brand-primary);
+      background: var(--interactive-brand-hover-secondary);
     }
   }
 
@@ -37,13 +37,13 @@
 [data-theme='dark'] {
   .tab {
     &:hover:not(.active) {
-      color: var(--color-label-brand-primary);
-      background-color: var(--color-interactive-brand-hover-secondary);
+      color: var(--label-brand-primary);
+      background-color: var(--interactive-brand-hover-secondary);
     }
 
     &:active:not(.active) {
-      color: var(--color-label-neutral-inverted-primary);
-      background-color: var(--color-interactive-brand-primary);
+      color: var(--label-neutral-inverted-primary);
+      background-color: var(--interactive-brand-primary);
     }
   }
 }

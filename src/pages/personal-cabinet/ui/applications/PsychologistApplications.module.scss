@@ -20,7 +20,7 @@
 .dateHeader {
   margin-bottom: 0.8rem;
   font: var(--font-h5);
-  color: var(--color-label-neutral-primary);
+  color: var(--label-neutral-primary);
 }
 
 .dateGroup:not(:first-child) {
@@ -35,7 +35,7 @@
 }
 
 .appointmentRow:not(:first-of-type) {
-  border-top: 1px solid var(--color-border-neutral-base);
+  border-top: 1px solid var(--border-neutral-base);
 }
 
 .timeStatusRow {
@@ -51,7 +51,7 @@
 
 .timeCol {
   font: var(--font-text-medium);
-  color: var(--color-label-neutral-primary);
+  color: var(--label-neutral-primary);
 }
 
 .infoCol {
@@ -75,13 +75,13 @@
   flex-shrink: 0;
   max-width: 370px;
   font: var(--font-text-large);
-  color: var(--color-label-neutral-primary);
+  color: var(--label-neutral-primary);
 }
 
 .location {
   display: block;
   font: var(--font-text-large);
-  color: var(--color-label-neutral-secondary);
+  color: var(--label-neutral-secondary);
 }
 
 .location::before {
@@ -109,29 +109,29 @@
   border-radius: 100%;
 
   &--new {
-    background-color: var(--color-label-success-primary);
+    background-color: var(--label-success-primary);
   }
 
   &--in-progress {
-    background-color: var(--color-label-brand-primary);
+    background-color: var(--label-brand-primary);
   }
 
   &--awaiting-user-confirmation {
-    background-color: var(--color-label-neutral-secondary);
+    background-color: var(--label-neutral-secondary);
   }
 
   &--completed {
-    background-color: var(--color-label-neutral-primary);
+    background-color: var(--label-neutral-primary);
   }
 
   &--cancelled {
-    background-color: var(--color-label-danger-primary);
+    background-color: var(--label-danger-primary);
   }
 }
 
 .status-text {
   font: var(--font-text-medium);
-  color: var(--color-label-neutral-primary);
+  color: var(--label-neutral-primary);
 }
 
 .btnConfirm {
@@ -142,19 +142,19 @@
   border-radius: 12px;
 
   font: var(--font-text-medium);
-  color: var(--color-label-brand-primary);
+  color: var(--label-brand-primary);
   white-space: nowrap;
 
-  background-color: var(--color-interactive-brand-secondary);
+  background-color: var(--interactive-brand-secondary);
 
   transition: all 0.2s ease;
 
   &:hover {
-    background-color: var(--color-interactive-brand-hover-secondary);
+    background-color: var(--interactive-brand-hover-secondary);
   }
 
   &:active {
-    background-color: var(--color-interactive-brand-active-secondary);
+    background-color: var(--interactive-brand-active-secondary);
   }
 
   &:disabled {
@@ -171,19 +171,19 @@
   border-radius: 12px;
 
   font: var(--font-text-medium);
-  color: var(--color-label-neutral-inverted-primary);
+  color: var(--label-neutral-inverted-primary);
   white-space: nowrap;
 
-  background-color: var(--color-interactive-brand-primary);
+  background-color: var(--interactive-brand-primary);
 
   transition: all 0.2s ease;
 
   &:hover {
-    background-color: var(--color-interactive-brand-hover);
+    background-color: var(--interactive-brand-hover);
   }
 
   &:active {
-    background-color: var(--color-interactive-brand-active);
+    background-color: var(--interactive-brand-active);
   }
 
   &:disabled {
@@ -191,7 +191,7 @@
     opacity: 0.4;
 
     &:hover {
-      background-color: var(--color-interactive-brand-primary);
+      background-color: var(--interactive-brand-primary);
     }
   }
 }
@@ -203,11 +203,11 @@
   margin-bottom: 2.4rem;
 
   :global(.ant-pagination-item-active) {
-    border-color: var(--color-label-brand-primary);
-    background-color: var(--color-label-brand-primary);
+    border-color: var(--label-brand-primary);
+    background-color: var(--label-brand-primary);
 
     a {
-      color: var(--color-label-neutral-inverted-primary) !important;
+      color: var(--label-neutral-inverted-primary) !important;
     }
   }
 }
@@ -238,24 +238,24 @@
   .timeCol,
   .patientName,
   .status-text {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--label-neutral-inverted-primary);
   }
 
   .location {
     color: color-mix(
       in srgb,
-      var(--color-label-neutral-quaternary),
-      var(--color-label-neutral-inverted-primary)
+      var(--label-neutral-quaternary),
+      var(--label-neutral-inverted-primary)
     );
   }
 
   .appointmentRow:not(:first-of-type) {
-    border-top: 1px solid var(--color-border-neutral-inverted);
+    border-top: 1px solid var(--border-neutral-inverted);
   }
 
   .status-dot {
     &--completed {
-      background-color: var(--color-label-neutral-inverted-primary);
+      background-color: var(--label-neutral-inverted-primary);
     }
   }
 }

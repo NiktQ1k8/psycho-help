@@ -7,7 +7,7 @@
   padding: 3.1rem 1.2rem 1.2rem;
   border-radius: 2.4rem;
 
-  background-color: var(--color-background-neutral-secondary);
+  background-color: var(--background-neutral-secondary);
 }
 
 .profileInfo {
@@ -28,15 +28,15 @@
   border-radius: 50%;
 
   font-size: 5.4rem;
-  color: var(--color-label-neutral-secondary);
+  color: var(--label-neutral-secondary);
 
-  background-color: var(--color-border-neutral-soft);
+  background-color: var(--border-neutral-soft);
 }
 
 .name {
   max-width: 15rem;
   font: var(--font-text-medium);
-  color: var(--color-label-neutral-primary);
+  color: var(--label-neutral-primary);
   text-align: center;
 }
 
@@ -60,7 +60,7 @@
   border-radius: 0.8rem;
 
   font: var(--font-text-large);
-  color: var(--color-label-neutral-secondary);
+  color: var(--label-neutral-secondary);
   text-align: left;
 
   background: none;
@@ -68,13 +68,13 @@
   transition: all 0.2s;
 
   &:hover {
-    color: var(--color-label-neutral-primary);
+    color: var(--label-neutral-primary);
   }
 
   &.active {
     font: var(--font-text-large-button);
-    color: var(--color-interactive-brand-primary);
-    background-color: var(--color-interactive-brand-secondary);
+    color: var(--interactive-brand-primary);
+    background-color: var(--interactive-brand-secondary);
   }
 }
 
@@ -101,14 +101,14 @@
   border-radius: 0.8rem;
 
   font: var(--font-text-large-button);
-  color: var(--color-interactive-brand-primary);
+  color: var(--interactive-brand-primary);
 
-  background-color: var(--color-interactive-brand-secondary);
+  background-color: var(--interactive-brand-secondary);
 
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: var(--color-interactive-brand-hover-secondary);
+    background-color: var(--interactive-brand-hover-secondary);
   }
 }
 
@@ -134,42 +134,42 @@
 
 [data-theme='dark'] {
   .sidebar {
-    background-color: var(--color-fill-neutral-primary);
+    background-color: var(--fill-neutral-primary);
   }
 
   .avatar {
     color: color-mix(
       in srgb,
-      var(--color-label-neutral-secondary),
-      var(--color-label-neutral-inverted-primary)
+      var(--label-neutral-secondary),
+      var(--label-neutral-inverted-primary)
     );
   }
 
   .name {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--label-neutral-inverted-primary);
   }
 
   .navItem {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--label-neutral-inverted-primary);
 
     &:hover:not(.active) {
-      color: var(--color-interactive-brand-primary);
+      color: var(--interactive-brand-primary);
     }
 
     &.active {
-      background-color: var(--color-interactive-neutral-active);
+      background-color: var(--interactive-neutral-active);
     }
   }
 
   .askButton {
-    color: var(--color-interactive-neutral-primary);
+    color: var(--interactive-neutral-primary);
 
     &:hover {
-      background-color: var(--color-interactive-neutral-hover-secondary);
+      background-color: var(--interactive-neutral-hover-secondary);
     }
 
     &:active {
-      background-color: var(--color-interactive-neutral-active-secondary);
+      background-color: var(--interactive-neutral-active-secondary);
     }
   }
 }

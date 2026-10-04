@@ -34,7 +34,7 @@
   padding: var(--card-padding);
   border-radius: var(--border-radius-card);
 
-  background-color: var(--color-background-brand-primary);
+  background-color: var(--background-brand-primary);
 
   & > * {
     z-index: 1;
@@ -78,13 +78,13 @@
   font-size: 3.2rem;
   font-weight: var(--title-font-weight);
   line-height: 3.6rem;
-  color: var(--color-label-neutral-inverted-primary);
+  color: var(--label-neutral-inverted-primary);
 }
 
 .features__1_text {
   font-size: 1.6rem;
   line-height: 2.4rem;
-  color: var(--color-label-neutral-inverted-primary);
+  color: var(--label-neutral-inverted-primary);
 }
 
 .features__grid_2 {
@@ -95,7 +95,7 @@
   padding: var(--card-padding);
   border-radius: var(--border-radius-card);
 
-  background-color: var(--color-fill-neutral-quaternary);
+  background-color: var(--fill-neutral-quaternary);
 }
 
 .features__2_title,
@@ -105,7 +105,7 @@
   font-size: 3.2rem;
   font-weight: var(--title-font-weight);
   line-height: 3.6rem;
-  color: var(--color-label-neutral-primary);
+  color: var(--label-neutral-primary);
 }
 
 .features__2_text,
@@ -114,7 +114,7 @@
   font-family: var(--text-font-family);
   font-size: 1.6rem;
   font-weight: 2.4rem;
-  color: var(--color-label-neutral-tetriary);
+  color: var(--label-neutral-tetriary);
 }
 
 .features__grid_3 {
@@ -125,7 +125,7 @@
   padding: var(--card-padding);
   border-radius: var(--border-radius-card);
 
-  background-color: var(--color-fill-neutral-quaternary);
+  background-color: var(--fill-neutral-quaternary);
 }
 
 .features__grid_4 {
@@ -136,7 +136,7 @@
   padding: var(--card-padding);
   border-radius: var(--border-radius-card);
 
-  background-color: var(--color-fill-neutral-quaternary);
+  background-color: var(--fill-neutral-quaternary);
 }
 
 .features__4_content {
@@ -291,19 +291,19 @@
 
 [data-theme='dark'] {
   .features__grid_1 {
-    background-color: var(--color-fill-brand-primary);
+    background-color: var(--fill-brand-primary);
   }
 
   .features__grid_2,
   .features__grid_3,
   .features__grid_4 {
-    background-color: var(--color-fill-neutral-primary);
+    background-color: var(--fill-neutral-primary);
   }
 
   .features__2_title,
   .features__3_title,
   .features__4_title {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--label-neutral-inverted-primary);
   }
 
   .features__2_text,
@@ -313,8 +313,8 @@
     line-height: 2.4rem;
     color: color-mix(
       in srgb,
-      var(--color-label-neutral-secondary),
-      var(--color-label-neutral-inverted-primary)
+      var(--label-neutral-secondary),
+      var(--label-neutral-inverted-primary)
     );
   }
 }

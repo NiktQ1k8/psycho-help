@@ -8,7 +8,7 @@
   padding: 2rem;
   border-radius: 1.6rem;
 
-  background-color: var(--color-background-neutral-secondary);
+  background-color: var(--background-neutral-secondary);
 
   @media (width <= 633px) {
     flex-direction: column;
@@ -24,14 +24,14 @@
 .title {
   margin: 0 0 1.2rem;
   font: var(--font-h4);
-  color: var(--color-label-neutral-primary);
+  color: var(--label-neutral-primary);
   letter-spacing: var(--font-header-letter-spacing);
 }
 
 .text {
   margin: 0 0 3.6rem;
   font: var(--font-text-large);
-  color: var(--color-label-neutral-primary);
+  color: var(--label-neutral-primary);
 }
 
 .button {
@@ -42,14 +42,14 @@
   border-radius: 1.6rem;
 
   font: var(--font-text-large-button);
-  color: var(--color-label-neutral-inverted-primary);
+  color: var(--label-neutral-inverted-primary);
 
-  background-color: var(--color-interactive-brand-primary);
+  background-color: var(--interactive-brand-primary);
 
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: var(--color-interactive-brand-hover);
+    background-color: var(--interactive-brand-hover);
   }
 }
 
@@ -65,19 +65,19 @@
 
 [data-theme='dark'] {
   .title {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--label-neutral-inverted-primary);
   }
 
   .text {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--label-neutral-inverted-primary);
   }
 
   .card {
-    background-color: var(--color-fill-neutral-primary);
+    background-color: var(--fill-neutral-primary);
   }
 
   .button {
-    color: var(--color-interactive-neutral-primary);
-    background-color: var(--color-background-neutral-primary);
+    color: var(--interactive-neutral-primary);
+    background-color: var(--background-neutral-primary);
   }
 }

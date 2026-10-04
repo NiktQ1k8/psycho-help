@@ -21,7 +21,7 @@
   border: 1px solid #63656b16;
   border-radius: 16px;
 
-  background-color: var(--color-fill-neutral-none);
+  background-color: var(--fill-neutral-none);
 
   transition:
     transform 0.3s ease,
@@ -51,7 +51,7 @@
   font-size: 18px;
   font-weight: 500;
   line-height: 1.4;
-  color: var(--color-label-neutral-primary);
+  color: var(--label-neutral-primary);
   text-align: center;
   white-space: pre-line;
 }
@@ -117,11 +117,11 @@
 
 [data-theme='dark'] {
   .card {
-    border: 1px solid var(--color-border-neutral-inverted);
-    background-color: var(--color-background-neutral-inverted);
+    border: 1px solid var(--border-neutral-inverted);
+    background-color: var(--background-neutral-inverted);
   }
 
   .text {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--label-neutral-inverted-primary);
   }
 }

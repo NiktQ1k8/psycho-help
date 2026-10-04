@@ -45,7 +45,7 @@
     padding: 1.2rem 1.2rem 3rem;
     border: 1px solid var(--border-neutral-base);
 
-    background-color: var(--background-neutral-primary);
+    background-color: var(--backgrounds-neutral-primary);
 
     transition: transform 0.2s;
 
@@ -140,7 +140,7 @@
 
 [data-theme='dark'] {
   .wrapper {
-    background-color: var(--background-neutral-inverted);
+    background-color: var(--backgrounds-neutral-inverted);
   }
 
   .fio,

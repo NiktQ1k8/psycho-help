@@ -1,5 +1,5 @@
 .footer {
-  background-color: var(--background-brand-primary);
+  background-color: var(--backgrounds-brand-primary);
 }
 
 .inner {
@@ -82,7 +82,7 @@
 
   &:hover,
   &:focus-visible {
-    color: var(--background-brand-primary);
+    color: var(--backgrounds-brand-primary);
     background-color: var(--label-neutral-inverted-primary);
   }
 }

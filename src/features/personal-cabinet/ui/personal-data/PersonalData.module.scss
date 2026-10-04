@@ -8,7 +8,7 @@
   font-size: 1.6rem;
   color: var(--label-neutral-primary);
 
-  background-color: var(--background-neutral-primary);
+  background-color: var(--backgrounds-neutral-primary);
   outline: none;
 
   transition:
@@ -30,7 +30,7 @@
 
   &:disabled {
     cursor: not-allowed;
-    background-color: var(--background-neutral-secondary);
+    background-color: var(--backgrounds-neutral-secondary);
   }
 }
 
@@ -54,7 +54,7 @@
   border: 1px solid var(--border-neutral-soft);
   border-radius: 0.8rem;
 
-  background-color: var(--background-neutral-primary);
+  background-color: var(--backgrounds-neutral-primary);
 
   transition:
     border-color 0.2s ease,
@@ -105,7 +105,7 @@
   gap: 1.6rem;
   align-items: center;
 
-  background-color: var(--background-neutral-primary);
+  background-color: var(--backgrounds-neutral-primary);
 }
 
 .avatar {
@@ -196,7 +196,7 @@
 
   font: var(--font-text-medium);
 
-  background-color: var(--background-neutral-primary);
+  background-color: var(--backgrounds-neutral-primary);
 }
 
 .header {
@@ -285,7 +285,7 @@
 
   font-size: 1.4rem;
   font-weight: 500;
-  color: var(--background-neutral-primary);
+  color: var(--backgrounds-neutral-primary);
 
   background-color: var(--interactive-brand-primary);
 
@@ -313,7 +313,7 @@
 
   &:hover {
     border-color: var(--fill-neutral-primary);
-    background-color: var(--background-neutral-secondary);
+    background-color: var(--backgrounds-neutral-secondary);
   }
 }
 
@@ -386,7 +386,7 @@
   border: 1px solid var(--border-neutral-soft);
   border-radius: 0.8rem;
 
-  background-color: var(--background-neutral-primary);
+  background-color: var(--backgrounds-neutral-primary);
 
   transition:
     border-color 0.2s ease,
@@ -496,7 +496,7 @@
   border-radius: 0.8rem;
 
   font: var(--font-text-medium);
-  color: var(--background-neutral-primary);
+  color: var(--backgrounds-neutral-primary);
 
   background-color: var(--interactive-brand-primary);
 

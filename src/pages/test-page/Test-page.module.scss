@@ -68,7 +68,7 @@
 
   &Complete,
   &Next {
-    color: var(--background-neutral-primary);
+    color: var(--backgrounds-neutral-primary);
     background-color: var(--interactive-brand-primary);
 
     &:hover {
@@ -183,7 +183,7 @@
   .buttonAction {
     &Back {
       color: var(--label-brand-primary);
-      background-color: var(--background-neutral-primary);
+      background-color: var(--backgrounds-neutral-primary);
 
       &:hover {
         background-color: var(--interactive-neutral-hover-secondary);

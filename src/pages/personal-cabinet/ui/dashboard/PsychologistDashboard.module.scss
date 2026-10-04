@@ -337,12 +337,12 @@
       var(--label-neutral-quaternary),
       var(--label-neutral-inverted-primary)
     );
-    background-color: var(--background-neutral-inverted);
+    background-color: var(--backgrounds-neutral-inverted);
   }
 
   .detailsCard {
     border: 1px solid var(--border-neutral-disable);
-    background-color: var(--background-neutral-inverted);
+    background-color: var(--backgrounds-neutral-inverted);
   }
 
   .eventCard {

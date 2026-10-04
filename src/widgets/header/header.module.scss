@@ -32,7 +32,7 @@
 
   margin-top: 2rem;
 
-  background-color: var(--background-neutral-primary);
+  background-color: var(--backgrounds-neutral-primary);
 }
 
 .header__nav {
@@ -383,7 +383,7 @@
 
 [data-theme='dark'] {
   .header {
-    background-color: var(--background-neutral-inverted);
+    background-color: var(--backgrounds-neutral-inverted);
   }
 
   .header__nav {

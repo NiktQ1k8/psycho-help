@@ -23,7 +23,7 @@
   padding: clamp(16px, 2.5vw, 36px);
   border-radius: 20px;
 
-  background: var(--background-neutral-primary);
+  background: var(--backgrounds-neutral-primary);
   box-shadow: 0 4px 16px var(--fill-neutral-primary);
 }
 
@@ -204,8 +204,8 @@
 }
 
 .checkbox:checked + .checkbox_custom {
-  border-color: var(--background-brand-primary);
-  background-color: var(--background-brand-primary);
+  border-color: var(--backgrounds-brand-primary);
+  background-color: var(--backgrounds-brand-primary);
   transition: all 0.3s;
 }
 
@@ -369,7 +369,7 @@
 
 [data-theme='dark'] {
   .modalContent {
-    background: var(--background-neutral-inverted);
+    background: var(--backgrounds-neutral-inverted);
   }
 
   .closeButton {

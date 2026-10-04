@@ -8,7 +8,7 @@
   padding: 2rem;
   border-radius: 1.6rem;
 
-  background-color: var(--background-neutral-secondary);
+  background-color: var(--backgrounds-neutral-secondary);
 
   @media (width <= 633px) {
     flex-direction: column;
@@ -78,6 +78,6 @@
 
   .button {
     color: var(--interactive-neutral-primary);
-    background-color: var(--background-neutral-primary);
+    background-color: var(--backgrounds-neutral-primary);
   }
 }

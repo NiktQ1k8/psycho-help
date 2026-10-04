@@ -21,11 +21,11 @@
 */
 
 :root {
-  --background-neutral-primary: #{$neutral-0};
-  --background-neutral-secondary: #{$neutral-50};
-  --background-neutral-tetriary: #{$neutral-0};
-  --background-neutral-inverted: #{$neutral-950};
-  --background-brand-primary: #{$accent-brand-500};
+  --backgrounds-neutral-primary: #{$neutral-0};
+  --backgrounds-neutral-secondary: #{$neutral-50};
+  --backgrounds-neutral-tetriary: #{$neutral-0};
+  --backgrounds-neutral-inverted: #{$neutral-950};
+  --backgrounds-brand-primary: #{$accent-brand-500};
   --label-neutral-primary: #{$neutral-900};
   --label-neutral-secondary: #{rgba($neutral-800, 0.72)};
   --label-neutral-tetriary: #{rgba($neutral-800, 0.52)};

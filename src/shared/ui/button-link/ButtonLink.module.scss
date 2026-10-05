@@ -14,21 +14,21 @@
   border-radius: 16px;
 
   font: var(--font-text-large-button);
-  color: var(--default);
+  color: var(--text-color);
   text-decoration: none;
 
-  background-color: var(--backgrounds-color-default);
+  background-color: var(--background-color-default);
 
   transition:
     background-color 0.3s,
     color 0.3s;
 
   &:hover {
-    background-color: var(--backgrounds-color-hover);
+    background-color: var(--background-color-hover);
   }
 
   &:active {
-    background-color: var(--backgrounds-color-active);
+    background-color: var(--background-color-active);
   }
 
   &:disabled {
@@ -43,33 +43,33 @@
 
   &_brand_ {
     &_primary_ {
-      --default: var(--labels-neutral-inverted-primary);
-      --backgrounds-color-default: var(--interactive-brand-primary);
-      --backgrounds-color-hover: var(--interactive-brand-hover);
-      --backgrounds-color-active: var(--interactive-brand-active);
+      --text-color: var(--labels-neutral-inverted-primary);
+      --background-color-default: var(--interactive-brand-primary);
+      --background-color-hover: var(--interactive-brand-hover);
+      --background-color-active: var(--interactive-brand-active);
     }
 
     &_secondary {
-      --default: var(--labels-brand-primary);
-      --backgrounds-color-default: var(--interactive-brand-secondary);
-      --backgrounds-color-hover: var(--interactive-brand-hover-secondary);
-      --backgrounds-color-active: var(--interactive-brand-active-secondary);
+      --text-color: var(--labels-brand-primary);
+      --background-color-default: var(--interactive-brand-secondary);
+      --background-color-hover: var(--interactive-brand-hover-secondary);
+      --background-color-active: var(--interactive-brand-active-secondary);
     }
   }
 
   &_neutral {
     &_primary_ {
-      --default: var(--labels-neutral-inverted-primary);
-      --backgrounds-color-default: var(--interactive-neutral-primary);
-      --backgrounds-color-hover: var(--interactive-neutral-hover);
-      --backgrounds-color-active: var(--interactive-neutral-active);
+      --text-color: var(--labels-neutral-inverted-primary);
+      --background-color-default: var(--interactive-neutral-primary);
+      --background-color-hover: var(--interactive-neutral-hover);
+      --background-color-active: var(--interactive-neutral-active);
     }
 
     &_secondary {
-      --default: var(--labels-neutral-primary);
-      --backgrounds-color-default: var(--interactive-neutral-secondary);
-      --backgrounds-color-hover: var(--interactive-neutral-hover-secondary);
-      --backgrounds-color-active: var(--interactive-neutral-active-secondary);
+      --text-color: var(--labels-neutral-primary);
+      --background-color-default: var(--interactive-neutral-secondary);
+      --background-color-hover: var(--interactive-neutral-hover-secondary);
+      --background-color-active: var(--interactive-neutral-active-secondary);
     }
   }
 
@@ -82,10 +82,10 @@
 [data-theme='dark'] {
   .buttonLink {
     &_brand__primary_ {
-      --default: var(--interactive-neutral-primary);
-      --backgrounds-color-default: var(--fills-neutral-none);
-      --backgrounds-color-hover: var(--interactive-neutral-hover-secondary);
-      --backgrounds-color-active: var(--interactive-neutral-active-secondary);
+      --text-color: var(--interactive-neutral-primary);
+      --background-color-default: var(--fills-neutral-none);
+      --background-color-hover: var(--interactive-neutral-hover-secondary);
+      --background-color-active: var(--interactive-neutral-active-secondary);
     }
   }
 }

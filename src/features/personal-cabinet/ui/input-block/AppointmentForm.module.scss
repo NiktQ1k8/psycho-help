@@ -16,7 +16,7 @@
 
   font-size: 2.4rem;
   font-weight: 500;
-  color: var(--color-label-neutral-primary);
+  color: var(--labels-neutral-primary);
 }
 
 .format__btns {
@@ -43,8 +43,8 @@
 }
 
 .active {
-  color: var(--color-label-neutral-inverted-primary);
-  background-color: var(--color-interactive-neutral-primary);
+  color: var(--labels-neutral-inverted-primary);
+  background-color: var(--interactive-neutral-primary);
 }
 
 .location__btns {
@@ -70,14 +70,14 @@
   cursor: pointer;
   user-select: none;
   font-size: 1.6rem;
-  color: var(--color-label-neutral-primary);
+  color: var(--labels-neutral-primary);
 }
 
 .mainInfo {
   display: flex;
   gap: 36px;
   margin-top: 24px;
-  color: var(--color-label-neutral-primary);
+  color: var(--labels-neutral-primary);
 }
 
 .imgWrapper {
@@ -122,12 +122,12 @@
 
 .exp {
   font-size: 2rem;
-  color: var(--color-label-neutral-secondary);
+  color: var(--labels-neutral-secondary);
 }
 
 .office {
   font-size: 1.6rem;
-  color: var(--color-label-neutral-secondary);
+  color: var(--labels-neutral-secondary);
 }
 
 .consultAreas {
@@ -142,11 +142,11 @@
 
 .consultArea {
   padding: 4px 16px;
-  border: var(--color-border-neutral-base) 1px solid;
+  border: var(--border-neutral-base) 1px solid;
   border-radius: 16px;
 
   font-size: 1.4rem;
-  color: var(--color-label-neutral-secondary);
+  color: var(--labels-neutral-secondary);
 }
 
 .therapist .galleryWrapper {
@@ -177,16 +177,16 @@
   border: none;
   border-radius: 50%;
 
-  background-color: var(--color-background-neutral-primary);
+  background-color: var(--backgrounds-neutral-primary);
 
   transition: background-color 0.3s opacity 0.3s;
 
   &:hover:not(:disabled) {
-    background-color: var(--color-interactive-neutral-hover-secondary);
+    background-color: var(--interactive-neutral-hover-secondary);
   }
 
   &:active:not(:disabled) {
-    background-color: var(--color-interactive-neutral-active-secondary);
+    background-color: var(--interactive-neutral-active-secondary);
   }
 
   &:disabled {
@@ -198,7 +198,7 @@
 .galleryArrow {
   width: 20px;
   height: 20px;
-  color: var(--color-interactive-neutral-primary);
+  color: var(--interactive-neutral-primary);
 
   &__prev {
     transform: scaleX(-1);
@@ -263,9 +263,9 @@
   border-radius: 16px;
 
   font-size: 2rem;
-  color: var(--color-label-neutral-inverted-primary);
+  color: var(--labels-neutral-inverted-primary);
 
-  background-color: var(--color-interactive-brand-primary);
+  background-color: var(--interactive-brand-primary);
 }
 
 .subButton:hover,
@@ -282,7 +282,7 @@
 .privacy_text {
   margin-bottom: 8px;
   font-size: 14px;
-  color: var(--color-label-neutral-secondary);
+  color: var(--labels-neutral-secondary);
 }
 
 .privacy_link {
@@ -303,7 +303,7 @@
 
 .backArrow__text {
   font-size: 1.6rem;
-  color: var(--color-label-neutral-secondary);
+  color: var(--labels-neutral-secondary);
 }
 
 .results__info {
@@ -322,7 +322,7 @@
 }
 
 .results__textGray {
-  color: var(--color-label-neutral-secondary);
+  color: var(--labels-neutral-secondary);
 }
 
 .results__textarea {
@@ -342,9 +342,9 @@
   border-radius: 16px;
 
   font-size: 2rem;
-  color: var(--color-label-neutral-inverted-primary);
+  color: var(--labels-neutral-inverted-primary);
 
-  background-color: var(--color-interactive-brand-primary);
+  background-color: var(--interactive-brand-primary);
 }
 
 @media (width <= 768px) {
@@ -362,94 +362,94 @@
 
 [data-theme='dark'] {
   .label {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .formatButton {
     border: none;
-    color: var(--color-label-neutral-inverted-primary);
-    background-color: var(--color-interactive-neutral-active);
+    color: var(--labels-neutral-inverted-primary);
+    background-color: var(--interactive-neutral-active);
   }
 
   .formatButton.active {
-    background-color: var(--color-label-brand-primary);
+    background-color: var(--labels-brand-primary);
   }
 
   .textarea {
-    color: var(--color-label-neutral-inverted-primary);
-    background-color: var(--color-fill-neutral-primary);
+    color: var(--labels-neutral-inverted-primary);
+    background-color: var(--fills-neutral-primary);
   }
 
   .textarea::placeholder {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .location__element label {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .name {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .qual {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .exp {
     color: color-mix(
       in srgb,
-      var(--color-label-neutral-secondary),
-      var(--color-label-neutral-inverted-primary)
+      var(--labels-neutral-secondary),
+      var(--labels-neutral-inverted-primary)
     );
   }
 
   .office {
     color: color-mix(
       in srgb,
-      var(--color-label-neutral-secondary),
-      var(--color-label-neutral-inverted-primary)
+      var(--labels-neutral-secondary),
+      var(--labels-neutral-inverted-primary)
     );
   }
 
   .consultArea {
-    border: 1px solid var(--color-border-neutral-inverted);
-    color: var(--color-label-neutral-inverted-primary);
+    border: 1px solid var(--border-neutral-inverted);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .backArrow svg path {
-    stroke: var(--color-border-neutral-inverted);
+    stroke: var(--border-neutral-inverted);
   }
 
   .datePicker {
-    background: var(--color-fill-neutral-primary);
+    background: var(--fills-neutral-primary);
   }
 
   .selectInput {
-    background: var(--color-fill-neutral-primary);
+    background: var(--fills-neutral-primary);
   }
 
   .privacy_text {
     color: color-mix(
       in srgb,
-      var(--color-label-neutral-secondary),
-      var(--color-label-neutral-inverted-primary)
+      var(--labels-neutral-secondary),
+      var(--labels-neutral-inverted-primary)
     );
   }
 
   .results__title {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .results__textGray {
     color: color-mix(
       in srgb,
-      var(--color-label-neutral-secondary),
-      var(--color-label-neutral-inverted-primary)
+      var(--labels-neutral-secondary),
+      var(--labels-neutral-inverted-primary)
     );
   }
 
   .backArrow__text {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 }

@@ -3,7 +3,7 @@
 }
 
 .blue {
-  background-color: var(--color-fill-brand-tetriary);
+  background-color: var(--fills-brand-tetriary);
 }
 
 .hero {
@@ -22,7 +22,7 @@
   font-size: 9.6rem;
   font-weight: 500;
   line-height: 11.3rem;
-  color: var(--color-label-brand-secondary);
+  color: var(--labels-brand-secondary);
 }
 
 .text {
@@ -31,7 +31,7 @@
 
   font-size: 2.4rem;
   line-height: 2.8rem;
-  color: var(--color-label-neutral-primary);
+  color: var(--labels-neutral-primary);
 }
 
 .image {
@@ -121,21 +121,21 @@
   padding: 3.8rem 3.6rem 3rem;
   border-radius: 1.6rem;
 
-  background-color: var(--color-fill-brand-quaternary);
+  background-color: var(--fills-brand-quaternary);
 }
 
 .telegramTitle {
   font-size: 4rem;
   font-weight: 600;
   line-height: 4.4rem;
-  color: var(--color-interactive-neutral-primary);
+  color: var(--interactive-neutral-primary);
   letter-spacing: -0.04em;
 }
 
 .telegramText {
   font-size: 2rem;
   line-height: 2.8rem;
-  color: var(--color-interactive-neutral-primary);
+  color: var(--interactive-neutral-primary);
 }
 
 .telegramIcon {
@@ -156,20 +156,20 @@
   font-size: 2rem;
   font-weight: 500;
   line-height: 2.8rem;
-  color: var(--color-label-neutral-inverted-primary);
+  color: var(--labels-neutral-inverted-primary);
   text-decoration: none;
 
-  background-color: var(--color-fill-brand-primary);
+  background-color: var(--fills-brand-primary);
 
   transition: background-color 0.3s;
 
   &:hover {
-    color: var(--color-label-neutral-inverted-primary);
-    background-color: var(--color-interactive-brand-hover);
+    color: var(--labels-neutral-inverted-primary);
+    background-color: var(--interactive-brand-hover);
   }
 
   &:active {
-    background-color: var(--color-interactive-brand-active);
+    background-color: var(--interactive-brand-active);
   }
 }
 
@@ -252,44 +252,44 @@
 
 [data-theme='dark'] {
   .blue {
-    background-color: var(--color-fill-neutral-primary);
+    background-color: var(--fills-neutral-primary);
   }
 
   .title {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .text {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .telegramTitle {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .telegramBanner {
-    border: 1px solid var(--color-border-neutral-inverted);
+    border: 1px solid var(--border-neutral-inverted);
     background-color: transparent;
   }
 
   .telegramText {
     color: color-mix(
       in srgb,
-      var(--color-label-neutral-secondary),
-      var(--color-label-neutral-inverted-primary)
+      var(--labels-neutral-secondary),
+      var(--labels-neutral-inverted-primary)
     );
   }
 
   .telegramLink {
-    color: var(--color-label-neutral-primary);
-    background-color: var(--color-background-neutral-primary);
+    color: var(--labels-neutral-primary);
+    background-color: var(--backgrounds-neutral-primary);
   }
 
   .telegramLink:hover {
-    background-color: var(--color-interactive-neutral-hover-secondary);
+    background-color: var(--interactive-neutral-hover-secondary);
   }
 
   .telegramLink:active {
-    background-color: var(--color-interactive-neutral-active-secondary);
+    background-color: var(--interactive-neutral-active-secondary);
   }
 }

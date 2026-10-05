@@ -313,7 +313,7 @@
   .commentLabel,
   .eventName,
   .eventVenue {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .infoRow span:not(:first-child),
@@ -321,44 +321,44 @@
   .eventTime {
     color: color-mix(
       in srgb,
-      var(--color-label-neutral-quaternary),
-      var(--color-label-neutral-inverted-primary)
+      var(--labels-neutral-quaternary),
+      var(--labels-neutral-inverted-primary)
     );
   }
 
   .dayItem:hover:not(.dayActive) .dayNumber {
-    background-color: var(--color-interactive-brand-hover);
+    background-color: var(--interactive-brand-hover);
   }
 
   .emptyDetails {
-    border: 1px solid var(--color-border-neutral-disable);
+    border: 1px solid var(--border-neutral-disable);
     color: color-mix(
       in srgb,
-      var(--color-label-neutral-quaternary),
-      var(--color-label-neutral-inverted-primary)
+      var(--labels-neutral-quaternary),
+      var(--labels-neutral-inverted-primary)
     );
-    background-color: var(--color-background-neutral-inverted);
+    background-color: var(--backgrounds-neutral-inverted);
   }
 
   .detailsCard {
-    border: 1px solid var(--color-border-neutral-disable);
-    background-color: var(--color-background-neutral-inverted);
+    border: 1px solid var(--border-neutral-disable);
+    background-color: var(--backgrounds-neutral-inverted);
   }
 
   .eventCard {
-    background-color: var(--color-fill-neutral-primary);
+    background-color: var(--fills-neutral-primary);
 
     &:hover {
-      background-color: var(--color-interactive-neutral-hover);
+      background-color: var(--interactive-neutral-hover);
     }
   }
 
   .eventCardActive {
     border-left: none;
-    background-color: var(--color-fill-brand-derivable-quaternary);
+    background-color: var(--interactive-brand-primary);
 
     &:hover {
-      background-color: var(--color-fill-brand-derivable-quaternary);
+      background-color: var(--interactive-brand-hover);
     }
   }
 }

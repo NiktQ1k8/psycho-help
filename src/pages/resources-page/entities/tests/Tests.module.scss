@@ -7,11 +7,11 @@
   .showMore {
     width: fit-content;
     padding-inline: 12.6rem;
-    color: var(--color-label-brand-primary);
-    background-color: var(--color-interactive-brand-hover-secondary);
+    color: var(--labels-brand-primary);
+    background-color: var(--interactive-brand-hover-secondary);
 
     &:hover {
-      color: var(--color-interactive-brand-hover-secondary);
+      color: var(--interactive-brand-hover-secondary);
     }
   }
 
@@ -29,9 +29,9 @@
       padding: 1.6rem;
       border-radius: 1.6rem;
 
-      color: var(--color-label-brand-primary);
+      color: var(--labels-brand-primary);
 
-      background: var(--color-interactive-brand-secondary);
+      background: var(--interactive-brand-secondary);
     }
 
     @include past-tablet {

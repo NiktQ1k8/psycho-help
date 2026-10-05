@@ -36,27 +36,27 @@
   border-radius: 16px;
 
   font: var(--font-text-medium);
-  color: var(--color-label-neutral-primary);
+  color: var(--labels-neutral-primary);
 
-  background-color: var(--color-interactive-neutral-secondary);
+  background-color: var(--interactive-neutral-secondary);
 
   transition:
     color 0.3s,
     background-color 0.3s;
 
   &:hover {
-    background-color: var(--color-interactive-neutral-hover-secondary);
+    background-color: var(--interactive-neutral-hover-secondary);
   }
 
   &:has(.radio:focus-visible) {
-    outline: 2px solid var(--color-border-brand-strong);
+    outline: 2px solid var(--border-brand-strong);
   }
 
   &__selected,
   &__selected:hover {
     cursor: default;
-    color: var(--color-label-brand-primary);
-    background-color: var(--color-interactive-brand-secondary);
+    color: var(--labels-brand-primary);
+    background-color: var(--interactive-brand-secondary);
   }
 }
 
@@ -83,17 +83,17 @@
 
 [data-theme='dark'] {
   .option {
-    color: var(--color-label-neutral-inverted-primary);
-    background-color: var(--color-interactive-neutral-active);
+    color: var(--labels-neutral-inverted-primary);
+    background-color: var(--interactive-neutral-active);
 
     &:hover {
-      background-color: var(--color-interactive-neutral-hover);
+      background-color: var(--interactive-neutral-hover);
     }
 
     &__selected,
     &__selected:hover {
-      color: var(--color-label-brand-quaternary);
-      background-color: var(--color-fill-brand-derivable-secondary);
+      color: var(--labels-brand-quaternary);
+      background-color: var(--interactive-brand);
     }
   }
 }

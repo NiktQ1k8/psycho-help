@@ -526,4 +526,12 @@
       var(--labels-neutral-inverted-primary)
     );
   }
+
+  .reasonBlock {
+    background-color: var(--fills-neutral-primary);
+  }
+
+  .reasonText {
+    color: var(--labels-neutral-inverted-primary);
+  }
 }

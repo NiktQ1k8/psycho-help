@@ -335,4 +335,12 @@
       background-color: var(--labels-neutral-inverted-primary);
     }
   }
+
+  .reasonBlockCancelled {
+    background-color: var(--fills-neutral-primary);
+  }
+
+  .reasonText {
+    color: var(--labels-neutral-inverted-primary);
+  }
 }

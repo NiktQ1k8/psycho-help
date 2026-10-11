@@ -98,7 +98,7 @@
   width: 100%;
   padding: 1.6rem 6.2rem;
   border: none;
-  border-radius: 0.8rem;
+  border-radius: 1.6rem;
 
   font: var(--font-text-large-button);
   color: var(--interactive-brand-primary);
@@ -157,19 +157,20 @@
     }
 
     &.active {
-      background-color: var(--interactive-neutral-active);
+      background-color: var(--fills-brand-primary);
     }
   }
 
   .askButton {
-    color: var(--interactive-neutral-primary);
+    color: var(--labels-neutral-inverted-primary);
+    background-color: var(--backgrounds-brand-primary);
 
     &:hover {
-      background-color: var(--interactive-neutral-hover-secondary);
+      background-color: var(--interactive-brand-hover);
     }
 
     &:active {
-      background-color: var(--interactive-neutral-active-secondary);
+      background-color: var(--interactive-brand-active);
     }
   }
 }

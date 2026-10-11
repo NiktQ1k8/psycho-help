@@ -40,6 +40,7 @@ $api.interceptors.response.use(
     const originalRequest = error.config;
 
     if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
       if (isRefreshing) {
         return new Promise(function (resolve, reject) {
           failedQueue.push({ resolve, reject });
@@ -52,7 +53,6 @@ $api.interceptors.response.use(
           });
       }
 
-      originalRequest._retry = true;
       isRefreshing = true;
 
       try {

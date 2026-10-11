@@ -25,6 +25,66 @@ describe('useFetch', () => {
     expect(result.current.error.message).toBe('');
   });
 
+  it.each([
+    ['Неверный пароль', 'Неверный пароль'],
+    [
+      [{ msg: 'Email is required' }, { msg: 'Invalid phone' }],
+      'Email is required, Invalid phone',
+    ],
+  ])(
+    'shows API error details and clears them after a successful retry (%j)',
+    async (detail, message) => {
+      const config: InternalAxiosRequestConfig = {
+        headers: new AxiosHeaders(),
+      };
+      const error = new AxiosError(
+        'Request failed',
+        'ERR_BAD_REQUEST',
+        config,
+        {},
+        {
+          status: 422,
+          statusText: 'Unprocessable Entity',
+          headers: {},
+          config,
+          data: { detail },
+        },
+      );
+      const request = vi
+        .fn()
+        .mockRejectedValueOnce(error)
+        .mockResolvedValueOnce('ok');
+      const { result } = renderHook(() => useFetch(request));
+      await act(async () => {
+        expect(await result.current.fetching()).toBe(false);
+      });
+      expect(result.current.error).toEqual({ message, status: 422 });
+      await act(async () => {
+        expect(await result.current.fetching()).toBe(true);
+      });
+      expect(result.current.error).toEqual({ message: '', status: undefined });
+      expect(result.current.isLoading).toBe(false);
+    },
+  );
+
+  it('reports loading while the request is still pending', async () => {
+    let finish!: () => void;
+    const request = new Promise<void>((resolve) => {
+      finish = resolve;
+    });
+    const { result } = renderHook(() => useFetch(() => request));
+    let pending!: Promise<boolean>;
+    act(() => {
+      pending = result.current.fetching();
+    });
+    expect(result.current.isLoading).toBe(true);
+    await act(async () => {
+      finish();
+      await pending;
+    });
+    expect(result.current.isLoading).toBe(false);
+  });
+
   it('должен обработать ошибку AxiosError и установить error', async () => {
     const headers = new AxiosHeaders();
     const config: InternalAxiosRequestConfig = { headers };

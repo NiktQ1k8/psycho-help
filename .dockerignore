@@ -5,9 +5,14 @@ node_modules
 build
 coverage
 test-results
+.env
 .env.local
+.env.*.local
 .env.production
 .env.stand
 .vscode
 .idea
 README.md
+
+# local database backups and demo data
+/.local-data/

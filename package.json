@@ -5,8 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "start": "concurrently --kill-others \"vite\" \"node mok-server/server.js\"",
-    "start:mock": "concurrently --kill-others \"vite\" \"node mok-server/server.js --skip-connect\"",
+    "start": "vite",
     "build": "tsc -b && vite build",
     "format": "prettier --check .",
     "format:write": "prettier --write .",
@@ -18,7 +17,9 @@
     "stylelint:fix": "stylelint \"**/*.{css,scss}\" --ignore-path .gitignore --fix",
     "test": "vitest",
     "test:run": "vitest run",
-    "typecheck": "tsc -b"
+    "typecheck": "tsc -b",
+    "db:backup": "sh scripts/local-backup.sh backup",
+    "db:restore": "sh scripts/local-backup.sh restore"
   },
   "dependencies": {
     "@ant-design/compatible": "5.1.4",
@@ -48,14 +49,9 @@
     "@types/react-dom": "^18.3.0",
     "@types/swiper": "^5.4.3",
     "@vitejs/plugin-react": "^5.0.4",
-    "concurrently": "^9.2.1",
-    "cookie-parser": "^1.4.7",
     "eslint": "^9.36.0",
     "eslint-plugin-react-hooks": "^6.1.0",
     "eslint-plugin-react-refresh": "^0.4.23",
-    "express": "^5.1.0",
-    "express-openapi-validator": "^5.6.0",
-    "http-proxy-middleware": "^3.0.5",
     "husky": "^9.1.7",
     "jsdom": "^27.0.0",
     "lint-staged": "^15.2.10",

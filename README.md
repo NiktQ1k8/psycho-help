@@ -30,7 +30,7 @@
 2. Запустите дев‑сервер:
 
    ```bash
-   npm run start:mock
+   npm run start
    ```
 
 3. Откройте в браузере:
@@ -39,20 +39,90 @@
    http://localhost:3000
    ```
 
-Vite поднимает локальный dev‑сервер с горячей перезагрузкой для быстрого развития.
+По умолчанию фронтенд подключается к стенду, указанному в `.env.development`.
+Vite пересылает запросы `/api/` (включая `/api/image/`) на адрес `DEVEL_BACKEND_URL` из `.env.development`.
+Cookies авторизации проходят через тот же локальный адрес. Мок-сервера и подмены ответов при недоступности бэкенда нет.
 
 ## Скрипты
 
-| Команда                                       | Назначение                                                           |
-| --------------------------------------------- | -------------------------------------------------------------------- |
-| `npm run dev`                                 | Запустить Vite                                                       |
-| `npm run start`                               | Запустить Vite и сервер: доступный dev API используется вместо моков |
-| `npm run start:mock`                          | Запустить Vite и мок-сервер без подключения к реальному API          |
-| `npm run format` / `npm run format:write`     | Проверить / исправить поддерживаемые Prettier файлы                  |
-| `npm run lint` / `npm run lint:fix`           | Проверить / исправить код через ESLint                               |
-| `npm run stylelint` / `npm run stylelint:fix` | Проверить / исправить CSS и SCSS через Stylelint                     |
-| `npm run test` / `npm run test:run`           | Запустить Vitest в режиме наблюдения / один раз                      |
-| `npm run typecheck`                           | Проверить типы TypeScript                                            |
-| `npm run build`                               | Проверить типы и собрать приложение в `build`                        |
-| `npm run preview`                             | Посмотреть собранное приложение локально                             |
-| `npm run prepare`                             | Настроить Git-хуки Husky (автоматически при установке зависимостей)  |
+| Команда                                       | Назначение                                                          |
+| --------------------------------------------- | ------------------------------------------------------------------- |
+| `npm run start` / `npm run dev`               | Запустить Vite с подключением к бэкенду                             |
+| `npm run format` / `npm run format:write`     | Проверить / исправить поддерживаемые Prettier файлы                 |
+| `npm run lint` / `npm run lint:fix`           | Проверить / исправить код через ESLint                              |
+| `npm run stylelint` / `npm run stylelint:fix` | Проверить / исправить CSS и SCSS через Stylelint                    |
+| `npm run test` / `npm run test:run`           | Запустить Vitest в режиме наблюдения / один раз                     |
+| `npm run typecheck`                           | Проверить типы TypeScript                                           |
+| `npm run build`                               | Проверить типы и собрать приложение в `build`                       |
+| `npm run preview`                             | Посмотреть собранное приложение локально                            |
+| `npm run prepare`                             | Настроить Git-хуки Husky (автоматически при установке зависимостей) |
+| `npm run db:backup` / `npm run db:restore`    | Создать / восстановить копию БД и изображений                       |
+
+## Локальный бэкенд через Docker
+
+Инструкция рассчитана на GNU/Linux ([установка Debian](https://www.debian.org/releases/stable/amd64/index.en.html)). Нужны Docker с Docker Compose и Git. Перед запуском проверьте Docker командой `docker info`. Если он выключен, на GNU/Linux с systemd выполните `sudo systemctl start docker`.
+
+### 1. Первая настройка — один раз
+
+Клонируйте бэкенд в любой удобный каталог:
+
+```bash
+git clone --branch develop https://github.com/Reuzer/mospoly-psychological-support.git
+cd mospoly-psychological-support
+cp .env.example .env
+mkdir -p srv/images
+printf '/srv/images/\n' >> .git/info/exclude
+docker compose up -d db
+docker compose exec db pg_isready -h 127.0.0.1 -U postgres -d postgres
+```
+
+Дождитесь `accepting connections` (при необходимости повторите последнюю команду), затем создайте схему БД и запустите бэкенд:
+
+```bash
+docker compose run --rm --build app uv run alembic upgrade head
+docker compose up -d
+```
+
+Настройки из `.env.example` уже подходят для Docker. Сохраните `RESET_DB_ON_START=false`, чтобы приложение не очищало БД при запуске. Каталог изображений `srv/images` исключён из Git только в вашем клоне.
+
+В корне фронтенда создайте `.env.development.local`:
+
+```dotenv
+DEVEL_BACKEND_URL=http://localhost:8000/
+```
+
+Этот файл не попадает в Git и переопределяет адрес из `.env.development`. Без него используется общий адрес. Чтобы вернуться на стенд, удалите локальное переопределение и перезапустите фронтенд.
+
+### 2. Последующие запуски
+
+После `docker compose down` выполните в каталоге бэкенда:
+
+```bash
+docker compose up -d
+```
+
+Бэкенд: `http://localhost:8000/`, документация: `http://localhost:8000/docs`.
+Фронтенд запускайте отдельно командой `npm run start` из его каталога.
+
+### 3. Остановка с сохранением данных
+
+В каталоге бэкенда:
+
+```bash
+docker compose down
+```
+
+БД и изображения сохраняются. Не добавляйте `-v`: этот флаг удаляет том БД.
+
+## Копия локальной БД
+
+Выполните из корня фронтенда при запущенном локальном бэкенде:
+
+```bash
+npm run db:backup
+npm run db:restore -- /путь/к/архиву.tar.gz
+```
+
+Первая команда сохраняет БД и изображения в один архив в `.local-data/` (не отслеживается Git). Вторая перезаписывает объекты БД из копии и восстанавливает изображения; `--` отделяет путь к архиву от аргументов npm. При ошибке восстановления БД её изменения откатываются. БД и изображения восстанавливаются последовательно, общей транзакции у них нет.
+
+Один shell-скрипт использует `pg_dump`, `pg_restore` внутри Docker и GNU `tar`; он не зависит от таблиц и API бэкенда. Контейнеры и каталог файлов при необходимости задаются через `LOCAL_DB_CONTAINER`, `LOCAL_FILES_CONTAINER`, `LOCAL_FILES_PATH` (по умолчанию `db`, `app`, `/srv/images`).

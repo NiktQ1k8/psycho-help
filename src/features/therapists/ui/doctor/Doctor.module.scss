@@ -5,7 +5,7 @@
   align-items: center;
 
   padding: 2.4rem 1rem;
-  border: 1px solid var(--color-border-neutral-base);
+  border: 1px solid var(--border-neutral-base);
   border-radius: 2rem;
 
   .photo {
@@ -43,9 +43,9 @@
     height: 100%;
     margin: 0 auto;
     padding: 1.2rem 1.2rem 3rem;
-    border: 1px solid var(--color-border-neutral-base);
+    border: 1px solid var(--border-neutral-base);
 
-    background-color: var(--color-background-neutral-primary);
+    background-color: var(--backgrounds-neutral-primary);
 
     transition: transform 0.2s;
 
@@ -85,20 +85,20 @@
   font: var(--font-h4);
   font-size: 3.2rem;
   font-weight: 500;
-  color: var(--color-label-neutral-primary);
+  color: var(--labels-neutral-primary);
 }
 
 .speciality {
   font: var(--font-text-large);
   font-size: 2rem;
-  color: var(--color-label-neutral-primary);
+  color: var(--labels-neutral-primary);
 }
 
 .experience {
   font: var(--font-text-large);
   font-size: 2rem;
   font-weight: 400;
-  color: var(--color-label-neutral-secondary);
+  color: var(--labels-neutral-secondary);
 
   opacity: 0.72;
 }
@@ -109,7 +109,7 @@
   font: var(--font-h5);
   font-size: 2.4rem;
   font-weight: 500;
-  color: var(--color-label-neutral-primary);
+  color: var(--labels-neutral-primary);
 }
 
 .consult_areas {
@@ -117,7 +117,7 @@
 
   font-size: 2rem;
   line-height: 1.5;
-  color: var(--color-label-neutral-secondary);
+  color: var(--labels-neutral-secondary);
 
   opacity: 0.72;
 }
@@ -140,25 +140,25 @@
 
 [data-theme='dark'] {
   .wrapper {
-    background-color: var(--color-background-neutral-inverted);
+    background-color: var(--backgrounds-neutral-inverted);
   }
 
   .fio,
   .speciality,
   .consult_label {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .experience,
   .consult_areas {
     color: color-mix(
       in srgb,
-      var(--color-label-neutral-secondary),
-      var(--color-label-neutral-inverted-primary)
+      var(--labels-neutral-secondary),
+      var(--labels-neutral-inverted-primary)
     );
   }
 
   .photo {
-    background-color: var(--color-fill-neutral-primary);
+    background-color: var(--fills-neutral-primary);
   }
 }

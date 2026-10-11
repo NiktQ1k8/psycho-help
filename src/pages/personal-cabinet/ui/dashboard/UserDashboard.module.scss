@@ -16,7 +16,7 @@
 
 .emptyText {
   font-style: italic;
-  color: var(--color-text-secondary, #666);
+  color: var(--text-secondary, #666);
 }
 
 .pageLoaderWrapper {
@@ -29,10 +29,10 @@
 .modalInitiator {
   margin-bottom: 12px;
   padding-bottom: 12px;
-  border-bottom: 1px solid var(--color-border-neutral-base, #eee);
+  border-bottom: 1px solid var(--border-neutral-base, #eee);
 
   font-size: var(--font-text-medium, 14px);
-  color: var(--color-text-primary, #333);
+  color: var(--text-primary, #333);
 
   strong {
     font-weight: 600;
@@ -42,27 +42,27 @@
 .modalText {
   font-size: var(--font-text-medium, 14px);
   line-height: 1.5;
-  color: var(--color-text-secondary, #444);
+  color: var(--text-secondary, #444);
   white-space: pre-wrap;
 }
 
 [data-theme='dark'] {
   .modalInitiator {
-    border-bottom-color: var(--color-border-neutral-primary);
-    color: var(--color-label-neutral-inverted-primary);
+    border-bottom-color: var(--border-neutral-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .modalText {
-    color: var(--color-label-neutral-inverted-secondary);
+    color: var(--labels-neutral-inverted-secondary);
   }
 
   .contactNotice {
-    color: var(--color-label-neutral-inverted-secondary);
+    color: var(--labels-neutral-inverted-secondary);
   }
 }
 
 .contactNotice {
   margin-bottom: 24px;
   font-size: var(--font-text-medium, 14px);
-  color: var(--color-label-neutral-secondary);
+  color: var(--labels-neutral-secondary);
 }

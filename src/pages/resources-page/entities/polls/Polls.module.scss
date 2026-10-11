@@ -23,9 +23,9 @@
       padding: 1.6rem;
       border-radius: 1.6rem;
 
-      color: var(--color-label-brand-primary);
+      color: var(--labels-brand-primary);
 
-      background: var(--color-interactive-brand-secondary);
+      background: var(--interactive-brand-secondary);
     }
 
     @include past-tablet {
@@ -58,11 +58,11 @@
     .passList {
       .passBtn {
         &:hover {
-          background-color: var(--color-interactive-neutral-hover-secondary);
+          background-color: var(--interactive-neutral-hover-secondary);
         }
 
         &:active {
-          background-color: var(--color-interactive-neutral-active-secondary);
+          background-color: var(--interactive-neutral-active-secondary);
         }
       }
     }

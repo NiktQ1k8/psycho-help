@@ -16,8 +16,8 @@
   box-sizing: border-box;
   width: 64px;
   height: 64px;
-  border: 8px solid var(--color-border-neutral-inverted);
-  border-bottom-color: var(--color-fill-brand-primary);
+  border: 8px solid var(--border-neutral-inverted);
+  border-bottom-color: var(--fills-brand-primary);
   border-radius: 50%;
 
   animation: rotation 1s linear infinite;

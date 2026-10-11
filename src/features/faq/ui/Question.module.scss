@@ -29,7 +29,7 @@
 
 .active {
   padding-left: 3.2rem;
-  background-color: var(--color-fill-brand-quaternary);
+  background-color: var(--fills-brand-quaternary);
 }
 
 .answer {
@@ -39,7 +39,7 @@
   margin-right: 2.4rem;
 
   font: var(--font-text-large);
-  color: var(--color-label-neutral-primary);
+  color: var(--labels-neutral-primary);
 }
 
 .active .answer {
@@ -52,7 +52,7 @@
 
 .p {
   font: var(--font-h5);
-  color: var(--color-label-neutral-primary);
+  color: var(--labels-neutral-primary);
   letter-spacing: var(--font-header-letter-spacing-h5);
 }
 
@@ -87,15 +87,15 @@
 
 [data-theme='dark'] {
   .wrapper.active {
-    background-color: var(--color-fill-neutral-secondary);
+    background-color: var(--fills-neutral-secondary);
   }
 
   .p,
   .answer {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .button path {
-    stroke: var(--color-border-neutral-inverted);
+    stroke: var(--border-neutral-inverted);
   }
 }

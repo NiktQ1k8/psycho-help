@@ -38,7 +38,7 @@
   font-family: var(--font-text-medium);
   font-size: 1.6rem;
   line-height: 2.4rem;
-  color: var(--color-label-neutral-primary);
+  color: var(--labels-neutral-primary);
 
   background: none;
   outline: none;
@@ -51,7 +51,7 @@
   font-size: 3.2rem;
   font-weight: 700;
   line-height: 3.6rem;
-  color: var(--color-label-neutral-primary, #111827);
+  color: var(--labels-neutral-primary, #111827);
 }
 
 .userName {
@@ -60,7 +60,7 @@
   font-size: 2rem;
   font-weight: 400;
   line-height: 2.8rem;
-  color: var(--color-label-neutral-primary, #111827);
+  color: var(--labels-neutral-primary, #111827);
 }
 
 .statusRow {
@@ -74,7 +74,7 @@
   font-size: 1.6rem;
   font-weight: 400;
   line-height: 2.4rem;
-  color: var(--color-label-neutral-secondary, #111827);
+  color: var(--labels-neutral-secondary, #111827);
 }
 
 .status {
@@ -89,15 +89,15 @@
   border-radius: 100%;
 
   &--new {
-    background-color: var(--color-label-success-primary);
+    background-color: var(--labels-success-primary);
   }
 
   &--in-progress {
-    background-color: var(--color-label-brand-primary);
+    background-color: var(--labels-brand-primary);
   }
 
   &--awaiting-user-confirmation {
-    background-color: var(--color-label-neutral-secondary);
+    background-color: var(--labels-neutral-secondary);
   }
 
   &--completed {
@@ -105,7 +105,7 @@
   }
 
   &--cancelled {
-    background-color: var(--color-label-danger-primary);
+    background-color: var(--labels-danger-primary);
   }
 }
 
@@ -114,28 +114,28 @@
   font-size: 1.6rem;
   font-weight: 600;
   line-height: 2.4rem;
-  color: var(--color-label-neutral-primary);
+  color: var(--labels-neutral-primary);
 }
 
 .reasonBlock {
   margin-bottom: 2rem;
   padding: 1.2rem 1.6rem;
-  border-left: 0.4rem solid var(--color-label-danger-primary, #ef4444);
+  border-left: 0.4rem solid var(--labels-danger-primary, #ef4444);
   border-radius: 0.4rem;
 
-  background-color: var(--color-bg-danger-light, #fef2f2);
+  background-color: var(--bg-danger-light, #fef2f2);
 }
 
 .reasonLabel {
   margin-right: 0.8rem;
   font-size: 1.4rem;
   font-weight: 600;
-  color: var(--color-label-danger-primary, #ef4444);
+  color: var(--labels-danger-primary, #ef4444);
 }
 
 .reasonText {
   font-size: 1.4rem;
-  color: var(--color-label-neutral-primary, #111827);
+  color: var(--labels-neutral-primary, #111827);
 }
 
 .dataGrid {
@@ -158,18 +158,18 @@
   font-family: var(--font-text-medium);
   font-size: 1.6rem;
   line-height: 2.4rem;
-  color: var(--color-label-neutral-secondary, #6b7280);
+  color: var(--labels-neutral-secondary, #6b7280);
 }
 
 .dataValue {
   padding: 1.2rem;
-  border: 0.1rem solid var(--color-border-neutral-base, #e5e7eb);
+  border: 0.1rem solid var(--border-neutral-base, #e5e7eb);
   border-radius: 0.4rem;
 
   font-family: var(--font-text-medium);
   font-size: 1.6rem;
   line-height: 2.4rem;
-  color: var(--color-label-neutral-primary, #111827);
+  color: var(--labels-neutral-primary, #111827);
 }
 
 .dataItemFull {
@@ -200,7 +200,7 @@
   font-family: var(--font-text-medium);
   font-size: 1.6rem;
   line-height: 2.4rem;
-  color: var(--color-label-neutral-primary, #111827);
+  color: var(--labels-neutral-primary, #111827);
   text-overflow: ellipsis;
 }
 
@@ -219,7 +219,7 @@
   font-family: var(--font-text-medium);
   font-size: 1.6rem;
   line-height: 2.4rem;
-  color: var(--color-label-brand-primary);
+  color: var(--labels-brand-primary);
 
   background: none;
   outline: none;
@@ -245,12 +245,12 @@
   line-height: 2.8rem;
   color: #fff;
 
-  background-color: var(--color-interactive-brand-primary, #2563eb);
+  background-color: var(--interactive-brand-primary, #2563eb);
 
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: var(--color-interactive-brand-hover, #1d4ed8);
+    background-color: var(--interactive-brand-hover, #1d4ed8);
   }
 
   &:disabled {
@@ -270,14 +270,14 @@
   font-size: 2rem;
   font-weight: 500;
   line-height: 2.8rem;
-  color: var(--color-label-danger-primary);
+  color: var(--labels-danger-primary);
 
-  background-color: var(--color-fill-danger-tetriary);
+  background-color: var(--fills-danger-tetriary);
 
   transition: border-color 0.2s;
 
   &:hover {
-    background-color: var(--color-fill-danger-secondary);
+    background-color: var(--fills-danger-secondary);
   }
 }
 
@@ -294,12 +294,12 @@
   line-height: 2.8rem;
   color: #fff;
 
-  background-color: var(--color-interactive-brand-primary, #2563eb);
+  background-color: var(--interactive-brand-primary, #2563eb);
 
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: var(--color-interactive-brand-hover, #1d4ed8);
+    background-color: var(--interactive-brand-hover, #1d4ed8);
   }
 
   &:disabled {
@@ -318,7 +318,7 @@
   font-family: var(--font-text-medium);
   font-size: 1.6rem;
   line-height: 2.4rem;
-  color: var(--color-label-neutral-secondary, #111827);
+  color: var(--labels-neutral-secondary, #111827);
 
   input {
     font-family: var(--font-text-medium);
@@ -334,7 +334,7 @@
   font-size: 3.2rem;
   font-weight: 700;
   line-height: 3.6rem;
-  color: var(--color-label-neutral-primary, #111827);
+  color: var(--labels-neutral-primary, #111827);
 }
 
 .fieldPicker {
@@ -367,7 +367,7 @@
 .timeWrapper :global(.ant-picker) {
   max-height: 5.06rem !important;
   padding: 1.2rem !important;
-  border: 0.1rem solid var(--color-border-neutral-base, #e5e7eb) !important;
+  border: 0.1rem solid var(--border-neutral-base, #e5e7eb) !important;
   border-radius: 0.4rem !important;
 
   background: #fff !important;
@@ -384,7 +384,7 @@
 .timeWrapper :global(.ant-picker):focus,
 .timeWrapper :global(.ant-picker):active,
 .timeWrapper :global(.ant-picker-focused) {
-  border: 0.1rem solid var(--color-border-neutral-base, #e5e7eb) !important;
+  border: 0.1rem solid var(--border-neutral-base, #e5e7eb) !important;
   background: #fff !important;
   outline: none !important;
   box-shadow: none !important;
@@ -481,40 +481,40 @@
   .dataLabel,
   .sidebarTitle,
   .fieldLabel {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .status-text,
   .dataValue {
     color: color-mix(
       in srgb,
-      var(--color-label-neutral-secondary),
-      var(--color-label-neutral-inverted-primary)
+      var(--labels-neutral-secondary),
+      var(--labels-neutral-inverted-primary)
     );
   }
 
   .status-dot {
     &--completed {
-      background-color: var(--color-label-neutral-inverted-primary);
+      background-color: var(--labels-neutral-inverted-primary);
     }
   }
 
   .fieldSelectWrapper :global(.customSelect-selector),
   .timeWrapper :global(.ant-picker),
   .dataValue:global(.ant-input-outlined[disabled]) {
-    border: 0.1rem solid var(--color-border-neutral-base, #e5e7eb) !important;
+    border: 0.1rem solid var(--border-neutral-base, #e5e7eb) !important;
     color: color-mix(
       in srgb,
-      var(--color-label-neutral-secondary),
-      var(--color-label-neutral-inverted-primary)
+      var(--labels-neutral-secondary),
+      var(--labels-neutral-inverted-primary)
     ) !important;
-    background: var(--color-background-neutral-inverted) !important;
+    background: var(--backgrounds-neutral-inverted) !important;
 
     input[disabled] {
       color: color-mix(
         in srgb,
-        var(--color-label-neutral-secondary),
-        var(--color-label-neutral-inverted-primary)
+        var(--labels-neutral-secondary),
+        var(--labels-neutral-inverted-primary)
       ) !important;
     }
   }
@@ -522,8 +522,8 @@
   .dataValueDescription {
     color: color-mix(
       in srgb,
-      var(--color-label-neutral-secondary),
-      var(--color-label-neutral-inverted-primary)
+      var(--labels-neutral-secondary),
+      var(--labels-neutral-inverted-primary)
     );
   }
 }

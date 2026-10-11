@@ -8,7 +8,7 @@
     }
 
     .title {
-      color: var(--color-interactive-brand-primary);
+      color: var(--interactive-brand-primary);
     }
   }
 }
@@ -20,7 +20,7 @@
   padding: 1.6rem 2.5rem 8rem;
   border-radius: 2rem;
 
-  background-color: var(--color-fill-brand-quaternary);
+  background-color: var(--fills-brand-quaternary);
 }
 
 .photoWrapper {
@@ -53,20 +53,20 @@
   font-size: 2rem;
   font-weight: 500;
   line-height: 2.8rem;
-  color: var(--color-interactive-neutral-primary);
+  color: var(--interactive-neutral-primary);
 }
 
 .date {
   font-size: 1.6rem;
   line-height: 2.4rem;
-  color: var(--color-interactive-neutral-primary);
+  color: var(--interactive-neutral-primary);
 }
 
 .title {
   font-size: 2.4rem;
   font-weight: 500;
   line-height: 2.8rem;
-  color: var(--color-interactive-neutral-primary);
+  color: var(--interactive-neutral-primary);
   letter-spacing: -0.04em;
 
   transition: color 0.5s;
@@ -83,7 +83,7 @@
 
   font-size: 1.6rem;
   line-height: 2.4rem;
-  color: var(--color-label-neutral-tetriary);
+  color: var(--labels-neutral-tetriary);
 }
 
 .externalLink {
@@ -147,22 +147,22 @@
 
 [data-theme='dark'] {
   .wrapper {
-    background-color: var(--color-fill-neutral-primary);
+    background-color: var(--fills-neutral-primary);
   }
 
   .type {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .date {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .title {
     color: color-mix(
       in srgb,
-      var(--color-label-neutral-secondary),
-      var(--color-label-neutral-inverted-primary)
+      var(--labels-neutral-secondary),
+      var(--labels-neutral-inverted-primary)
     );
   }
 }

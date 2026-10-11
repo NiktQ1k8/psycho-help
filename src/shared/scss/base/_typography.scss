@@ -88,6 +88,7 @@ $font-weight-semi-bold: 600;
 :root {
   --font-header-letter-spacing: -0.1rem;
   --font-header-letter-spacing-h5: -0.1rem;
+  --font-letter-spacing-wide: 0.2rem;
   --font-h1: #{$font-weight-semi-bold 3.6rem/4.4rem $font-family-header};
   --font-h2: #{$font-weight-semi-bold 2.8rem/3.6rem $font-family-header};
   --font-h3: #{$font-weight-medium 2.4rem/3.2rem $font-family-header};

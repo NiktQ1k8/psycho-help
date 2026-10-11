@@ -10,7 +10,7 @@
 }
 
 .link {
-  color: var(--color-label-neutral-secondary);
+  color: var(--labels-neutral-secondary);
   text-decoration: none;
 }
 
@@ -18,7 +18,7 @@
   margin-top: 60px;
   padding: 24px;
   border-radius: 32px;
-  background-color: var(--color-background-neutral-secondary);
+  background-color: var(--backgrounds-neutral-secondary);
 }
 
 .mobileLink {
@@ -60,14 +60,14 @@
 [data-theme='dark'] {
   .links .link,
   .links span {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .links a:hover {
-    color: var(--color-label-brand-secondary);
+    color: var(--labels-brand-secondary);
   }
 
   .contentWrapper {
-    background-color: var(--color-fill-neutral-primary);
+    background-color: var(--fills-neutral-primary);
   }
 }

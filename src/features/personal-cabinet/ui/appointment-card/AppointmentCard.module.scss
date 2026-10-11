@@ -5,12 +5,12 @@
 
   min-width: 0;
   padding: 1.6rem 0.8rem 1.6rem 1.6rem;
-  border: 1px solid var(--color-border-neutral-base);
+  border: 1px solid var(--border-neutral-base);
   border-radius: 2.4rem;
 
   overflow-wrap: break-word;
 
-  background-color: var(--color-background-neutral-primary);
+  background-color: var(--backgrounds-neutral-primary);
 }
 
 .header {
@@ -22,7 +22,7 @@
 
 .date {
   font: var(--font-h5);
-  color: var(--color-label-neutral-primary);
+  color: var(--labels-neutral-primary);
   letter-spacing: var(--font-header-letter-spacing-h5, -0.1rem);
 }
 
@@ -39,7 +39,7 @@
   align-items: flex-start;
 
   font: var(--font-text-medium);
-  color: var(--color-label-neutral-primary);
+  color: var(--labels-neutral-primary);
 
   span {
     white-space: normal;
@@ -49,13 +49,13 @@
 .icon {
   margin-top: 0.4rem;
   font-size: 1.6rem;
-  color: var(--color-label-neutral-tetriary);
+  color: var(--labels-neutral-tetriary);
 }
 
 .iconWarning {
   flex-shrink: 0;
   font-size: 2rem;
-  color: var(--color-label-warning-primary);
+  color: var(--labels-warning-primary);
 }
 
 .footer {
@@ -72,7 +72,7 @@
   align-items: center;
 
   font: var(--font-text-small);
-  color: var(--color-label-neutral-secondary);
+  color: var(--labels-neutral-secondary);
 }
 
 .statusDot {
@@ -115,12 +115,12 @@
   border-radius: 1.6rem;
 
   font: var(--font-text-medium);
-  color: var(--color-interactive-brand-primary);
+  color: var(--interactive-brand-primary);
 
-  background-color: var(--color-interactive-brand-secondary);
+  background-color: var(--interactive-brand-secondary);
 
   &:hover {
-    background-color: var(--color-interactive-brand-hover-secondary);
+    background-color: var(--interactive-brand-hover-secondary);
   }
 }
 
@@ -132,12 +132,12 @@
   border-radius: 1.6rem;
 
   font: var(--font-text-medium);
-  color: var(--color-label-neutral-inverted-primary);
+  color: var(--labels-neutral-inverted-primary);
 
-  background-color: var(--color-interactive-brand-primary);
+  background-color: var(--interactive-brand-primary);
 
   &:hover {
-    background-color: var(--color-interactive-brand-hover);
+    background-color: var(--interactive-brand-hover);
   }
 }
 
@@ -145,11 +145,11 @@
   cursor: pointer;
 
   padding: 1rem 3rem;
-  border: 1px solid var(--color-label-danger-primary);
+  border: 1px solid var(--labels-danger-primary);
   border-radius: 1.6rem;
 
   font: var(--font-text-medium);
-  color: var(--color-label-danger-primary);
+  color: var(--labels-danger-primary);
 
   background-color: transparent;
 
@@ -159,40 +159,40 @@
 }
 
 .dotSuccess {
-  background-color: var(--color-label-success-primary);
+  background-color: var(--labels-success-primary);
 }
 
 .dotDanger {
-  background-color: var(--color-label-danger-primary);
+  background-color: var(--labels-danger-primary);
 }
 
 .dotWarning {
-  background-color: var(--color-label-warning-primary);
+  background-color: var(--labels-warning-primary);
 }
 
 .dotNeutral {
-  background-color: var(--color-label-neutral-quaternary);
+  background-color: var(--labels-neutral-quaternary);
 }
 
 [data-theme='dark'] {
   .card {
-    background-color: var(--color-fill-neutral-primary);
+    background-color: var(--fills-neutral-primary);
   }
 
   .date {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .icon {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .infoItem {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .commentLink {
-    color: var(--color-label-neutral-primary);
-    background-color: var(--color-background-neutral-primary);
+    color: var(--labels-neutral-primary);
+    background-color: var(--backgrounds-neutral-primary);
   }
 }

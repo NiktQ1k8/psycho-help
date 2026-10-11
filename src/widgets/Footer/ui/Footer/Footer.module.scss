@@ -1,5 +1,5 @@
 .footer {
-  background-color: var(--color-background-brand-primary);
+  background-color: var(--backgrounds-brand-primary);
 }
 
 .inner {
@@ -18,10 +18,10 @@
   margin-right: auto;
   padding: 16px;
   border-radius: 10px;
-  color: var(--color-label-neutral-inverted-primary);
+  color: var(--labels-neutral-inverted-primary);
 
   &:focus-visible {
-    outline: 1px solid var(--color-label-neutral-inverted-primary);
+    outline: 1px solid var(--labels-neutral-inverted-primary);
   }
 }
 
@@ -44,12 +44,12 @@
 .label {
   font-size: 14px;
   line-height: 20px;
-  color: var(--color-label-brand-quaternary);
+  color: var(--labels-brand-quaternary);
 }
 
 .value {
   font: var(--font-text-medium);
-  color: var(--color-label-neutral-inverted-primary);
+  color: var(--labels-neutral-inverted-primary);
   text-decoration: none;
 
   &:hover,
@@ -71,10 +71,10 @@
 
   width: 36px;
   height: 36px;
-  border: 1px solid var(--color-label-neutral-inverted-primary);
+  border: 1px solid var(--labels-neutral-inverted-primary);
   border-radius: 100px;
 
-  color: var(--color-label-neutral-inverted-primary);
+  color: var(--labels-neutral-inverted-primary);
 
   transition:
     color 0.3s,
@@ -82,8 +82,8 @@
 
   &:hover,
   &:focus-visible {
-    color: var(--color-background-brand-primary);
-    background-color: var(--color-label-neutral-inverted-primary);
+    color: var(--backgrounds-brand-primary);
+    background-color: var(--labels-neutral-inverted-primary);
   }
 }
 
@@ -108,7 +108,7 @@
   padding: 16px;
 
   font: var(--font-text-medium);
-  color: var(--color-label-neutral-inverted-primary);
+  color: var(--labels-neutral-inverted-primary);
 }
 
 .address,
@@ -128,7 +128,7 @@
   font-size: min(12.5vw, 179px);
   font-weight: 900;
   line-height: 90%;
-  color: var(--color-label-brand-quaternary);
+  color: var(--labels-brand-quaternary);
 
   opacity: 0.1;
 }
@@ -139,12 +139,12 @@
 
   font-size: 12px;
   line-height: 16px;
-  color: var(--color-label-neutral-inverted-primary);
+  color: var(--labels-neutral-inverted-primary);
   text-align: center;
 }
 
 .issuesLink {
-  color: var(--color-label-neutral-inverted-primary);
+  color: var(--labels-neutral-inverted-primary);
   text-decoration-style: solid;
   text-decoration-thickness: 3%;
   text-decoration-skip-ink: none;

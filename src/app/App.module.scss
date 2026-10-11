@@ -1,11 +1,11 @@
 .content {
   flex: auto;
   min-height: 0;
-  color: var(--color-label-neutral-primary);
+  color: var(--labels-neutral-primary);
 }
 
 [data-theme='dark'] {
   .content {
-    color: var(--color-label-neutral-inverted-primary);
+    color: var(--labels-neutral-inverted-primary);
   }
 }

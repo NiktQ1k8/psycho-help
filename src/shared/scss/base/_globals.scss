@@ -82,6 +82,10 @@
   --fills-neutral-tetriary: #{rgba($neutral-600, 0.08)};
   --fills-neutral-quaternary: #{rgba($neutral-600, 0.04)};
   --fills-neutral-none: #{$neutral-0};
+  --color-fill-brand-derivable-primary: #{rgba($accent-brand-500, 0.8)};
+  --color-fill-brand-derivable-secondary: #{rgba($accent-brand-500, 0.52)};
+  --color-fill-brand-derivable-tetriary: #{rgba($accent-brand-500, 0.32)};
+  --color-fill-brand-derivable-quaternary: #{rgba($accent-brand-500, 0.12)};
   --border-neutral-strong: #{$neutral-950};
   --border-neutral-base: #{rgba($neutral-600, 0.16)};
   --border-neutral-soft: #{rgba($neutral-600, 0.08)};

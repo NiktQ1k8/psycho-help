@@ -68,6 +68,7 @@
   font-size: 14px;
   color: #4a4a4a;
   text-transform: capitalize;
+  transition: all 0.2s;
 }
 
 .dayNumber {
@@ -326,8 +327,14 @@
     );
   }
 
-  .dayItem:hover:not(.dayActive) .dayNumber {
-    background-color: var(--interactive-brand-hover);
+  .dayItem:hover:not(.dayActive) {
+    .dayName {
+      color: var(--labels-brand-primary);
+    }
+
+    .dayNumber {
+      background-color: var(--backgrounds-brand-primary);
+    }
   }
 
   .emptyDetails {

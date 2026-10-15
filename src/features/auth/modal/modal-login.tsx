@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import { useAuth } from '@/features/auth/api/useAuth';
+import { getAuthErrorMessage } from '@/entities/auth/model/auth-errors';
+import { validateProfileField } from '@/entities/auth/model/profile-form';
+import { useAuth } from '@/entities/auth/model/useAuth';
 import { useFetch } from '@/shared/api/useFetch';
+import type { TAuthModalProps } from '../model/modal-types';
 import styles from './Modal.module.scss';
 import EyeIcon from './icons/Eye.svg?react';
 import EyeOffIcon from './icons/EyeOff.svg?react';
@@ -10,81 +13,53 @@ const INITIAL_FORM_VALUE = {
   password: '',
 };
 
-/*
-Тип пропсов для модального окна входа:
-- "setWindow" — функция для переключения окна модалки (вход/регистрация)
-- "isOpen" — булевый флаг, открыто ли модальное окно
-- "setModalOpen" — функция для закрытия или открытия модального окна
-
-Здесь использовалось "any" для функций, чтобы не писать типы, но это убрано,
-так как сейчас известно, какие значения реально передаются:
-
-- setWindow принимает только 'login' или 'reg'
-- setModalOpen принимает только булевое значение
-
-Если в будущем появятся новые состояния модалки (например "forgot"),
-можно расширить тип union или же его вынести в отдельный файл:
-
-type TProps = {
-  setWindow: (param: 'login' | 'reg' | 'forgot') => void;
-  isOpen: boolean;
-  setModalOpen: (param: boolean) => void;
-};
-*/
-
-type Tprops = {
-  setWindow: (param: 'log' | 'reg' | 'forgot' | 'change') => void;
-  isOpen: boolean;
-  setModalOpen: (param: boolean) => void;
-};
-
-const ModalLogin: React.FC<Tprops> = ({ setWindow, isOpen, setModalOpen }) => {
+const ModalLogin: React.FC<TAuthModalProps> = ({
+  setWindow,
+  isOpen,
+  setModalOpen,
+}) => {
   const [formValue, setFormValue] = useState({ ...INITIAL_FORM_VALUE });
   const [errors, setErrors] = useState({ ...INITIAL_FORM_VALUE });
-  const [open, setOpen] = useState(isOpen);
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const { login } = useAuth();
 
-  const { fetching, isLoading, error } = useFetch(async () => {
-    const { email, password } = { ...formValue };
-    await login(email, password);
-  });
-
-  const validateEmail = (email: string) =>
-    /^[\w-]+(\.[\w-]+)*@[\w-]+\.[a-z]{2,6}$/i.test(email)
-      ? ''
-      : 'Некорректный формат электронной почты';
-
-  const validatePassword = (password: string) =>
-    password ? '' : 'Пароль не может быть пустым';
+  const { fetching, isLoading, error, clearError } = useFetch(
+    async () => {
+      const { email, password } = formValue;
+      await login(email.trim(), password);
+    },
+    (error) => getAuthErrorMessage(error, 'login'),
+  );
 
   const validateForm = () => {
     const newErrors = {
-      email: validateEmail(formValue.email),
-      password: validatePassword(formValue.password),
+      email: validateProfileField('email', formValue.email) || '',
+      password:
+        formValue.password.length >= 8 && formValue.password.length <= 64
+          ? ''
+          : 'Пароль должен содержать от 8 до 64 символов',
     };
     setErrors(newErrors);
     return Object.values(newErrors).every((error) => error === '');
   };
 
   const handleOk = async () => {
-    if (!validateForm()) return;
+    if (isLoading || !validateForm()) return;
     const ok = await fetching();
     if (ok) {
-      setOpen(false);
       setModalOpen(false);
     }
   };
 
   const handleCancel = () => {
-    setOpen(false);
     setModalOpen(false);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    clearError();
     setFormValue((prevValues) => ({
       ...prevValues,
       [name]: value,
@@ -95,7 +70,7 @@ const ModalLogin: React.FC<Tprops> = ({ setWindow, isOpen, setModalOpen }) => {
     }));
   };
 
-  if (!open) return null;
+  if (!isOpen) return null;
 
   return (
     <div className={styles.modalOverlay}>
@@ -111,97 +86,120 @@ const ModalLogin: React.FC<Tprops> = ({ setWindow, isOpen, setModalOpen }) => {
           </button>
         </div>
 
-        <form className={styles.form}>
-          <label>
-            <span>Электронная почта</span>
-            <input
-              type="email"
-              name="email"
-              value={formValue.email}
-              placeholder="primer@gmail.com"
-              onChange={handleInputChange}
-              className={styles.input}
-              aria-details="Строка для ввода электронной почты"
-            />
-            {errors.email && (
-              <span className={styles.errorText}>{errors.email}</span>
-            )}
-          </label>
-          <label>
-            <span>Пароль</span>
-            <div className={styles.passwordWrapper}>
+        <form
+          noValidate
+          onSubmit={(e) => {
+            e.preventDefault();
+            void handleOk();
+          }}
+        >
+          <div className={styles.form}>
+            <label>
+              <span>Электронная почта</span>
               <input
-                type={showPassword ? 'text' : 'password'}
-                name="password"
-                value={formValue.password}
-                placeholder="Введите пароль"
+                type="email"
+                disabled={isLoading}
+                maxLength={64}
+                autoComplete="email"
+                name="email"
+                aria-invalid={!!errors.email}
+                onBlur={() =>
+                  setErrors((prev) => ({
+                    ...prev,
+                    email: validateProfileField('email', formValue.email) || '',
+                  }))
+                }
+                value={formValue.email}
+                placeholder="Введите почту"
                 onChange={handleInputChange}
-                className={styles.passwordInput}
+                className={styles.input}
+                aria-details="Строка для ввода электронной почты"
               />
-              <button
-                type="button"
-                className={styles.showPassButton}
-                onClick={() => setShowPassword((s) => !s)}
-                aria-pressed={showPassword}
-                aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
-              >
-                {showPassword ? <EyeIcon /> : <EyeOffIcon />}
-              </button>
-            </div>
-            {errors.password && (
-              <span className={styles.errorText}>{errors.password}</span>
-            )}
-          </label>
-          <div className={styles.rememberContainer}>
-            <div className={styles.rememberCheckbox}>
-              <label className={styles.checkboxLabel}>
+              {errors.email && (
+                <span className={styles.errorText}>{errors.email}</span>
+              )}
+            </label>
+            <label>
+              <span>Пароль</span>
+              <div className={styles.passwordWrapper}>
                 <input
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  className={styles.checkbox}
+                  type={showPassword ? 'text' : 'password'}
+                  name="password"
+                  disabled={isLoading}
+                  aria-invalid={!!errors.password}
+                  maxLength={64}
+                  autoComplete="current-password"
+                  value={formValue.password}
+                  placeholder="Введите пароль"
+                  onChange={handleInputChange}
+                  className={styles.passwordInput}
                 />
-                <span className={styles.checkbox_custom}></span>
-                <span className={styles.checkboxText}>Запомнить меня</span>
-              </label>
+                <button
+                  type="button"
+                  className={styles.showPassButton}
+                  onClick={() => setShowPassword((s) => !s)}
+                  aria-pressed={showPassword}
+                  aria-label={
+                    showPassword ? 'Скрыть пароль' : 'Показать пароль'
+                  }
+                >
+                  {showPassword ? <EyeIcon /> : <EyeOffIcon />}
+                </button>
+              </div>
+              {errors.password && (
+                <span className={styles.errorText}>{errors.password}</span>
+              )}
+            </label>
+            <div className={styles.rememberContainer}>
+              <div className={styles.rememberCheckbox}>
+                <label className={styles.checkboxLabel}>
+                  <input
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                    className={styles.checkbox}
+                  />
+                  <span className={styles.checkbox_custom}></span>
+                  <span className={styles.checkboxText}>Запомнить меня</span>
+                </label>
+              </div>
+              <a
+                className={styles.forgotLink}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setWindow('forgot');
+                }}
+              >
+                Забыли пароль?
+              </a>
             </div>
-            <a
-              className={styles.forgotLink}
-              onClick={(e) => {
-                e.preventDefault();
-                setWindow('forgot');
-              }}
+          </div>
+
+          {error.message && (
+            <p className={styles.errorMessage} role="alert">
+              {error.message}
+            </p>
+          )}
+
+          <div className={styles.footer}>
+            <button
+              className={styles.submitButton}
+              type="submit"
+              disabled={isLoading}
             >
-              Забыли пароль?
-            </a>
+              {isLoading ? 'Загрузка...' : 'Войти'}
+            </button>
+            <p className={styles.Suggestion}>
+              <span>У вас еще нет учетной записи?</span>{' '}
+              <a
+                className={styles.ModalSwitcher}
+                onClick={() => setWindow('reg')}
+              >
+                Регистрация
+              </a>
+            </p>
           </div>
         </form>
-
-        {error.status === 401 && (
-          <p className={styles.errorMessage}>Неверный логин или пароль</p>
-        )}
-        {error.message !== '' && error.status !== 401 && (
-          <p className={styles.errorMessage}>{error.message}</p>
-        )}
-
-        <div className={styles.footer}>
-          <button
-            className={styles.submitButton}
-            onClick={handleOk}
-            disabled={isLoading}
-          >
-            {isLoading ? 'Загрузка...' : 'Войти'}
-          </button>
-          <p className={styles.Suggestion}>
-            <span>У вас еще нет учетной записи?</span>{' '}
-            <a
-              className={styles.ModalSwitcher}
-              onClick={() => setWindow('reg')}
-            >
-              Регистрация
-            </a>
-          </p>
-        </div>
       </div>
     </div>
   );

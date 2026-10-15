@@ -1,8 +1,9 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { ConfigProvider, theme } from 'antd';
 import ru_RU from 'antd/locale/ru_RU';
 import { AppContextProvider } from '@/app/context/provider';
 import { appTheme } from '@/app/theme';
+import { queryClient } from '@/shared/api/queryClient';
 import { useTheme } from '@/shared/hooks/useTheme';
 import '@/shared/lib/dayjs';
 import { BackToTop } from '@/shared/ui';
@@ -10,15 +11,11 @@ import { CookieBanner } from '@/shared/ui/cookie-banner/CookieBanner';
 import { Footer } from '@/widgets/Footer/ui/Footer/Footer';
 import Header from '@/widgets/header/header';
 import styles from './App.module.scss';
+import { setupSession } from './api/setupSession';
 import AppRouter from './router/AppRouter';
 
-const client = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 1,
-    },
-  },
-});
+const cleanupSession = setupSession();
+if (import.meta.hot) import.meta.hot.dispose(cleanupSession);
 
 function App() {
   const { currentTheme } = useTheme();
@@ -30,7 +27,7 @@ function App() {
   };
 
   return (
-    <QueryClientProvider client={client}>
+    <QueryClientProvider client={queryClient}>
       <ConfigProvider locale={ru_RU} theme={themeConfig}>
         <AppContextProvider>
           <Header />

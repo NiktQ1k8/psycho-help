@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { navPages } from '@/app/router/routes';
-import { useAuth } from '@/features/auth/api/useAuth';
+import { useAuth } from '@/entities/auth/model/useAuth';
 import { SLUG } from '@/shared/config/slug';
 import Header from './header';
 
@@ -46,7 +46,7 @@ vi.mock('@/features/auth/modal/modal', () => ({
     ) : null,
 }));
 
-vi.mock('@/features/auth/api/useAuth', () => ({ useAuth: vi.fn() }));
+vi.mock('@/entities/auth/model/useAuth', () => ({ useAuth: vi.fn() }));
 
 const renderHeader = () =>
   render(

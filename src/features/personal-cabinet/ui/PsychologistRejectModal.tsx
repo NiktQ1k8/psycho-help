@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Input, Modal, message } from 'antd';
-import { AxiosError } from 'axios';
 import {
   applicationQueryKey,
   rejectApplication,
@@ -13,11 +12,12 @@ import {
   type PsychologistReasonDraftType,
   usePsychologistDrafts,
 } from '@/features/personal-cabinet/model/psychologist-drafts';
+import { getErrorMessage } from '@/shared/api/errors';
 
-type ModalType = PsychologistReasonDraftType;
+type TModalType = PsychologistReasonDraftType;
 
 const CONFIG: Record<
-  ModalType,
+  TModalType,
   {
     title: string;
     okText: string;
@@ -50,19 +50,19 @@ const CONFIG: Record<
   },
 };
 
-interface PsychologistRejectModalProps {
-  type: ModalType;
+type TPsychologistRejectModalProps = {
+  type: TModalType;
   entityId: string | null;
   onClose: () => void;
   onSuccess?: () => void;
-}
+};
 
 const PsychologistRejectModal = ({
   type,
   entityId,
   onClose,
   onSuccess,
-}: PsychologistRejectModalProps) => {
+}: TPsychologistRejectModalProps) => {
   const queryClient = useQueryClient();
   const reason = usePsychologistDrafts((state) =>
     entityId ? state.reasonDrafts[type]?.[entityId] || '' : '',
@@ -82,9 +82,8 @@ const PsychologistRejectModal = ({
       onClose();
       onSuccess?.();
     },
-    onError: (error: AxiosError<{ detail?: string }>) => {
-      const detail = error.response?.data?.detail;
-      message.error(detail || 'Не удалось выполнить операцию');
+    onError: (error) => {
+      message.error(getErrorMessage(error, 'Не удалось выполнить операцию'));
     },
   });
 

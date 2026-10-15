@@ -1,28 +1,28 @@
 import type { FC, ReactNode } from 'react';
 import { UserOutlined } from '@ant-design/icons';
 import clsx from 'clsx';
-import type { User } from '@/entities/auth';
+import type { TUser } from '@/entities/auth/types';
 import styles from './sidebar.module.scss';
 
-export interface TabConfig {
+export type TTabConfig = {
   id: string;
   label: string;
-}
+};
 
-export interface TabBadge {
+export type TTabBadge = {
   tabId: string;
   content: (isActive: boolean) => ReactNode;
-}
+};
 
-interface SidebarProps {
-  user: User | null;
+type TSidebarProps = {
+  user: TUser | null;
   activeTab: string;
   onChangeTab: (tab: string) => void;
-  tabs: TabConfig[];
-  tabBadges?: TabBadge[];
-}
+  tabs: TTabConfig[];
+  tabBadges?: TTabBadge[];
+};
 
-const Sidebar: FC<SidebarProps> = ({
+const Sidebar: FC<TSidebarProps> = ({
   user,
   activeTab,
   onChangeTab,
@@ -45,7 +45,6 @@ const Sidebar: FC<SidebarProps> = ({
             : 'Имя пользователя'}
         </div>
       </div>
-
       <nav className={styles.nav}>
         {tabs.map((tab) => {
           const badgeContent = getBadgeForTab(tab.id);
@@ -62,10 +61,7 @@ const Sidebar: FC<SidebarProps> = ({
           );
         })}
       </nav>
-
-      <div className={styles.footer}>
-        <button className={styles.askButton}>Задать вопрос</button>
-      </div>
+      {/* TODO: Добавить кнопку "Задать вопрос" */}
     </aside>
   );
 };

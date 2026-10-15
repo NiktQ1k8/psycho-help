@@ -13,14 +13,14 @@ import Loader from '@/shared/ui/loader/loader';
 import styles from './NewsItemPage.module.scss';
 
 export const NewsItemPage = () => {
-  const { slug } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const {
     data: newsItem,
     isLoading,
     error,
-  } = useQuery(newsItemQueries.bySlug(slug!));
+  } = useQuery(newsItemQueries.byId(id ?? ''));
 
   useEffect(() => {
     window.scroll(0, 0);

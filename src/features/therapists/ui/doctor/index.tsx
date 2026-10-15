@@ -1,13 +1,13 @@
 import type { FC } from 'react';
 import { Link } from 'react-router-dom';
-import type { Therapist } from '@/entities/therapist/types';
+import type { TTherapist } from '@/entities/therapist/types';
 import altPhoto from '@/shared/assets/images/altPhotos/User_Accounts_alt.png';
 import { SLUG } from '@/shared/config/slug';
 import Img from '@/shared/ui/img/Img';
 import styles from './Doctor.module.scss';
 
 interface Props {
-  doctor: Therapist;
+  doctor: TTherapist;
   linkToDetails?: boolean; // если true — карточка кликабельная
 }
 

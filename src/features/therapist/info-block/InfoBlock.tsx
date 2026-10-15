@@ -1,11 +1,11 @@
 import { type FC, useState } from 'react';
-import type { Therapist } from '@/entities/therapist/types';
+import type { TTherapist } from '@/entities/therapist/types';
 import altPhoto from '@/shared/assets/images/altPhotos/User_Accounts_alt.png';
 import { Img } from '@/shared/ui';
 import styles from './InfoBlock.module.scss';
 
 interface Props {
-  therapist: Therapist;
+  therapist: TTherapist;
 }
 
 const InfoBlock: FC<Props> = ({ therapist: therapist }) => {

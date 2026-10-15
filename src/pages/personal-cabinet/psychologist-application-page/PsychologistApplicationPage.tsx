@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { DatePicker, Empty, Input, Result, Select, message } from 'antd';
-import { AxiosError } from 'axios';
 import clsx from 'clsx';
 import {
   acceptApplication,
@@ -10,17 +9,18 @@ import {
   applicationQueryKey,
   offerConsultation,
 } from '@/entities/application/api';
-import type { Application, MeetingType } from '@/entities/application/types';
+import type { TApplication, TMeetingType } from '@/entities/application/types';
+import { useAuth } from '@/entities/auth/model/useAuth';
 import { Role } from '@/entities/role/helpers';
-import { useAuth } from '@/features/auth/api/useAuth';
 import { useCabinetTab } from '@/features/personal-cabinet/model/personal-cabinet-tab';
 import PsychologistRejectModal from '@/features/personal-cabinet/ui/PsychologistRejectModal';
 import Sidebar from '@/features/personal-cabinet/ui/sidebar/Sidebar';
 import {
-  type TabId,
+  type TTabId,
   getTabsForRole,
 } from '@/pages/personal-cabinet/config/tabs';
 import { ApplicationStatusTag } from '@/pages/personal-cabinet/constants';
+import { getErrorMessage } from '@/shared/api/errors';
 import { SLUG } from '@/shared/config/slug';
 import dayjs from '@/shared/lib/dayjs';
 import { MOSCOW_TZ } from '@/shared/lib/dayjs';
@@ -73,7 +73,7 @@ const PsychologistApplicationPage = () => {
 
   const handleSidebarTabChange = useCallback(
     (tabId: string) => {
-      setSavedTab(tabId as TabId);
+      setSavedTab(tabId as TTabId);
       navigate(SLUG.CABINET);
     },
     [navigate, setSavedTab],
@@ -89,7 +89,7 @@ const PsychologistApplicationPage = () => {
     enabled: isPsychologist && !!id,
   });
 
-  const [userMeetingType, setUserMeetingType] = useState<MeetingType | null>(
+  const [userMeetingType, setUserMeetingType] = useState<TMeetingType | null>(
     null,
   );
   const [userDate, setUserDate] = useState<dayjs.Dayjs | null>(null);
@@ -122,7 +122,7 @@ const PsychologistApplicationPage = () => {
     [application?.scheduled_at],
   );
 
-  const getMeetingType = (application: Application | undefined) => {
+  const getMeetingType = (application: TApplication | undefined) => {
     if (userMeetingType) return userMeetingType;
     if (application?.meeting_type) return application.meeting_type;
     if (application?.location_address) return 'offline';
@@ -176,9 +176,8 @@ const PsychologistApplicationPage = () => {
         queryKey: [applicationQueryKey.byId, id],
       });
     },
-    onError: (error: AxiosError<{ detail?: string }>) => {
-      const detail = error.response?.data?.detail;
-      message.error(detail || 'Не удалось выполнить операцию');
+    onError: (error) => {
+      message.error(getErrorMessage(error, 'Не удалось выполнить операцию'));
     },
   });
 
@@ -202,17 +201,15 @@ const PsychologistApplicationPage = () => {
       });
       navigate(-1);
     },
-    onError: (error: AxiosError<{ detail?: string }>) => {
-      const detail = error.response?.data?.detail;
-      message.error(detail || 'Не удалось сохранить изменения');
+    onError: (error) => {
+      message.error(getErrorMessage(error, 'Не удалось сохранить изменения'));
     },
   });
 
   if (!isPsychologist) return <Navigate to={SLUG.MAIN} replace />;
   if (isLoading) return <Loader />;
   if (isError) {
-    const detail = (error as AxiosError<{ detail?: string }>)?.response?.data
-      ?.detail;
+    const detail = getErrorMessage(error);
     return (
       <Result
         status="error"
@@ -237,9 +234,7 @@ const PsychologistApplicationPage = () => {
     application.status === 'in_progress' ||
     application.status === 'awaiting_user_confirmation';
   const canReject =
-    application.status === 'new' ||
-    application.status === 'in_progress' ||
-    application.status === 'awaiting_user_confirmation';
+    application.status === 'new' || application.status === 'in_progress';
 
   const canSave =
     canChange &&
@@ -248,7 +243,7 @@ const PsychologistApplicationPage = () => {
     selectedDateTime.isAfter(dayjs.tz()) &&
     (meetingType === 'offline'
       ? locationAddress.trim().length > 0
-      : meetingUrl.trim().length > 0);
+      : meetingUrl.trim().length > 0 && meetingUrl.trim().length <= 128);
 
   const disabledDates = (current: dayjs.Dayjs) => {
     return current
@@ -256,11 +251,11 @@ const PsychologistApplicationPage = () => {
       : false;
   };
 
-  interface ExpandableTextProps {
+  type TExpandableTextProps = {
     text: string;
-  }
+  };
 
-  const ExpandableText: React.FC<ExpandableTextProps> = ({ text }) => {
+  const ExpandableText: React.FC<TExpandableTextProps> = ({ text }) => {
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
     if (!text) return null;
     return (
@@ -465,6 +460,8 @@ const PsychologistApplicationPage = () => {
                 className={styles.dataValue}
                 placeholder="—"
                 value={meetingUrl}
+                maxLength={128}
+                showCount
                 onChange={(e) => setUserMeetingUrl(e.target.value)}
                 disabled={!canChange}
               />

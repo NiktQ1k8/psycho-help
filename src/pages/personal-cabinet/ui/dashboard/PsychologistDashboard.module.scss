@@ -62,13 +62,14 @@
   align-items: center;
 
   padding: 4px;
+
+  font: var(--font-text-medium);
 }
 
 .dayName {
-  font-size: 14px;
-  color: #4a4a4a;
+  color: var(--labels-neutral-primary);
   text-transform: capitalize;
-  transition: all 0.2s;
+  transition: color 0.3s;
 }
 
 .dayNumber {
@@ -80,19 +81,26 @@
   height: 28px;
   border-radius: 50%;
 
-  font-size: 14px;
-  color: #1a1a1a;
+  color: var(--labels-neutral-primary);
 
-  transition: all 0.2s;
+  transition:
+    color 0.3s,
+    background-color 0.3s;
 }
 
-.dayActive .dayNumber {
-  color: #fff;
-  background-color: #3b82f6;
+.dayActive {
+  .dayName {
+    color: var(--labels-brand-primary);
+  }
+
+  .dayNumber {
+    color: var(--labels-neutral-inverted-primary);
+    background-color: var(--backgrounds-brand-primary);
+  }
 }
 
 .dayItem:hover:not(.dayActive) .dayNumber {
-  background-color: #f0f0f0;
+  background-color: var(--interactive-neutral-hover-secondary);
 }
 
 .datePicker {
@@ -327,14 +335,12 @@
     );
   }
 
-  .dayItem:hover:not(.dayActive) {
-    .dayName {
-      color: var(--labels-brand-primary);
-    }
+  .dayActive .dayName {
+    color: var(--labels-brand-primary);
+  }
 
-    .dayNumber {
-      background-color: var(--backgrounds-brand-primary);
-    }
+  .dayItem:hover:not(.dayActive) .dayNumber {
+    background-color: var(--interactive-neutral-hover);
   }
 
   .emptyDetails {

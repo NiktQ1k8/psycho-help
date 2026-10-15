@@ -1,25 +1,26 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Empty, Input, Result, message } from 'antd';
-import { AxiosError } from 'axios';
+import { Alert, Empty, Input, Result, message } from 'antd';
 import clsx from 'clsx';
+import { applicationQueries } from '@/entities/application/api';
 import {
   appointmentQueries,
   appointmentQueryKey,
   completeAppointment,
 } from '@/entities/appointment/api';
+import { useAuth } from '@/entities/auth/model/useAuth';
 import { Role } from '@/entities/role/helpers';
-import { useAuth } from '@/features/auth/api/useAuth';
 import { useCabinetTab } from '@/features/personal-cabinet/model/personal-cabinet-tab';
 import { usePsychologistDrafts } from '@/features/personal-cabinet/model/psychologist-drafts';
 import PsychologistRejectModal from '@/features/personal-cabinet/ui/PsychologistRejectModal';
 import Sidebar from '@/features/personal-cabinet/ui/sidebar/Sidebar';
 import {
-  type TabId,
+  type TTabId,
   getTabsForRole,
 } from '@/pages/personal-cabinet/config/tabs';
 import { AppointmentStatusTag } from '@/pages/personal-cabinet/constants';
+import { getErrorMessage } from '@/shared/api/errors';
 import { SLUG } from '@/shared/config/slug';
 import dayjs from '@/shared/lib/dayjs';
 import Loader from '@/shared/ui/loader/loader';
@@ -57,7 +58,7 @@ const PsychologistAppointmentPage = () => {
 
   const handleSidebarTabChange = useCallback(
     (tabId: string) => {
-      setSavedTab(tabId as TabId);
+      setSavedTab(tabId as TTabId);
       navigate(SLUG.CABINET);
     },
     [navigate, setSavedTab],
@@ -72,6 +73,11 @@ const PsychologistAppointmentPage = () => {
     ...appointmentQueries.byId(id!),
     enabled: isPsychologist && !!id,
   });
+
+  const { data: application, error: applicationError } = useQuery(
+    applicationQueries.byId(appointment?.application_id || ''),
+  );
+  const reason = application?.problem_description || appointment?.reason;
 
   const conclusion = usePsychologistDrafts((state) =>
     appointmentId ? state.conclusionDrafts[appointmentId] || '' : '',
@@ -110,7 +116,7 @@ const PsychologistAppointmentPage = () => {
   ]);
 
   const completeMutation = useMutation({
-    mutationFn: () => completeAppointment(id!, conclusion),
+    mutationFn: () => completeAppointment(id!, conclusion.trim()),
     onSuccess: () => {
       message.success('Запись завершена');
       if (appointmentId) {
@@ -122,17 +128,15 @@ const PsychologistAppointmentPage = () => {
       });
       navigate(-1);
     },
-    onError: (error: AxiosError<{ detail?: string }>) => {
-      const detail = error.response?.data?.detail;
-      message.error(detail || 'Не удалось завершить запись');
+    onError: (error) => {
+      message.error(getErrorMessage(error, 'Не удалось завершить запись'));
     },
   });
 
   if (!isPsychologist) return <Navigate to={SLUG.MAIN} replace />;
   if (isLoading) return <Loader />;
   if (isError) {
-    const detail = (error as AxiosError<{ detail?: string }>)?.response?.data
-      ?.detail;
+    const detail = getErrorMessage(error);
     return (
       <Result
         status="error"
@@ -230,7 +234,7 @@ const PsychologistAppointmentPage = () => {
               </span>
             </div>
             <div className={styles.infoRowGrid}>
-              <span className={styles.infoLabel}>Статус</span>
+              <span className={styles.infoLabel}>Соцсети</span>
               <span className={styles.infoValueGrid}>
                 {appointment.patient?.social_media || '—'}
               </span>
@@ -270,10 +274,17 @@ const PsychologistAppointmentPage = () => {
             </div>
           </div>
 
-          {appointment.reason && (
+          {applicationError && (
+            <Alert
+              type="error"
+              message="Не удалось загрузить данные заявки"
+              description={getErrorMessage(applicationError)}
+            />
+          )}
+          {reason && (
             <div className={styles.infoRow}>
               <span className={styles.infoLabel}>Причина записи</span>
-              <span className={styles.infoValue}>{appointment.reason}</span>
+              <span className={styles.infoValue}>{reason}</span>
             </div>
           )}
 
@@ -302,8 +313,8 @@ const PsychologistAppointmentPage = () => {
                     setConclusionDraft(appointment.id, e.target.value)
                   }
                   placeholder="Введите заключение по консультации"
-                  // maxLength={2000}
-                  // showCount
+                  maxLength={2048}
+                  showCount
                 />
               </span>
             </div>

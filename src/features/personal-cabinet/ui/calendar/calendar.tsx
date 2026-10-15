@@ -4,7 +4,7 @@ import { Calendar, theme } from 'antd';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
-import type { Appointment } from '@/entities/appointment/types';
+import type { TAppointment } from '@/entities/appointment/types';
 import { useAppointment } from '@/features/personal-cabinet/model/appointment';
 import styles from './Calendar.module.scss';
 import Marker from './marker/marker';
@@ -17,7 +17,7 @@ const specialDatesTypes: Record<string, string> = {
 };
 
 type Props = {
-  appointments?: Appointment[];
+  appointments?: TAppointment[];
 };
 
 const ACalendar: FC<Props> = ({ appointments }) => {

@@ -1,116 +1,131 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { authApi } from '@/entities/auth/api';
+import { getAuthErrorMessage } from '@/entities/auth/model/auth-errors';
+import { validateProfileField } from '@/entities/auth/model/profile-form';
 import { useFetch } from '@/shared/api/useFetch';
+import type { TAuthModalProps } from '../model/modal-types';
 import styles from './Modal.module.scss';
 
-type Tprops = {
-  setWindow: (param: 'log' | 'reg' | 'forgot' | 'change') => void;
-  isOpen: boolean;
-  setModalOpen: (param: boolean) => void;
-};
-
-const ModalForgotPassword: React.FC<Tprops> = ({
+const ModalForgotPassword = ({
   setWindow,
   isOpen,
   setModalOpen,
-}) => {
+}: TAuthModalProps) => {
   const [email, setEmail] = useState('');
-  const [error, setError] = useState('');
-  const [open, setOpen] = useState(isOpen);
+  const [emailError, setEmailError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const { fetching, isLoading, error, clearError } = useFetch(
+    async () => {
+      const response = await authApi.requestPasswordReset({
+        email: email.trim(),
+      });
+      setSuccessMessage(response.message);
+    },
+    (error) => getAuthErrorMessage(error, 'requestPasswordReset'),
+  );
 
-  const {
-    fetching,
-    isLoading,
-    error: fetchError,
-  } = useFetch(async () => {
-    // TODO: Заглушка — здесь можно вызвать реальный API, например AuthApi.forgotPassword(email)
-    await new Promise((res) => setTimeout(res, 700));
-  });
-
-  const validateEmail = (value: string) =>
-    /^[\w-]+(\.[\w-]+)*@[\w-]+\.[a-z]{2,6}$/i.test(value)
-      ? ''
-      : 'Некорректный формат электронной почты';
-
-  const handleOk = async () => {
-    const err = validateEmail(email);
-    setError(err);
-    if (err) return;
-    await fetching();
-    if (fetchError.message === '') {
-      // закроем модалку и покажем нотификацию где-то вне компонента
-      setOpen(false);
-      setModalOpen(false);
-    }
+  const handleSubmit = async () => {
+    if (isLoading) return;
+    const validationError = validateProfileField('email', email) || '';
+    setEmailError(validationError);
+    if (!validationError) await fetching();
   };
 
-  const handleCancel = () => {
-    setOpen(false);
-    setModalOpen(false);
-  };
-
-  if (!open) return null;
-
+  if (!isOpen) return null;
   return (
     <div className={styles.modalOverlay}>
-      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+      <div className={styles.modalContent}>
         <div className={styles.modalHeaderPassword}>
-          <h2 className={styles.modalTitle}>Забыли пароль?</h2>
+          <h2 className={styles.modalTitle}>
+            {successMessage ? 'Проверьте почту' : 'Забыли пароль?'}
+          </h2>
           <button
+            type="button"
             className={styles.closeButton}
-            onClick={handleCancel}
+            onClick={() => setModalOpen(false)}
             aria-label="Закрыть"
           >
             ✕
           </button>
         </div>
-
-        <p className={styles.modalDesc}>
-          Введите Email, который вы использовали при регистрации
-        </p>
-
-        <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
-          <label>
-            <span>Электронная почта</span>
-            <input
-              type="email"
-              name="email"
-              value={email}
-              placeholder="Введите почту"
-              onChange={(e) => setEmail(e.target.value)}
-              className={styles.input}
-            />
-            {error && <span className={styles.errorText}>{error}</span>}
-          </label>
-        </form>
-
-        {fetchError.message !== '' && (
-          <p className={styles.errorMessage}>{fetchError.message}</p>
-        )}
-
-        <div className={styles.footer}>
-          <button
-            className={styles.submitButton}
-            onClick={handleOk}
-            disabled={isLoading}
-          >
-            {isLoading ? 'Загрузка...' : 'Восстановить'}
-          </button>
-          <p className={styles.Suggestion}>
-            <a
-              className={styles.ModalSwitcher}
+        {successMessage ? (
+          <>
+            <p className={styles.modalDesc} role="status">
+              {successMessage}. Откройте ссылку из письма, чтобы задать новый
+              пароль.
+            </p>
+            <button
+              type="button"
+              className={styles.submitButton}
               onClick={() => setWindow('log')}
             >
-              Вернуться
-            </a>
-            <span> | </span>
-            <a
-              className={styles.ModalSwitcher}
-              onClick={() => setWindow('change')}
+              Вернуться ко входу
+            </button>
+          </>
+        ) : (
+          <>
+            <p className={styles.modalDesc}>
+              Введите почту, которую вы использовали при регистрации
+            </p>
+            <form
+              noValidate
+              onSubmit={(e) => {
+                e.preventDefault();
+                void handleSubmit();
+              }}
             >
-              Перейти к восстановлению пароля
-            </a>
-          </p>
-        </div>
+              <div className={styles.form}>
+                <label>
+                  <span>Электронная почта</span>
+                  <input
+                    type="email"
+                    disabled={isLoading}
+                    name="email"
+                    autoComplete="email"
+                    maxLength={64}
+                    value={email}
+                    placeholder="Введите почту"
+                    className={styles.input}
+                    aria-invalid={!!emailError}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      setEmailError('');
+                      clearError();
+                    }}
+                    onBlur={() =>
+                      setEmailError(validateProfileField('email', email) || '')
+                    }
+                  />
+                  {emailError && (
+                    <span className={styles.errorText}>{emailError}</span>
+                  )}
+                </label>
+              </div>
+              {error.message && (
+                <p className={styles.errorMessage} role="alert">
+                  {error.message}
+                </p>
+              )}
+              <div className={styles.footer}>
+                <button
+                  type="submit"
+                  className={styles.submitButton}
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Отправка...' : 'Восстановить'}
+                </button>
+                <p className={styles.Suggestion}>
+                  <a
+                    className={styles.ModalSwitcher}
+                    onClick={() => setWindow('log')}
+                  >
+                    Вернуться ко входу
+                  </a>
+                </p>
+              </div>
+            </form>
+          </>
+        )}
       </div>
     </div>
   );

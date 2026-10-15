@@ -1,8 +1,8 @@
-import type { ApplicationStatus } from '@/entities/application/types';
-import type { AppointmentStatus } from '@/entities/appointment/types';
+import type { TApplicationStatus } from '@/entities/application/types';
+import type { TAppointmentStatus } from '@/entities/appointment/types';
 
 export const AppointmentStatusTag: Record<
-  AppointmentStatus,
+  TAppointmentStatus,
   { text: string; className: string }
 > = {
   awaiting: { text: 'Ожидается', className: 'status-dot--awaiting' },
@@ -11,7 +11,7 @@ export const AppointmentStatusTag: Record<
 };
 
 export const ApplicationStatusTag: Record<
-  ApplicationStatus,
+  TApplicationStatus,
   { text: string; className: string }
 > = {
   new: { text: 'Новая', className: 'status-dot--new' },

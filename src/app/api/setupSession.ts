@@ -1,0 +1,61 @@
+import { isAxiosError } from 'axios';
+import type { InternalAxiosRequestConfig } from 'axios';
+import { refreshSession } from '@/entities/auth/api';
+import { useAuth } from '@/entities/auth/model/useAuth';
+import { useApplication } from '@/features/personal-cabinet/model/application';
+import { useAppointment } from '@/features/personal-cabinet/model/appointment';
+import { useCabinetTab } from '@/features/personal-cabinet/model/personal-cabinet-tab';
+import { usePsychologistDrafts } from '@/features/personal-cabinet/model/psychologist-drafts';
+import { $api } from '@/shared/api/http';
+
+type TSessionRequestConfig = InternalAxiosRequestConfig & { _retry?: boolean };
+
+export const setupSession = () => {
+  const unsubscribe = useAuth.subscribe((state, previous) => {
+    if (state.user && (!previous.user || state.user.id === previous.user.id)) {
+      return;
+    }
+    useApplication.setState(useApplication.getInitialState(), true);
+    useAppointment.setState(useAppointment.getInitialState(), true);
+    useCabinetTab.setState(useCabinetTab.getInitialState(), true);
+    usePsychologistDrafts.setState(
+      usePsychologistDrafts.getInitialState(),
+      true,
+    );
+  });
+
+  const interceptor = $api.interceptors.response.use(
+    (response) => response,
+    async (error: unknown) => {
+      if (!isAxiosError(error) || error.response?.status !== 401) {
+        throw error;
+      }
+
+      const request = error.config as TSessionRequestConfig | undefined;
+      if (!request) throw error;
+      if (request._retry) {
+        useAuth.getState().resetSession();
+        throw error;
+      }
+
+      request._retry = true;
+      try {
+        await refreshSession();
+      } catch (refreshError) {
+        if (
+          isAxiosError(refreshError) &&
+          refreshError.response?.status === 401
+        ) {
+          useAuth.getState().resetSession();
+        }
+        throw refreshError;
+      }
+      return $api(request);
+    },
+  );
+
+  return () => {
+    unsubscribe();
+    $api.interceptors.response.eject(interceptor);
+  };
+};

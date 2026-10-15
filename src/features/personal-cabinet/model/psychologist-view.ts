@@ -1,11 +1,11 @@
 import { create } from 'zustand';
-import type { ApplicationStatus } from '@/entities/application/types';
-import type { AppointmentStatus } from '@/entities/appointment/types';
+import type { TApplicationStatus } from '@/entities/application/types';
+import type { TAppointmentStatus } from '@/entities/appointment/types';
 import dayjs from '@/shared/lib/dayjs';
 
 export type SortDirection = 'asc' | 'desc';
-export type ApplicationStatusFilter = 'all' | ApplicationStatus | 'closed';
-export type AppointmentStatusFilter = 'all' | AppointmentStatus;
+export type ApplicationStatusFilter = 'all' | TApplicationStatus | 'closed';
+export type AppointmentStatusFilter = 'all' | TAppointmentStatus;
 export type FormatFilter = 'all' | 'offline' | 'online';
 export type ActiveTab = 'applications' | 'appointments';
 

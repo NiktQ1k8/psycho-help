@@ -5,7 +5,7 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 import clsx from 'clsx';
-import type { AppointmentStatus } from '@/entities/appointment/types';
+import type { TAppointmentStatus } from '@/entities/appointment/types';
 import styles from './AppointmentCard.module.scss';
 
 interface AppointmentCardProps {
@@ -13,7 +13,7 @@ interface AppointmentCardProps {
   doctorName: string;
   address: string;
   type: 'upcoming' | 'past' | 'confirmation';
-  status?: AppointmentStatus | string;
+  status?: TAppointmentStatus | string;
   hasComment?: boolean;
   onConfirm?: () => void;
   onComment?: () => void;

@@ -3,15 +3,15 @@ import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { applicationQueries } from '@/entities/application/api';
+import { useAuth } from '@/entities/auth/model/useAuth';
 import { Role } from '@/entities/role/helpers';
-import type { RoleCode } from '@/entities/role/types';
-import { useAuth } from '@/features/auth/api/useAuth';
+import type { TRoleCode } from '@/entities/role/types';
 import { useCabinetTab } from '@/features/personal-cabinet/model/personal-cabinet-tab';
 import Sidebar from '@/features/personal-cabinet/ui/sidebar/Sidebar';
-import type { TabBadge } from '@/features/personal-cabinet/ui/sidebar/Sidebar';
+import type { TTabBadge } from '@/features/personal-cabinet/ui/sidebar/Sidebar';
 import Loader from '@/shared/ui/loader/loader';
 import {
-  type TabId,
+  type TTabId,
   getDefaultTabForRole,
   getTabsForRole,
 } from './config/tabs';
@@ -21,7 +21,7 @@ const PersonalCabinet: FC = () => {
   const authUser = useAuth((state) => state.user);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const primaryRoleCode = useMemo<RoleCode>(() => {
+  const primaryRoleCode = useMemo<TRoleCode>(() => {
     if (!authUser?.roles || authUser.roles.length === 0) {
       return 'user';
     }
@@ -47,8 +47,8 @@ const PersonalCabinet: FC = () => {
     [applications],
   );
 
-  const tabBadges = useMemo<TabBadge[]>(() => {
-    const badges: TabBadge[] = [];
+  const tabBadges = useMemo<TTabBadge[]>(() => {
+    const badges: TTabBadge[] = [];
 
     if (isPsychologist && activeApplicationsCount > 0) {
       badges.push({
@@ -80,7 +80,7 @@ const PersonalCabinet: FC = () => {
   const tabFromQuery = tabs.find(
     (tab) => tab.id === searchParams.get('tab'),
   )?.id;
-  const [selectedTab, setSelectedTab] = useState<TabId>(() =>
+  const [selectedTab, setSelectedTab] = useState<TTabId>(() =>
     savedTab && tabs.some((tab) => tab.id === savedTab) ? savedTab : defaultTab,
   );
   const activeTab =

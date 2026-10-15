@@ -1,6 +1,6 @@
 import type { FC } from 'react';
-import type { User } from '@/entities/auth/types';
-import type { RoleCode } from '@/entities/role/types';
+import type { TUser } from '@/entities/auth/types';
+import type { TRoleCode } from '@/entities/role/types';
 import AppointmentForm from '@/features/personal-cabinet/ui/input-block/AppointmentForm';
 import PersonalData from '@/features/personal-cabinet/ui/personal-data/PersonalData';
 import PsychologistApplications from '@/pages/personal-cabinet/ui/applications/PsychologistApplications';
@@ -8,7 +8,7 @@ import PsychologistAppointments from '@/pages/personal-cabinet/ui/appointments/P
 import ComingSoon from '../ui/PlaceholderComponent';
 import Dashboard from '../ui/dashboard/Dashboard';
 
-export type TabId =
+export type TTabId =
   | 'main'
   | 'applications'
   | 'userAppointments'
@@ -16,25 +16,19 @@ export type TabId =
   | 'profile';
 // потом админа и контент-менеджера добавим, сейчас даже не понятно, какие табы у них будут
 
-export interface TabRenderProps {
-  user: User;
-  primaryRoleCode: RoleCode;
+export interface ITabRenderProps {
+  user: TUser;
+  primaryRoleCode: TRoleCode;
   onBookClick: () => void;
 }
 
-export interface TabConfig {
-  id: TabId;
+export interface ITabConfig {
+  id: TTabId;
   label: string;
-  render: FC<TabRenderProps>;
+  render: FC<ITabRenderProps>;
 }
 
-const bookingTab: TabConfig = {
-  id: 'userAppointments',
-  label: 'Запись на сессию',
-  render: () => <AppointmentForm />,
-};
-
-export const roleBasedTabs: Record<string, TabConfig[]> = {
+export const roleBasedTabs: Record<string, ITabConfig[]> = {
   user: [
     {
       id: 'main',
@@ -47,7 +41,11 @@ export const roleBasedTabs: Record<string, TabConfig[]> = {
         />
       ),
     },
-    bookingTab,
+    {
+      id: 'userAppointments',
+      label: 'Запись на сессию',
+      render: () => <AppointmentForm />,
+    },
     {
       id: 'profile',
       label: 'Профиль',
@@ -66,7 +64,6 @@ export const roleBasedTabs: Record<string, TabConfig[]> = {
         />
       ),
     },
-    bookingTab,
     {
       id: 'applications',
       label: 'Заявки',
@@ -95,7 +92,6 @@ export const roleBasedTabs: Record<string, TabConfig[]> = {
         />
       ),
     },
-    bookingTab,
     {
       id: 'psychologistAppointments',
       label: 'Записи',
@@ -119,7 +115,6 @@ export const roleBasedTabs: Record<string, TabConfig[]> = {
         />
       ),
     },
-    bookingTab,
     {
       id: 'profile',
       label: 'Профиль',
@@ -128,17 +123,17 @@ export const roleBasedTabs: Record<string, TabConfig[]> = {
   ],
 };
 
-export const defaultTabForRole: Record<string, TabId> = {
+export const defaultTabForRole: Record<string, TTabId> = {
   user: 'main',
   psychologist: 'main',
   admin: 'main',
   content_manager: 'main',
 };
 
-export function getTabsForRole(roleCode: string): TabConfig[] {
+export function getTabsForRole(roleCode: string): ITabConfig[] {
   return roleBasedTabs[roleCode] || roleBasedTabs.user;
 }
 
-export function getDefaultTabForRole(roleCode: string): TabId {
+export function getDefaultTabForRole(roleCode: string): TTabId {
   return defaultTabForRole[roleCode] || 'main';
 }

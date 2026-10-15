@@ -1,23 +1,25 @@
 import type { FC } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { ConfigProvider, DatePicker, message } from 'antd';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { ConfigProvider, DatePicker, Result, message } from 'antd';
 import locale from 'antd/es/locale/ru_RU';
 import clsx from 'clsx';
 import dayjs, { Dayjs } from 'dayjs';
 import {
+  applicationQueries,
+  applicationQueryKey,
   createApplication,
-  getUniversityStatuses,
 } from '@/entities/application/api';
 import type {
-  ApplicationCreateRequest,
-  MeetingType,
-  UniversityStatus,
+  TApplicationCreateRequest,
+  TMeetingType,
+  TUniversityStatus,
 } from '@/entities/application/types';
-import { therapistQueries } from '@/entities/therapist/api';
-import { useAuth } from '@/features/auth/api/useAuth';
+import { useAuth } from '@/entities/auth/model/useAuth';
+import { therapistQueries } from '@/entities/therapist/queries';
 import { useApplication } from '@/features/personal-cabinet/model/application';
+import { getErrorMessage } from '@/shared/api/errors';
 import altPhoto from '@/shared/assets/images/altPhotos/User_Accounts_alt.png';
 import Arrow from '@/shared/assets/images/appointments/arrow.svg?react';
 import backArrow from '@/shared/assets/images/appointments/backArrow.svg';
@@ -29,9 +31,17 @@ import privacyFile from './assets/Privacy_police.pdf';
 const AppointmentForm: FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const formatParam = searchParams.get('format');
-  const formatFromQuery: MeetingType | null =
+  const formatFromQuery: TMeetingType | null =
     formatParam === 'online' || formatParam === 'offline' ? formatParam : null;
-  const { data: doctors = [], isLoading } = useQuery(therapistQueries.list());
+  const {
+    data: doctors = [],
+    isLoading,
+    error: doctorsError,
+  } = useQuery(therapistQueries.list());
+  const { data: universityStatuses = [], error: statusesError } = useQuery(
+    applicationQueries.universityStatuses(),
+  );
+  const queryClient = useQueryClient();
   const user = useAuth((s) => s.user);
   const application = useApplication((state) => state.application);
   const setApplication = useApplication((state) => state.setApplication);
@@ -42,18 +52,17 @@ const AppointmentForm: FC = () => {
     new Set(),
   );
   const [window, setWindow] = useState<'form' | 'results'>('form');
-  const [meetingType, setMeetingType] = useState<MeetingType | null>(
+  const [meetingType, setMeetingType] = useState<TMeetingType | null>(
     formatFromQuery,
   );
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
-  const [universityStatuses, setUniversityStatuses] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     setMeetingType(formatFromQuery);
   }, [formatFromQuery]);
 
-  const handleMeetingTypeChange = (nextType: MeetingType) => {
+  const handleMeetingTypeChange = (nextType: TMeetingType) => {
     setMeetingType(nextType);
     const nextParams = new URLSearchParams(searchParams);
     nextParams.set('format', nextType);
@@ -92,24 +101,6 @@ const AppointmentForm: FC = () => {
       setSelectedOffices(new Set());
     }
   }, [meetingType]);
-
-  // 📚 Загрузка статусов
-  useEffect(() => {
-    const fetchUniversityStatuses = async () => {
-      try {
-        const statuses = await getUniversityStatuses();
-        setUniversityStatuses(statuses);
-      } catch {
-        setUniversityStatuses([
-          'студент',
-          'аспирант',
-          'преподаватель',
-          'сотрудник',
-        ]);
-      }
-    };
-    fetchUniversityStatuses();
-  }, []);
 
   // 🎯 Обработчик чекбокса офиса
   const handleOfficeToggle = (office: string) => {
@@ -170,8 +161,8 @@ const AppointmentForm: FC = () => {
       return;
     }
     const description = application.problem_description?.trim();
-    if (!description || description.length < 10) {
-      message.error('Опишите проблему (минимум 10 символов)');
+    if (!description || description.length < 10 || description.length > 2000) {
+      message.error('Опишите проблему: от 10 до 2000 символов');
       return;
     }
 
@@ -179,20 +170,29 @@ const AppointmentForm: FC = () => {
   };
 
   const handleSubmit = async () => {
-    if (!user || !currentTherapist || !selectedDate) return;
+    if (
+      isSubmitting ||
+      !user ||
+      !currentTherapist ||
+      !selectedDate ||
+      !application.university_status ||
+      !application.problem_description
+    )
+      return;
     setIsSubmitting(true);
 
-    const requestData: ApplicationCreateRequest = {
-      psychologist_id: currentTherapist.id!,
+    const requestData: TApplicationCreateRequest = {
+      psychologist_id: currentTherapist.id,
       scheduled_at: selectedDate.toISOString(),
-      problem_description: application.problem_description!,
+      problem_description: application.problem_description.trim(),
       preferred_campus:
         meetingType === 'offline' ? currentTherapist.office : undefined,
-      university_status: application.university_status as UniversityStatus,
+      university_status: application.university_status,
     };
 
     try {
       await createApplication(requestData);
+      queryClient.invalidateQueries({ queryKey: [applicationQueryKey.list] });
       message.success('Заявка успешно отправлена');
       useApplication.getState().resetApplication();
       setSelectedDate(null);
@@ -201,12 +201,22 @@ const AppointmentForm: FC = () => {
       nextParams.delete('format');
       setSearchParams(nextParams, { replace: true });
       setWindow('form');
-    } catch {
-      message.error('Не удалось отправить заявку');
+    } catch (error) {
+      message.error(getErrorMessage(error, 'Не удалось отправить заявку'));
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  if (doctorsError || statusesError) {
+    return (
+      <Result
+        status="error"
+        title="Не удалось загрузить форму записи"
+        subTitle={getErrorMessage(doctorsError || statusesError)}
+      />
+    );
+  }
 
   return (
     <ConfigProvider locale={locale}>
@@ -392,7 +402,7 @@ const AppointmentForm: FC = () => {
               value={application.university_status || 'студент'}
               onChange={(e) =>
                 setApplication({
-                  university_status: e.target.value as UniversityStatus,
+                  university_status: e.target.value as TUniversityStatus,
                 })
               }
               className={styles.selectInput}
@@ -408,6 +418,7 @@ const AppointmentForm: FC = () => {
           <div className={styles.field}>
             <label className={styles.label}>Ваш запрос</label>
             <textarea
+              maxLength={2000}
               value={application.problem_description}
               onChange={(e) =>
                 setApplication({ problem_description: e.target.value })

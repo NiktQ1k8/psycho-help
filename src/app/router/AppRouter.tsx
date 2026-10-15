@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { useAppContext } from '@/app/context';
-import { useAuth } from '@/features/auth/api/useAuth';
+import { useAuth } from '@/entities/auth/model/useAuth';
 import { SLUG } from '@/shared/config/slug';
 import { Loader } from '@/shared/ui';
 import { routes } from './routes';

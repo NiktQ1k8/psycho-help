@@ -1,11 +1,11 @@
-import type { Role as RoleType } from './types';
+import type { TRole } from './types';
 
 export class Role {
-  roles: RoleType[];
-  constructor(roles: RoleType[]) {
+  roles: TRole[];
+  constructor(roles: TRole[]) {
     this.roles = roles;
   }
-  getRoleByCode(code: string): RoleType | undefined {
+  getRoleByCode(code: string): TRole | undefined {
     return this.roles.find((role) => role.code === code);
   }
   isUser(): boolean {

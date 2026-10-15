@@ -1,181 +1,185 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { Input } from 'antd';
+import { authApi } from '@/entities/auth/api';
+import { getAuthErrorMessage } from '@/entities/auth/model/auth-errors';
+import { validatePassword } from '@/entities/auth/model/profile-form';
 import { useFetch } from '@/shared/api/useFetch';
+import type { TAuthModalProps } from '../model/modal-types';
 import styles from './Modal.module.scss';
-import EyeIcon from './icons/Eye.svg?react';
-import EyeOffIcon from './icons/EyeOff.svg?react';
 
-type Tprops = {
-  setWindow: (param: 'log' | 'reg' | 'forgot' | 'change') => void;
-  isOpen: boolean;
-  setModalOpen: (param: boolean) => void;
-};
+type TProps = TAuthModalProps & { token?: string };
 
-const ModalChangePassword: React.FC<Tprops> = ({
+const ModalChangePassword = ({
   setWindow,
   isOpen,
   setModalOpen,
-}) => {
-  const [currentPassword, setCurrentPassword] = useState('');
+  token = '',
+}: TProps) => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [errors, setErrors] = useState({ current: '', new: '', confirm: '' });
-  const [open, setOpen] = useState(isOpen);
+  const [errors, setErrors] = useState({ password: '', confirm: '' });
+  const [successMessage, setSuccessMessage] = useState('');
+  const { fetching, isLoading, error, clearError } = useFetch(
+    async () => {
+      const response = await authApi.resetPassword({
+        token,
+        new_password: newPassword,
+      });
+      setSuccessMessage(response.message);
+    },
+    (error) => getAuthErrorMessage(error, 'resetPassword'),
+  );
 
-  const [showCurrent, setShowCurrent] = useState(false);
-  const [showNew, setShowNew] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
-
-  const {
-    fetching,
-    isLoading,
-    error: fetchError,
-  } = useFetch(async () => {
-    // TODO: Заглушка — здесь должен быть вызов API по смене пароля
-    await new Promise((res) => setTimeout(res, 700));
-  });
-
-  const validate = () => {
-    const newErrors = { current: '', new: '', confirm: '' };
-    if (!currentPassword) newErrors.current = 'Введите текущий пароль';
-    if (newPassword.length < 8)
-      newErrors.new = 'Пароль должен содержать не менее 8 символов';
-    if (newPassword !== confirmPassword)
-      newErrors.confirm = 'Пароли не совпадают';
-    setErrors(newErrors);
-    return Object.values(newErrors).every((v) => v === '');
+  const handleSubmit = async () => {
+    if (isLoading || !token) return;
+    const nextErrors = {
+      password: validatePassword(newPassword) || '',
+      confirm: !confirmPassword
+        ? 'Повторите пароль'
+        : newPassword === confirmPassword
+          ? ''
+          : 'Пароли не совпадают',
+    };
+    setErrors(nextErrors);
+    if (!nextErrors.password && !nextErrors.confirm) await fetching();
   };
 
-  const handleOk = async () => {
-    if (!validate()) return;
-    await fetching();
-    if (fetchError.message === '') {
-      setOpen(false);
-      setModalOpen(false);
-    }
-  };
-
-  const handleCancel = () => {
-    setOpen(false);
-    setModalOpen(false);
-  };
-
-  if (!open) return null;
-
+  if (!isOpen) return null;
   return (
     <div className={styles.modalOverlay}>
-      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+      <div className={styles.modalContent}>
         <div className={styles.modalHeaderPassword}>
-          <h2 className={styles.modalTitle}>Смена пароля</h2>
+          <h2 className={styles.modalTitle}>Восстановление пароля</h2>
           <button
+            type="button"
             className={styles.closeButton}
-            onClick={handleCancel}
+            onClick={() => setModalOpen(false)}
             aria-label="Закрыть"
           >
             ✕
           </button>
         </div>
-
-        <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
-          <label>
-            <span>Текущий пароль</span>
-            <div className={styles.passwordWrapper}>
-              <input
-                type={showCurrent ? 'text' : 'password'}
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                className={styles.passwordInput}
-              />
-              <button
-                type="button"
-                className={styles.showPassButton}
-                onClick={() => setShowCurrent((s) => !s)}
-                aria-pressed={showCurrent}
-                aria-label={showCurrent ? 'Скрыть пароль' : 'Показать пароль'}
-              >
-                {showCurrent ? <EyeIcon /> : <EyeOffIcon />}
-              </button>
-            </div>
-            {errors.current && (
-              <p className={styles.errorText}>{errors.current}</p>
-            )}
-          </label>
-
-          <label>
-            <span>Введите новый пароль</span>
-            <div className={styles.passwordWrapper}>
-              <input
-                type={showNew ? 'text' : 'password'}
+        {successMessage ? (
+          <>
+            <p className={styles.modalDesc} role="status">
+              {successMessage}. Войдите с новым паролем.
+            </p>
+            <button
+              type="button"
+              className={styles.submitButton}
+              onClick={() => setWindow('log')}
+            >
+              Войти
+            </button>
+          </>
+        ) : !token ? (
+          <>
+            <p className={styles.errorMessage} role="alert">
+              В ссылке нет кода восстановления. Запросите новое письмо и
+              перейдите по ссылке из него.
+            </p>
+            <button
+              type="button"
+              className={styles.submitButton}
+              onClick={() => setWindow('forgot')}
+            >
+              Запросить новое письмо
+            </button>
+          </>
+        ) : (
+          <form
+            noValidate
+            onSubmit={(e) => {
+              e.preventDefault();
+              void handleSubmit();
+            }}
+          >
+            <div className={styles.form}>
+              <label htmlFor="reset-password">Новый пароль</label>
+              <Input.Password
+                id="reset-password"
+                disabled={isLoading}
+                aria-invalid={!!errors.password}
                 value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                className={styles.passwordInput}
+                autoComplete="new-password"
+                maxLength={64}
+                size="large"
+                status={errors.password ? 'error' : undefined}
+                onChange={(e) => {
+                  setNewPassword(e.target.value);
+                  clearError();
+                  setErrors({
+                    password: validatePassword(e.target.value) || '',
+                    confirm:
+                      confirmPassword && e.target.value !== confirmPassword
+                        ? 'Пароли не совпадают'
+                        : '',
+                  });
+                }}
+                onBlur={() =>
+                  setErrors((prev) => ({
+                    ...prev,
+                    password: validatePassword(newPassword) || '',
+                  }))
+                }
               />
-              <button
-                type="button"
-                className={styles.showPassButton}
-                onClick={() => setShowNew((s) => !s)}
-                aria-pressed={showNew}
-                aria-label={showNew ? 'Скрыть пароль' : 'Показать пароль'}
-              >
-                {showNew ? <EyeIcon /> : <EyeOffIcon />}
-              </button>
+              {errors.password ? (
+                <span className={styles.errorText}>{errors.password}</span>
+              ) : (
+                <span className={styles.hintText}>
+                  От 8 до 64 символов, без пробелов в начале и конце
+                </span>
+              )}
+              <label htmlFor="reset-password-confirm">Повторите пароль</label>
+              <Input.Password
+                id="reset-password-confirm"
+                disabled={isLoading}
+                aria-invalid={!!errors.confirm}
+                value={confirmPassword}
+                autoComplete="new-password"
+                maxLength={64}
+                size="large"
+                status={errors.confirm ? 'error' : undefined}
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value);
+                  clearError();
+                  setErrors((prev) => ({
+                    ...prev,
+                    confirm:
+                      e.target.value === newPassword
+                        ? ''
+                        : 'Пароли не совпадают',
+                  }));
+                }}
+              />
+              {errors.confirm && (
+                <span className={styles.errorText}>{errors.confirm}</span>
+              )}
             </div>
-            {errors.new ? (
-              <p className={styles.errorText}>{errors.new}</p>
-            ) : (
-              <p className={styles.hintText}>
-                Пароль не менее 8 символов, с цифрой, буквой и спецсимволом
+            {error.message && (
+              <p className={styles.errorMessage} role="alert">
+                {error.message}
               </p>
             )}
-          </label>
-
-          <label>
-            <span>Повторите пароль</span>
-            <div className={styles.passwordWrapper}>
-              <input
-                type={showConfirm ? 'text' : 'password'}
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className={styles.passwordInput}
-              />
+            <div className={styles.footer}>
               <button
-                type="button"
-                className={styles.showPassButton}
-                onClick={() => setShowConfirm((s) => !s)}
-                aria-pressed={showConfirm}
-                aria-label={showConfirm ? 'Скрыть пароль' : 'Показать пароль'}
+                type="submit"
+                className={styles.submitButton}
+                disabled={isLoading}
               >
-                {showConfirm ? <EyeIcon /> : <EyeOffIcon />}
+                {isLoading ? 'Сохранение...' : 'Сохранить пароль'}
               </button>
+              <p className={styles.Suggestion}>
+                <a
+                  className={styles.ModalSwitcher}
+                  onClick={() => setWindow('forgot')}
+                >
+                  Запросить новое письмо
+                </a>
+              </p>
             </div>
-            {errors.confirm && (
-              <p className={styles.errorText}>{errors.confirm}</p>
-            )}
-          </label>
-        </form>
-
-        {fetchError.message !== '' && (
-          <p className={styles.errorMessage}>{fetchError.message}</p>
+          </form>
         )}
-
-        <div className={styles.footer}>
-          <button
-            className={styles.submitButton}
-            onClick={handleOk}
-            disabled={isLoading}
-          >
-            {isLoading ? 'Загрузка...' : 'Сохранить'}
-          </button>
-          <p className={styles.Suggestion} style={{ marginTop: 12 }}>
-            <a
-              className={styles.ModalSwitcher}
-              onClick={() => {
-                setWindow('log');
-              }}
-            >
-              Вернуться
-            </a>
-          </p>
-        </div>
       </div>
     </div>
   );

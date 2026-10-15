@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { navPages } from '@/app/router/routes';
-import { useAuth } from '@/features/auth/api/useAuth';
+import { useAuth } from '@/entities/auth/model/useAuth';
 import ModalWindow from '@/features/auth/modal/modal';
 import Auth from '@/shared/assets/images/header/auth.svg?react';
 import Profile from '@/shared/assets/images/header/profile.svg?react';

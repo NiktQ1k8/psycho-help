@@ -1,6 +1,6 @@
-import type { User } from '@/entities/auth';
+import type { TUserContact } from '@/entities/auth/types';
 
-export type Psychologist = {
+export type TPsychologist = {
   id: string;
   user_id: string;
   experience: string;
@@ -11,5 +11,5 @@ export type Psychologist = {
   education: string;
   short_description: string;
   photo: string | null;
-  user: User | null; // где-то на бэке может быть null, а где-то обязательный
+  user: TUserContact | null;
 };

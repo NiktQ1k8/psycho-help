@@ -1,34 +1,36 @@
-import type { User } from '@/entities/auth';
-import type { Psychologist } from '@/entities/psychologist/types';
+import type { TUserContact } from '@/entities/auth/types';
+import type { TPsychologist } from '@/entities/psychologist/types';
 
-export interface Appointment {
+export type TAppointment = {
   id: string;
-  patient: User;
-  psychologist: Psychologist;
+  patient: TUserContact;
+  psychologist: TPsychologist & { user: TUserContact };
   application_id: string | null;
-  type: AppointmentType;
+  type: TAppointmentType;
   reason: string | null;
-  status: AppointmentStatus;
+  status: TAppointmentStatus;
   scheduled_time: string;
   remind_time: string | null;
   last_change_time: string;
   venue: string;
   comment: string | null;
   cancel_reason: string | null;
+  patient_comment: string | null;
   conclusion: string | null;
-}
+  emergency_contact: string | null;
+};
 
-export type AppointmentStatus = 'awaiting' | 'cancelled' | 'done';
-export type AppointmentType = 'Offline' | 'Online';
+export type TAppointmentStatus = 'awaiting' | 'cancelled' | 'done';
+export type TAppointmentType = 'Offline' | 'Online';
 
-export interface AppointmentCreateRequest {
-  application_id: string | null;
+export type TAppointmentCreateRequest = {
+  application_id?: string | null;
   patient_id: string;
   psychologist_id: string;
-  type: AppointmentType;
+  type: TAppointmentType;
   scheduled_time: string;
-  reason: string | null;
-  remind_time: string | null;
-  venue: string | null;
-  comment: string | null;
-}
+  reason?: string | null;
+  remind_time?: string | null;
+  venue?: string | null;
+  comment?: string | null;
+};

@@ -1,12 +1,12 @@
 import type { FC } from 'react';
-import type { RoleCode } from '@/entities/role/types';
+import type { TRoleCode } from '@/entities/role/types';
 import AdminDashboard from './AdminDashboard';
 import PsychologistDashboard from './PsychologistDashboard';
 import UserDashboard from './UserDashboard';
 
 interface DashboardProps {
   userName: string;
-  role: RoleCode;
+  role: TRoleCode;
   onBookClick?: () => void;
 }
 

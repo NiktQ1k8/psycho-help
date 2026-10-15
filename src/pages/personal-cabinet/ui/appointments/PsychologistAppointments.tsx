@@ -4,10 +4,11 @@ import { useQuery } from '@tanstack/react-query';
 import { Alert, Empty, Pagination } from 'antd';
 import clsx from 'clsx';
 import { appointmentQueries } from '@/entities/appointment/api';
-import type { Appointment } from '@/entities/appointment/types';
+import type { TAppointment } from '@/entities/appointment/types';
 import { usePsychologistView } from '@/features/personal-cabinet/model/psychologist-view';
 import PsychologistListFilters from '@/features/personal-cabinet/ui/psychologist-filters/PsychologistFilters';
 import { AppointmentStatusTag } from '@/pages/personal-cabinet/constants';
+import { getErrorMessage } from '@/shared/api/errors';
 import { SLUG } from '@/shared/config/slug';
 import dayjs from '@/shared/lib/dayjs';
 import Loader from '@/shared/ui/loader/loader';
@@ -30,7 +31,7 @@ const APPOINTMENT_FORMAT_OPTIONS = [
   { value: 'online', label: 'Онлайн' },
 ];
 
-const getPatientName = (appointment: Appointment) =>
+const getPatientName = (appointment: TAppointment) =>
   [appointment.patient?.last_name, appointment.patient?.first_name]
     .filter(Boolean)
     .join(' ') || 'Имя не указано';
@@ -40,7 +41,7 @@ const getTimeRange = (time: string) => {
   return `${start.format('HH:mm')} - ${start.add(1, 'hour').format('HH:mm')}`;
 };
 
-const getVenueDisplay = (appointment: Appointment) => {
+const getVenueDisplay = (appointment: TAppointment) => {
   if (appointment.type === 'Online') return appointment.venue || 'Онлайн';
   return appointment.venue || 'Очно';
 };
@@ -99,6 +100,7 @@ const PsychologistAppointments = () => {
     data: allAppointments = [],
     isLoading: isLoadingAppointments,
     isError: isErrorAppointments,
+    error: loadError,
   } = useQuery(appointmentQueries.list());
 
   const filteredAppointments = useMemo(() => {
@@ -170,12 +172,12 @@ const PsychologistAppointments = () => {
         type="error"
         showIcon
         message="Не удалось загрузить записи"
-        description="Попробуйте обновить страницу"
+        description={getErrorMessage(loadError)}
         style={{ margin: '2.4rem 0' }}
       />
     );
 
-  const renderAppointmentRow = (appointment: Appointment) => {
+  const renderAppointmentRow = (appointment: TAppointment) => {
     const statusUI = AppointmentStatusTag[appointment.status];
 
     return (
@@ -252,7 +254,7 @@ const PsychologistAppointments = () => {
       <div className={styles.list} role="list">
         {paginated.length === 0 && <Empty description="Записей нет" />}
 
-        {groupByDate(paginated as Appointment[], (appointment) =>
+        {groupByDate(paginated as TAppointment[], (appointment) =>
           toMoscow(appointment.scheduled_time).format('D MMMM'),
         ).map((group) => (
           <div className={styles.dateGroup} key={group.date}>

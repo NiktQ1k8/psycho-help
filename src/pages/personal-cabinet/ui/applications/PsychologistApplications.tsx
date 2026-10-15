@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Alert, Empty, Pagination, message } from 'antd';
-import { AxiosError } from 'axios';
 import clsx from 'clsx';
 import {
   acceptApplication,
@@ -10,14 +9,15 @@ import {
   applicationQueryKey,
 } from '@/entities/application/api';
 import type {
-  Application,
-  ApplicationStatus,
-  MeetingType,
+  TApplication,
+  TApplicationStatus,
+  TMeetingType,
 } from '@/entities/application/types';
-import { useAuth } from '@/features/auth/api/useAuth';
+import { useAuth } from '@/entities/auth/model/useAuth';
 import { usePsychologistView } from '@/features/personal-cabinet/model/psychologist-view';
 import PsychologistListFilters from '@/features/personal-cabinet/ui/psychologist-filters/PsychologistFilters';
 import { ApplicationStatusTag } from '@/pages/personal-cabinet/constants';
+import { getErrorMessage } from '@/shared/api/errors';
 import { SLUG } from '@/shared/config/slug';
 import dayjs from '@/shared/lib/dayjs';
 import Loader from '@/shared/ui/loader/loader';
@@ -27,7 +27,7 @@ const toMoscow = (date: string) => dayjs(date).tz();
 
 const ITEMS_PER_PAGE = 5;
 
-const CLOSED_STATUSES: ApplicationStatus[] = [
+const CLOSED_STATUSES: TApplicationStatus[] = [
   'rejected',
   'cancelled',
   'expired',
@@ -48,7 +48,7 @@ const APPLICATION_FORMAT_OPTIONS = [
   { value: 'online', label: 'Онлайн' },
 ];
 
-const getPatientName = (application: Application) =>
+const getPatientName = (application: TApplication) =>
   [application.user?.last_name, application.user?.first_name]
     .filter(Boolean)
     .join(' ') || 'Имя не указано';
@@ -70,7 +70,7 @@ const getShortPsychologistName = (
   return [user.last_name, initials].filter(Boolean).join(' ');
 };
 
-const getSortTime = (application: Application): number => {
+const getSortTime = (application: TApplication): number => {
   const date = application.scheduled_at;
   return date ? new Date(date).getTime() : 0;
 };
@@ -81,8 +81,8 @@ const getTimeRange = (time: string | null) => {
   return `${start.format('HH:mm')} - ${start.add(1, 'hour').format('HH:mm')}`;
 };
 
-const getMeetingType: (application: Application) => MeetingType = (
-  application: Application,
+const getMeetingType: (application: TApplication) => TMeetingType = (
+  application: TApplication,
 ) => {
   if (application.meeting_type) return application.meeting_type;
   if (application.location_address) return 'offline';
@@ -91,7 +91,7 @@ const getMeetingType: (application: Application) => MeetingType = (
   return 'online';
 };
 
-const getVenue = (application: Application) => {
+const getVenue = (application: TApplication) => {
   if (getMeetingType(application) === 'online')
     return application.meeting_url || 'Онлайн';
   return application.location_address || application.preferred_campus || 'Очно';
@@ -154,6 +154,7 @@ const PsychologistApplications = () => {
     data: allApplications = [],
     isLoading: isLoadingApplications,
     isError: isErrorApplications,
+    error: loadError,
   } = useQuery(applicationQueries.list());
 
   const acceptMutation = useMutation({
@@ -161,9 +162,8 @@ const PsychologistApplications = () => {
       acceptApplication(applicationId, userId!),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: [applicationQueryKey.list] }),
-    onError: (error: AxiosError<{ detail?: string }>) => {
-      const detail = error.response?.data?.detail;
-      message.error(detail || 'Не удалось выполнить операцию');
+    onError: (error) => {
+      message.error(getErrorMessage(error, 'Не удалось выполнить операцию'));
     },
   });
 
@@ -242,12 +242,12 @@ const PsychologistApplications = () => {
         type="error"
         showIcon
         message="Не удалось загрузить заявки"
-        description="Попробуйте обновить страницу"
+        description={getErrorMessage(loadError)}
         style={{ margin: '2.4rem 0' }}
       />
     );
 
-  const renderApplicationRow = (application: Application) => {
+  const renderApplicationRow = (application: TApplication) => {
     const statusUI = ApplicationStatusTag[application.status];
     const preferPsychologistName = getShortPsychologistName(
       application.psychologist?.user,
@@ -337,7 +337,7 @@ const PsychologistApplications = () => {
 
       <div className={styles.list} role="list">
         {paginated.length === 0 && <Empty description="Заявок нет" />}
-        {groupByDate(paginated as Application[], (application) => {
+        {groupByDate(paginated as TApplication[], (application) => {
           const date = application.scheduled_at;
           return date ? toMoscow(date).format('D MMMM') : 'Дата ещё не указана';
         }).map((group) => (

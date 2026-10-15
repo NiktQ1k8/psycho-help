@@ -82,36 +82,6 @@
   flex: 1;
 }
 
-.footer {
-  margin-top: 3.2rem;
-}
-
-@media (width >= 1023px) {
-  .footer {
-    margin-top: 23.7rem;
-  }
-}
-
-.askButton {
-  cursor: pointer;
-
-  width: 100%;
-  padding: 1.6rem 6.2rem;
-  border: none;
-  border-radius: 1.6rem;
-
-  font: var(--font-text-large-button);
-  color: var(--interactive-brand-primary);
-
-  background-color: var(--interactive-brand-secondary);
-
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: var(--interactive-brand-hover-secondary);
-  }
-}
-
 @media (width <= 1023px) {
   .sidebar {
     min-height: auto;
@@ -158,19 +128,6 @@
 
     &.active {
       background-color: var(--fills-brand-primary);
-    }
-  }
-
-  .askButton {
-    color: var(--labels-neutral-inverted-primary);
-    background-color: var(--backgrounds-brand-primary);
-
-    &:hover {
-      background-color: var(--interactive-brand-hover);
-    }
-
-    &:active {
-      background-color: var(--interactive-brand-active);
     }
   }
 }

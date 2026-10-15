@@ -1,24 +1,33 @@
 import React from 'react';
 import type { FC } from 'react';
 import { createPortal } from 'react-dom';
+import type { TAuthModalView } from '../model/modal-types';
 import ModalChangePassword from './modal-change-password';
 import ModalForgotPassword from './modal-forgot-password';
 import ModalLogin from './modal-login';
 import ModalRegistration from './modal-registration';
 
-interface ModalWindowProps {
+type TModalWindowProps = {
   isOpen: boolean;
   onClose: () => void;
-}
+  initialView?: TAuthModalView;
+  resetToken?: string;
+};
 
-const ModalWindow: FC<ModalWindowProps> = ({ isOpen, onClose }) => {
-  const [modalWindow, setModalWindow] = React.useState<string>('log');
+const ModalWindow: FC<TModalWindowProps> = ({
+  isOpen,
+  onClose,
+  initialView = 'log',
+  resetToken,
+}) => {
+  const [modalWindow, setModalWindow] =
+    React.useState<TAuthModalView>(initialView);
 
   React.useEffect(() => {
     if (isOpen) {
-      setModalWindow('log');
+      setModalWindow(initialView);
     }
-  }, [isOpen]);
+  }, [isOpen, initialView]);
 
   const handleSetModalOpen = (open: boolean) => {
     if (!open) onClose();
@@ -55,6 +64,7 @@ const ModalWindow: FC<ModalWindowProps> = ({ isOpen, onClose }) => {
     if (modalWindow === 'change') {
       return (
         <ModalChangePassword
+          token={resetToken}
           setWindow={setModalWindow}
           isOpen={isOpen}
           setModalOpen={handleSetModalOpen}

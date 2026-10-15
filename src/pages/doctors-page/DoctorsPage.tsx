@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Result } from 'antd';
-import { therapistQueries } from '@/entities/therapist/api';
+import { therapistQueries } from '@/entities/therapist/queries';
 import DoctorList from '@/features/therapists/ui/doctor-list';
 import Title from '@/features/therapists/ui/title';
 import Loader from '@/shared/ui/loader/loader';

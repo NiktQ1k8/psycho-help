@@ -3,7 +3,10 @@ export const SLUG = {
   MAIN: '/',
 
   /** Выход */
-  LOGOUT: '/logout', // TODO: сделать
+  LOGOUT: '/logout',
+
+  /** Восстановление пароля по ссылке из письма */
+  RESET_PASSWORD: '/reset-password',
 
   /** Психологи */
   THERAPISTS: '/therapists',

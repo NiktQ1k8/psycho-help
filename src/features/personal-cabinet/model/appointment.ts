@@ -1,9 +1,9 @@
 import { create } from 'zustand';
-import type { Appointment } from '@/entities/appointment/types';
+import type { TAppointmentCreateRequest } from '@/entities/appointment/types';
 
 interface IAppointment {
-  appointment: Partial<Appointment>;
-  setAppointment: (patch: Partial<Appointment>) => void;
+  appointment: Partial<TAppointmentCreateRequest>;
+  setAppointment: (patch: Partial<TAppointmentCreateRequest>) => void;
 }
 
 export const useAppointment = create<IAppointment>((set) => ({

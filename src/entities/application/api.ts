@@ -1,40 +1,46 @@
 import { queryOptions } from '@tanstack/react-query';
 import { $api } from '@/shared/api/http';
 import type {
-  Application,
-  ApplicationCreateRequest,
-  ApplicationStatus,
-  CancelRequest,
-  MeetingType,
+  TApplication,
+  TApplicationCreateRequest,
+  TApplicationListParams,
+  TCancelRequest,
+  TOfferConsultationRequest,
+  TUniversityStatus,
 } from './types';
 
 export const applicationQueryKey = {
   list: 'application.list',
   byId: 'application.byId',
+  universityStatuses: 'application.universityStatuses',
 };
 
 export const applicationQueries = {
-  list: (params?: {
-    skip?: number;
-    limit?: number;
-    status?: ApplicationStatus;
-    assigned_to?: string;
-    sort_by?: string;
-    sort_desc?: boolean;
-  }) => {
+  universityStatuses: () =>
+    queryOptions({
+      queryKey: [applicationQueryKey.universityStatuses],
+      queryFn: ({ signal }) => getUniversityStatuses(signal),
+    }),
+  list: (params?: TApplicationListParams) => {
     const requestParams = { limit: 100, ...params };
 
-    return queryOptions<Application[]>({
+    return queryOptions<TApplication[]>({
       queryKey: [applicationQueryKey.list, requestParams],
-      queryFn: async () =>
-        (await $api.get('/applications/', { params: requestParams })).data,
+      queryFn: async ({ signal }) =>
+        (
+          await $api.get<TApplication[]>('/applications/', {
+            params: requestParams,
+            signal,
+          })
+        ).data,
     });
   },
 
   byId: (id: string) =>
-    queryOptions<Application>({
+    queryOptions<TApplication>({
       queryKey: [applicationQueryKey.byId, id],
-      queryFn: async () => (await $api.get(`/applications/${id}`)).data,
+      queryFn: async ({ signal }) =>
+        (await $api.get<TApplication>(`/applications/${id}`, { signal })).data,
       enabled: !!id,
     }),
 };
@@ -43,7 +49,7 @@ export const acceptApplication = async (
   applicationId: string,
   assignedTo: string,
 ) => {
-  const { data } = await $api.post<Application>(
+  const { data } = await $api.post<TApplication>(
     `/applications/${applicationId}/accept`,
     {
       assigned_to: assignedTo,
@@ -54,15 +60,9 @@ export const acceptApplication = async (
 
 export const offerConsultation = async (
   applicationId: string,
-  body: {
-    psychologist_id: string;
-    meeting_type: MeetingType;
-    scheduled_at: string;
-    location_address?: string | null;
-    meeting_url?: string | null;
-  },
+  body: TOfferConsultationRequest,
 ) => {
-  const { data } = await $api.post<Application>(
+  const { data } = await $api.post<TApplication>(
     `/applications/${applicationId}/offer`,
     body,
   );
@@ -73,7 +73,7 @@ export const rejectApplication = async (
   applicationId: string,
   rejectReason: string,
 ) => {
-  const { data } = await $api.post<Application>(
+  const { data } = await $api.post<TApplication>(
     `/applications/${applicationId}/reject`,
     {
       reject_reason: rejectReason,
@@ -84,37 +84,24 @@ export const rejectApplication = async (
 
 export const cancelApplication = async (
   applicationId: string,
-  payload: CancelRequest,
+  payload: TCancelRequest,
 ) => {
-  const { data } = await $api.post<Application>(
+  const { data } = await $api.post<TApplication>(
     `/applications/${applicationId}/cancel`,
     payload,
   );
   return data;
 };
 
-export const createApplication = async (body: ApplicationCreateRequest) => {
-  const { data } = await $api.post<Application>('/applications/', body);
+export const createApplication = async (body: TApplicationCreateRequest) => {
+  const { data } = await $api.post<TApplication>('/applications/', body);
   return data;
 };
 
-export const confirmApplication = async (
-  applicationId: string,
-  appointmentId?: string,
-) => {
-  const { data } = await $api.post<Application>(
-    `/applications/${applicationId}/confirm`,
-    null,
-    {
-      params: appointmentId ? { appointment_id: appointmentId } : undefined,
-    },
-  );
-  return data;
-};
-
-export const getUniversityStatuses = async () => {
-  const { data } = await $api.get<string[]>(
+export const getUniversityStatuses = async (signal?: AbortSignal) => {
+  const { data } = await $api.get<TUniversityStatus[]>(
     '/applications/university-statuses',
+    { signal },
   );
   return data;
 };

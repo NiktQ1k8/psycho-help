@@ -11,19 +11,23 @@ import {
   ResourcesPage,
   TestPage,
 } from '@/pages';
+import Logout from '@/pages/Logout/Logout';
+import ResetPassword from '@/pages/ResetPassword/ResetPassword';
 import PsychologistApplicationPage from '@/pages/personal-cabinet/psychologist-application-page/PsychologistApplicationPage';
 import PsychologistAppointmentPage from '@/pages/personal-cabinet/psychologist-appointment-page/PsychologistAppointmentPage';
 import { SLUG } from '@/shared/config/slug';
 
-interface RoutePath {
+interface IRoutePath {
   path: string;
   Component: FC;
   navText?: string;
   authOnly?: boolean;
 }
 
-// Порядок маршрутов определяет порядок ссылок в шапке.
-export const routes: RoutePath[] = [
+// Порядок маршрутов определяет порядок ссылок в шапке
+export const routes: IRoutePath[] = [
+  { path: SLUG.LOGOUT, Component: Logout },
+  { path: SLUG.RESET_PASSWORD, Component: ResetPassword },
   {
     path: SLUG.MAIN,
     Component: HomePage,
@@ -44,7 +48,7 @@ export const routes: RoutePath[] = [
     navText: 'Новости',
   },
   {
-    path: `${SLUG.NEWS}/:slug`,
+    path: `${SLUG.NEWS}/:id`,
     Component: NewsItemPage,
   },
   {
@@ -83,5 +87,5 @@ export const routes: RoutePath[] = [
 ];
 
 export const navPages = routes.filter(
-  (route): route is RoutePath & { navText: string } => !!route.navText,
+  (route): route is IRoutePath & { navText: string } => !!route.navText,
 );

@@ -1,49 +1,48 @@
 import { useCallback, useRef, useState } from 'react';
-import { AxiosError } from 'axios';
-import type { ResponseError } from '@/shared/api';
+import { isAxiosError } from 'axios';
+import { getErrorMessage } from './errors';
+import type { TResponseError } from './types';
 
-export type UseFetchReturn = {
+export type TUseFetchReturn = {
   isLoading: boolean;
-  error: ResponseError;
+  error: TResponseError;
   fetching: () => Promise<boolean>;
+  clearError: () => void;
 };
 
-export function useFetch<T>(foo: () => Promise<T>): UseFetchReturn {
+export function useFetch<T>(
+  foo: () => Promise<T>,
+  formatError: (error: unknown) => string = getErrorMessage,
+): TUseFetchReturn {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<ResponseError>({
+  const [error, setError] = useState<TResponseError>({
     message: '',
     status: undefined,
   });
 
-  const fooRef = useRef(foo);
-  fooRef.current = foo;
+  const requestRef = useRef({ foo, formatError });
+  requestRef.current = { foo, formatError };
+
+  const clearError = useCallback(() => {
+    setError({ message: '', status: undefined });
+  }, []);
 
   const fetching = useCallback(async (): Promise<boolean> => {
     try {
       setIsLoading(true);
-      await fooRef.current();
       setError({ message: '', status: undefined });
+      await requestRef.current.foo();
       return true;
     } catch (e) {
-      if (e instanceof AxiosError) {
-        const detail = e.response?.data?.detail;
-        const message =
-          typeof detail === 'string'
-            ? detail
-            : Array.isArray(detail)
-              ? detail.map((d: { msg: string }) => d.msg).join(', ')
-              : e.message;
-        setError({ message, status: e.response?.status });
-      } else if (e instanceof Error) {
-        setError({ message: e.message, status: undefined });
-      } else {
-        setError({ message: 'unknown error', status: undefined });
-      }
+      setError({
+        message: requestRef.current.formatError(e),
+        status: isAxiosError(e) ? e.response?.status : undefined,
+      });
       return false;
     } finally {
       setIsLoading(false);
     }
   }, []);
 
-  return { fetching, isLoading, error };
+  return { fetching, isLoading, error, clearError };
 }

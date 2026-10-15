@@ -1,29 +1,25 @@
 import { type QueryObserverOptions, queryOptions } from '@tanstack/react-query';
-import type { News } from '@/entities/news/types';
-import type { ResponseError } from '@/shared/api';
+import type { TNews } from '@/entities/news/types';
 import { $api } from '@/shared/api/http.ts';
 
 export const newsItemQueryKey = {
   list: 'newsItem.list',
-  bySlug: 'newsItem.bySlug',
+  byId: 'newsItem.byId',
 };
 
 export const newsItemQueries = {
-  list: (options?: Partial<QueryObserverOptions<News[], ResponseError>>) =>
-    queryOptions<News[], ResponseError>({
+  list: (options?: Partial<QueryObserverOptions<TNews[], Error>>) =>
+    queryOptions<TNews[], Error>({
       queryKey: [newsItemQueryKey.list],
-      queryFn: async () => (await $api.get('/news')).data,
+      queryFn: async () => (await $api.get<TNews[]>('/news/')).data,
       ...options,
     }),
 
-  bySlug: (
-    slug: string,
-    options?: Partial<QueryObserverOptions<News, ResponseError>>,
-  ) =>
-    queryOptions<News, ResponseError>({
-      queryKey: [newsItemQueryKey.bySlug, slug],
-      queryFn: async () => (await $api.get(`/news/${slug}`)).data,
-      enabled: !!slug,
+  byId: (id: string, options?: Partial<QueryObserverOptions<TNews, Error>>) =>
+    queryOptions<TNews, Error>({
+      queryKey: [newsItemQueryKey.byId, id],
+      queryFn: async () => (await $api.get<TNews>(`/news/${id}`)).data,
+      enabled: !!id,
       ...options,
     }),
 };

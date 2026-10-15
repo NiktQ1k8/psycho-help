@@ -1,7 +1,13 @@
-import React, { useMemo, useState } from 'react';
-import type { RegistrationData } from '@/entities/auth';
-import { useAuth } from '@/features/auth/api/useAuth';
+import React, { useState } from 'react';
+import { getAuthErrorMessage } from '@/entities/auth/model/auth-errors';
+import {
+  normalizePhoneInput,
+  validatePassword,
+  validateProfileField,
+} from '@/entities/auth/model/profile-form';
+import { useAuth } from '@/entities/auth/model/useAuth';
 import { useFetch } from '@/shared/api/useFetch';
+import type { TAuthModalProps } from '../model/modal-types';
 import styles from './Modal.module.scss';
 import EyeIcon from './icons/Eye.svg?react';
 import EyeOffIcon from './icons/EyeOff.svg?react';
@@ -15,19 +21,7 @@ const INITIAL_FORM_VALUE = {
   confirm_password: '',
 };
 
-const HINTS = {
-  phone_number: 'Введите номер в формате +79999999999',
-  email: 'Введите вашу электронную почту в формате primer@gmail.com',
-  password: 'Пароль не менее 8 символов, с цифрой, буквой и спецсимволом',
-};
-
-type Tprops = {
-  setWindow: (param: 'log' | 'reg' | 'forgot' | 'change') => void;
-  isOpen: boolean;
-  setModalOpen: (param: boolean) => void;
-};
-
-const ModalRegistration: React.FC<Tprops> = ({
+const ModalRegistration: React.FC<TAuthModalProps> = ({
   setWindow,
   isOpen,
   setModalOpen,
@@ -39,146 +33,100 @@ const ModalRegistration: React.FC<Tprops> = ({
     setFormValue({ ...INITIAL_FORM_VALUE });
     setErrors({ ...INITIAL_FORM_VALUE });
   };
-  const [open, setOpen] = useState(isOpen);
 
   const { registration } = useAuth();
 
-  const { fetching, isLoading, error } = useFetch(async () => {
-    const { confirm_password, ...dataForServer } = formValue;
-    await registration(dataForServer as RegistrationData);
-  });
+  const { fetching, isLoading, error, clearError } = useFetch(
+    async () => {
+      const { confirm_password, ...dataForServer } = formValue;
+      await registration({
+        ...dataForServer,
+        first_name: dataForServer.first_name.trim(),
+        last_name: dataForServer.last_name.trim(),
+        email: dataForServer.email.trim(),
+      });
+    },
+    (error) => getAuthErrorMessage(error, 'registration'),
+  );
 
-  const validateFirst_name = (name: string) =>
-    /^[a-zа-я]+$/i.test(name) ? '' : 'Имя не должно содержать цифр';
-
-  const validateLast_name = (name: string) =>
-    /^[a-zа-я]+$/i.test(name) ? '' : 'Фамилия не должна содержать цифр';
-
-  const validatePhone_number = (phone_number: string) => {
-    const sanitizedNumber = phone_number.replace(/[^0-9+]/g, '');
-    return sanitizedNumber.length === 12 && sanitizedNumber.startsWith('+7')
-      ? ''
-      : 'Номер телефона должен быть в формате +79999999999';
-  };
-
-  const validateEmail = (email: string) =>
-    /^[\w-]+(\.[\w-]+)*@[\w-]+\.[a-z]{2,6}$/i.test(email)
-      ? ''
-      : 'Некорректный формат электронной почты';
-
-  const validatePassword = (password: string) => {
-    if (password.length < 8) {
-      return 'Пароль должен содержать не менее 8 символов';
-    }
-    if (!/[0-9]/.test(password)) {
-      return 'Пароль должен содержать хотя бы одну цифру';
-    }
-    if (!/[a-zA-Z]/.test(password)) {
-      return 'Пароль должен содержать хотя бы одну латинскую букву';
-    }
-    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-      return 'Пароль должен содержать хотя бы один специальный символ';
-    }
-    if (/[^a-zA-Z0-9!@#$%^&*(),.?":{}|<>]/.test(password)) {
-      return 'Пароль может содержать только латинские буквы, цифры и специальные символы';
-    }
-    return '';
-  };
-
-  const validateConfirm_password = (confirm_password: string) =>
-    confirm_password === formValue.password ? '' : 'Пароли не совпадают';
+  const validateConfirmPassword = (confirmPassword: string) =>
+    !confirmPassword
+      ? 'Повторите пароль'
+      : confirmPassword === formValue.password
+        ? ''
+        : 'Пароли не совпадают';
 
   const validateForm = () => {
     const newErrors = {
-      first_name: validateFirst_name(formValue.first_name),
-      last_name: validateLast_name(formValue.last_name),
-      phone_number: validatePhone_number(formValue.phone_number),
-      email: validateEmail(formValue.email),
-      password: validatePassword(formValue.password),
-      confirm_password: validateConfirm_password(formValue.confirm_password),
+      first_name:
+        validateProfileField('first_name', formValue.first_name) || '',
+      last_name: validateProfileField('last_name', formValue.last_name) || '',
+      phone_number:
+        validateProfileField('phone_number', formValue.phone_number) || '',
+      email: validateProfileField('email', formValue.email) || '',
+      password: validatePassword(formValue.password) || '',
+      confirm_password: validateConfirmPassword(formValue.confirm_password),
     };
     setErrors(newErrors);
     return Object.values(newErrors).every((error) => error === '');
   };
 
   const handleOk = async () => {
-    if (!validateForm()) return;
+    if (isLoading || !validateForm()) return;
     const ok = await fetching();
     if (ok) {
-      setOpen(false);
       setModalOpen(false);
       resetForm();
     }
   };
 
   const handleCancel = () => {
-    setOpen(false);
     setModalOpen(false);
   };
 
-  const formComplete = useMemo(() => {
-    return Object.entries(formValue).every(([key, value]) => {
-      if (key === 'middle_name') return true;
-      return value.trim() !== '';
-    });
-  }, [formValue]);
+  const validateField = (
+    name: keyof typeof formValue,
+    value: string,
+  ): string => {
+    if (name === 'password') return validatePassword(value) || '';
+    if (name === 'confirm_password') return validateConfirmPassword(value);
+    return validateProfileField(name, value) || '';
+  };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    const filteredValue =
-      name === 'first_name' || name === 'last_name' || name === 'middle_name'
-        ? value.replace(/[0-9\s]/g, '')
-        : value;
-    setFormValue((prevValues) => ({
-      ...prevValues,
-      [name]: filteredValue,
-    }));
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [name]: '',
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const name = e.target.name as keyof typeof formValue;
+    setErrors((prev) => ({
+      ...prev,
+      [name]: validateField(name, e.target.value),
     }));
   };
 
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value.replace(/\D/g, '');
-
-    if (!value.startsWith('7')) {
-      if (value.startsWith('8')) {
-        value = '7' + value.slice(1);
-      } else if (value === '') {
-        value = '';
-      } else if (!value.startsWith('7')) {
-        value = '7' + value;
-      }
-    }
-
-    if (value.length > 11) {
-      value = value.slice(0, 11);
-    }
-
-    let formatted = '';
-    if (value.length > 0) {
-      formatted = '+' + value.slice(0, 1);
-      if (value.length > 1) formatted += value.slice(1, 4);
-      if (value.length > 4) formatted += value.slice(4, 7);
-      if (value.length > 7) formatted += value.slice(7, 9);
-      if (value.length > 9) formatted += value.slice(9, 11);
-    }
-
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const name = e.target.name as keyof typeof formValue;
+    const value =
+      name === 'phone_number'
+        ? normalizePhoneInput(e.target.value)
+        : e.target.value;
+    clearError();
     setFormValue((prevValues) => ({
       ...prevValues,
-      phone_number: formatted || value,
+      [name]: value,
     }));
     setErrors((prevErrors) => ({
       ...prevErrors,
-      phone_number: '',
+      [name]: validateField(name, value),
+      ...(name === 'password' &&
+        formValue.confirm_password && {
+          confirm_password:
+            formValue.confirm_password === value ? '' : 'Пароли не совпадают',
+        }),
     }));
   };
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  if (!open) return null;
+  if (!isOpen) return null;
 
   return (
     <div className={styles.modalOverlay}>
@@ -194,148 +142,191 @@ const ModalRegistration: React.FC<Tprops> = ({
           </button>
         </div>
 
-        <form className={styles.form}>
-          <div className={styles.names}>
+        <form
+          noValidate
+          onSubmit={(e) => {
+            e.preventDefault();
+            void handleOk();
+          }}
+        >
+          <div className={styles.form}>
+            <div className={styles.names}>
+              <label>
+                <span className={styles.required}>Ваше имя</span>
+                <input
+                  type="text"
+                  disabled={isLoading}
+                  name="first_name"
+                  aria-invalid={!!errors.first_name}
+                  onBlur={handleBlur}
+                  maxLength={50}
+                  value={formValue.first_name}
+                  placeholder="Введите имя"
+                  onChange={handleInputChange}
+                  className={styles.input}
+                  aria-label="Строка для ввода имени"
+                />
+                {errors.first_name && (
+                  <p className={styles.errorText}>{errors.first_name}</p>
+                )}
+              </label>
+              <label>
+                <span className={styles.required}>Ваша фамилия</span>
+                <input
+                  type="text"
+                  disabled={isLoading}
+                  name="last_name"
+                  aria-invalid={!!errors.last_name}
+                  onBlur={handleBlur}
+                  maxLength={50}
+                  value={formValue.last_name}
+                  placeholder="Введите фамилию"
+                  onChange={handleInputChange}
+                  className={styles.input}
+                  aria-label="Строка для ввода фамилии"
+                />
+                {errors.last_name && (
+                  <p className={styles.errorText}>{errors.last_name}</p>
+                )}
+              </label>
+            </div>
             <label>
-              <span className={styles.required}>Ваше имя</span>
+              <span className={styles.required}>Номер телефона</span>
               <input
-                type="text"
-                name="first_name"
-                value={formValue.first_name}
-                placeholder="Введите имя"
+                type="tel"
+                disabled={isLoading}
+                inputMode="tel"
+                autoComplete="tel"
+                maxLength={20}
+                name="phone_number"
+                aria-invalid={!!errors.phone_number}
+                onBlur={handleBlur}
+                value={formValue.phone_number}
+                placeholder="+79999999999"
                 onChange={handleInputChange}
                 className={styles.input}
-                aria-label="Строка для ввода имени"
               />
-              {errors.first_name && (
-                <p className={styles.errorText}>{errors.first_name}</p>
+              {errors.phone_number && (
+                <span className={styles.errorText}>{errors.phone_number}</span>
               )}
             </label>
             <label>
-              <span className={styles.required}>Ваша фамилия</span>
+              <span className={styles.required}>Электронная почта</span>
               <input
-                type="text"
-                name="last_name"
-                value={formValue.last_name}
-                placeholder="Введите фамилию"
+                type="email"
+                disabled={isLoading}
+                name="email"
+                aria-invalid={!!errors.email}
+                onBlur={handleBlur}
+                maxLength={64}
+                autoComplete="email"
+                value={formValue.email}
+                placeholder="Введите почту"
                 onChange={handleInputChange}
                 className={styles.input}
-                aria-label="Строка для ввода фамилии"
+                aria-label="Строка для ввода электронной почты"
               />
-              {errors.last_name && (
-                <p className={styles.errorText}>{errors.last_name}</p>
+              {errors.email && (
+                <span className={styles.errorText}>{errors.email}</span>
+              )}
+            </label>
+            <label>
+              <span className={styles.required}>Пароль</span>
+              <div className={styles.passwordWrapper}>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  name="password"
+                  disabled={isLoading}
+                  aria-invalid={!!errors.password}
+                  onBlur={handleBlur}
+                  maxLength={64}
+                  autoComplete="new-password"
+                  value={formValue.password}
+                  placeholder="Введите пароль"
+                  onChange={handleInputChange}
+                  className={styles.passwordInput}
+                  aria-label="Строка для ввода пароля"
+                />
+                <button
+                  type="button"
+                  className={styles.showPassButton}
+                  onClick={() => setShowPassword((s) => !s)}
+                  aria-pressed={showPassword}
+                  aria-label={
+                    showPassword ? 'Скрыть пароль' : 'Показать пароль'
+                  }
+                >
+                  {showPassword ? <EyeIcon /> : <EyeOffIcon />}
+                </button>
+              </div>
+              {errors.password ? (
+                <span className={styles.errorText}>{errors.password}</span>
+              ) : (
+                <span className={styles.hintText}>
+                  Пароль от 8 до 64 символов, без пробелов в начале и конце
+                </span>
+              )}
+            </label>
+            <label>
+              <span className={styles.required}>Повторите пароль</span>
+              <div className={styles.passwordWrapper}>
+                <input
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  name="confirm_password"
+                  disabled={isLoading}
+                  aria-invalid={!!errors.confirm_password}
+                  onBlur={handleBlur}
+                  maxLength={64}
+                  autoComplete="new-password"
+                  value={formValue.confirm_password}
+                  placeholder="Введите пароль ещё раз"
+                  onChange={handleInputChange}
+                  className={styles.passwordInput}
+                  aria-label="Строка для повторного ввода пароля"
+                />
+                <button
+                  type="button"
+                  className={styles.showPassButton}
+                  onClick={() => setShowConfirmPassword((s) => !s)}
+                  aria-pressed={showConfirmPassword}
+                  aria-label={
+                    showConfirmPassword ? 'Скрыть пароль' : 'Показать пароль'
+                  }
+                >
+                  {showConfirmPassword ? <EyeIcon /> : <EyeOffIcon />}
+                </button>
+              </div>
+              {errors.confirm_password && (
+                <p className={styles.errorText}>{errors.confirm_password}</p>
               )}
             </label>
           </div>
-          <label>
-            <span>Номер телефона</span>
-            <input
-              type="tel"
-              name="phone_number"
-              value={formValue.phone_number}
-              placeholder="+79999999999"
-              onChange={handlePhoneChange}
-              className={styles.input}
-            />
-            {errors.phone_number && (
-              <span className={styles.errorText}>{errors.phone_number}</span>
-            )}
-          </label>
-          <label>
-            <span className={styles.required}>Электронная почта</span>
-            <input
-              type="email"
-              name="email"
-              value={formValue.email}
-              placeholder="primer@gmail.com"
-              onChange={handleInputChange}
-              className={styles.input}
-              aria-label="Строка для ввода электронной почты"
-            />
-            {errors.email && (
-              <span className={styles.errorText}>{errors.email}</span>
-            )}
-          </label>
-          <label>
-            <span className={styles.required}>Пароль</span>
-            <div className={styles.passwordWrapper}>
-              <input
-                type={showPassword ? 'text' : 'password'}
-                name="password"
-                value={formValue.password}
-                placeholder="Введите пароль"
-                onChange={handleInputChange}
-                className={styles.passwordInput}
-                aria-label="Строка для ввода пароля"
-              />
-              <button
-                type="button"
-                className={styles.showPassButton}
-                onClick={() => setShowPassword((s) => !s)}
-                aria-pressed={showPassword}
-                aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
-              >
-                {showPassword ? <EyeIcon /> : <EyeOffIcon />}
-              </button>
-            </div>
-            {errors.password ? (
-              <span className={styles.errorText}>{errors.password}</span>
-            ) : (
-              <span className={styles.hintText}>{HINTS.password}</span>
-            )}
-          </label>
-          <label>
-            <span className={styles.required}>Повторите пароль</span>
-            <div className={styles.passwordWrapper}>
-              <input
-                type={showConfirmPassword ? 'text' : 'password'}
-                name="confirm_password"
-                value={formValue.confirm_password}
-                placeholder="Введите пароль ещё раз"
-                onChange={handleInputChange}
-                className={styles.passwordInput}
-                aria-label="Строка для повторного ввода пароля"
-              />
-              <button
-                type="button"
-                className={styles.showPassButton}
-                onClick={() => setShowConfirmPassword((s) => !s)}
-                aria-pressed={showConfirmPassword}
-                aria-label={
-                  showConfirmPassword ? 'Скрыть пароль' : 'Показать пароль'
-                }
-              >
-                {showConfirmPassword ? <EyeIcon /> : <EyeOffIcon />}
-              </button>
-            </div>
-            {errors.confirm_password && (
-              <p className={styles.errorText}>{errors.confirm_password}</p>
-            )}
-          </label>
-        </form>
 
-        {error.message !== '' && (
-          <p className={styles.errorMessage}>{error.message}</p>
-        )}
+          {error.message !== '' && (
+            <p className={styles.errorMessage} role="alert">
+              {error.message}
+            </p>
+          )}
 
-        <div className={styles.footer}>
-          <button
-            className={styles.submitButton}
-            onClick={handleOk}
-            disabled={!formComplete || isLoading}
-          >
-            {isLoading ? 'Загрузка...' : 'Зарегистрироваться'}
-          </button>
-          <p className={styles.Suggestion}>
-            <span>У вас уже есть учётная запись?</span>{' '}
-            <a
-              className={styles.ModalSwitcher}
-              onClick={() => setWindow('log')}
+          <div className={styles.footer}>
+            <button
+              className={styles.submitButton}
+              type="submit"
+              disabled={isLoading}
             >
-              Войти
-            </a>
-          </p>
-        </div>
+              {isLoading ? 'Загрузка...' : 'Зарегистрироваться'}
+            </button>
+            <p className={styles.Suggestion}>
+              <span>У вас уже есть учётная запись?</span>{' '}
+              <a
+                className={styles.ModalSwitcher}
+                onClick={() => setWindow('log')}
+              >
+                Войти
+              </a>
+            </p>
+          </div>
+        </form>
       </div>
     </div>
   );

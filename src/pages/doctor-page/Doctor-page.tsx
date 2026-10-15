@@ -3,7 +3,7 @@ import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Result } from 'antd';
-import { therapistQueries } from '@/entities/therapist/api';
+import { therapistQueries } from '@/entities/therapist/queries';
 import InfoBlock from '@/features/therapist/info-block/InfoBlock';
 import { SLUG } from '@/shared/config/slug';
 import Loader from '@/shared/ui/loader/loader';

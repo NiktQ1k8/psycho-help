@@ -1,34 +1,34 @@
 import { useCallback, useMemo, useState } from 'react';
 import type { FC } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Input, Modal, message } from 'antd';
+import { Alert, Input, Modal, message } from 'antd';
 import dayjs from 'dayjs';
 import {
   applicationQueries,
   applicationQueryKey,
   cancelApplication,
-  confirmApplication,
 } from '@/entities/application/api';
-import type { Application } from '@/entities/application/types';
+import type { TApplication } from '@/entities/application/types';
 import {
   appointmentQueries,
   appointmentQueryKey,
   cancelAppointment,
   createAppointment,
 } from '@/entities/appointment/api';
-import type { Appointment } from '@/entities/appointment/types';
-import { therapistQueries } from '@/entities/therapist/api';
-import type { Therapist } from '@/entities/therapist/types';
-import { useAuth } from '@/features/auth/api/useAuth';
+import type { TAppointment } from '@/entities/appointment/types';
+import { useAuth } from '@/entities/auth/model/useAuth';
+import { therapistQueries } from '@/entities/therapist/queries';
+import type { TTherapist } from '@/entities/therapist/types';
 import AppointmentCard from '@/features/personal-cabinet/ui/appointment-card/AppointmentCard';
 import GreetingCard from '@/features/personal-cabinet/ui/greeting-card/GreetingCard';
+import { getErrorMessage } from '@/shared/api/errors';
 import PageLoader from '@/shared/ui/PageLoader';
 import styles from './UserDashboard.module.scss';
 
-interface UserDashboardProps {
+type TUserDashboardProps = {
   userName: string;
   onBookClick: () => void;
-}
+};
 
 const MEETING_TYPE_LABELS: Record<string, string> = {
   online: 'Онлайн',
@@ -42,7 +42,7 @@ const INITIATOR_LABELS: Record<string, string> = {
   system: 'Система',
 };
 
-const UserDashboard: FC<UserDashboardProps> = ({ userName, onBookClick }) => {
+const UserDashboard: FC<TUserDashboardProps> = ({ userName, onBookClick }) => {
   const queryClient = useQueryClient();
   const user = useAuth((s) => s.user);
 
@@ -60,20 +60,27 @@ const UserDashboard: FC<UserDashboardProps> = ({ userName, onBookClick }) => {
   }>({ visible: false, type: 'appointment', id: '' });
   const [cancelReason, setCancelReason] = useState('');
 
-  const { data: doctors, isLoading: isLoadingDoctors } = useQuery(
-    therapistQueries.list(),
-  );
-  const { data: serverAppointments, isLoading: isLoadingAppointments } =
-    useQuery(appointmentQueries.list());
-  const { data: applications, isLoading: isLoadingApplications } = useQuery(
-    applicationQueries.list(),
-  );
+  const {
+    data: doctors,
+    isLoading: isLoadingDoctors,
+    error: doctorsError,
+  } = useQuery(therapistQueries.list());
+  const {
+    data: serverAppointments,
+    isLoading: isLoadingAppointments,
+    error: appointmentsError,
+  } = useQuery(appointmentQueries.list());
+  const {
+    data: applications,
+    isLoading: isLoadingApplications,
+    error: applicationsError,
+  } = useQuery(applicationQueries.list());
 
   const getTherapistName = useCallback(
     (therapistId?: string) => {
       if (!therapistId) return 'Специалист не назначен';
       if (!doctors) return 'Загрузка данных...';
-      const doctor = doctors.find((d: Therapist) => d.id === therapistId);
+      const doctor = doctors.find((d: TTherapist) => d.id === therapistId);
       if (!doctor) return 'Неизвестный специалист';
       return `${doctor.last_name} ${doctor.first_name} ${doctor.middle_name || ''}`.trim();
     },
@@ -82,8 +89,8 @@ const UserDashboard: FC<UserDashboardProps> = ({ userName, onBookClick }) => {
 
   const { upcoming, past } = useMemo(() => {
     const now = dayjs();
-    const upc: Appointment[] = [];
-    const pst: Appointment[] = [];
+    const upc: TAppointment[] = [];
+    const pst: TAppointment[] = [];
 
     (serverAppointments || []).forEach((item) => {
       const appointmentDate = dayjs(item.scheduled_time);
@@ -107,8 +114,8 @@ const UserDashboard: FC<UserDashboardProps> = ({ userName, onBookClick }) => {
   }, [serverAppointments]);
 
   const { awaitingConfirmation, inProcessing } = useMemo(() => {
-    const awaiting: Application[] = [];
-    const processing: Application[] = [];
+    const awaiting: TApplication[] = [];
+    const processing: TApplication[] = [];
 
     (applications || []).forEach((app) => {
       if (app.status === 'awaiting_user_confirmation') {
@@ -122,43 +129,47 @@ const UserDashboard: FC<UserDashboardProps> = ({ userName, onBookClick }) => {
   }, [applications]);
 
   const confirmMutation = useMutation({
-    mutationFn: async (app: Application) => {
-      if (!app.psychologist?.id) {
-        throw new Error('Psychologist is not assigned');
+    mutationFn: async (app: TApplication) => {
+      if (
+        !user ||
+        !app.psychologist ||
+        !app.scheduled_at ||
+        !app.meeting_type
+      ) {
+        throw new Error('В заявке не указаны данные консультации');
       }
 
-      const apptType = app.meeting_type === 'online' ? 'Online' : 'Offline';
-      const scheduledTime = app.scheduled_at || new Date().toISOString();
+      const isOnline = app.meeting_type === 'online';
+      const venue = isOnline
+        ? app.meeting_url
+        : app.location_address || app.preferred_campus;
+      if (isOnline && (!venue || venue.length > 128)) {
+        throw new Error(
+          'Попросите психолога указать ссылку на встречу длиной до 128 символов',
+        );
+      }
 
-      const createdAppointment = await createAppointment({
+      // Создание приёма на бэке также подтверждает связанную заявку.
+      return createAppointment({
         application_id: app.id,
-        patient_id: user!.id,
+        patient_id: user.id,
         psychologist_id: app.psychologist.id,
-        type: apptType,
-        scheduled_time: scheduledTime,
-        reason: app.problem_description,
-        remind_time: null,
-        venue:
-          app.location_address ||
-          app.preferred_campus ||
-          app.meeting_url ||
-          null,
-        comment: null,
+        type: isOnline ? 'Online' : 'Offline',
+        scheduled_time: app.scheduled_at,
+        venue,
       });
-
-      return confirmApplication(app.id, createdAppointment.id);
     },
     onSuccess: () => {
       message.success('Заявка успешно подтверждена');
       queryClient.invalidateQueries({ queryKey: [applicationQueryKey.list] });
       queryClient.invalidateQueries({ queryKey: [appointmentQueryKey.list] });
     },
-    onError: () => {
-      message.error('Не удалось подтвердить заявку');
+    onError: (error) => {
+      message.error(getErrorMessage(error, 'Не удалось подтвердить заявку'));
     },
   });
 
-  const handleConfirm = (app: Application) => {
+  const handleConfirm = (app: TApplication) => {
     Modal.confirm({
       title: 'Подтверждение записи',
       content: 'Вы уверены, что хотите подтвердить предложенное время и дату?',
@@ -194,8 +205,8 @@ const UserDashboard: FC<UserDashboardProps> = ({ userName, onBookClick }) => {
       queryClient.invalidateQueries({ queryKey: [applicationQueryKey.list] });
       queryClient.invalidateQueries({ queryKey: [appointmentQueryKey.list] });
     },
-    onError: () => {
-      message.error('Ошибка при отмене');
+    onError: (error) => {
+      message.error(getErrorMessage(error, 'Ошибка при отмене'));
     },
   });
 
@@ -219,6 +230,18 @@ const UserDashboard: FC<UserDashboardProps> = ({ userName, onBookClick }) => {
       <div className={styles.pageLoaderWrapper}>
         <PageLoader />
       </div>
+    );
+  }
+
+  const loadError = doctorsError || appointmentsError || applicationsError;
+  if (loadError) {
+    return (
+      <Alert
+        type="error"
+        showIcon
+        message="Не удалось загрузить личный кабинет"
+        description={getErrorMessage(loadError)}
+      />
     );
   }
 

@@ -1,7 +1,7 @@
 import { queryOptions } from '@tanstack/react-query';
 import type {
-  Appointment,
-  AppointmentCreateRequest,
+  TAppointment,
+  TAppointmentCreateRequest,
 } from '@/entities/appointment/types';
 import { $api } from '@/shared/api/http';
 
@@ -12,15 +12,18 @@ export const appointmentQueryKey = {
 
 export const appointmentQueries = {
   list: (params?: { user_id?: string }) =>
-    queryOptions<Appointment[]>({
+    queryOptions<TAppointment[]>({
       queryKey: [appointmentQueryKey.list, params],
-      queryFn: async () => (await $api.get('/appointments/', { params })).data,
+      queryFn: async ({ signal }) =>
+        (await $api.get<TAppointment[]>('/appointments/', { params, signal }))
+          .data,
     }),
 
   byId: (id: string) =>
-    queryOptions<Appointment>({
+    queryOptions<TAppointment>({
       queryKey: [appointmentQueryKey.byId, id],
-      queryFn: async () => (await $api.get(`/appointments/${id}`)).data,
+      queryFn: async ({ signal }) =>
+        (await $api.get<TAppointment>(`/appointments/${id}`, { signal })).data,
       enabled: !!id,
     }),
 };
@@ -29,20 +32,23 @@ export const cancelAppointment = async (
   id: string,
   cancelReason: string,
 ): Promise<void> => {
-  await $api.put(`/appointments/${id}/cancel`, { cancel_reason: cancelReason });
+  await $api.put<void>(`/appointments/${id}/cancel`, {
+    cancel_reason: cancelReason,
+  });
 };
 
 export const completeAppointment = async (
   id: string,
   conclusion: string,
-): Promise<Appointment> => {
-  const { data } = await $api.put(`/appointments/${id}/done`, { conclusion });
-  return data;
+): Promise<void> => {
+  await $api.put<void>(`/appointments/${id}/done`, {
+    patient_comment: conclusion,
+  });
 };
 
 export const createAppointment = async (
-  body: AppointmentCreateRequest,
-): Promise<Appointment> => {
-  const { data } = await $api.post<Appointment>('/appointments/create', body);
+  body: TAppointmentCreateRequest,
+): Promise<TAppointment> => {
+  const { data } = await $api.post<TAppointment>('/appointments/create', body);
   return data;
 };

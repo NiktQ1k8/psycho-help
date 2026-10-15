@@ -1,13 +1,13 @@
 import { create } from 'zustand';
-import type { ApplicationCreateRequest } from '@/entities/application/types';
+import type { TApplicationCreateRequest } from '@/entities/application/types';
 
 interface IApplication {
-  application: Partial<ApplicationCreateRequest>;
-  setApplication: (patch: Partial<ApplicationCreateRequest>) => void;
+  application: Partial<TApplicationCreateRequest>;
+  setApplication: (patch: Partial<TApplicationCreateRequest>) => void;
   resetApplication: () => void;
 }
 
-const defaultState: Partial<ApplicationCreateRequest> = {
+const defaultState: Partial<TApplicationCreateRequest> = {
   problem_description: '',
   university_status: 'студент',
 };

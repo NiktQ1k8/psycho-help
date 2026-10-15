@@ -294,6 +294,11 @@
   &:hover {
     background-color: var(--interactive-brand-hover);
   }
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: var(--interactive-neutral-disable);
+  }
 }
 
 .cancelNameButton {

@@ -1,4 +1,4 @@
-export type Therapist = {
+export type TTherapist = {
   id: string;
   experience: string;
   qualification: string;
@@ -11,5 +11,10 @@ export type Therapist = {
   photo: string | null;
   middle_name: string | null;
   last_name: string;
-  phone_number: string | null;
+  phone_number: string;
+};
+
+export type TTherapistListParams = {
+  skip?: number;
+  take?: number;
 };

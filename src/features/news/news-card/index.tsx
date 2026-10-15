@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
-import type { News } from '@/entities/news/types';
+import type { TNews } from '@/entities/news/types';
 import newsLink from '@/shared/assets/images/news/news-link.svg';
 import { SLUG } from '@/shared/config/slug';
 import styles from './NewsCard.module.scss';
@@ -9,12 +9,12 @@ import styles from './NewsCard.module.scss';
 // import Img from '@/shared/ui/img/Img';
 // import altPhoto from '@/shared/assets/images/altPhotos/User_Accounts_alt.png';
 
-interface Props {
-  newsItem: News;
+interface IProps {
+  newsItem: TNews;
   linkToDetails?: boolean;
 }
 
-export const NewsCard: FC<Props> = ({ newsItem, linkToDetails = true }) => {
+export const NewsCard: FC<IProps> = ({ newsItem, linkToDetails = true }) => {
   const content = (
     <div className={styles.wrapper}>
       {/* По моему мнению намного красивее с картинкой, но в макете её нет((( */}
@@ -45,7 +45,7 @@ export const NewsCard: FC<Props> = ({ newsItem, linkToDetails = true }) => {
 
   return (
     <Link
-      to={`${SLUG.NEWS}/${newsItem.slug}`}
+      to={`${SLUG.NEWS}/${newsItem.id}`}
       className={styles.link}
       style={{ textDecoration: 'none', color: 'inherit' }}
     >

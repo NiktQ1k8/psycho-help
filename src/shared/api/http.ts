@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { SLUG } from '@/shared/config/slug';
+import { getErrorMessage } from './errors';
 
 export const $serviceClient = axios.create({
   baseURL: import.meta.env.VITE_REACT_APP_API_URL,
@@ -11,70 +11,16 @@ export const $api = axios.create({
   withCredentials: true,
 });
 
-$api.interceptors.request.use(async (config) => {
-  return config;
-});
-
-let isRefreshing = false;
-let failedQueue: {
-  resolve: (value: unknown) => void;
-  reject: (reason?: unknown) => void;
-}[] = [];
-
-const processQueue = (error: unknown, token = null) => {
-  failedQueue.forEach((prom) => {
-    if (error) {
-      prom.reject(error);
-    } else {
-      prom.resolve(token);
-    }
-  });
-  failedQueue = [];
+const rejectWithMessage = (error: unknown) => {
+  if (axios.isAxiosError(error) && !axios.isCancel(error)) {
+    error.message = getErrorMessage(error);
+  }
+  return Promise.reject(error);
 };
 
-$api.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  async (error) => {
-    const originalRequest = error.config;
-
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-      if (isRefreshing) {
-        return new Promise(function (resolve, reject) {
-          failedQueue.push({ resolve, reject });
-        })
-          .then(() => {
-            return $api(originalRequest);
-          })
-          .catch((err) => {
-            return Promise.reject(err);
-          });
-      }
-
-      isRefreshing = true;
-
-      try {
-        await axios.post(
-          `${import.meta.env.VITE_REACT_APP_API_URL}users/refresh`,
-          {},
-          { withCredentials: true },
-        );
-
-        processQueue(null);
-        return $api(originalRequest);
-      } catch (refreshError) {
-        processQueue(refreshError, null);
-
-        // logout
-        window.location.href = SLUG.MAIN;
-
-        return Promise.reject(refreshError);
-      } finally {
-        isRefreshing = false;
-      }
-    }
-    return Promise.reject(error);
-  },
+$serviceClient.interceptors.response.use(
+  (response) => response,
+  rejectWithMessage,
 );
+
+$api.interceptors.response.use((response) => response, rejectWithMessage);

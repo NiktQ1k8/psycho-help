@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { Result } from 'antd';
 import { newsItemQueries } from '@/entities/news/api/queries';
-import NewsList from '@/features/news/news-list';
+import NewsList from '@/features/news/news-list/NewsList';
 import newsHeroImage from '@/shared/assets/images/news/news-hero-image.png';
 import telegramIcon from '@/shared/assets/images/news/telegram-icon.svg';
 import { EXTERNAL_LINKS } from '@/shared/config/externalLinks';

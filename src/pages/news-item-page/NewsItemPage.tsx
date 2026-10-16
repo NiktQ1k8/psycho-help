@@ -4,10 +4,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { LeftOutlined } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
 import { Result } from 'antd';
-import dayjs from 'dayjs';
 import { newsItemQueries } from '@/entities/news/api/queries';
 import chevronLeft from '@/shared/assets/images/news/chevron-left.svg';
 import { SLUG } from '@/shared/config/slug';
+import { moscowDate } from '@/shared/lib/date-time';
 import { ButtonLink } from '@/shared/ui/button-link/ButtonLink';
 import Loader from '@/shared/ui/loader/loader';
 import styles from './NewsItemPage.module.scss';
@@ -54,7 +54,7 @@ export const NewsItemPage = () => {
           Новости
         </Link>
         <div className={styles.info}>
-          <p>{dayjs(newsItem.date).format('DD.MM.YYYY')}</p>
+          <p>{moscowDate(newsItem.date).toFormat('dd.MM.yyyy')}</p>
           <p>{newsItem.type}</p>
         </div>
       </div>

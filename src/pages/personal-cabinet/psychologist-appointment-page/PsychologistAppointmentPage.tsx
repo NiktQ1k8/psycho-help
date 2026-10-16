@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Alert, Empty, Input, Result, message } from 'antd';
+import { Alert, App, Empty, Input, Result } from 'antd';
 import clsx from 'clsx';
 import { applicationQueries } from '@/entities/application/api';
 import {
@@ -11,18 +11,14 @@ import {
 } from '@/entities/appointment/api';
 import { useAuth } from '@/entities/auth/model/useAuth';
 import { Role } from '@/entities/role/helpers';
-import { useCabinetTab } from '@/features/personal-cabinet/model/personal-cabinet-tab';
 import { usePsychologistDrafts } from '@/features/personal-cabinet/model/psychologist-drafts';
 import PsychologistRejectModal from '@/features/personal-cabinet/ui/PsychologistRejectModal';
 import Sidebar from '@/features/personal-cabinet/ui/sidebar/Sidebar';
-import {
-  type TTabId,
-  getTabsForRole,
-} from '@/pages/personal-cabinet/config/tabs';
+import { getTabsForRole } from '@/pages/personal-cabinet/config/tabs';
 import { AppointmentStatusTag } from '@/pages/personal-cabinet/constants';
 import { getErrorMessage } from '@/shared/api/errors';
 import { SLUG } from '@/shared/config/slug';
-import dayjs from '@/shared/lib/dayjs';
+import { moscowDate } from '@/shared/lib/date-time';
 import Loader from '@/shared/ui/loader/loader';
 import styles from './PsychologistAppointmentPage.module.scss';
 
@@ -35,34 +31,23 @@ const PSYCHOLOGIST_TABS = getTabsForRole('psychologist');
 
 const formatDate = (iso?: string | null) => {
   if (!iso) return null;
-  return dayjs(iso).tz().format('D MMMM YYYY');
+  return moscowDate(iso).toFormat('d MMMM yyyy');
 };
 
 const formatTime = (iso?: string | null) => {
   if (!iso) return null;
-  return dayjs(iso).tz().format('HH:mm');
+  return moscowDate(iso).toFormat('HH:mm');
 };
 
 const PsychologistAppointmentPage = () => {
+  const { message } = App.useApp();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const user = useAuth((s) => s.user);
   const appointmentId = id || '';
-  const setSavedTab = useCabinetTab((s) => s.setActiveTab);
 
-  const isPsychologist = useMemo(
-    () => (user?.roles ? new Role(user.roles).isPsychologist() : false),
-    [user?.roles],
-  );
-
-  const handleSidebarTabChange = useCallback(
-    (tabId: string) => {
-      setSavedTab(tabId as TTabId);
-      navigate(SLUG.CABINET);
-    },
-    [navigate, setSavedTab],
-  );
+  const isStaff = new Role(user?.roles ?? []).isStaff();
 
   const {
     data: appointment,
@@ -71,7 +56,7 @@ const PsychologistAppointmentPage = () => {
     error,
   } = useQuery({
     ...appointmentQueries.byId(id!),
-    enabled: isPsychologist && !!id,
+    enabled: isStaff && !!id,
   });
 
   const { data: application, error: applicationError } = useQuery(
@@ -79,18 +64,18 @@ const PsychologistAppointmentPage = () => {
   );
   const reason = application?.problem_description || appointment?.reason;
 
-  const conclusion = usePsychologistDrafts((state) =>
-    appointmentId ? state.conclusionDrafts[appointmentId] || '' : '',
+  const conclusionDraft = usePsychologistDrafts(
+    (state) => state.conclusionDrafts[appointmentId],
   );
-
-  const hasConclusionDraft = usePsychologistDrafts((state) =>
-    appointmentId
-      ? Object.prototype.hasOwnProperty.call(
-          state.conclusionDrafts,
-          appointmentId,
-        )
-      : false,
-  );
+  const savedConclusion =
+    appointment?.patient_comment ?? appointment?.conclusion ?? '';
+  const conclusion = conclusionDraft ?? savedConclusion;
+  const hasConclusionChanges = conclusion.trim() !== savedConclusion.trim();
+  const completionHint = !conclusion.trim()
+    ? 'Заполните заключение по консультации, чтобы завершить запись.'
+    : !hasConclusionChanges
+      ? 'Заключение не изменено. Внесите изменения, чтобы завершить запись.'
+      : '';
 
   const setConclusionDraft = usePsychologistDrafts(
     (state) => state.setConclusionDraft,
@@ -100,32 +85,19 @@ const PsychologistAppointmentPage = () => {
   );
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
 
-  useEffect(() => {
-    if (
-      !appointment?.id ||
-      hasConclusionDraft ||
-      appointment.conclusion === null
-    )
-      return;
-    setConclusionDraft(appointment.id, appointment.conclusion);
-  }, [
-    appointment?.id,
-    appointment?.conclusion,
-    hasConclusionDraft,
-    setConclusionDraft,
-  ]);
-
   const completeMutation = useMutation({
     mutationFn: () => completeAppointment(id!, conclusion.trim()),
-    onSuccess: () => {
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: [appointmentQueryKey.list] }),
+        queryClient.invalidateQueries({
+          queryKey: [appointmentQueryKey.byId, id],
+        }),
+      ]);
       message.success('Запись завершена');
       if (appointmentId) {
         clearConclusionDraft(appointmentId);
       }
-      queryClient.invalidateQueries({ queryKey: [appointmentQueryKey.list] });
-      queryClient.invalidateQueries({
-        queryKey: [appointmentQueryKey.byId, id],
-      });
       navigate(-1);
     },
     onError: (error) => {
@@ -133,7 +105,7 @@ const PsychologistAppointmentPage = () => {
     },
   });
 
-  if (!isPsychologist) return <Navigate to={SLUG.MAIN} replace />;
+  if (!isStaff) return <Navigate to={SLUG.MAIN} replace />;
   if (isLoading) return <Loader />;
   if (isError) {
     const detail = getErrorMessage(error);
@@ -171,8 +143,7 @@ const PsychologistAppointmentPage = () => {
       <div className={styles.sidebarWrapper}>
         <Sidebar
           user={user}
-          activeTab="appointments"
-          onChangeTab={handleSidebarTabChange}
+          activeTab="psychologistAppointments"
           tabs={PSYCHOLOGIST_TABS}
         />
       </div>
@@ -283,7 +254,7 @@ const PsychologistAppointmentPage = () => {
           )}
           {reason && (
             <div className={styles.infoRow}>
-              <span className={styles.infoLabel}>Причина записи</span>
+              <span className={styles.infoLabel}>Тема встречи</span>
               <span className={styles.infoValue}>{reason}</span>
             </div>
           )}
@@ -315,14 +286,36 @@ const PsychologistAppointmentPage = () => {
                   placeholder="Введите заключение по консультации"
                   maxLength={2048}
                   showCount
+                  disabled={completeMutation.isPending}
                 />
               </span>
             </div>
           )}
         </div>
 
+        {appointment.status === 'awaiting' && completionHint && (
+          <Alert
+            id="completion-requirements"
+            className={styles.completionHint}
+            type="info"
+            showIcon
+            message={completionHint}
+          />
+        )}
+
         {appointment.status === 'awaiting' && (
           <div className={styles.actions}>
+            <button
+              className={styles.actionButtonEnd}
+              onClick={() => completeMutation.mutate()}
+              disabled={!!completionHint || completeMutation.isPending}
+              aria-describedby={
+                completionHint ? 'completion-requirements' : undefined
+              }
+              type="button"
+            >
+              {completeMutation.isPending ? 'Завершение...' : 'Завершить'}
+            </button>
             <button
               className={styles.actionButtonCancel}
               onClick={() => setCancelModalOpen(true)}
@@ -330,16 +323,6 @@ const PsychologistAppointmentPage = () => {
               type="button"
             >
               Отменить
-            </button>
-            <button
-              className={styles.actionButtonEnd}
-              onClick={() => completeMutation.mutate()}
-              disabled={
-                conclusion.trim().length === 0 || completeMutation.isPending
-              }
-              type="button"
-            >
-              {completeMutation.isPending ? 'Завершение...' : 'Завершить'}
             </button>
           </div>
         )}
@@ -350,9 +333,6 @@ const PsychologistAppointmentPage = () => {
           onClose={() => setCancelModalOpen(false)}
           onSuccess={() => {
             message.success('Запись отменена');
-            queryClient.invalidateQueries({
-              queryKey: [appointmentQueryKey.byId, id],
-            });
             navigate(-1);
           }}
         />

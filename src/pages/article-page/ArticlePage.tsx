@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { LeftOutlined } from '@ant-design/icons';
-import dayjs from 'dayjs';
 import { SLUG } from '@/shared/config/slug';
+import { moscowDate } from '@/shared/lib/date-time';
 import { ButtonLink } from '@/shared/ui/button-link/ButtonLink';
 import styles from './ArticlePage.module.scss';
 import { TRANSLATES as t } from './constants';
@@ -69,7 +69,9 @@ export const ArticlePage = () => {
         </Link>
 
         <div className={styles.info}>
-          <p className={styles.date}>{dayjs(data.date).format('DD.MM.YYYY')}</p>
+          <p className={styles.date}>
+            {moscowDate(data.date).toFormat('dd.MM.yyyy')}
+          </p>
           <p className={styles.author}>{data.author}</p>
         </div>
       </div>

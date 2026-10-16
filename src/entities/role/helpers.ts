@@ -20,4 +20,7 @@ export class Role {
   isContentManager(): boolean {
     return !!this.getRoleByCode('content_manager');
   }
+  isStaff(): boolean {
+    return this.isPsychologist() || this.isAdmin() || this.isContentManager();
+  }
 }

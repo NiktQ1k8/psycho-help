@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Input, Modal, message } from 'antd';
+import { App, Input, Modal } from 'antd';
 import {
   applicationQueryKey,
   rejectApplication,
@@ -9,15 +9,13 @@ import {
   cancelAppointment,
 } from '@/entities/appointment/api';
 import {
-  type PsychologistReasonDraftType,
+  type TPsychologistReasonDraftType,
   usePsychologistDrafts,
 } from '@/features/personal-cabinet/model/psychologist-drafts';
 import { getErrorMessage } from '@/shared/api/errors';
 
-type TModalType = PsychologistReasonDraftType;
-
 const CONFIG: Record<
-  TModalType,
+  TPsychologistReasonDraftType,
   {
     title: string;
     okText: string;
@@ -51,7 +49,7 @@ const CONFIG: Record<
 };
 
 type TPsychologistRejectModalProps = {
-  type: TModalType;
+  type: TPsychologistReasonDraftType;
   entityId: string | null;
   onClose: () => void;
   onSuccess?: () => void;
@@ -63,6 +61,7 @@ const PsychologistRejectModal = ({
   onClose,
   onSuccess,
 }: TPsychologistRejectModalProps) => {
+  const { message } = App.useApp();
   const queryClient = useQueryClient();
   const reason = usePsychologistDrafts((state) =>
     entityId ? state.reasonDrafts[type]?.[entityId] || '' : '',
@@ -76,8 +75,18 @@ const PsychologistRejectModal = ({
   const mutation = useMutation({
     mutationFn: ({ id, reason }: { id: string; reason: string }) =>
       config.mutationFn(id, reason),
-    onSuccess: (_data, variables) => {
-      queryClient.invalidateQueries({ queryKey: [config.queryKey] });
+    onSuccess: async (_data, variables) => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: [config.queryKey] }),
+        queryClient.invalidateQueries({
+          queryKey: [
+            type === 'application'
+              ? applicationQueryKey.byId
+              : appointmentQueryKey.byId,
+            variables.id,
+          ],
+        }),
+      ]);
       clearReasonDraft(type, variables.id);
       onClose();
       onSuccess?.();
@@ -88,20 +97,21 @@ const PsychologistRejectModal = ({
   });
 
   const handleClose = () => {
-    onClose();
+    if (!mutation.isPending) onClose();
   };
 
   return (
     <Modal
-      styles={{
-        body: { marginBottom: 25 },
-      }}
       centered={true}
       title={config.title}
       open={entityId !== null}
       onCancel={handleClose}
       okText={config.okText}
       cancelText="Закрыть"
+      cancelButtonProps={{ disabled: mutation.isPending }}
+      closable={!mutation.isPending}
+      maskClosable={!mutation.isPending}
+      keyboard={!mutation.isPending}
       okButtonProps={{
         danger: true,
         disabled: reason.trim().length === 0,
@@ -114,11 +124,10 @@ const PsychologistRejectModal = ({
       }}
     >
       <p style={{ marginBottom: 5 }}>{config.label}</p>
-      <p style={{ color: 'var(--labels-neutral-secondary)' }}>
-        {config.sublabel}
-      </p>
+      <p>{config.sublabel}</p>
       <Input.TextArea
         rows={6}
+        disabled={mutation.isPending}
         value={reason}
         onChange={(e) => {
           if (entityId) {

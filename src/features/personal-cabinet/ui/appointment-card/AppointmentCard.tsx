@@ -8,7 +8,7 @@ import clsx from 'clsx';
 import type { TAppointmentStatus } from '@/entities/appointment/types';
 import styles from './AppointmentCard.module.scss';
 
-interface AppointmentCardProps {
+interface IAppointmentCardProps {
   date: string;
   doctorName: string;
   address: string;
@@ -22,9 +22,13 @@ interface AppointmentCardProps {
 
 const getStatusConfig = (status?: string) => {
   switch (status?.toLocaleLowerCase()) {
-    /*     case 'approved':
-    case 'accepted':
-      return { text: 'Подтверждено', dotClass: styles.dotSuccess }; */
+    case 'new':
+    case 'in_progress':
+      return { text: 'В обработке', dotClass: styles.dotWarning };
+    case 'rejected':
+      return { text: 'Отклонено', dotClass: styles.dotDanger };
+    case 'expired':
+      return { text: 'Срок истёк', dotClass: styles.dotNeutral };
     case 'cancelled':
       return { text: 'Отменено', dotClass: styles.dotDanger };
     case 'done':
@@ -34,7 +38,7 @@ const getStatusConfig = (status?: string) => {
   }
 };
 
-const AppointmentCard: FC<AppointmentCardProps> = ({
+const AppointmentCard: FC<IAppointmentCardProps> = ({
   date,
   doctorName,
   address,

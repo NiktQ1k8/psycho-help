@@ -1,20 +1,18 @@
 import type { FC } from 'react';
-import {
-  ArticlePage,
-  DoctorPage,
-  DoctorsPage,
-  FaqPage,
-  HomePage,
-  NewsItemPage,
-  NewsPage,
-  PersonalCabinet,
-  ResourcesPage,
-  TestPage,
-} from '@/pages';
 import Logout from '@/pages/Logout/Logout';
 import ResetPassword from '@/pages/ResetPassword/ResetPassword';
+import { ArticlePage } from '@/pages/article-page/ArticlePage';
+import { DoctorPage } from '@/pages/doctor-page';
+import { DoctorsPage } from '@/pages/doctors-page';
+import { FaqPage } from '@/pages/faq-page';
+import { HomePage } from '@/pages/home-page';
+import { NewsItemPage } from '@/pages/news-item-page/NewsItemPage';
+import { NewsPage } from '@/pages/news-page/NewsPage';
+import PersonalCabinet from '@/pages/personal-cabinet/personal-cabinet';
 import PsychologistApplicationPage from '@/pages/personal-cabinet/psychologist-application-page/PsychologistApplicationPage';
 import PsychologistAppointmentPage from '@/pages/personal-cabinet/psychologist-appointment-page/PsychologistAppointmentPage';
+import { ResourcesPage } from '@/pages/resources-page';
+import { TestPage } from '@/pages/test-page';
 import { SLUG } from '@/shared/config/slug';
 
 interface IRoutePath {

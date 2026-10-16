@@ -1,25 +1,22 @@
-import { type FC, useCallback, useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { type FC, useMemo } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { applicationQueries } from '@/entities/application/api';
 import { useAuth } from '@/entities/auth/model/useAuth';
 import { Role } from '@/entities/role/helpers';
 import type { TRoleCode } from '@/entities/role/types';
-import { useCabinetTab } from '@/features/personal-cabinet/model/personal-cabinet-tab';
 import Sidebar from '@/features/personal-cabinet/ui/sidebar/Sidebar';
 import type { TTabBadge } from '@/features/personal-cabinet/ui/sidebar/Sidebar';
+import { SLUG } from '@/shared/config/slug';
 import Loader from '@/shared/ui/loader/loader';
-import {
-  type TTabId,
-  getDefaultTabForRole,
-  getTabsForRole,
-} from './config/tabs';
+import { getDefaultTabForRole, getTabsForRole } from './config/tabs';
 import styles from './personal-cabinet.module.scss';
 
 const PersonalCabinet: FC = () => {
   const authUser = useAuth((state) => state.user);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   const primaryRoleCode = useMemo<TRoleCode>(() => {
     if (!authUser?.roles || authUser.roles.length === 0) {
@@ -32,25 +29,28 @@ const PersonalCabinet: FC = () => {
     return 'user';
   }, [authUser?.roles]);
 
-  const isPsychologist = primaryRoleCode === 'psychologist';
+  const isStaff = new Role(authUser?.roles ?? []).isStaff();
 
   const { data: applications = [] } = useQuery({
     ...applicationQueries.list(),
-    enabled: isPsychologist,
+    enabled: isStaff,
   });
 
   const activeApplicationsCount = useMemo(
     () =>
       applications.filter(
-        (a) => a.status === 'new' || a.status === 'in_progress',
+        (a) =>
+          a.status === 'new' ||
+          (a.status === 'in_progress' &&
+            a.assigned_to_user?.id === authUser?.id),
       ).length,
-    [applications],
+    [applications, authUser?.id],
   );
 
   const tabBadges = useMemo<TTabBadge[]>(() => {
     const badges: TTabBadge[] = [];
 
-    if (isPsychologist && activeApplicationsCount > 0) {
+    if (isStaff && activeApplicationsCount > 0) {
       badges.push({
         tabId: 'applications',
         content: (isActive) => (
@@ -67,49 +67,16 @@ const PersonalCabinet: FC = () => {
     }
 
     return badges;
-  }, [isPsychologist, activeApplicationsCount]);
+  }, [isStaff, activeApplicationsCount]);
 
   const tabs = useMemo(
     () => getTabsForRole(primaryRoleCode),
     [primaryRoleCode],
   );
 
-  const savedTab = useCabinetTab((s) => s.activeTab);
-  const setSavedTab = useCabinetTab((s) => s.setActiveTab);
   const defaultTab = getDefaultTabForRole(primaryRoleCode);
-  const tabFromQuery = tabs.find(
-    (tab) => tab.id === searchParams.get('tab'),
-  )?.id;
-  const [selectedTab, setSelectedTab] = useState<TTabId>(() =>
-    savedTab && tabs.some((tab) => tab.id === savedTab) ? savedTab : defaultTab,
-  );
   const activeTab =
-    tabFromQuery ??
-    (tabs.some((tab) => tab.id === selectedTab) ? selectedTab : defaultTab);
-
-  useEffect(() => {
-    setSavedTab(activeTab);
-  }, [activeTab, setSavedTab]);
-
-  const handleTabChange = useCallback(
-    (tabId: string) => {
-      const nextTab = tabs.find((tab) => tab.id === tabId)?.id;
-      if (nextTab) {
-        setSelectedTab(nextTab);
-        if (searchParams.has('tab') || searchParams.has('format')) {
-          const nextParams = new URLSearchParams(searchParams);
-          nextParams.delete('tab');
-          nextParams.delete('format');
-          setSearchParams(nextParams, { replace: true });
-        }
-      }
-    },
-    [tabs, searchParams, setSearchParams],
-  );
-
-  const handleBookClick = useCallback(() => {
-    handleTabChange('userAppointments');
-  }, [handleTabChange]);
+    tabs.find((tab) => tab.id === searchParams.get('tab'))?.id ?? defaultTab;
 
   const activeTabConfig = useMemo(() => {
     return tabs.find((tab) => tab.id === activeTab);
@@ -125,7 +92,6 @@ const PersonalCabinet: FC = () => {
         <Sidebar
           user={authUser}
           activeTab={activeTab}
-          onChangeTab={handleTabChange}
           tabs={tabs}
           tabBadges={tabBadges}
         />
@@ -135,7 +101,7 @@ const PersonalCabinet: FC = () => {
         {activeTabConfig?.render({
           user: authUser,
           primaryRoleCode,
-          onBookClick: handleBookClick,
+          onBookClick: () => navigate(`${SLUG.CABINET}?tab=userAppointments`),
         })}
       </main>
     </div>

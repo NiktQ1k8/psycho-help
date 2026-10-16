@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Logo from '@/shared/assets/images/logo.svg?react';
 import { EXTERNAL_LINKS } from '@/shared/config/externalLinks';
 import { SLUG } from '@/shared/config/slug';
+import { moscowDate } from '@/shared/lib/date-time';
 import { locations, socials } from '../../model/constants';
 import styles from './Footer.module.scss';
 
@@ -67,8 +68,8 @@ export const Footer: FC = () => {
           в репозитории
         </p>
         <p className={styles.copyright}>
-          © {new Date().getFullYear()} Служба психологической помощи (СПП)
-          Московского Политеха.
+          © {moscowDate().year} Служба психологической помощи (СПП) Московского
+          Политеха.
         </p>
       </div>
     </footer>

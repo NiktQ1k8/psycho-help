@@ -1,29 +1,32 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { DatePicker, Empty, Input, Result, Select, message } from 'antd';
+import { Alert, App, Empty, Input, Result, Select } from 'antd';
 import clsx from 'clsx';
+import type { DateTime } from 'luxon';
 import {
   acceptApplication,
   applicationQueries,
   applicationQueryKey,
   offerConsultation,
 } from '@/entities/application/api';
-import type { TApplication, TMeetingType } from '@/entities/application/types';
+import { getApplicationMeetingType } from '@/entities/application/meeting';
 import { useAuth } from '@/entities/auth/model/useAuth';
 import { Role } from '@/entities/role/helpers';
-import { useCabinetTab } from '@/features/personal-cabinet/model/personal-cabinet-tab';
+import {
+  CONSULTATION_TIMES,
+  CONSULTATION_TIME_HINT,
+  isConsultationTimeValid,
+} from '@/features/personal-cabinet/model/consultation-time';
+import { usePsychologistDrafts } from '@/features/personal-cabinet/model/psychologist-drafts';
 import PsychologistRejectModal from '@/features/personal-cabinet/ui/PsychologistRejectModal';
 import Sidebar from '@/features/personal-cabinet/ui/sidebar/Sidebar';
-import {
-  type TTabId,
-  getTabsForRole,
-} from '@/pages/personal-cabinet/config/tabs';
+import { getTabsForRole } from '@/pages/personal-cabinet/config/tabs';
 import { ApplicationStatusTag } from '@/pages/personal-cabinet/constants';
 import { getErrorMessage } from '@/shared/api/errors';
 import { SLUG } from '@/shared/config/slug';
-import dayjs from '@/shared/lib/dayjs';
-import { MOSCOW_TZ } from '@/shared/lib/dayjs';
+import { moscowDate, toApiDate } from '@/shared/lib/date-time';
+import { DatePicker } from '@/shared/ui/date-picker/MoscowDatePicker';
 import Loader from '@/shared/ui/loader/loader';
 import styles from './PsychologistApplicationPage.module.scss';
 
@@ -32,52 +35,47 @@ const MEETING_TYPE_OPTIONS = [
   { value: 'offline' as const, label: 'Очно' },
 ];
 
-const TIME_SLOTS = [
-  '09:00',
-  '10:00',
-  '11:00',
-  '12:00',
-  '13:00',
-  '14:00',
-  '15:00',
-  '16:00',
-  '17:00',
-  '18:00',
-];
-
 const PSYCHOLOGIST_TABS = getTabsForRole('psychologist');
 
-const getMoscowDateTime = (date: dayjs.Dayjs, time: string) => {
-  const [hours, minutes] = time.split(':').map(Number);
+const getMoscowDateTime = (date: DateTime, time: string) =>
+  moscowDate(`${date.toFormat('yyyy-MM-dd')}T${time}`);
 
-  return date
-    .tz(MOSCOW_TZ, true)
-    .hour(hours)
-    .minute(minutes)
-    .second(0)
-    .millisecond(0);
+type TExpandableTextProps = {
+  text: string;
+};
+
+const ExpandableText: React.FC<TExpandableTextProps> = ({ text }) => {
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  if (!text) return null;
+  return (
+    <div className={styles.dataValueDescriptionWrapper}>
+      <span
+        className={`${styles.dataValueDescription} ${isExpanded ? styles.expanded : ''}`}
+      >
+        {text}
+      </span>
+      {text.length > 100 && (
+        <button
+          className={styles.expandButton}
+          onClick={() => setIsExpanded(!isExpanded)}
+          type="button"
+        >
+          {isExpanded ? 'Свернуть' : 'Открыть полностью'}
+        </button>
+      )}
+    </div>
+  );
 };
 
 const PsychologistApplicationPage = () => {
+  const { message } = App.useApp();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const user = useAuth((s) => s.user);
   const userId = user?.id;
-  const setSavedTab = useCabinetTab((s) => s.setActiveTab);
 
-  const isPsychologist = useMemo(
-    () => (user?.roles ? new Role(user.roles).isPsychologist() : false),
-    [user?.roles],
-  );
-
-  const handleSidebarTabChange = useCallback(
-    (tabId: string) => {
-      setSavedTab(tabId as TTabId);
-      navigate(SLUG.CABINET);
-    },
-    [navigate, setSavedTab],
-  );
+  const isStaff = new Role(user?.roles ?? []).isStaff();
 
   const {
     data: application,
@@ -86,119 +84,99 @@ const PsychologistApplicationPage = () => {
     error,
   } = useQuery({
     ...applicationQueries.byId(id!),
-    enabled: isPsychologist && !!id,
+    enabled: isStaff && !!id,
   });
 
-  const [userMeetingType, setUserMeetingType] = useState<TMeetingType | null>(
-    null,
+  const draft = usePsychologistDrafts((state) =>
+    id ? state.offerDrafts[id] : undefined,
   );
-  const [userDate, setUserDate] = useState<dayjs.Dayjs | null>(null);
-  const [userTime, setUserTime] = useState<string | null>(null);
-
-  const [userLocationAddress, setUserLocationAddress] = useState<string | null>(
-    null,
+  const setOfferDraft = usePsychologistDrafts((state) => state.setOfferDraft);
+  const clearOfferDraft = usePsychologistDrafts(
+    (state) => state.clearOfferDraft,
   );
-  const [userMeetingUrl, setUserMeetingUrl] = useState<string | null>(null);
-  const [formInitializedForId, setFormInitializedForId] = useState<
-    string | null
-  >(null);
-
   const [rejectModalOpen, setRejectModalOpen] = useState(false);
-
-  useEffect(() => {
-    if (!application?.id || formInitializedForId === application.id) return;
-
-    setUserMeetingType(null);
-    setUserDate(null);
-    setUserTime(null);
-    setUserLocationAddress(null);
-    setUserMeetingUrl(null);
-    setFormInitializedForId(application.id);
-  }, [application?.id, formInitializedForId]);
 
   const applicationScheduledAt = useMemo(
     () =>
-      application?.scheduled_at ? dayjs(application.scheduled_at).tz() : null,
+      application?.scheduled_at ? moscowDate(application.scheduled_at) : null,
     [application?.scheduled_at],
   );
 
-  const getMeetingType = (application: TApplication | undefined) => {
-    if (userMeetingType) return userMeetingType;
-    if (application?.meeting_type) return application.meeting_type;
-    if (application?.location_address) return 'offline';
-    if (application?.meeting_url) return 'online';
-    if (application?.preferred_campus) return 'offline';
-    return 'online';
-  };
+  const meetingType =
+    draft?.meetingType ??
+    (application ? getApplicationMeetingType(application) : 'online');
 
-  const meetingType = getMeetingType(application);
-
-  const selectedDate = useMemo(
-    () => userDate || applicationScheduledAt?.startOf('day') || null,
-    [applicationScheduledAt, userDate],
-  );
+  const selectedDate = draft?.date
+    ? moscowDate(draft.date)
+    : applicationScheduledAt?.startOf('day') || null;
   const selectedTime =
-    userTime || applicationScheduledAt?.format('HH:mm') || null;
+    draft?.time ?? applicationScheduledAt?.toFormat('HH:mm') ?? null;
   const locationAddress =
-    userLocationAddress ??
+    draft?.locationAddress ??
     application?.location_address ??
     application?.preferred_campus ??
     '';
-  const meetingUrl = userMeetingUrl ?? application?.meeting_url ?? '';
+  const meetingUrl = draft?.meetingUrl ?? application?.meeting_url ?? '';
 
-  const selectedDateTime = useMemo(() => {
-    if (!selectedDate || !selectedTime) return null;
-    return getMoscowDateTime(selectedDate, selectedTime);
-  }, [selectedDate, selectedTime]);
+  const selectedDateTime =
+    selectedDate && selectedTime
+      ? getMoscowDateTime(selectedDate, selectedTime)
+      : null;
 
-  const timeOptions = useMemo(() => {
-    const options =
-      selectedTime && !TIME_SLOTS.includes(selectedTime)
-        ? [...TIME_SLOTS, selectedTime].sort()
-        : TIME_SLOTS;
-    const nowMoscow = dayjs.tz();
-
-    return options.map((slot) => ({
-      value: slot,
-      label: slot,
-      disabled: selectedDate
-        ? getMoscowDateTime(selectedDate, slot).isBefore(nowMoscow)
-        : false,
-    }));
-  }, [selectedDate, selectedTime]);
+  const times =
+    selectedTime && !CONSULTATION_TIMES.includes(selectedTime)
+      ? [...CONSULTATION_TIMES, selectedTime].sort()
+      : CONSULTATION_TIMES;
+  const timeOptions = times.map((slot) => ({
+    value: slot,
+    label: slot,
+    disabled: selectedDate
+      ? !isConsultationTimeValid(getMoscowDateTime(selectedDate, slot))
+      : !CONSULTATION_TIMES.includes(slot),
+  }));
 
   const acceptMutation = useMutation({
     mutationFn: (applicationId: string) =>
       acceptApplication(applicationId, userId!),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [applicationQueryKey.list] });
-      queryClient.invalidateQueries({
-        queryKey: [applicationQueryKey.byId, id],
-      });
-    },
+    onSuccess: () =>
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: [applicationQueryKey.list] }),
+        queryClient.invalidateQueries({
+          queryKey: [applicationQueryKey.byId, id],
+        }),
+      ]),
     onError: (error) => {
       message.error(getErrorMessage(error, 'Не удалось выполнить операцию'));
     },
   });
 
   const offerMutation = useMutation({
-    mutationFn: () =>
-      offerConsultation(id!, {
+    mutationFn: () => {
+      if (!selectedDateTime || !isConsultationTimeValid(selectedDateTime)) {
+        throw new Error(
+          `Выберите будущее время консультации. ${CONSULTATION_TIME_HINT}`,
+        );
+      }
+      return offerConsultation(id!, {
         psychologist_id: user!.id,
-        meeting_type: meetingType!,
-        scheduled_at: selectedDateTime!.toISOString(),
+        meeting_type: meetingType,
+        scheduled_at: toApiDate(selectedDateTime),
         location_address:
           meetingType === 'offline' ? locationAddress.trim() : null,
         meeting_url: meetingType === 'online' ? meetingUrl.trim() : null,
-      }),
-    onSuccess: () => {
+      });
+    },
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: [applicationQueryKey.list] }),
+        queryClient.invalidateQueries({
+          queryKey: [applicationQueryKey.byId, id],
+        }),
+      ]);
+      clearOfferDraft(id!);
       message.success(
         'Консультация предложена, ожидаем подтверждения пользователя',
       );
-      queryClient.invalidateQueries({ queryKey: [applicationQueryKey.list] });
-      queryClient.invalidateQueries({
-        queryKey: [applicationQueryKey.byId, id],
-      });
       navigate(-1);
     },
     onError: (error) => {
@@ -206,7 +184,7 @@ const PsychologistApplicationPage = () => {
     },
   });
 
-  if (!isPsychologist) return <Navigate to={SLUG.MAIN} replace />;
+  if (!isStaff) return <Navigate to={SLUG.MAIN} replace />;
   if (isLoading) return <Loader />;
   if (isError) {
     const detail = getErrorMessage(error);
@@ -228,54 +206,71 @@ const PsychologistApplicationPage = () => {
     );
   }
   if (!application) return <Empty description="Заявка не найдена" />;
+  if (application.status === 'completed') {
+    return (
+      <Navigate
+        to={
+          application.appointment
+            ? `${SLUG.CABINET_APPOINTMENT}/${application.appointment.id}`
+            : `${SLUG.CABINET}?tab=psychologistAppointments`
+        }
+        replace
+      />
+    );
+  }
 
   const canAccept = application.status === 'new';
-  const canChange =
-    application.status === 'in_progress' ||
+  const isAwaitingConfirmation =
     application.status === 'awaiting_user_confirmation';
+  const canChange =
+    application.status === 'in_progress' || isAwaitingConfirmation;
   const canReject =
     application.status === 'new' || application.status === 'in_progress';
+  const isSaving = acceptMutation.isPending || offerMutation.isPending;
+  const canEdit = canChange && !isSaving;
+
+  const hasOfferChanges =
+    meetingType !== getApplicationMeetingType(application) ||
+    selectedDateTime?.startOf('minute').toMillis() !==
+      applicationScheduledAt?.startOf('minute').toMillis() ||
+    (meetingType === 'offline'
+      ? locationAddress.trim() !==
+        (
+          application.location_address ??
+          application.preferred_campus ??
+          ''
+        ).trim()
+      : meetingUrl.trim() !== (application.meeting_url ?? '').trim());
+
+  const offerIssues: string[] = [];
+  if (!selectedDate) offerIssues.push('Выберите дату консультации.');
+  if (!selectedTime) offerIssues.push('Выберите время консультации.');
+  if (selectedDateTime && !isConsultationTimeValid(selectedDateTime)) {
+    offerIssues.push(
+      `Выберите будущее время консультации. ${CONSULTATION_TIME_HINT}`,
+    );
+  }
+  if (meetingType === 'offline' && !locationAddress.trim()) {
+    offerIssues.push('Укажите адрес проведения очной встречи.');
+  }
+  if (meetingType === 'online') {
+    if (!meetingUrl.trim())
+      offerIssues.push('Укажите ссылку на онлайн-встречу.');
+    else if (meetingUrl.trim().length > 128) {
+      offerIssues.push('Сократите ссылку на встречу до 128 символов.');
+    }
+  }
 
   const canSave =
     canChange &&
-    meetingType &&
-    selectedDateTime &&
-    selectedDateTime.isAfter(dayjs.tz()) &&
-    (meetingType === 'offline'
-      ? locationAddress.trim().length > 0
-      : meetingUrl.trim().length > 0 && meetingUrl.trim().length <= 128);
+    !isSaving &&
+    !offerIssues.length &&
+    (!isAwaitingConfirmation || hasOfferChanges);
 
-  const disabledDates = (current: dayjs.Dayjs) => {
+  const disabledDates = (current: DateTime) => {
     return current
-      ? current.tz(MOSCOW_TZ, true).isBefore(dayjs.tz().startOf('day'), 'day')
+      ? current.toFormat('yyyy-MM-dd') < moscowDate().toFormat('yyyy-MM-dd')
       : false;
-  };
-
-  type TExpandableTextProps = {
-    text: string;
-  };
-
-  const ExpandableText: React.FC<TExpandableTextProps> = ({ text }) => {
-    const [isExpanded, setIsExpanded] = useState<boolean>(false);
-    if (!text) return null;
-    return (
-      <div className={styles.dataValueDescriptionWrapper}>
-        <span
-          className={`${styles.dataValueDescription} ${isExpanded ? styles.expanded : ''}`}
-        >
-          {text}
-        </span>
-        {text.length > 100 && (
-          <button
-            className={styles.expandButton}
-            onClick={() => setIsExpanded(!isExpanded)}
-            type="button"
-          >
-            {isExpanded ? 'Свернуть' : 'Открыть полностью'}
-          </button>
-        )}
-      </div>
-    );
   };
 
   const statusUI = ApplicationStatusTag[application.status];
@@ -302,7 +297,6 @@ const PsychologistApplicationPage = () => {
         <Sidebar
           user={user}
           activeTab="applications"
-          onChangeTab={handleSidebarTabChange}
           tabs={PSYCHOLOGIST_TABS}
         />
       </div>
@@ -386,6 +380,16 @@ const PsychologistApplicationPage = () => {
           </div>
 
           <h3 className={styles.sidebarTitle}>Запись на сессию</h3>
+          {canAccept && (
+            <div className={styles.dataItemFull}>
+              <Alert
+                type="info"
+                showIcon
+                message="Чтобы изменить дату, время и другие условия встречи, сначала нажмите «В работу»."
+              />
+            </div>
+          )}
+          <p className={styles.dataItemFull}>{CONSULTATION_TIME_HINT}</p>
 
           <label className={styles.fieldLabel}>
             <span className={styles.dataLabel}>Дата</span>
@@ -395,13 +399,14 @@ const PsychologistApplicationPage = () => {
                 className={styles.fieldPicker}
                 value={selectedDate}
                 onChange={(date) =>
-                  setUserDate(date ? date.startOf('day') : null)
+                  date &&
+                  setOfferDraft(id!, { date: date.toFormat('yyyy-MM-dd') })
                 }
                 disabledDate={disabledDates}
                 format="DD.MM.YYYY"
                 placeholder="—"
                 allowClear={false}
-                disabled={!canChange}
+                disabled={!canEdit}
               />
             </div>
           </label>
@@ -414,10 +419,10 @@ const PsychologistApplicationPage = () => {
                 className={styles.fieldSelect}
                 prefixCls="customSelect"
                 value={selectedTime || undefined}
-                onChange={setUserTime}
+                onChange={(time) => setOfferDraft(id!, { time })}
                 placeholder="—"
                 options={timeOptions}
-                disabled={!canChange}
+                disabled={!canEdit}
               />
             </div>
           </label>
@@ -430,10 +435,10 @@ const PsychologistApplicationPage = () => {
                 className={styles.fieldSelect}
                 prefixCls="customSelect"
                 value={meetingType}
-                onChange={setUserMeetingType}
+                onChange={(meetingType) => setOfferDraft(id!, { meetingType })}
                 options={MEETING_TYPE_OPTIONS}
                 placeholder="—"
-                disabled={!canChange}
+                disabled={!canEdit}
               />
             </div>
           </label>
@@ -446,8 +451,10 @@ const PsychologistApplicationPage = () => {
                 className={styles.dataValue}
                 placeholder="—"
                 value={locationAddress}
-                onChange={(e) => setUserLocationAddress(e.target.value)}
-                disabled={!canChange}
+                onChange={(e) =>
+                  setOfferDraft(id!, { locationAddress: e.target.value })
+                }
+                disabled={!canEdit}
               />
             </label>
           )}
@@ -462,8 +469,10 @@ const PsychologistApplicationPage = () => {
                 value={meetingUrl}
                 maxLength={128}
                 showCount
-                onChange={(e) => setUserMeetingUrl(e.target.value)}
-                disabled={!canChange}
+                onChange={(e) =>
+                  setOfferDraft(id!, { meetingUrl: e.target.value })
+                }
+                disabled={!canEdit}
               />
             </label>
           )}
@@ -474,12 +483,34 @@ const PsychologistApplicationPage = () => {
           <ExpandableText text={application.problem_description} />
         </div>
 
+        {canChange && (offerIssues.length > 0 || isAwaitingConfirmation) && (
+          <Alert
+            id="offer-requirements"
+            className={styles.offerHint}
+            type="info"
+            showIcon
+            message={
+              offerIssues.length
+                ? 'Чтобы запросить подтверждение'
+                : 'Ожидаем подтверждения пользователя'
+            }
+            description={
+              offerIssues.length
+                ? offerIssues.join(' ')
+                : hasOfferChanges
+                  ? 'Условия встречи изменены. Отправьте запрос повторно, чтобы пользователь подтвердил новые данные.'
+                  : 'Можно изменить дату, время, формат, адрес или ссылку на встречу и отправить запрос повторно. Кнопка станет активной после изменения данных.'
+            }
+          />
+        )}
+
         {(canReject || canAccept || canChange) && (
           <div className={styles.actions}>
             {canReject && (
               <button
                 className={styles.btnSecondary}
                 onClick={() => setRejectModalOpen(true)}
+                disabled={isSaving}
                 type="button"
               >
                 Отклонить заявку
@@ -489,7 +520,7 @@ const PsychologistApplicationPage = () => {
               <button
                 className={styles.btnConfirm}
                 onClick={() => acceptMutation.mutate(application.id)}
-                disabled={acceptMutation.isPending}
+                disabled={isSaving}
                 type="button"
               >
                 {acceptMutation.isPending ? 'Сохранение...' : 'В работу'}
@@ -500,11 +531,18 @@ const PsychologistApplicationPage = () => {
                 className={styles.btnPrimary}
                 onClick={() => offerMutation.mutate()}
                 disabled={!canSave}
+                aria-describedby={
+                  offerIssues.length || isAwaitingConfirmation
+                    ? 'offer-requirements'
+                    : undefined
+                }
                 type="button"
               >
                 {offerMutation.isPending
                   ? 'Сохранение...'
-                  : 'Запросить подтверждение'}
+                  : isAwaitingConfirmation
+                    ? 'Запросить подтверждение повторно'
+                    : 'Запросить подтверждение'}
               </button>
             )}
           </div>
@@ -516,10 +554,8 @@ const PsychologistApplicationPage = () => {
         entityId={rejectModalOpen ? id! : null}
         onClose={() => setRejectModalOpen(false)}
         onSuccess={() => {
+          clearOfferDraft(id!);
           message.success('Заявка отклонена');
-          queryClient.invalidateQueries({
-            queryKey: [applicationQueryKey.byId, id],
-          });
           navigate(-1);
         }}
       />

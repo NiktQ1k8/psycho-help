@@ -25,14 +25,6 @@ body {
   min-height: 100vh;
 }
 
-html[data-theme='dark'] {
-  color-scheme: dark;
-
-  body {
-    background: var(--backgrounds-neutral-inverted);
-  }
-}
-
 code {
   font-family:
     source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
@@ -40,4 +32,17 @@ code {
 
 img {
   display: block;
+}
+
+// Счётчик Ant Design расположен под полем вне его высоты.
+.ant-modal-body .ant-input-textarea-show-count {
+  margin-bottom: 24px;
+}
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+
+  body {
+    background: var(--backgrounds-neutral-inverted);
+  }
 }

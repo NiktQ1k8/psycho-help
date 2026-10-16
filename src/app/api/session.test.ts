@@ -13,10 +13,13 @@ import {
   expect,
   it,
 } from 'vitest';
+import { authApi } from '@/entities/auth/api';
 import { useAuth } from '@/entities/auth/model/useAuth';
 import type { TUser } from '@/entities/auth/types';
 import { useApplication } from '@/features/personal-cabinet/model/application';
+import { useCabinetDrafts } from '@/features/personal-cabinet/model/cabinet-drafts';
 import { usePsychologistDrafts } from '@/features/personal-cabinet/model/psychologist-drafts';
+import { usePsychologistView } from '@/features/personal-cabinet/model/psychologist-view';
 import { $api, $serviceClient } from '@/shared/api/http';
 import { queryClient } from '@/shared/api/queryClient';
 import { setupSession } from './setupSession';
@@ -97,6 +100,37 @@ afterAll(() => {
 });
 
 describe('Авторизация и сессия', () => {
+  it.each([
+    {
+      action: 'запрос письма',
+      path: '/users/password-reset/request',
+      body: { email: user.email },
+      request: () => authApi.requestPasswordReset({ email: user.email }),
+    },
+    {
+      action: 'сброс пароля по токену',
+      path: '/users/password-reset/confirm',
+      body: { token: 'demo-token', new_password: 'NewPassword123!' },
+      request: () =>
+        authApi.resetPassword({
+          token: 'demo-token',
+          new_password: 'NewPassword123!',
+        }),
+    },
+  ])(
+    'отправляет $action в API с нужными данными',
+    async ({ path, body, request }) => {
+      const result = { message: 'Запрос выполнен' };
+      respond = (config) => {
+        expect(config.method).toBe('post');
+        expect(JSON.parse(config.data)).toEqual(body);
+        return response(config, result);
+      };
+      expect(await request()).toEqual(result);
+      expect(requests).toEqual([`/api${path}`]);
+    },
+  );
+
   it.each(['login', 'registration'] as const)(
     'успешный %s сохраняет пользователя и очищает старый кэш',
     async (action) => {
@@ -180,6 +214,16 @@ describe('Авторизация и сессия', () => {
     usePsychologistDrafts
       .getState()
       .setConclusionDraft('appointment', 'Личное заключение');
+    usePsychologistDrafts.getState().setOfferDraft('application', {
+      meetingUrl: 'https://example.com/private',
+    });
+    useCabinetDrafts.getState().setProfile({ social_media: '@private' });
+    useCabinetDrafts
+      .getState()
+      .setCancellationReason('application:private', 'Личная причина');
+    useApplication.getState().setMeetingType('offline');
+    usePsychologistView.getState().setSearchQuery('applications', 'Иванов');
+    usePsychologistView.getState().setSearchQuery('appointments', 'Петров');
     respond = (config) => fail(config);
     await expect($api.get('/appointments/')).rejects.toMatchObject({
       response: { status: 401 },
@@ -189,6 +233,16 @@ describe('Авторизация и сессия', () => {
     expect(queryClient.getQueryData(['application.list'])).toBeUndefined();
     expect(useApplication.getState().application.problem_description).toBe('');
     expect(usePsychologistDrafts.getState().conclusionDrafts).toEqual({});
+    expect(usePsychologistDrafts.getState().offerDrafts).toEqual({});
+    expect(useCabinetDrafts.getState().profile).toEqual({});
+    expect(useCabinetDrafts.getState().cancellationReasons).toEqual({});
+    expect(useApplication.getState().meetingType).toBeNull();
+    expect(usePsychologistView.getState().applicationFilters.searchQuery).toBe(
+      '',
+    );
+    expect(usePsychologistView.getState().appointmentFilters.searchQuery).toBe(
+      '',
+    );
     expect(
       JSON.parse(sessionStorage.getItem('psychologist-drafts')!).state
         .conclusionDrafts,
@@ -266,11 +320,15 @@ describe('Авторизация и сессия', () => {
     usePsychologistDrafts
       .getState()
       .setReasonDraft('application', 'application', 'Личная причина');
+    usePsychologistView.getState().setSearchQuery('applications', 'Иванов');
     respond = (config) => fail(config, 503);
     await expect(useAuth.getState().logOut()).rejects.toBeInstanceOf(
       AxiosError,
     );
     expect(useAuth.getState()).toMatchObject({ isAuth: true, user });
+    expect(usePsychologistView.getState().applicationFilters.searchQuery).toBe(
+      'Иванов',
+    );
     respond = (config) => response(config, null);
     await useAuth.getState().logOut();
     expect(requests).toEqual(['/api/users/logout', '/api/users/logout']);
@@ -281,5 +339,8 @@ describe('Авторизация и сессия', () => {
       application: {},
       appointment: {},
     });
+    expect(usePsychologistView.getState().applicationFilters.searchQuery).toBe(
+      '',
+    );
   });
 });

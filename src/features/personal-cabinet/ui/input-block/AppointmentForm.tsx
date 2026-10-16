@@ -2,10 +2,8 @@ import type { FC } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { ConfigProvider, DatePicker, Result, message } from 'antd';
-import locale from 'antd/es/locale/ru_RU';
+import { App, Result } from 'antd';
 import clsx from 'clsx';
-import dayjs, { Dayjs } from 'dayjs';
 import {
   applicationQueries,
   applicationQueryKey,
@@ -19,16 +17,25 @@ import type {
 import { useAuth } from '@/entities/auth/model/useAuth';
 import { therapistQueries } from '@/entities/therapist/queries';
 import { useApplication } from '@/features/personal-cabinet/model/application';
+import {
+  CONSULTATION_START_HOUR,
+  CONSULTATION_TIME_HINT,
+  disabledConsultationTime,
+  isConsultationTimeValid,
+} from '@/features/personal-cabinet/model/consultation-time';
 import { getErrorMessage } from '@/shared/api/errors';
 import altPhoto from '@/shared/assets/images/altPhotos/User_Accounts_alt.png';
 import Arrow from '@/shared/assets/images/appointments/arrow.svg?react';
 import backArrow from '@/shared/assets/images/appointments/backArrow.svg';
+import { moscowDate, toApiDate } from '@/shared/lib/date-time';
 import { Img } from '@/shared/ui';
+import { DatePicker } from '@/shared/ui/date-picker/MoscowDatePicker';
 import Loader from '@/shared/ui/loader/loader';
 import styles from './AppointmentForm.module.scss';
 import privacyFile from './assets/Privacy_police.pdf';
 
 const AppointmentForm: FC = () => {
+  const { message } = App.useApp();
   const [searchParams, setSearchParams] = useSearchParams();
   const formatParam = searchParams.get('format');
   const formatFromQuery: TMeetingType | null =
@@ -45,22 +52,26 @@ const AppointmentForm: FC = () => {
   const user = useAuth((s) => s.user);
   const application = useApplication((state) => state.application);
   const setApplication = useApplication((state) => state.setApplication);
-
-  // 🎯 State для навигации по галерее и фильтров
-  const [currentTherapistIndex, setCurrentTherapistIndex] = useState(0);
-  const [selectedOffices, setSelectedOffices] = useState<Set<string>>(
-    new Set(),
+  const meetingType = useApplication((state) => state.meetingType);
+  const setMeetingType = useApplication((state) => state.setMeetingType);
+  const selectedOffices = useApplication((state) => state.selectedOffices);
+  const setSelectedOffices = useApplication(
+    (state) => state.setSelectedOffices,
   );
   const [window, setWindow] = useState<'form' | 'results'>('form');
-  const [meetingType, setMeetingType] = useState<TMeetingType | null>(
-    formatFromQuery,
-  );
-  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
+  const selectedDate = application.scheduled_at
+    ? moscowDate(application.scheduled_at)
+    : null;
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    setMeetingType(formatFromQuery);
-  }, [formatFromQuery]);
+    if (
+      formatFromQuery &&
+      formatFromQuery !== useApplication.getState().meetingType
+    ) {
+      setMeetingType(formatFromQuery);
+    }
+  }, [formatFromQuery, setMeetingType]);
 
   const handleMeetingTypeChange = (nextType: TMeetingType) => {
     setMeetingType(nextType);
@@ -81,51 +92,40 @@ const AppointmentForm: FC = () => {
     }
 
     // Фильтр по чекбоксам офисов (применяется только для очного формата)
-    if (meetingType === 'offline' && selectedOffices.size > 0) {
+    if (meetingType === 'offline' && selectedOffices.length > 0) {
       availableDoctors = availableDoctors.filter(
-        (doctor) => doctor.office && selectedOffices.has(doctor.office),
+        (doctor) => doctor.office && selectedOffices.includes(doctor.office),
       );
     }
 
     return availableDoctors;
   }, [doctors, selectedOffices, meetingType]);
 
-  // 🔄 Сброс индекса галереи при изменении списка или формата встречи
-  useEffect(() => {
-    setCurrentTherapistIndex(0);
-  }, [filteredDoctors.length, meetingType]);
-
-  // 🔄 Сброс чекбоксов при переключении на Online
-  useEffect(() => {
-    if (meetingType === 'online') {
-      setSelectedOffices(new Set());
-    }
-  }, [meetingType]);
-
-  // 🎯 Обработчик чекбокса офиса
   const handleOfficeToggle = (office: string) => {
-    setSelectedOffices((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(office)) {
-        newSet.delete(office);
-      } else {
-        newSet.add(office);
-      }
-      return newSet;
-    });
-    setCurrentTherapistIndex(0);
+    setSelectedOffices(
+      selectedOffices.includes(office)
+        ? selectedOffices.filter((item) => item !== office)
+        : [...selectedOffices, office],
+    );
   };
 
-  // 🎯 Навигация по специалистам (вперед/назад)
+  const selectedIndex = filteredDoctors.findIndex(
+    (doctor) => doctor.id === application.psychologist_id,
+  );
+  const currentTherapistIndex = Math.max(0, selectedIndex);
   const handleNextTherapist = () => {
     if (currentTherapistIndex < filteredDoctors.length - 1) {
-      setCurrentTherapistIndex((prev) => prev + 1);
+      setApplication({
+        psychologist_id: filteredDoctors[currentTherapistIndex + 1].id,
+      });
     }
   };
 
   const handlePrevTherapist = () => {
     if (currentTherapistIndex > 0) {
-      setCurrentTherapistIndex((prev) => prev - 1);
+      setApplication({
+        psychologist_id: filteredDoctors[currentTherapistIndex - 1].id,
+      });
     }
   };
 
@@ -156,6 +156,12 @@ const AppointmentForm: FC = () => {
       message.error('Выберите дату и время приема');
       return;
     }
+    if (!isConsultationTimeValid(selectedDate)) {
+      message.error(
+        `Выберите будущее время консультации. ${CONSULTATION_TIME_HINT}`,
+      );
+      return;
+    }
     if (!application.university_status) {
       message.error('Укажите ваш статус в университете');
       return;
@@ -179,11 +185,18 @@ const AppointmentForm: FC = () => {
       !application.problem_description
     )
       return;
+    if (!isConsultationTimeValid(selectedDate)) {
+      message.error(
+        `Выберите будущее время консультации. ${CONSULTATION_TIME_HINT}`,
+      );
+      setWindow('form');
+      return;
+    }
     setIsSubmitting(true);
 
     const requestData: TApplicationCreateRequest = {
       psychologist_id: currentTherapist.id,
-      scheduled_at: selectedDate.toISOString(),
+      scheduled_at: toApiDate(selectedDate),
       problem_description: application.problem_description.trim(),
       preferred_campus:
         meetingType === 'offline' ? currentTherapist.office : undefined,
@@ -195,8 +208,6 @@ const AppointmentForm: FC = () => {
       queryClient.invalidateQueries({ queryKey: [applicationQueryKey.list] });
       message.success('Заявка успешно отправлена');
       useApplication.getState().resetApplication();
-      setSelectedDate(null);
-      setMeetingType(null);
       const nextParams = new URLSearchParams(searchParams);
       nextParams.delete('format');
       setSearchParams(nextParams, { replace: true });
@@ -219,7 +230,7 @@ const AppointmentForm: FC = () => {
   }
 
   return (
-    <ConfigProvider locale={locale}>
+    <>
       {window === 'form' ? (
         <div className={styles.form}>
           <div className={styles.format}>
@@ -255,7 +266,7 @@ const AppointmentForm: FC = () => {
                     <input
                       type="checkbox"
                       id={`office-${office}`}
-                      checked={selectedOffices.has(office)}
+                      checked={selectedOffices.includes(office)}
                       onChange={() => handleOfficeToggle(office)}
                     />
                     <label
@@ -375,23 +386,40 @@ const AppointmentForm: FC = () => {
               <p className={styles.empty}>
                 {meetingType === 'offline'
                   ? 'По выбранным фильтрам специалисты не найдены'
-                  : 'Список специалистов загружается...'}
+                  : 'Нет доступных специалистов'}
               </p>
             )}
           </div>
 
           <div className={styles.field}>
-            <label className={styles.label}>Выберите дату и время</label>
+            <label className={styles.label}>Выберите дату и время (МСК)</label>
             <DatePicker
-              showTime={{ format: 'HH:mm', minuteStep: 15 }}
+              showTime={{
+                format: 'HH:mm',
+                defaultOpenValue: moscowDate().set({
+                  hour: CONSULTATION_START_HOUR,
+                  minute: 0,
+                  second: 0,
+                  millisecond: 0,
+                }),
+              }}
               format="DD.MM.YYYY HH:mm"
               className={styles.datePicker}
               placeholder="Выберите время приема"
-              onChange={(value) => setSelectedDate(value)}
+              onChange={(value) =>
+                setApplication({
+                  scheduled_at: value
+                    ? toApiDate(value.set({ second: 0, millisecond: 0 }))
+                    : undefined,
+                })
+              }
               value={selectedDate}
               disabledDate={(current) =>
-                current && current < dayjs().startOf('day')
+                current &&
+                current.toFormat('yyyy-MM-dd') <
+                  moscowDate().toFormat('yyyy-MM-dd')
               }
+              disabledTime={disabledConsultationTime}
               hideDisabledOptions
             />
           </div>
@@ -467,7 +495,7 @@ const AppointmentForm: FC = () => {
               >
                 Дата и время:{' '}
               </span>
-              {selectedDate?.format('DD MMMM YYYY, HH:mm')}
+              {selectedDate?.toFormat('dd MMMM yyyy, HH:mm')}
             </p>
 
             <p className={styles.results__text}>
@@ -520,7 +548,7 @@ const AppointmentForm: FC = () => {
           </div>
         </div>
       )}
-    </ConfigProvider>
+    </>
   );
 };
 

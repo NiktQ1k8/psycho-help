@@ -1,13 +1,13 @@
 import type { FC } from 'react';
 import type { TNews } from '@/entities/news/types';
-import { NewsCard } from '../news-card';
+import { NewsCard } from '../news-card/NewsCard';
 import styles from './NewsList.module.scss';
 
-interface Props {
+interface INewsListProps {
   news: TNews[];
 }
 
-const NewsList: FC<Props> = ({ news }) => {
+const NewsList: FC<INewsListProps> = ({ news }) => {
   return (
     <div className={styles.list}>
       {news.map((newsItem) => (

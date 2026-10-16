@@ -1,9 +1,9 @@
 import type { FC } from 'react';
 import { Link } from 'react-router-dom';
-import dayjs from 'dayjs';
 import type { TNews } from '@/entities/news/types';
 import newsLink from '@/shared/assets/images/news/news-link.svg';
 import { SLUG } from '@/shared/config/slug';
+import { moscowDate } from '@/shared/lib/date-time';
 import styles from './NewsCard.module.scss';
 
 // import Img from '@/shared/ui/img/Img';
@@ -30,7 +30,7 @@ export const NewsCard: FC<IProps> = ({ newsItem, linkToDetails = true }) => {
       <div className={styles.cardHeader}>
         {newsItem.type && <div className={styles.type}>{newsItem.type}</div>}
         <div className={styles.date}>
-          {dayjs(newsItem.date).format('DD.MM.YYYY')}
+          {moscowDate(newsItem.date).toFormat('dd.MM.yyyy')}
         </div>
       </div>
       <p className={styles.title}>{newsItem.title}</p>

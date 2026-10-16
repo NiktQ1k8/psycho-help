@@ -4,8 +4,9 @@ import { refreshSession } from '@/entities/auth/api';
 import { useAuth } from '@/entities/auth/model/useAuth';
 import { useApplication } from '@/features/personal-cabinet/model/application';
 import { useAppointment } from '@/features/personal-cabinet/model/appointment';
-import { useCabinetTab } from '@/features/personal-cabinet/model/personal-cabinet-tab';
+import { useCabinetDrafts } from '@/features/personal-cabinet/model/cabinet-drafts';
 import { usePsychologistDrafts } from '@/features/personal-cabinet/model/psychologist-drafts';
+import { usePsychologistView } from '@/features/personal-cabinet/model/psychologist-view';
 import { $api } from '@/shared/api/http';
 
 type TSessionRequestConfig = InternalAxiosRequestConfig & { _retry?: boolean };
@@ -17,11 +18,12 @@ export const setupSession = () => {
     }
     useApplication.setState(useApplication.getInitialState(), true);
     useAppointment.setState(useAppointment.getInitialState(), true);
-    useCabinetTab.setState(useCabinetTab.getInitialState(), true);
+    useCabinetDrafts.setState(useCabinetDrafts.getInitialState(), true);
     usePsychologistDrafts.setState(
       usePsychologistDrafts.getInitialState(),
       true,
     );
+    usePsychologistView.getState().resetView();
   });
 
   const interceptor = $api.interceptors.response.use(

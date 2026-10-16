@@ -1,7 +1,9 @@
 import type { FC, ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 import { UserOutlined } from '@ant-design/icons';
 import clsx from 'clsx';
 import type { TUser } from '@/entities/auth/types';
+import { SLUG } from '@/shared/config/slug';
 import styles from './sidebar.module.scss';
 
 export type TTabConfig = {
@@ -17,18 +19,11 @@ export type TTabBadge = {
 type TSidebarProps = {
   user: TUser | null;
   activeTab: string;
-  onChangeTab: (tab: string) => void;
   tabs: TTabConfig[];
   tabBadges?: TTabBadge[];
 };
 
-const Sidebar: FC<TSidebarProps> = ({
-  user,
-  activeTab,
-  onChangeTab,
-  tabs,
-  tabBadges,
-}) => {
+const Sidebar: FC<TSidebarProps> = ({ user, activeTab, tabs, tabBadges }) => {
   const getBadgeForTab = (tabId: string) => {
     return tabBadges?.find((b) => b.tabId === tabId)?.content;
   };
@@ -50,14 +45,15 @@ const Sidebar: FC<TSidebarProps> = ({
           const badgeContent = getBadgeForTab(tab.id);
           const isActive = activeTab === tab.id;
           return (
-            <button
+            <Link
               key={tab.id}
               className={clsx(styles.navItem, isActive && styles.active)}
-              onClick={() => onChangeTab(tab.id)}
+              to={`${SLUG.CABINET}?tab=${tab.id}`}
+              aria-current={isActive ? 'page' : undefined}
             >
               <span className={styles.navLabel}>{tab.label}</span>
               {badgeContent && <>{badgeContent(isActive)}</>}
-            </button>
+            </Link>
           );
         })}
       </nav>

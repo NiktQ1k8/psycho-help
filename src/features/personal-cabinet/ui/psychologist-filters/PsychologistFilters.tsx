@@ -3,35 +3,36 @@ import {
   SortAscendingOutlined,
   SortDescendingOutlined,
 } from '@ant-design/icons';
-import { AutoComplete, DatePicker, Input, Select } from 'antd';
-import dayjs from 'dayjs';
-import type { Dayjs } from 'dayjs';
-import type { SortDirection } from '@/features/personal-cabinet/model/psychologist-view';
+import { AutoComplete, Input, Select } from 'antd';
+import type { DateTime } from 'luxon';
+import type { TSortDirection } from '@/features/personal-cabinet/model/psychologist-view';
+import { moscowDate, toApiDate } from '@/shared/lib/date-time';
+import { DatePicker } from '@/shared/ui/date-picker/MoscowDatePicker';
 import styles from './PsychologistFilters.module.scss';
 
-interface SelectOption {
+interface ISelectOption {
   value: string;
   label: string;
 }
 
-interface SearchSuggestion {
+interface ISearchSuggestion {
   value: string;
 }
 
-interface PsychologistListFiltersProps {
+interface IPsychologistListFiltersProps {
   searchQuery: string;
-  searchSuggestions: SearchSuggestion[];
+  searchSuggestions: ISearchSuggestion[];
   onSearchQueryChange: (value: string) => void;
   formatFilter: string;
-  formatOptions: SelectOption[];
+  formatOptions: ISelectOption[];
   onFormatFilterChange: (value: string) => void;
   statusFilter: string;
-  statusOptions: SelectOption[];
+  statusOptions: ISelectOption[];
   onStatusFilterChange: (value: string) => void;
   dateRange: [string, string] | null;
   onDateRangeChange: (range: [string, string] | null) => void;
-  sortDirection: SortDirection;
-  onSortDirectionChange: (direction: SortDirection) => void;
+  sortDirection: TSortDirection;
+  onSortDirectionChange: (direction: TSortDirection) => void;
   hasActiveFilters: boolean;
   onResetFilters: () => void;
   searchPlaceholder?: string;
@@ -58,7 +59,7 @@ const PsychologistListFilters = ({
   searchPlaceholder = 'Поиск по ФИО',
   formatPlaceholder = 'Все форматы',
   statusPlaceholder = 'Все статусы',
-}: PsychologistListFiltersProps) => {
+}: IPsychologistListFiltersProps) => {
   return (
     <div className={styles['filters']}>
       <div className={styles['filters__bar']} role="search">
@@ -98,12 +99,16 @@ const PsychologistListFilters = ({
           dropdownClassName="custom-range-picker-dropdown"
           className={styles['filters__date-range']}
           separator={<span style={{ color: '#C4C4C4' }}>&#10132;</span>}
-          value={dateRange ? [dayjs(dateRange[0]), dayjs(dateRange[1])] : null}
-          onChange={(dates: [Dayjs | null, Dayjs | null] | null) => {
+          value={
+            dateRange
+              ? [moscowDate(dateRange[0]), moscowDate(dateRange[1])]
+              : null
+          }
+          onChange={(dates: [DateTime | null, DateTime | null] | null) => {
             if (dates && dates[0] && dates[1]) {
               onDateRangeChange([
-                dates[0].toISOString(),
-                dates[1].toISOString(),
+                toApiDate(dates[0].startOf('day')),
+                toApiDate(dates[1].startOf('day')),
               ]);
               return;
             }

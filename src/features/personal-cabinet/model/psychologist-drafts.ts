@@ -1,20 +1,35 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
+import type { TMeetingType } from '@/entities/application/types';
 
-export type PsychologistReasonDraftType = 'application' | 'appointment';
+export type TPsychologistReasonDraftType = 'application' | 'appointment';
 
-type ReasonDrafts = Record<PsychologistReasonDraftType, Record<string, string>>;
+type TReasonDrafts = Record<
+  TPsychologistReasonDraftType,
+  Record<string, string>
+>;
 
-interface PsychologistDraftsState {
-  reasonDrafts: ReasonDrafts;
+export type TOfferDraft = {
+  meetingType?: TMeetingType;
+  date?: string;
+  time?: string;
+  locationAddress?: string;
+  meetingUrl?: string;
+};
+
+interface IPsychologistDraftsState {
+  reasonDrafts: TReasonDrafts;
   conclusionDrafts: Record<string, string>;
+  offerDrafts: Record<string, TOfferDraft>;
+  setOfferDraft: (id: string, patch: TOfferDraft) => void;
+  clearOfferDraft: (id: string) => void;
   setReasonDraft: (
-    type: PsychologistReasonDraftType,
+    type: TPsychologistReasonDraftType,
     entityId: string,
     reason: string,
   ) => void;
   clearReasonDraft: (
-    type: PsychologistReasonDraftType,
+    type: TPsychologistReasonDraftType,
     entityId: string,
   ) => void;
   setConclusionDraft: (appointmentId: string, conclusion: string) => void;
@@ -26,7 +41,7 @@ const omitKey = <T>(record: Record<string, T>, key: string) => {
   return rest;
 };
 
-export const usePsychologistDrafts = create<PsychologistDraftsState>()(
+export const usePsychologistDrafts = create<IPsychologistDraftsState>()(
   persist(
     (set) => ({
       reasonDrafts: {
@@ -34,6 +49,16 @@ export const usePsychologistDrafts = create<PsychologistDraftsState>()(
         appointment: {},
       },
       conclusionDrafts: {},
+      offerDrafts: {},
+      setOfferDraft: (id, patch) =>
+        set((state) => ({
+          offerDrafts: {
+            ...state.offerDrafts,
+            [id]: { ...state.offerDrafts[id], ...patch },
+          },
+        })),
+      clearOfferDraft: (id) =>
+        set((state) => ({ offerDrafts: omitKey(state.offerDrafts, id) })),
 
       setReasonDraft: (type, entityId, reason) =>
         set((state) => ({

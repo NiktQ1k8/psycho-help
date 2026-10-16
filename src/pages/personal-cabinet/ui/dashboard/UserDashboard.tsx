@@ -1,13 +1,16 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { FC } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Alert, Input, Modal, message } from 'antd';
-import dayjs from 'dayjs';
+import { Alert, App, Input, Modal } from 'antd';
 import {
   applicationQueries,
   applicationQueryKey,
   cancelApplication,
 } from '@/entities/application/api';
+import {
+  getApplicationMeetingType,
+  getApplicationVenue,
+} from '@/entities/application/meeting';
 import type { TApplication } from '@/entities/application/types';
 import {
   appointmentQueries,
@@ -17,11 +20,15 @@ import {
 } from '@/entities/appointment/api';
 import type { TAppointment } from '@/entities/appointment/types';
 import { useAuth } from '@/entities/auth/model/useAuth';
-import { therapistQueries } from '@/entities/therapist/queries';
-import type { TTherapist } from '@/entities/therapist/types';
+import { useCabinetDrafts } from '@/features/personal-cabinet/model/cabinet-drafts';
+import {
+  CONSULTATION_TIME_HINT,
+  isConsultationTimeValid,
+} from '@/features/personal-cabinet/model/consultation-time';
 import AppointmentCard from '@/features/personal-cabinet/ui/appointment-card/AppointmentCard';
 import GreetingCard from '@/features/personal-cabinet/ui/greeting-card/GreetingCard';
 import { getErrorMessage } from '@/shared/api/errors';
+import { moscowDate } from '@/shared/lib/date-time';
 import PageLoader from '@/shared/ui/PageLoader';
 import styles from './UserDashboard.module.scss';
 
@@ -42,7 +49,21 @@ const INITIATOR_LABELS: Record<string, string> = {
   system: 'Система',
 };
 
+const getTherapistName = (psychologist: TApplication['psychologist']) => {
+  if (!psychologist) return 'Специалист не назначен';
+  return (
+    [
+      psychologist.user?.last_name,
+      psychologist.user?.first_name,
+      psychologist.user?.middle_name,
+    ]
+      .filter(Boolean)
+      .join(' ') || 'Имя специалиста не указано'
+  );
+};
+
 const UserDashboard: FC<TUserDashboardProps> = ({ userName, onBookClick }) => {
+  const { message, modal } = App.useApp();
   const queryClient = useQueryClient();
   const user = useAuth((s) => s.user);
 
@@ -58,13 +79,17 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName, onBookClick }) => {
     type: 'appointment' | 'application';
     id: string;
   }>({ visible: false, type: 'appointment', id: '' });
-  const [cancelReason, setCancelReason] = useState('');
+  const reasonKey = `${cancelModal.type}:${cancelModal.id}`;
+  const cancelReason = useCabinetDrafts(
+    (state) => state.cancellationReasons[reasonKey] || '',
+  );
+  const setCancellationReason = useCabinetDrafts(
+    (state) => state.setCancellationReason,
+  );
+  const clearCancellationReason = useCabinetDrafts(
+    (state) => state.clearCancellationReason,
+  );
 
-  const {
-    data: doctors,
-    isLoading: isLoadingDoctors,
-    error: doctorsError,
-  } = useQuery(therapistQueries.list());
   const {
     data: serverAppointments,
     isLoading: isLoadingAppointments,
@@ -76,70 +101,67 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName, onBookClick }) => {
     error: applicationsError,
   } = useQuery(applicationQueries.list());
 
-  const getTherapistName = useCallback(
-    (therapistId?: string) => {
-      if (!therapistId) return 'Специалист не назначен';
-      if (!doctors) return 'Загрузка данных...';
-      const doctor = doctors.find((d: TTherapist) => d.id === therapistId);
-      if (!doctor) return 'Неизвестный специалист';
-      return `${doctor.last_name} ${doctor.first_name} ${doctor.middle_name || ''}`.trim();
-    },
-    [doctors],
-  );
-
   const { upcoming, past } = useMemo(() => {
-    const now = dayjs();
     const upc: TAppointment[] = [];
     const pst: TAppointment[] = [];
 
     (serverAppointments || []).forEach((item) => {
-      const appointmentDate = dayjs(item.scheduled_time);
-      if (appointmentDate.isValid()) {
-        if (
-          appointmentDate.isAfter(now) &&
-          item.status !== 'cancelled' &&
-          item.status !== 'done'
-        ) {
-          upc.push(item);
-        } else {
-          pst.push(item);
-        }
+      if (item.status === 'awaiting') {
+        upc.push(item);
+      } else {
+        pst.push(item);
       }
     });
 
-    upc.sort((a, b) => dayjs(a.scheduled_time).diff(dayjs(b.scheduled_time)));
-    pst.sort((a, b) => dayjs(b.scheduled_time).diff(dayjs(a.scheduled_time)));
+    upc.sort(
+      (a, b) =>
+        moscowDate(a.scheduled_time).toMillis() -
+        moscowDate(b.scheduled_time).toMillis(),
+    );
+    pst.sort(
+      (a, b) =>
+        moscowDate(b.scheduled_time).toMillis() -
+        moscowDate(a.scheduled_time).toMillis(),
+    );
 
     return { upcoming: upc, past: pst };
   }, [serverAppointments]);
 
-  const { awaitingConfirmation, inProcessing } = useMemo(() => {
-    const awaiting: TApplication[] = [];
-    const processing: TApplication[] = [];
+  const { awaitingConfirmation, inProcessing, closedApplications } =
+    useMemo(() => {
+      const awaiting: TApplication[] = [];
+      const processing: TApplication[] = [];
+      const closed: TApplication[] = [];
 
-    (applications || []).forEach((app) => {
-      if (app.status === 'awaiting_user_confirmation') {
-        awaiting.push(app);
-      } else if (app.status === 'new' || app.status === 'in_progress') {
-        processing.push(app);
-      }
-    });
+      (applications || []).forEach((app) => {
+        if (app.status === 'awaiting_user_confirmation') {
+          awaiting.push(app);
+        } else if (app.status === 'new' || app.status === 'in_progress') {
+          processing.push(app);
+        } else if (['rejected', 'cancelled', 'expired'].includes(app.status)) {
+          closed.push(app);
+        }
+      });
 
-    return { awaitingConfirmation: awaiting, inProcessing: processing };
-  }, [applications]);
+      return {
+        awaitingConfirmation: awaiting,
+        inProcessing: processing,
+        closedApplications: closed,
+      };
+    }, [applications]);
 
   const confirmMutation = useMutation({
     mutationFn: async (app: TApplication) => {
-      if (
-        !user ||
-        !app.psychologist ||
-        !app.scheduled_at ||
-        !app.meeting_type
-      ) {
+      if (!user || !app.psychologist || !app.scheduled_at) {
         throw new Error('В заявке не указаны данные консультации');
       }
+      if (!isConsultationTimeValid(moscowDate(app.scheduled_at))) {
+        throw new Error(
+          `Попросите психолога выбрать будущее время консультации. ${CONSULTATION_TIME_HINT}`,
+        );
+      }
 
-      const isOnline = app.meeting_type === 'online';
+      const isOnline = getApplicationMeetingType(app) === 'online';
       const venue = isOnline
         ? app.meeting_url
         : app.location_address || app.preferred_campus;
@@ -159,10 +181,12 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName, onBookClick }) => {
         venue,
       });
     },
-    onSuccess: () => {
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: [applicationQueryKey.list] }),
+        queryClient.invalidateQueries({ queryKey: [appointmentQueryKey.list] }),
+      ]);
       message.success('Заявка успешно подтверждена');
-      queryClient.invalidateQueries({ queryKey: [applicationQueryKey.list] });
-      queryClient.invalidateQueries({ queryKey: [appointmentQueryKey.list] });
     },
     onError: (error) => {
       message.error(getErrorMessage(error, 'Не удалось подтвердить заявку'));
@@ -170,12 +194,12 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName, onBookClick }) => {
   });
 
   const handleConfirm = (app: TApplication) => {
-    Modal.confirm({
+    modal.confirm({
       title: 'Подтверждение записи',
       content: 'Вы уверены, что хотите подтвердить предложенное время и дату?',
       okText: 'Подтвердить',
       cancelText: 'Назад',
-      onOk: () => confirmMutation.mutate(app),
+      onOk: () => confirmMutation.mutateAsync(app),
     });
   };
 
@@ -198,12 +222,14 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName, onBookClick }) => {
         return cancelAppointment(id, reason);
       }
     },
-    onSuccess: () => {
+    onSuccess: async (_data, variables) => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: [applicationQueryKey.list] }),
+        queryClient.invalidateQueries({ queryKey: [appointmentQueryKey.list] }),
+      ]);
       message.success('Успешно отменено');
       setCancelModal({ visible: false, type: 'appointment', id: '' });
-      setCancelReason('');
-      queryClient.invalidateQueries({ queryKey: [applicationQueryKey.list] });
-      queryClient.invalidateQueries({ queryKey: [appointmentQueryKey.list] });
+      clearCancellationReason(`${variables.type}:${variables.id}`);
     },
     onError: (error) => {
       message.error(getErrorMessage(error, 'Ошибка при отмене'));
@@ -211,8 +237,16 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName, onBookClick }) => {
   });
 
   const handleCancelSubmit = () => {
+    if (cancelMutation.isPending) return;
     if (!cancelReason.trim()) {
       message.error('Пожалуйста, укажите причину отмены');
+      return;
+    }
+    if (
+      cancelReason.trim().length >
+      (cancelModal.type === 'application' ? 500 : 512)
+    ) {
+      message.error('Сократите причину отмены');
       return;
     }
     cancelMutation.mutate({
@@ -222,8 +256,7 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName, onBookClick }) => {
     });
   };
 
-  const isLoading =
-    isLoadingDoctors || isLoadingAppointments || isLoadingApplications;
+  const isLoading = isLoadingAppointments || isLoadingApplications;
 
   if (isLoading) {
     return (
@@ -233,7 +266,7 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName, onBookClick }) => {
     );
   }
 
-  const loadError = doctorsError || appointmentsError || applicationsError;
+  const loadError = appointmentsError || applicationsError;
   if (loadError) {
     return (
       <Alert
@@ -262,8 +295,8 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName, onBookClick }) => {
             upcoming.map((app) => (
               <AppointmentCard
                 key={app.id}
-                date={dayjs(app.scheduled_time).format('D MMMM, HH:mm')}
-                doctorName={getTherapistName(app.psychologist.id)}
+                date={moscowDate(app.scheduled_time).toFormat('d MMMM, HH:mm')}
+                doctorName={getTherapistName(app.psychologist)}
                 address={
                   app.venue ||
                   (app.type === 'Online' ? 'Онлайн сессия' : 'Офлайн')
@@ -292,36 +325,27 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName, onBookClick }) => {
           <h3 className={styles.sectionTitle}>В обработке у специалиста</h3>
           <div className={styles.cardsGrid}>
             {inProcessing.map((app) => {
-              const meetingTypeStr = app.meeting_type
-                ? MEETING_TYPE_LABELS[app.meeting_type] || app.meeting_type
-                : 'Тип встречи не указан';
-              const locationStr =
-                app.meeting_type === 'offline'
-                  ? app.location_address ||
-                    app.preferred_campus ||
-                    'Адрес уточняется'
-                  : app.meeting_url || 'Ссылка будет отправлена позже';
+              const meetingTypeStr =
+                MEETING_TYPE_LABELS[getApplicationMeetingType(app)];
+              const locationStr = getApplicationVenue(app);
               const scheduledStr = app.scheduled_at
-                ? dayjs(app.scheduled_at).format('D MMMM, HH:mm')
+                ? moscowDate(app.scheduled_at).toFormat('d MMMM, HH:mm')
                 : 'Время подбирается специалистом';
 
               return (
                 <AppointmentCard
                   key={app.id}
                   date={scheduledStr}
-                  doctorName={getTherapistName(app.psychologist?.id)}
+                  doctorName={getTherapistName(app.psychologist)}
                   address={`${meetingTypeStr} — ${locationStr}`}
                   type="upcoming"
                   status={app.status}
-                  onCancel={
-                    app.status === 'new'
-                      ? () =>
-                          setCancelModal({
-                            visible: true,
-                            type: 'application',
-                            id: app.id,
-                          })
-                      : undefined
+                  onCancel={() =>
+                    setCancelModal({
+                      visible: true,
+                      type: 'application',
+                      id: app.id,
+                    })
                   }
                 />
               );
@@ -335,24 +359,18 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName, onBookClick }) => {
           <h3 className={styles.sectionTitle}>Требуют подтверждения</h3>
           <div className={styles.cardsGrid}>
             {awaitingConfirmation.map((app) => {
-              const meetingTypeStr = app.meeting_type
-                ? MEETING_TYPE_LABELS[app.meeting_type] || app.meeting_type
-                : 'Не указан';
-              const locationStr =
-                app.meeting_type === 'offline'
-                  ? app.location_address ||
-                    app.preferred_campus ||
-                    'Адрес не указан'
-                  : app.meeting_url || 'Ссылка будет отправлена';
+              const meetingTypeStr =
+                MEETING_TYPE_LABELS[getApplicationMeetingType(app)];
+              const locationStr = getApplicationVenue(app);
               const scheduledStr = app.scheduled_at
-                ? dayjs(app.scheduled_at).format('D MMMM, HH:mm')
+                ? moscowDate(app.scheduled_at).toFormat('d MMMM, HH:mm')
                 : 'Время не назначено';
 
               return (
                 <AppointmentCard
                   key={app.id}
                   date={scheduledStr}
-                  doctorName={getTherapistName(app.psychologist?.id)}
+                  doctorName={getTherapistName(app.psychologist)}
                   address={`${meetingTypeStr} — ${locationStr}`}
                   type="confirmation"
                   status={app.status}
@@ -385,7 +403,6 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName, onBookClick }) => {
               if (isCancelled) {
                 commentText = app.cancel_reason || 'Причина не указана';
                 // Ищем связанную заявку, чтобы достать инициатора отмены
-                // Пока что инициатор на беке не ставится?
                 const relatedApp = applications?.find(
                   (a) => a.id === app.application_id,
                 );
@@ -393,7 +410,7 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName, onBookClick }) => {
                   cancelInitiator = relatedApp.cancel_initiator;
                 }
               } else if (isDone) {
-                commentText = app.conclusion || '';
+                commentText = app.patient_comment || app.conclusion || '';
               }
 
               const hasComment = Boolean(commentText);
@@ -401,8 +418,10 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName, onBookClick }) => {
               return (
                 <AppointmentCard
                   key={app.id}
-                  date={dayjs(app.scheduled_time).format('D MMMM, HH:mm')}
-                  doctorName={getTherapistName(app.psychologist.id)}
+                  date={moscowDate(app.scheduled_time).toFormat(
+                    'd MMMM, HH:mm',
+                  )}
+                  doctorName={getTherapistName(app.psychologist)}
                   address={
                     app.venue ||
                     (app.type === 'Online' ? 'Онлайн сессия' : 'Офлайн')
@@ -425,11 +444,45 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName, onBookClick }) => {
         </section>
       )}
 
+      {closedApplications.length > 0 && (
+        <section className={styles.section}>
+          <h3 className={styles.sectionTitle}>Закрытые заявки</h3>
+          <div className={styles.cardsGrid}>
+            {closedApplications.map((app) => {
+              const reason = app.reject_reason || app.cancel_reason || '';
+              return (
+                <AppointmentCard
+                  key={app.id}
+                  date={moscowDate(app.scheduled_at || app.created_at).toFormat(
+                    'd MMMM, HH:mm',
+                  )}
+                  doctorName={getTherapistName(app.psychologist)}
+                  address={`${MEETING_TYPE_LABELS[getApplicationMeetingType(app)]} — ${getApplicationVenue(app)}`}
+                  type="past"
+                  status={app.status}
+                  hasComment={!!reason}
+                  onComment={() =>
+                    setCommentModalData({
+                      visible: true,
+                      status: app.status,
+                      text: reason,
+                      initiator: app.cancel_initiator,
+                    })
+                  }
+                />
+              );
+            })}
+          </div>
+        </section>
+      )}
+
       <Modal
         title={
           commentModalData.status === 'cancelled'
             ? 'Причина отмены'
-            : 'Комментарий психолога'
+            : commentModalData.status === 'rejected'
+              ? 'Причина отказа'
+              : 'Комментарий психолога'
         }
         open={commentModalData.visible}
         onCancel={() =>
@@ -452,20 +505,27 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName, onBookClick }) => {
         title="Отмена"
         open={cancelModal.visible}
         onCancel={() => {
+          if (cancelMutation.isPending) return;
           setCancelModal({ visible: false, type: 'appointment', id: '' });
-          setCancelReason('');
         }}
         onOk={handleCancelSubmit}
         confirmLoading={cancelMutation.isPending}
+        cancelButtonProps={{ disabled: cancelMutation.isPending }}
+        closable={!cancelMutation.isPending}
+        maskClosable={!cancelMutation.isPending}
+        keyboard={!cancelMutation.isPending}
         okText="Подтвердить отмену"
         cancelText="Назад"
-        okButtonProps={{ danger: true }}
+        okButtonProps={{ danger: true, disabled: !cancelReason.trim() }}
       >
         <p style={{ marginBottom: 12 }}>Пожалуйста, укажите причину отмены:</p>
         <Input.TextArea
           rows={4}
           value={cancelReason}
-          onChange={(e) => setCancelReason(e.target.value)}
+          maxLength={cancelModal.type === 'application' ? 500 : 512}
+          showCount
+          disabled={cancelMutation.isPending}
+          onChange={(e) => setCancellationReason(reasonKey, e.target.value)}
           placeholder="Например: Изменились планы, заболел(а)"
         />
       </Modal>

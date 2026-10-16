@@ -1,6 +1,8 @@
 import { isValidPhoneNumber } from 'libphonenumber-js/max';
 import type { TUser } from '@/entities/auth/types';
 
+export const PHONE_MAX_LENGTH = 16; // «+» и до 15 цифр в международном номере.
+
 export type TProfileFormData = {
   first_name: string;
   last_name: string;
@@ -28,9 +30,14 @@ export const getProfileFormData = (user: TUser | null): TProfileFormData => ({
 export const normalizePhoneInput = (value: string): string => {
   const digits = value.replace(/\D/g, '');
   if (!digits) return value.trimStart().startsWith('+') ? '+' : '';
-  if (value.trimStart().startsWith('+')) return `+${digits}`;
-  if (digits.startsWith('8')) return `+7${digits.slice(1)}`;
-  return `+${digits.startsWith('7') ? digits : `7${digits}`}`;
+  const normalizedDigits = value.trimStart().startsWith('+')
+    ? digits
+    : digits.startsWith('8')
+      ? `7${digits.slice(1)}`
+      : digits.startsWith('7')
+        ? digits
+        : `7${digits}`;
+  return `+${normalizedDigits}`.slice(0, PHONE_MAX_LENGTH);
 };
 
 export const validatePassword = (password: string): string | undefined => {
@@ -84,7 +91,7 @@ export const validateProfileField = (
     case 'phone_number':
       if (
         value.length < 10 ||
-        value.length > 20 ||
+        value.length > PHONE_MAX_LENGTH ||
         !/^\+\d+$/.test(value) ||
         !isValidPhoneNumber(value)
       ) {

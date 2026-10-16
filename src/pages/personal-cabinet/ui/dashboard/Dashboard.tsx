@@ -1,22 +1,20 @@
 import type { FC } from 'react';
 import type { TRoleCode } from '@/entities/role/types';
-import AdminDashboard from './AdminDashboard';
 import PsychologistDashboard from './PsychologistDashboard';
 import UserDashboard from './UserDashboard';
 
-interface DashboardProps {
+interface IDashboardProps {
   userName: string;
   role: TRoleCode;
   onBookClick?: () => void;
 }
 
-const Dashboard: FC<DashboardProps> = ({ userName, role, onBookClick }) => {
+const Dashboard: FC<IDashboardProps> = ({ userName, role, onBookClick }) => {
   switch (role) {
     case 'psychologist':
-      return <PsychologistDashboard onBookClick={onBookClick} />;
     case 'admin':
     case 'content_manager':
-      return <AdminDashboard />;
+      return <PsychologistDashboard />;
     case 'user':
     default:
       return (

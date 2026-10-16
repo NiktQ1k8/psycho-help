@@ -5,7 +5,6 @@ import AppointmentForm from '@/features/personal-cabinet/ui/input-block/Appointm
 import PersonalData from '@/features/personal-cabinet/ui/personal-data/PersonalData';
 import PsychologistApplications from '@/pages/personal-cabinet/ui/applications/PsychologistApplications';
 import PsychologistAppointments from '@/pages/personal-cabinet/ui/appointments/PsychologistAppointments';
-import ComingSoon from '../ui/PlaceholderComponent';
 import Dashboard from '../ui/dashboard/Dashboard';
 
 export type TTabId =
@@ -14,7 +13,6 @@ export type TTabId =
   | 'userAppointments'
   | 'psychologistAppointments'
   | 'profile';
-// потом админа и контент-менеджера добавим, сейчас даже не понятно, какие табы у них будут
 
 export interface ITabRenderProps {
   user: TUser;
@@ -80,47 +78,6 @@ export const roleBasedTabs: Record<string, ITabConfig[]> = {
       render: ({ user }) => <PersonalData user={user} />,
     },
   ],
-  admin: [
-    {
-      id: 'main',
-      label: 'Главная',
-      render: ({ user, primaryRoleCode, onBookClick }) => (
-        <Dashboard
-          userName={user.first_name || 'Пользователь'}
-          role={primaryRoleCode}
-          onBookClick={onBookClick}
-        />
-      ),
-    },
-    {
-      id: 'psychologistAppointments',
-      label: 'Записи',
-      render: () => <ComingSoon title="Администрирование" />,
-    },
-    {
-      id: 'profile',
-      label: 'Профиль',
-      render: ({ user }) => <PersonalData user={user} />,
-    },
-  ],
-  content_manager: [
-    {
-      id: 'main',
-      label: 'Главная',
-      render: ({ user, primaryRoleCode, onBookClick }) => (
-        <Dashboard
-          userName={user.first_name || 'Пользователь'}
-          role={primaryRoleCode}
-          onBookClick={onBookClick}
-        />
-      ),
-    },
-    {
-      id: 'profile',
-      label: 'Профиль',
-      render: ({ user }) => <PersonalData user={user} />,
-    },
-  ],
 };
 
 export const defaultTabForRole: Record<string, TTabId> = {
@@ -131,7 +88,12 @@ export const defaultTabForRole: Record<string, TTabId> = {
 };
 
 export function getTabsForRole(roleCode: string): ITabConfig[] {
-  return roleBasedTabs[roleCode] || roleBasedTabs.user;
+  // Временно общий кабинет для психолога, администратора и контент-менеджера.
+  const tabRole =
+    roleCode === 'admin' || roleCode === 'content_manager'
+      ? 'psychologist'
+      : roleCode;
+  return roleBasedTabs[tabRole] || roleBasedTabs.user;
 }
 
 export function getDefaultTabForRole(roleCode: string): TTabId {

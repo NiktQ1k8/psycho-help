@@ -1,79 +1,84 @@
+import type { DateTime } from 'luxon';
 import { create } from 'zustand';
 import type { TApplicationStatus } from '@/entities/application/types';
 import type { TAppointmentStatus } from '@/entities/appointment/types';
-import dayjs from '@/shared/lib/dayjs';
+import { moscowDate, toApiDate } from '@/shared/lib/date-time';
 
-export type SortDirection = 'asc' | 'desc';
-export type ApplicationStatusFilter = 'all' | TApplicationStatus | 'closed';
-export type AppointmentStatusFilter = 'all' | TAppointmentStatus;
-export type FormatFilter = 'all' | 'offline' | 'online';
-export type ActiveTab = 'applications' | 'appointments';
+export type TSortDirection = 'asc' | 'desc';
+export type TApplicationStatusFilter =
+  'all' | Exclude<TApplicationStatus, 'completed'> | 'closed';
+export type TAppointmentStatusFilter = 'all' | TAppointmentStatus;
+export type TFormatFilter = 'all' | 'offline' | 'online';
+export type TActiveTab = 'applications' | 'appointments';
 
-interface BaseFilters {
+interface IBaseFilters {
   currentPage: number;
-  sortDirection: SortDirection;
-  formatFilter: FormatFilter;
+  sortDirection: TSortDirection;
+  formatFilter: TFormatFilter;
   searchQuery: string;
   dateRange: [string, string] | null;
 }
 
-interface TabFilters<TStatus> extends BaseFilters {
+interface ITabFilters<TStatus> extends IBaseFilters {
   statusFilter: TStatus;
 }
 
-interface ViewState {
-  applicationFilters: TabFilters<ApplicationStatusFilter>;
-  appointmentFilters: TabFilters<AppointmentStatusFilter>;
-  setCurrentPage: (tab: ActiveTab, page: number) => void;
-  setSortDirection: (tab: ActiveTab, dir: SortDirection) => void;
-  setStatusFilter: (tab: ActiveTab, filter: string) => void;
-  setFormatFilter: (tab: ActiveTab, filter: FormatFilter) => void;
-  setSearchQuery: (tab: ActiveTab, query: string) => void;
-  setDateRange: (tab: ActiveTab, range: [string, string] | null) => void;
-  resetFilters: (tab: ActiveTab) => void;
+interface IViewState {
+  dashboardDate: DateTime | null;
+  setDashboardDate: (date: DateTime) => void;
+  applicationFilters: ITabFilters<TApplicationStatusFilter>;
+  appointmentFilters: ITabFilters<TAppointmentStatusFilter>;
+  setCurrentPage: (tab: TActiveTab, page: number) => void;
+  setSortDirection: (tab: TActiveTab, dir: TSortDirection) => void;
+  setStatusFilter: (tab: TActiveTab, filter: string) => void;
+  setFormatFilter: (tab: TActiveTab, filter: TFormatFilter) => void;
+  setSearchQuery: (tab: TActiveTab, query: string) => void;
+  setDateRange: (tab: TActiveTab, range: [string, string] | null) => void;
+  resetFilters: (tab: TActiveTab) => void;
+  resetView: () => void;
 }
 
 export const getDefaultAppointmentDateRange = (): [string, string] => [
-  dayjs.tz().startOf('day').toISOString(),
-  dayjs.tz().add(1, 'month').startOf('day').toISOString(),
+  toApiDate(moscowDate().startOf('day')),
+  toApiDate(moscowDate().plus({ months: 1 }).startOf('day')),
 ];
 
-const getDefaultFilters = (): BaseFilters => ({
+const getDefaultFilters = (): IBaseFilters => ({
   currentPage: 1,
-  sortDirection: 'asc' as const,
-  formatFilter: 'all' as const,
+  sortDirection: 'asc',
+  formatFilter: 'all',
   searchQuery: '',
   dateRange: null,
 });
 
-const getDefaultAppointmentFilters = (): BaseFilters => ({
-  currentPage: 1,
-  sortDirection: 'asc' as const,
-  formatFilter: 'all' as const,
-  searchQuery: '',
-  dateRange: getDefaultAppointmentDateRange(),
+const getDefaultView = () => ({
+  dashboardDate: null,
+  applicationFilters: {
+    ...getDefaultFilters(),
+    statusFilter: 'all' as TApplicationStatusFilter,
+  },
+  appointmentFilters: {
+    ...getDefaultFilters(),
+    dateRange: getDefaultAppointmentDateRange(),
+    statusFilter: 'all' as TAppointmentStatusFilter,
+  },
 });
 
 const filtersKey = (
-  tab: ActiveTab,
+  tab: TActiveTab,
 ): 'applicationFilters' | 'appointmentFilters' =>
   tab === 'applications' ? 'applicationFilters' : 'appointmentFilters';
 
-export const usePsychologistView = create<ViewState>((set, get) => {
-  const updateFilter = (tab: ActiveTab, patch: Record<string, unknown>) => {
+export const usePsychologistView = create<IViewState>((set, get) => {
+  const updateFilter = (tab: TActiveTab, patch: Record<string, unknown>) => {
     const key = filtersKey(tab);
     set({ [key]: { ...get()[key], ...patch } });
   };
 
   return {
-    applicationFilters: {
-      ...getDefaultFilters(),
-      statusFilter: 'all' as ApplicationStatusFilter,
-    },
-    appointmentFilters: {
-      ...getDefaultAppointmentFilters(),
-      statusFilter: 'all' as AppointmentStatusFilter,
-    },
+    ...getDefaultView(),
+    setDashboardDate: (date) => set({ dashboardDate: date }),
+    resetView: () => set(getDefaultView()),
 
     setCurrentPage: (tab, page) => updateFilter(tab, { currentPage: page }),
     setSortDirection: (tab, dir) =>
@@ -87,19 +92,9 @@ export const usePsychologistView = create<ViewState>((set, get) => {
     setDateRange: (tab, range) =>
       updateFilter(tab, { dateRange: range, currentPage: 1 }),
 
-    resetFilters: (tab) => {
-      const key = filtersKey(tab);
-      const defaultWithoutStatus = getDefaultFilters();
-      const statusFilter =
-        tab === 'applications'
-          ? ('all' as ApplicationStatusFilter)
-          : ('all' as AppointmentStatusFilter);
+    resetFilters: (tab) =>
       set({
-        [key]: {
-          ...defaultWithoutStatus,
-          statusFilter,
-        },
-      });
-    },
+        [filtersKey(tab)]: { ...getDefaultFilters(), statusFilter: 'all' },
+      }),
   };
 });

@@ -1,17 +1,20 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Alert, Empty, Pagination, message } from 'antd';
+import { Alert, App, Empty, Pagination } from 'antd';
 import clsx from 'clsx';
 import {
   acceptApplication,
   applicationQueries,
   applicationQueryKey,
 } from '@/entities/application/api';
+import {
+  getApplicationMeetingType,
+  getApplicationVenue,
+} from '@/entities/application/meeting';
 import type {
   TApplication,
   TApplicationStatus,
-  TMeetingType,
 } from '@/entities/application/types';
 import { useAuth } from '@/entities/auth/model/useAuth';
 import { usePsychologistView } from '@/features/personal-cabinet/model/psychologist-view';
@@ -19,11 +22,9 @@ import PsychologistListFilters from '@/features/personal-cabinet/ui/psychologist
 import { ApplicationStatusTag } from '@/pages/personal-cabinet/constants';
 import { getErrorMessage } from '@/shared/api/errors';
 import { SLUG } from '@/shared/config/slug';
-import dayjs from '@/shared/lib/dayjs';
+import { moscowDate } from '@/shared/lib/date-time';
 import Loader from '@/shared/ui/loader/loader';
 import styles from './PsychologistApplications.module.scss';
-
-const toMoscow = (date: string) => dayjs(date).tz();
 
 const ITEMS_PER_PAGE = 5;
 
@@ -38,7 +39,6 @@ const APPLICATION_STATUS_OPTIONS = [
   { value: 'new', label: 'Новая' },
   { value: 'in_progress', label: 'В работе' },
   { value: 'awaiting_user_confirmation', label: 'На подтверждении' },
-  { value: 'completed', label: 'Завершено' },
   { value: 'closed', label: 'Отменено' },
 ];
 
@@ -49,7 +49,11 @@ const APPLICATION_FORMAT_OPTIONS = [
 ];
 
 const getPatientName = (application: TApplication) =>
-  [application.user?.last_name, application.user?.first_name]
+  [
+    application.user?.last_name,
+    application.user?.first_name,
+    application.user?.middle_name,
+  ]
     .filter(Boolean)
     .join(' ') || 'Имя не указано';
 
@@ -72,29 +76,13 @@ const getShortPsychologistName = (
 
 const getSortTime = (application: TApplication): number => {
   const date = application.scheduled_at;
-  return date ? new Date(date).getTime() : 0;
+  return date ? moscowDate(date).toMillis() : 0;
 };
 
 const getTimeRange = (time: string | null) => {
   if (!time) return 'Время ещё не указано';
-  const start = toMoscow(time);
-  return `${start.format('HH:mm')} - ${start.add(1, 'hour').format('HH:mm')}`;
-};
-
-const getMeetingType: (application: TApplication) => TMeetingType = (
-  application: TApplication,
-) => {
-  if (application.meeting_type) return application.meeting_type;
-  if (application.location_address) return 'offline';
-  if (application.meeting_url) return 'online';
-  if (application.preferred_campus) return 'offline';
-  return 'online';
-};
-
-const getVenue = (application: TApplication) => {
-  if (getMeetingType(application) === 'online')
-    return application.meeting_url || 'Онлайн';
-  return application.location_address || application.preferred_campus || 'Очно';
+  const start = moscowDate(time);
+  return `${start.toFormat('HH:mm')} - ${start.plus({ hours: 1 }).toFormat('HH:mm')}`;
 };
 
 const groupByDate = <T,>(
@@ -116,6 +104,7 @@ const groupByDate = <T,>(
 };
 
 const PsychologistApplications = () => {
+  const { message } = App.useApp();
   const FILTERS_TAB = 'applications' as const;
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -142,9 +131,10 @@ const PsychologistApplications = () => {
     searchQuery,
     dateRange,
   } = filters;
+  const searchTerm = searchQuery.trim().replace(/\s+/g, ' ').toLowerCase();
 
   const hasActiveFilters =
-    searchQuery !== '' ||
+    searchTerm !== '' ||
     statusFilter !== 'all' ||
     formatFilter !== 'all' ||
     sortDirection !== 'asc' ||
@@ -167,16 +157,8 @@ const PsychologistApplications = () => {
     },
   });
 
-  const relevantApplications = useMemo(() => {
-    return allApplications.filter(
-      (application) =>
-        application.status === 'new' ||
-        application.assigned_to_user?.id === userId,
-    );
-  }, [allApplications, userId]);
-
   const filteredApplications = useMemo(() => {
-    let result = relevantApplications;
+    let result = allApplications;
 
     if (statusFilter === 'closed') {
       result = result.filter((a) => CLOSED_STATUSES.includes(a.status));
@@ -184,25 +166,26 @@ const PsychologistApplications = () => {
       result = result.filter((a) => a.status === statusFilter);
     }
 
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
+    if (searchTerm) {
       result = result.filter((a) =>
-        getPatientName(a).toLowerCase().includes(q),
+        getPatientName(a).toLowerCase().includes(searchTerm),
       );
     }
 
     if (formatFilter !== 'all') {
-      result = result.filter((a) => getMeetingType(a) === formatFilter);
+      result = result.filter(
+        (a) => getApplicationMeetingType(a) === formatFilter,
+      );
     }
 
     if (dateRange) {
       const [from, to] = dateRange;
-      const fromMs = dayjs(from).tz().startOf('day').valueOf();
-      const toMs = dayjs(to).tz().endOf('day').valueOf();
+      const fromMs = moscowDate(from).startOf('day').toMillis();
+      const toMs = moscowDate(to).endOf('day').toMillis();
       result = result.filter((a) => {
         const date = a.scheduled_at;
         if (!date) return false;
-        const t = dayjs(date).valueOf();
+        const t = moscowDate(date).toMillis();
         return t >= fromMs && t <= toMs;
       });
     }
@@ -210,28 +193,31 @@ const PsychologistApplications = () => {
     const dir = sortDirection === 'asc' ? 1 : -1;
     return [...result].sort((a, b) => dir * (getSortTime(a) - getSortTime(b)));
   }, [
-    relevantApplications,
+    allApplications,
     statusFilter,
     formatFilter,
-    searchQuery,
+    searchTerm,
     dateRange,
     sortDirection,
   ]);
 
   const currentItems = filteredApplications;
+  const page = Math.min(
+    currentPage,
+    Math.max(1, Math.ceil(currentItems.length / ITEMS_PER_PAGE)),
+  );
   const paginated = currentItems.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE,
+    (page - 1) * ITEMS_PER_PAGE,
+    page * ITEMS_PER_PAGE,
   );
 
   const searchSuggestions = useMemo(() => {
-    if (!searchQuery) return [];
-    const q = searchQuery.toLowerCase();
-    const names = new Set(relevantApplications.map(getPatientName));
+    if (!searchTerm) return [];
+    const names = new Set(allApplications.map(getPatientName));
     return [...names]
-      .filter((name) => name.toLowerCase().includes(q))
+      .filter((name) => name.toLowerCase().includes(searchTerm))
       .map((name) => ({ value: name }));
-  }, [relevantApplications, searchQuery]);
+  }, [allApplications, searchTerm]);
 
   const isLoading = isLoadingApplications;
 
@@ -281,7 +267,9 @@ const PsychologistApplications = () => {
             <span className={styles.patientName}>
               {getPatientName(application)}
             </span>
-            <span className={styles.location}>{getVenue(application)}</span>
+            <span className={styles.location}>
+              {getApplicationVenue(application)}
+            </span>
           </div>
         </div>
         <div className={styles.actionsCol}>
@@ -337,9 +325,11 @@ const PsychologistApplications = () => {
 
       <div className={styles.list} role="list">
         {paginated.length === 0 && <Empty description="Заявок нет" />}
-        {groupByDate(paginated as TApplication[], (application) => {
+        {groupByDate(paginated, (application) => {
           const date = application.scheduled_at;
-          return date ? toMoscow(date).format('D MMMM') : 'Дата ещё не указана';
+          return date
+            ? moscowDate(date).toFormat('d MMMM yyyy')
+            : 'Дата ещё не указана';
         }).map((group) => (
           <div className={styles.dateGroup} key={group.date}>
             <h3 className={styles.dateHeader}>{group.date}</h3>
@@ -351,7 +341,7 @@ const PsychologistApplications = () => {
       {currentItems.length > ITEMS_PER_PAGE && (
         <Pagination
           className={styles.pagination}
-          current={currentPage}
+          current={page}
           total={currentItems.length}
           pageSize={ITEMS_PER_PAGE}
           onChange={(page) => setCurrentPage(FILTERS_TAB, page)}

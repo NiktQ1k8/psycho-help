@@ -22,17 +22,29 @@ export const applicationQueries = {
       queryFn: ({ signal }) => getUniversityStatuses(signal),
     }),
   list: (params?: TApplicationListParams) => {
-    const requestParams = { limit: 100, ...params };
+    const requestParams = { ...params, limit: params?.limit ?? 100 };
+    const paginated = params?.limit !== undefined || params?.skip !== undefined;
 
     return queryOptions<TApplication[]>({
-      queryKey: [applicationQueryKey.list, requestParams],
-      queryFn: async ({ signal }) =>
-        (
-          await $api.get<TApplication[]>('/applications/', {
-            params: requestParams,
+      queryKey: [applicationQueryKey.list, requestParams, paginated],
+      select: (applications) =>
+        applications.filter(
+          (application) => application.status !== 'completed',
+        ),
+      queryFn: async ({ signal }) => {
+        const applications: TApplication[] = [];
+        let skip = requestParams.skip ?? 0;
+        while (true) {
+          const { data } = await $api.get<TApplication[]>('/applications/', {
+            params: { ...requestParams, skip },
             signal,
-          })
-        ).data,
+          });
+          applications.push(...data);
+          if (paginated || data.length < requestParams.limit)
+            return applications;
+          skip += data.length;
+        }
+      },
     });
   },
 

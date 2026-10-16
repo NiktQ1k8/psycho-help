@@ -197,7 +197,6 @@ const ModalRegistration: React.FC<TAuthModalProps> = ({
                 disabled={isLoading}
                 inputMode="tel"
                 autoComplete="tel"
-                maxLength={20}
                 name="phone_number"
                 aria-invalid={!!errors.phone_number}
                 onBlur={handleBlur}

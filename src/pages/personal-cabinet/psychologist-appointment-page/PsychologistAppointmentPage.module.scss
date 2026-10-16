@@ -141,9 +141,14 @@
   color: var(--labels-neutral-primary, #111827);
 }
 
+.completionHint {
+  margin-top: 16px;
+}
+
 .actions {
   display: flex;
-  gap: 12px;
+  flex-flow: row-reverse wrap;
+  gap: 2.4rem;
   margin-top: 24px;
 }
 
@@ -246,12 +251,6 @@
   }
 }
 
-.actions {
-  display: flex;
-  flex-direction: row-reverse;
-  gap: 2.4rem;
-}
-
 @media (width <= 1023px) {
   .page {
     grid-template-columns: 1fr;
@@ -268,6 +267,10 @@
 }
 
 @media (width <= 600px) {
+  .actions {
+    flex-direction: column;
+  }
+
   .sidebarWrapper * {
     display: none;
   }

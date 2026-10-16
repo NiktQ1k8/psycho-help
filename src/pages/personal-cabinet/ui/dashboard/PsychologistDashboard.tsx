@@ -1,47 +1,64 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  EnvironmentOutlined,
-  PlusOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
+import { EnvironmentOutlined, UserOutlined } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
-import { Button, DatePicker } from 'antd';
+import { Alert, Button } from 'antd';
 import clsx from 'clsx';
-import dayjs from 'dayjs';
-import type { Dayjs } from 'dayjs';
+import type { DateTime } from 'luxon';
 import { appointmentQueries } from '@/entities/appointment/api';
+import {
+  CONSULTATION_END_HOUR,
+  CONSULTATION_START_HOUR,
+} from '@/features/personal-cabinet/model/consultation-time';
+import { usePsychologistView } from '@/features/personal-cabinet/model/psychologist-view';
+import { AppointmentStatusTag } from '@/pages/personal-cabinet/constants';
+import { getErrorMessage } from '@/shared/api/errors';
 import { SLUG } from '@/shared/config/slug';
+import { moscowDate } from '@/shared/lib/date-time';
+import { DatePicker } from '@/shared/ui/date-picker/MoscowDatePicker';
 import Loader from '@/shared/ui/loader/loader';
 import styles from './PsychologistDashboard.module.scss';
 
-const DAY_HOURS = Array.from({ length: 11 }, (_, i) => i + 9);
 const HOUR_HEIGHT = 80;
 
-interface PsychologistDashboardProps {
-  onBookClick?: () => void;
-}
-
-const PsychologistDashboard: React.FC<PsychologistDashboardProps> = ({
-  onBookClick,
-}) => {
+const PsychologistDashboard = () => {
   const navigate = useNavigate();
-  const [currentDate, setCurrentDate] = useState<Dayjs>(dayjs());
+  const currentDate =
+    usePsychologistView((state) => state.dashboardDate) ?? moscowDate();
+  const setCurrentDate = usePsychologistView((state) => state.setDashboardDate);
   const [selectedAptId, setSelectedAptId] = useState<string | null>(null);
 
-  const { data: appointments = [], isLoading: isLoadingApts } = useQuery(
-    appointmentQueries.list(),
-  );
+  const {
+    data: appointments = [],
+    isLoading: isLoadingApts,
+    error,
+  } = useQuery(appointmentQueries.list());
 
   const todaysAppointments = useMemo(() => {
-    const startOfDay = currentDate.startOf('day').valueOf();
-    const endOfDay = currentDate.endOf('day').valueOf();
+    const startOfDay = currentDate.startOf('day').toMillis();
+    const endOfDay = currentDate.endOf('day').toMillis();
 
     return appointments.filter((apt) => {
-      const aptTime = dayjs(apt.scheduled_time).valueOf();
-      return aptTime >= startOfDay && aptTime <= endOfDay;
+      const aptTime = moscowDate(apt.scheduled_time).toMillis();
+      return (
+        apt.status !== 'cancelled' &&
+        aptTime >= startOfDay &&
+        aptTime <= endOfDay
+      );
     });
   }, [appointments, currentDate]);
+
+  const dayHours = useMemo(() => {
+    const hours = todaysAppointments.map(
+      (apt) => moscowDate(apt.scheduled_time).hour,
+    );
+    const firstHour = Math.min(CONSULTATION_START_HOUR, ...hours);
+    const lastHour = Math.max(CONSULTATION_END_HOUR, ...hours);
+    return Array.from(
+      { length: lastHour - firstHour + 1 },
+      (_, i) => firstHour + i,
+    );
+  }, [todaysAppointments]);
 
   const selectedAppointment = useMemo(() => {
     return todaysAppointments.find((a) => a.id === selectedAptId) || null;
@@ -49,43 +66,51 @@ const PsychologistDashboard: React.FC<PsychologistDashboardProps> = ({
 
   const weekDays = useMemo(() => {
     const startOfWeek = currentDate.startOf('week');
-    return Array.from({ length: 7 }).map((_, i) => startOfWeek.add(i, 'day'));
+    return Array.from({ length: 7 }).map((_, i) =>
+      startOfWeek.plus({ days: i }),
+    );
   }, [currentDate]);
 
-  const handleDaySelect = (day: Dayjs) => {
-    setCurrentDate(day);
+  const handleDaySelect = (day: DateTime) => {
+    setCurrentDate(day.startOf('day'));
     setSelectedAptId(null);
   };
 
   const getTimeRange = (timeStr: string) => {
-    const start = dayjs(timeStr);
-    const end = start.add(1, 'hour');
-    return `${start.format('HH:mm')} - ${end.format('HH:mm')}`;
+    const start = moscowDate(timeStr);
+    const end = start.plus({ hours: 1 });
+    return `${start.toFormat('HH:mm')} - ${end.toFormat('HH:mm')}`;
   };
 
   if (isLoadingApts) return <Loader />;
+  if (error)
+    return (
+      <Alert
+        type="error"
+        showIcon
+        message="Не удалось загрузить расписание"
+        description={getErrorMessage(error)}
+      />
+    );
 
   return (
     <>
       <div className={styles.headerRow}>
         <h1 className={styles.pageTitle}>Расписание</h1>
-        <button className={styles.btnAdd} onClick={onBookClick}>
-          Добавить запись <PlusOutlined />
-        </button>
       </div>
 
       <div className={styles.navigationRow}>
         <div className={styles.weekSelector}>
           {weekDays.map((day) => {
-            const isSelected = day.isSame(currentDate, 'day');
+            const isSelected = day.hasSame(currentDate, 'day');
             return (
               <div
-                key={day.format('DD')}
+                key={day.toFormat('dd')}
                 className={clsx(styles.dayItem, isSelected && styles.dayActive)}
                 onClick={() => handleDaySelect(day)}
               >
-                <span className={styles.dayName}>{day.format('dd')}</span>
-                <span className={styles.dayNumber}>{day.format('D')}</span>
+                <span className={styles.dayName}>{day.toFormat('ccc')}</span>
+                <span className={styles.dayNumber}>{day.toFormat('d')}</span>
               </div>
             );
           })}
@@ -105,7 +130,7 @@ const PsychologistDashboard: React.FC<PsychologistDashboardProps> = ({
         <div className={styles.mainContent}>
           <div className={styles.scheduleGrid}>
             <div className={styles.timeLabels}>
-              {DAY_HOURS.map((hour) => (
+              {dayHours.map((hour) => (
                 <div
                   key={hour}
                   className={styles.timeLabelRow}
@@ -121,13 +146,13 @@ const PsychologistDashboard: React.FC<PsychologistDashboardProps> = ({
 
             <div className={styles.eventsContainer}>
               {todaysAppointments.map((apt) => {
-                const aptTime = dayjs(apt.scheduled_time);
+                const aptTime = moscowDate(apt.scheduled_time);
                 const isSelected = selectedAptId === apt.id;
 
-                const startHour = 9;
+                const startHour = dayHours[0];
                 const topPosition =
-                  (aptTime.hour() - startHour) * HOUR_HEIGHT +
-                  (aptTime.minute() / 60) * HOUR_HEIGHT;
+                  (aptTime.hour - startHour) * HOUR_HEIGHT +
+                  (aptTime.minute / 60) * HOUR_HEIGHT;
                 const durationHeight = HOUR_HEIGHT;
 
                 const venueStr =
@@ -136,8 +161,6 @@ const PsychologistDashboard: React.FC<PsychologistDashboardProps> = ({
                     : apt.venue
                       ? `${apt.venue}`
                       : 'Очно';
-
-                if (aptTime.hour() < 9 || aptTime.hour() > 19) return null;
 
                 return (
                   <div
@@ -153,7 +176,8 @@ const PsychologistDashboard: React.FC<PsychologistDashboardProps> = ({
                     onClick={() => setSelectedAptId(apt.id)}
                   >
                     <div className={styles.eventTime}>
-                      {getTimeRange(apt.scheduled_time)}
+                      {getTimeRange(apt.scheduled_time)} ·{' '}
+                      {AppointmentStatusTag[apt.status].text}
                     </div>
                     <div className={styles.eventName}>
                       {[apt.patient.first_name, apt.patient.last_name].join(
@@ -189,7 +213,7 @@ const PsychologistDashboard: React.FC<PsychologistDashboardProps> = ({
                   <EnvironmentOutlined className={styles.infoIcon} />
                   <span>
                     {selectedAppointment.type === 'Online'
-                      ? 'Онлайн'
+                      ? selectedAppointment.venue || 'Онлайн'
                       : selectedAppointment.venue || 'Кабинет не указан'}
                   </span>
                 </div>

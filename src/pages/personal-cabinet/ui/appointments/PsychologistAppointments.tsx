@@ -10,11 +10,9 @@ import PsychologistListFilters from '@/features/personal-cabinet/ui/psychologist
 import { AppointmentStatusTag } from '@/pages/personal-cabinet/constants';
 import { getErrorMessage } from '@/shared/api/errors';
 import { SLUG } from '@/shared/config/slug';
-import dayjs from '@/shared/lib/dayjs';
+import { moscowDate } from '@/shared/lib/date-time';
 import Loader from '@/shared/ui/loader/loader';
 import styles from './PsychologistAppointments.module.scss';
-
-const toMoscow = (date: string) => dayjs(date).tz();
 
 const ITEMS_PER_PAGE = 5;
 
@@ -32,13 +30,17 @@ const APPOINTMENT_FORMAT_OPTIONS = [
 ];
 
 const getPatientName = (appointment: TAppointment) =>
-  [appointment.patient?.last_name, appointment.patient?.first_name]
+  [
+    appointment.patient?.last_name,
+    appointment.patient?.first_name,
+    appointment.patient?.middle_name,
+  ]
     .filter(Boolean)
     .join(' ') || 'Имя не указано';
 
 const getTimeRange = (time: string) => {
-  const start = toMoscow(time);
-  return `${start.format('HH:mm')} - ${start.add(1, 'hour').format('HH:mm')}`;
+  const start = moscowDate(time);
+  return `${start.toFormat('HH:mm')} - ${start.plus({ hours: 1 }).toFormat('HH:mm')}`;
 };
 
 const getVenueDisplay = (appointment: TAppointment) => {
@@ -88,9 +90,10 @@ const PsychologistAppointments = () => {
     searchQuery,
     dateRange,
   } = filters;
+  const searchTerm = searchQuery.trim().replace(/\s+/g, ' ').toLowerCase();
 
   const hasActiveFilters =
-    searchQuery !== '' ||
+    searchTerm !== '' ||
     statusFilter !== 'all' ||
     formatFilter !== 'all' ||
     sortDirection !== 'asc' ||
@@ -115,19 +118,18 @@ const PsychologistAppointments = () => {
       result = result.filter((a) => a.type === appointmentType);
     }
 
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
+    if (searchTerm) {
       result = result.filter((a) =>
-        getPatientName(a).toLowerCase().includes(q),
+        getPatientName(a).toLowerCase().includes(searchTerm),
       );
     }
 
     if (dateRange) {
       const [from, to] = dateRange;
-      const fromMs = dayjs(from).tz().startOf('day').valueOf();
-      const toMs = dayjs(to).tz().endOf('day').valueOf();
+      const fromMs = moscowDate(from).startOf('day').toMillis();
+      const toMs = moscowDate(to).endOf('day').toMillis();
       result = result.filter((a) => {
-        const t = dayjs(a.scheduled_time).valueOf();
+        const t = moscowDate(a.scheduled_time).toMillis();
         return t >= fromMs && t <= toMs;
       });
     }
@@ -136,32 +138,35 @@ const PsychologistAppointments = () => {
     return [...result].sort(
       (a, b) =>
         dir *
-        (new Date(a.scheduled_time).getTime() -
-          new Date(b.scheduled_time).getTime()),
+        (moscowDate(a.scheduled_time).toMillis() -
+          moscowDate(b.scheduled_time).toMillis()),
     );
   }, [
     allAppointments,
     statusFilter,
     formatFilter,
-    searchQuery,
+    searchTerm,
     dateRange,
     sortDirection,
   ]);
 
   const currentItems = filteredAppointments;
+  const page = Math.min(
+    currentPage,
+    Math.max(1, Math.ceil(currentItems.length / ITEMS_PER_PAGE)),
+  );
   const paginated = currentItems.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE,
+    (page - 1) * ITEMS_PER_PAGE,
+    page * ITEMS_PER_PAGE,
   );
 
   const searchSuggestions = useMemo(() => {
-    if (!searchQuery) return [];
-    const q = searchQuery.toLowerCase();
+    if (!searchTerm) return [];
     const names = new Set(allAppointments.map(getPatientName));
     return [...names]
-      .filter((name) => name.toLowerCase().includes(q))
+      .filter((name) => name.toLowerCase().includes(searchTerm))
       .map((name) => ({ value: name }));
-  }, [allAppointments, searchQuery]);
+  }, [allAppointments, searchTerm]);
 
   const isLoading = isLoadingAppointments;
 
@@ -254,8 +259,8 @@ const PsychologistAppointments = () => {
       <div className={styles.list} role="list">
         {paginated.length === 0 && <Empty description="Записей нет" />}
 
-        {groupByDate(paginated as TAppointment[], (appointment) =>
-          toMoscow(appointment.scheduled_time).format('D MMMM'),
+        {groupByDate(paginated, (appointment) =>
+          moscowDate(appointment.scheduled_time).toFormat('d MMMM yyyy'),
         ).map((group) => (
           <div className={styles.dateGroup} key={group.date}>
             <h3 className={styles.dateHeader}>{group.date}</h3>
@@ -267,7 +272,7 @@ const PsychologistAppointments = () => {
       {currentItems.length > ITEMS_PER_PAGE && (
         <Pagination
           className={styles.pagination}
-          current={currentPage}
+          current={page}
           total={currentItems.length}
           pageSize={ITEMS_PER_PAGE}
           onChange={(page) => setCurrentPage(FILTERS_TAB, page)}

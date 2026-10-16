@@ -1,7 +1,7 @@
-import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react';
+import { type ChangeEvent, type FormEvent, useState } from 'react';
 import type { FC } from 'react';
 import { UserOutlined } from '@ant-design/icons';
-import { Input, Modal, message } from 'antd';
+import { App, Input, Modal } from 'antd';
 import { authApi } from '@/entities/auth/api';
 import { getAuthErrorMessage } from '@/entities/auth/model/auth-errors';
 import {
@@ -14,6 +14,8 @@ import {
 } from '@/entities/auth/model/profile-form';
 import { useAuth } from '@/entities/auth/model/useAuth';
 import type { TUser, TUserProfileUpdate } from '@/entities/auth/types';
+import { Role } from '@/entities/role/helpers';
+import { useCabinetDrafts } from '@/features/personal-cabinet/model/cabinet-drafts';
 import { getErrorMessage } from '@/shared/api/errors';
 import EditIcon from '@/shared/assets/images/cabinet/edit.svg?react';
 import ExitIcon from '@/shared/assets/images/cabinet/exit.svg?react';
@@ -25,10 +27,8 @@ type TPersonalDataProps = {
 
 const PersonalData: FC<TPersonalDataProps> = ({ user }) => {
   const { logOut, setUser } = useAuth();
-  const showStudyGroup = !user?.roles?.some(
-    ({ code }) => code === 'psychologist' || code === 'admin',
-  );
-  const [messageApi, contextHolder] = message.useMessage();
+  const showStudyGroup = !new Role(user?.roles ?? []).isStaff();
+  const { message: messageApi, modal } = App.useApp();
 
   const [isEditingName, setIsEditingName] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -42,10 +42,11 @@ const PersonalData: FC<TPersonalDataProps> = ({ user }) => {
     confirm_password: '',
   });
 
-  const [originalData, setOriginalData] = useState<TProfileFormData>(() =>
-    getProfileFormData(user),
-  );
-  const [formData, setFormData] = useState<TProfileFormData>(originalData);
+  const draft = useCabinetDrafts((state) => state.profile);
+  const setProfileDraft = useCabinetDrafts((state) => state.setProfile);
+  const clearProfileDraft = useCabinetDrafts((state) => state.clearProfile);
+  const originalData = getProfileFormData(user);
+  const formData = { ...originalData, ...draft };
   const hasChanges = (
     Object.keys(formData) as Array<keyof TProfileFormData>
   ).some(
@@ -55,20 +56,13 @@ const PersonalData: FC<TPersonalDataProps> = ({ user }) => {
   );
   const [errors, setErrors] = useState<TProfileFormErrors>({});
 
-  useEffect(() => {
-    const data = getProfileFormData(user);
-    setOriginalData(data);
-    setFormData(data);
-    setErrors({});
-  }, [user]);
-
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name as keyof TProfileFormData;
     const value =
       name === 'phone_number'
         ? normalizePhoneInput(e.target.value)
         : e.target.value;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setProfileDraft({ [name]: value });
     setErrors((prev) => ({
       ...prev,
       [name]: validateProfileField(name, value),
@@ -77,6 +71,13 @@ const PersonalData: FC<TPersonalDataProps> = ({ user }) => {
 
   const handleNameEdit = () => {
     setIsEditingName(!isEditingName);
+  };
+
+  const handleCancelChanges = () => {
+    if (isSaving) return;
+    clearProfileDraft();
+    setErrors({});
+    setIsEditingName(false);
   };
 
   const toProfileUpdate = (data: TProfileFormData): TUserProfileUpdate => ({
@@ -119,12 +120,10 @@ const PersonalData: FC<TPersonalDataProps> = ({ user }) => {
     setIsSaving(true);
     try {
       const user = await authApi.updateProfile(toProfileUpdate(formData));
-      const savedData = getProfileFormData(user);
-      setOriginalData(savedData);
-      setFormData(savedData);
       setErrors({});
       setIsEditingName(false);
       setUser(user);
+      clearProfileDraft();
       messageApi.success('Изменения профиля сохранены');
     } catch (error) {
       messageApi.error(
@@ -183,7 +182,7 @@ const PersonalData: FC<TPersonalDataProps> = ({ user }) => {
   };
 
   const handleLogout = () => {
-    Modal.confirm({
+    modal.confirm({
       title: 'Подтверждение выхода',
       content: 'Вы уверены, что хотите выйти из аккаунта?',
       okText: 'Выйти',
@@ -202,7 +201,6 @@ const PersonalData: FC<TPersonalDataProps> = ({ user }) => {
   return (
     <>
       <form className={styles.container} onSubmit={handleSubmit} noValidate>
-        {contextHolder}
         <div className={styles.avatarSection}>
           <div className={styles.avatar}>
             {avatar ? (
@@ -234,6 +232,7 @@ const PersonalData: FC<TPersonalDataProps> = ({ user }) => {
                       <input
                         type="text"
                         name="last_name"
+                        disabled={isSaving}
                         maxLength={50}
                         aria-invalid={!!errors.last_name}
                         value={formData.last_name}
@@ -251,6 +250,7 @@ const PersonalData: FC<TPersonalDataProps> = ({ user }) => {
                       <input
                         type="text"
                         name="first_name"
+                        disabled={isSaving}
                         maxLength={50}
                         aria-invalid={!!errors.first_name}
                         value={formData.first_name}
@@ -268,6 +268,7 @@ const PersonalData: FC<TPersonalDataProps> = ({ user }) => {
                       <input
                         type="text"
                         name="middle_name"
+                        disabled={isSaving}
                         maxLength={50}
                         aria-invalid={!!errors.middle_name}
                         value={formData.middle_name}
@@ -293,12 +294,9 @@ const PersonalData: FC<TPersonalDataProps> = ({ user }) => {
                     </button>
                     <button
                       type="button"
-                      className={styles.cancelNameButton}
-                      onClick={() => {
-                        setIsEditingName(false);
-                        setFormData(originalData);
-                        setErrors({});
-                      }}
+                      className={styles.cancelButton}
+                      onClick={handleCancelChanges}
+                      disabled={isSaving}
                     >
                       Отмена
                     </button>
@@ -315,6 +313,7 @@ const PersonalData: FC<TPersonalDataProps> = ({ user }) => {
                   type="button"
                   className={styles.editButton}
                   onClick={handleNameEdit}
+                  disabled={isSaving}
                   aria-label="Редактировать имя"
                 >
                   <EditIcon />
@@ -332,6 +331,7 @@ const PersonalData: FC<TPersonalDataProps> = ({ user }) => {
                     type="text"
                     id="study_group"
                     name="study_group"
+                    disabled={isSaving}
                     maxLength={50}
                     value={formData.study_group}
                     onChange={handleInputChange}
@@ -355,6 +355,7 @@ const PersonalData: FC<TPersonalDataProps> = ({ user }) => {
                   type="tel"
                   id="phone_number"
                   name="phone_number"
+                  disabled={isSaving}
                   value={formData.phone_number}
                   onChange={handleInputChange}
                   placeholder="+79991234567"
@@ -378,6 +379,7 @@ const PersonalData: FC<TPersonalDataProps> = ({ user }) => {
                   type="email"
                   id="email"
                   name="email"
+                  disabled={isSaving}
                   maxLength={64}
                   value={formData.email}
                   onChange={handleInputChange}
@@ -400,6 +402,7 @@ const PersonalData: FC<TPersonalDataProps> = ({ user }) => {
                   type="text"
                   id="social_media"
                   name="social_media"
+                  disabled={isSaving}
                   value={formData.social_media}
                   onChange={handleInputChange}
                   maxLength={50}
@@ -436,6 +439,14 @@ const PersonalData: FC<TPersonalDataProps> = ({ user }) => {
           </div>
 
           <div className={styles.actions}>
+            <button
+              type="button"
+              className={styles.cancelButton}
+              onClick={handleCancelChanges}
+              disabled={isSaving || Object.keys(draft).length === 0}
+            >
+              Отменить изменения
+            </button>
             <button
               type="submit"
               className={styles.saveButton}

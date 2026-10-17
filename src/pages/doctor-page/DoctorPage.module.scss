@@ -21,14 +21,8 @@
   background-color: var(--backgrounds-neutral-secondary);
 }
 
-.mobileLink {
+.wrapper .mobileLink {
   display: none;
-}
-
-@media screen and (width <= 768px) {
-  .mobileLink {
-    display: none;
-  }
 }
 
 @media screen and (width <= 480px) {
@@ -41,8 +35,8 @@
     display: none;
   }
 
-  .mobileLink {
-    display: block;
+  .wrapper .mobileLink {
+    display: inline-flex;
     margin-left: 10px;
   }
 

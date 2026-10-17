@@ -1,7 +1,7 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { LeftOutlined } from '@ant-design/icons';
-import { SLUG } from '@/shared/config/slug';
 import { moscowDate } from '@/shared/lib/date-time';
+import { BackButton } from '@/shared/ui/back-button/BackButton';
 import { ButtonLink } from '@/shared/ui/button-link/ButtonLink';
 import styles from './ArticlePage.module.scss';
 import { TRANSLATES as t } from './constants';
@@ -63,10 +63,7 @@ export const ArticlePage = () => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.top}>
-        <Link to={SLUG.RESOURCES} className={styles.backButton}>
-          <LeftOutlined />
-          {t.materials}
-        </Link>
+        <BackButton text={t.materials} />
 
         <div className={styles.info}>
           <p className={styles.date}>

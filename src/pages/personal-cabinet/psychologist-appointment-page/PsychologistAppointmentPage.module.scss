@@ -25,21 +25,6 @@
   }
 }
 
-.back {
-  display: flex;
-  gap: 1.2rem;
-
-  border: none;
-
-  font-family: var(--font-text-medium);
-  font-size: 1.6rem;
-  line-height: 2.4rem;
-  color: var(--labels-neutral-primary);
-
-  background: none;
-  outline: none;
-}
-
 .title {
   margin: 24px 0;
 
@@ -315,7 +300,6 @@
 }
 
 [data-theme='dark'] {
-  .back,
   .title,
   .infoLabel,
   .statusLabel {

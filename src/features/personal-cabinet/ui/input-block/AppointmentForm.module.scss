@@ -290,20 +290,7 @@
 }
 
 .backButton {
-  cursor: pointer;
   margin-top: 4px;
-  border: none;
-  background: none;
-}
-
-.backArrow {
-  display: flex;
-  gap: 7.5px;
-}
-
-.backArrow__text {
-  font-size: 1.6rem;
-  color: var(--labels-neutral-secondary);
 }
 
 .results__info {
@@ -417,10 +404,6 @@
     color: var(--labels-neutral-inverted-primary);
   }
 
-  .backArrow svg path {
-    stroke: var(--border-neutral-inverted);
-  }
-
   .datePicker {
     background: var(--fills-neutral-primary);
   }
@@ -447,9 +430,5 @@
       var(--labels-neutral-secondary),
       var(--labels-neutral-inverted-primary)
     );
-  }
-
-  .backArrow__text {
-    color: var(--labels-neutral-inverted-primary);
   }
 }

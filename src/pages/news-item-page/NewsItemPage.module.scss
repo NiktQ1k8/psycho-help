@@ -14,21 +14,6 @@
   margin-bottom: 3.6rem;
 }
 
-.backButton {
-  display: flex;
-  align-items: center;
-  color: var(--labels-brand-primary);
-  transition: color 0.3s;
-
-  img {
-    height: 2.4rem;
-  }
-
-  &:hover {
-    color: var(--interactive-brand-hover);
-  }
-}
-
 .info {
   display: flex;
   gap: 3.7rem;

@@ -1,13 +1,12 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { LeftOutlined } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
 import { Result } from 'antd';
 import { newsItemQueries } from '@/entities/news/api/queries';
-import chevronLeft from '@/shared/assets/images/news/chevron-left.svg';
-import { SLUG } from '@/shared/config/slug';
 import { moscowDate } from '@/shared/lib/date-time';
+import { BackButton } from '@/shared/ui/back-button/BackButton';
 import { ButtonLink } from '@/shared/ui/button-link/ButtonLink';
 import Loader from '@/shared/ui/loader/loader';
 import styles from './NewsItemPage.module.scss';
@@ -45,14 +44,7 @@ export const NewsItemPage = () => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.newsItemHeader}>
-        <Link
-          to={SLUG.NEWS}
-          onClick={() => navigate(-1)}
-          className={styles.backButton}
-        >
-          <img src={chevronLeft} alt="Назад" />
-          Новости
-        </Link>
+        <BackButton text="Новости" />
         <div className={styles.info}>
           <p>{moscowDate(newsItem.date).toFormat('dd.MM.yyyy')}</p>
           <p>{newsItem.type}</p>

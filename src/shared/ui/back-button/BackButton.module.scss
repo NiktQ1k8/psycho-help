@@ -1,0 +1,25 @@
+.backButton {
+  cursor: pointer;
+
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+
+  width: fit-content;
+  border: none;
+
+  font: var(--font-text-medium);
+  color: var(--back-button-light-color);
+
+  background-color: transparent;
+
+  &:focus-visible {
+    border-radius: 100px;
+    outline: 2px solid currentcolor;
+    outline-offset: 2px;
+  }
+}
+
+[data-theme='dark'] .backButton {
+  color: var(--back-button-dark-color);
+}

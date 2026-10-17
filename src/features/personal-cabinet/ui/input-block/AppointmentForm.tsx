@@ -26,9 +26,9 @@ import {
 import { getErrorMessage } from '@/shared/api/errors';
 import altPhoto from '@/shared/assets/images/altPhotos/User_Accounts_alt.png';
 import Arrow from '@/shared/assets/images/appointments/arrow.svg?react';
-import backArrow from '@/shared/assets/images/appointments/backArrow.svg';
 import { moscowDate, toApiDate } from '@/shared/lib/date-time';
 import { Img } from '@/shared/ui';
+import { BackButton } from '@/shared/ui/back-button/BackButton';
 import { DatePicker } from '@/shared/ui/date-picker/MoscowDatePicker';
 import Loader from '@/shared/ui/loader/loader';
 import styles from './AppointmentForm.module.scss';
@@ -480,16 +480,12 @@ const AppointmentForm: FC = () => {
         </div>
       ) : (
         <div className={styles.results}>
-          <button
+          <BackButton
             className={styles.backButton}
-            type="button"
+            lightColor="var(--labels-neutral-secondary)"
+            darkColor="var(--labels-neutral-inverted-primary)"
             onClick={() => setWindow('form')}
-          >
-            <div className={styles.backArrow}>
-              <img src={backArrow} alt="backArrow" />
-              <p className={styles.backArrow__text}>Назад</p>
-            </div>
-          </button>
+          />
           <div className={styles.results__info}>
             <h3 className={styles.results__title}>Запись</h3>
 

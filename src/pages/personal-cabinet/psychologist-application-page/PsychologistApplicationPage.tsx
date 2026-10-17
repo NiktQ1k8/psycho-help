@@ -26,6 +26,7 @@ import { ApplicationStatusTag } from '@/pages/personal-cabinet/constants';
 import { getErrorMessage } from '@/shared/api/errors';
 import { SLUG } from '@/shared/config/slug';
 import { moscowDate, toApiDate } from '@/shared/lib/date-time';
+import { BackButton } from '@/shared/ui/back-button/BackButton';
 import { DatePicker } from '@/shared/ui/date-picker/MoscowDatePicker';
 import Loader from '@/shared/ui/loader/loader';
 import styles from './PsychologistApplicationPage.module.scss';
@@ -191,15 +192,7 @@ const PsychologistApplicationPage = () => {
         status="error"
         title="Не удалось загрузить заявку"
         subTitle={detail || 'Попробуйте обновить страницу или вернитесь назад'}
-        extra={
-          <button
-            className={styles.back}
-            type="button"
-            onClick={() => navigate(-1)}
-          >
-            Вернуться назад
-          </button>
-        }
+        extra={<BackButton text="Вернуться назад" />}
       />
     );
   }
@@ -304,14 +297,7 @@ const PsychologistApplicationPage = () => {
       </div>
 
       <main className={styles.content}>
-        <button
-          className={styles.back}
-          onClick={() => navigate(-1)}
-          type="button"
-        >
-          <span>&lt;</span>
-          <span>Вернуться назад</span>
-        </button>
+        <BackButton text="Вернуться назад" />
 
         <h1 className={styles.pageTitle}>Заявка</h1>
 

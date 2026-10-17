@@ -19,6 +19,7 @@ import { getTabsForRole } from '@/pages/personal-cabinet/config/tabs';
 import { getErrorMessage } from '@/shared/api/errors';
 import { SLUG } from '@/shared/config/slug';
 import { moscowDate } from '@/shared/lib/date-time';
+import { BackButton } from '@/shared/ui/back-button/BackButton';
 import Loader from '@/shared/ui/loader/loader';
 import styles from './PsychologistAppointmentPage.module.scss';
 
@@ -112,15 +113,7 @@ const PsychologistAppointmentPage = () => {
         status="error"
         title="Не удалось загрузить запись"
         subTitle={detail || 'Попробуйте обновить страницу или вернитесь назад'}
-        extra={
-          <button
-            className={styles.back}
-            type="button"
-            onClick={() => navigate(-1)}
-          >
-            Вернуться назад
-          </button>
-        }
+        extra={<BackButton text="Вернуться назад" />}
       />
     );
   }
@@ -151,14 +144,7 @@ const PsychologistAppointmentPage = () => {
       </div>
 
       <article className={styles.wrapper}>
-        <button
-          className={styles.back}
-          onClick={() => navigate(-1)}
-          type="button"
-        >
-          <span>&lt;</span>
-          <span>Вернуться назад</span>
-        </button>
+        <BackButton text="Вернуться назад" />
 
         <h2 className={styles.title}>Запись</h2>
 

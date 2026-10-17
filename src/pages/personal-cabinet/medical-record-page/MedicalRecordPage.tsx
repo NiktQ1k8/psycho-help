@@ -1,5 +1,4 @@
-import { Link, Navigate, useParams, useSearchParams } from 'react-router-dom';
-import { ArrowLeftOutlined } from '@ant-design/icons';
+import { Navigate, useParams, useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Alert, Empty } from 'antd';
 import { appointmentQueries } from '@/entities/appointment/api';
@@ -12,6 +11,7 @@ import { getTabsForRole } from '@/pages/personal-cabinet/config/tabs';
 import { getErrorMessage } from '@/shared/api/errors';
 import { SLUG } from '@/shared/config/slug';
 import { moscowDate } from '@/shared/lib/date-time';
+import { BackButton } from '@/shared/ui/back-button/BackButton';
 import Loader from '@/shared/ui/loader/loader';
 import layout from '../personal-cabinet.module.scss';
 import styles from './MedicalRecordPage.module.scss';
@@ -65,9 +65,7 @@ const MedicalRecordPage = () => {
         />
       </div>
       <main className={styles.wrapper}>
-        <Link className={styles.back} to={`${SLUG.CABINET}?tab=medicalRecords`}>
-          <ArrowLeftOutlined /> Вернуться назад
-        </Link>
+        <BackButton text="Вернуться назад" />
         <h1>Медицинская карта пользователя</h1>
         {isLoading ? (
           <Loader />
@@ -112,7 +110,9 @@ const MedicalRecordPage = () => {
             <AppointmentList
               appointments={history}
               currentPage={Number(searchParams.get('page')) || 1}
-              onPageChange={(page) => setSearchParams({ page: String(page) })}
+              onPageChange={(page) =>
+                setSearchParams({ page: String(page) }, { replace: true })
+              }
             />
           </>
         )}

@@ -13,17 +13,6 @@
     gap: 2.4rem;
     align-items: flex-start;
     justify-content: space-between;
-
-    .backButton {
-      display: flex;
-      gap: 0.6rem;
-      align-items: center;
-      justify-content: center;
-
-      font: var(--font-text-medium);
-      color: var(--labels-brand-primary);
-      text-decoration: none;
-    }
   }
 
   .info {

@@ -6,6 +6,7 @@ import { Result } from 'antd';
 import { therapistQueries } from '@/entities/therapist/queries';
 import InfoBlock from '@/features/therapist/info-block/InfoBlock';
 import { SLUG } from '@/shared/config/slug';
+import { BackButton } from '@/shared/ui/back-button/BackButton';
 import Loader from '@/shared/ui/loader/loader';
 import styles from './DoctorPage.module.scss';
 
@@ -53,12 +54,7 @@ const DoctorPage = () => {
           {[doctor.last_name, doctor.first_name, doctor.middle_name].join(' ')}
         </p>
       </div>
-      <Link
-        to={SLUG.THERAPISTS}
-        className={[styles.link, styles.mobileLink].join(' ')}
-      >
-        Вернуться к списку
-      </Link>
+      <BackButton className={styles.mobileLink} text="Вернуться к списку" />
       <div className={styles.contentWrapper}>
         <InfoBlock therapist={doctor} />
       </div>

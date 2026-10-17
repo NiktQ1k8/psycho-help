@@ -9,13 +9,13 @@ import {
   appointmentQueryKey,
   completeAppointment,
 } from '@/entities/appointment/api';
+import { AppointmentStatusTag } from '@/entities/appointment/status';
 import { useAuth } from '@/entities/auth/model/useAuth';
 import { Role } from '@/entities/role/helpers';
 import { usePsychologistDrafts } from '@/features/personal-cabinet/model/psychologist-drafts';
 import PsychologistRejectModal from '@/features/personal-cabinet/ui/PsychologistRejectModal';
 import Sidebar from '@/features/personal-cabinet/ui/sidebar/Sidebar';
 import { getTabsForRole } from '@/pages/personal-cabinet/config/tabs';
-import { AppointmentStatusTag } from '@/pages/personal-cabinet/constants';
 import { getErrorMessage } from '@/shared/api/errors';
 import { SLUG } from '@/shared/config/slug';
 import { moscowDate } from '@/shared/lib/date-time';
@@ -26,8 +26,6 @@ const TYPE_LABELS: Record<string, string> = {
   Online: 'Онлайн',
   Offline: 'Очно',
 };
-
-const PSYCHOLOGIST_TABS = getTabsForRole('psychologist');
 
 const formatDate = (iso?: string | null) => {
   if (!iso) return null;
@@ -144,7 +142,11 @@ const PsychologistAppointmentPage = () => {
         <Sidebar
           user={user}
           activeTab="psychologistAppointments"
-          tabs={PSYCHOLOGIST_TABS}
+          tabs={getTabsForRole(
+            new Role(user?.roles ?? []).isPsychologist()
+              ? 'psychologist'
+              : 'admin',
+          )}
         />
       </div>
 

@@ -28,6 +28,9 @@ interface IViewState {
   setDashboardDate: (date: DateTime) => void;
   applicationFilters: ITabFilters<TApplicationStatusFilter>;
   appointmentFilters: ITabFilters<TAppointmentStatusFilter>;
+  medicalRecordFilters: { searchQuery: string; currentPage: number };
+  setMedicalRecordSearch: (query: string) => void;
+  setMedicalRecordPage: (page: number) => void;
   setCurrentPage: (tab: TActiveTab, page: number) => void;
   setSortDirection: (tab: TActiveTab, dir: TSortDirection) => void;
   setStatusFilter: (tab: TActiveTab, filter: string) => void;
@@ -53,6 +56,7 @@ const getDefaultFilters = (): IBaseFilters => ({
 
 const getDefaultView = () => ({
   dashboardDate: null,
+  medicalRecordFilters: { searchQuery: '', currentPage: 1 },
   applicationFilters: {
     ...getDefaultFilters(),
     statusFilter: 'all' as TApplicationStatusFilter,
@@ -79,6 +83,12 @@ export const usePsychologistView = create<IViewState>((set, get) => {
     ...getDefaultView(),
     setDashboardDate: (date) => set({ dashboardDate: date }),
     resetView: () => set(getDefaultView()),
+    setMedicalRecordSearch: (searchQuery) =>
+      set({ medicalRecordFilters: { searchQuery, currentPage: 1 } }),
+    setMedicalRecordPage: (currentPage) =>
+      set({
+        medicalRecordFilters: { ...get().medicalRecordFilters, currentPage },
+      }),
 
     setCurrentPage: (tab, page) => updateFilter(tab, { currentPage: page }),
     setSortDirection: (tab, dir) =>

@@ -8,6 +8,7 @@ import { FaqPage } from '@/pages/faq-page';
 import { HomePage } from '@/pages/home-page';
 import { NewsItemPage } from '@/pages/news-item-page/NewsItemPage';
 import { NewsPage } from '@/pages/news-page/NewsPage';
+import MedicalRecordPage from '@/pages/personal-cabinet/medical-record-page/MedicalRecordPage';
 import PersonalCabinet from '@/pages/personal-cabinet/personal-cabinet';
 import PsychologistApplicationPage from '@/pages/personal-cabinet/psychologist-application-page/PsychologistApplicationPage';
 import PsychologistAppointmentPage from '@/pages/personal-cabinet/psychologist-appointment-page/PsychologistAppointmentPage';
@@ -75,6 +76,11 @@ export const routes: IRoutePath[] = [
   {
     path: `${SLUG.CABINET_APPOINTMENT}/:id`,
     Component: PsychologistAppointmentPage,
+    authOnly: true,
+  },
+  {
+    path: `${SLUG.CABINET_MEDICAL_RECORD}/:id`,
+    Component: MedicalRecordPage,
     authOnly: true,
   },
   {

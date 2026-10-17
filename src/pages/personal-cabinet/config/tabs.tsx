@@ -5,6 +5,7 @@ import AppointmentForm from '@/features/personal-cabinet/ui/input-block/Appointm
 import PersonalData from '@/features/personal-cabinet/ui/personal-data/PersonalData';
 import PsychologistApplications from '@/pages/personal-cabinet/ui/applications/PsychologistApplications';
 import PsychologistAppointments from '@/pages/personal-cabinet/ui/appointments/PsychologistAppointments';
+import MedicalRecords from '@/pages/personal-cabinet/ui/medical-records/MedicalRecords';
 import Dashboard from '../ui/dashboard/Dashboard';
 
 export type TTabId =
@@ -12,6 +13,7 @@ export type TTabId =
   | 'applications'
   | 'userAppointments'
   | 'psychologistAppointments'
+  | 'medicalRecords'
   | 'profile';
 
 export interface ITabRenderProps {
@@ -85,6 +87,16 @@ export const defaultTabForRole: Record<string, TTabId> = {
 };
 
 export function getTabsForRole(roleCode: string): ITabConfig[] {
+  if (roleCode === 'psychologist') {
+    return [
+      ...roleBasedTabs.psychologist,
+      {
+        id: 'medicalRecords',
+        label: 'Медицинские карты',
+        render: () => <MedicalRecords />,
+      },
+    ];
+  }
   // Временно общий кабинет для психолога, администратора и контент-менеджера.
   const tabRole =
     roleCode === 'admin' || roleCode === 'content_manager'

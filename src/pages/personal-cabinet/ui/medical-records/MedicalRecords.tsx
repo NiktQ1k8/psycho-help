@@ -1,0 +1,106 @@
+import { useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { Alert, Empty, Input, Pagination } from 'antd';
+import { appointmentQueries } from '@/entities/appointment/api';
+import { getUserFullName } from '@/entities/auth/model/user-name';
+import { usePsychologistView } from '@/features/personal-cabinet/model/psychologist-view';
+import { getErrorMessage } from '@/shared/api/errors';
+import { SLUG } from '@/shared/config/slug';
+import { ButtonLink } from '@/shared/ui/button-link/ButtonLink';
+import Loader from '@/shared/ui/loader/loader';
+import { normalizeSearch } from '@/shared/utils/normalizeSearch';
+import styles from './MedicalRecords.module.scss';
+
+const ITEMS_PER_PAGE = 5;
+
+const MedicalRecords = () => {
+  const { medicalRecordFilters, setMedicalRecordSearch, setMedicalRecordPage } =
+    usePsychologistView();
+  const { searchQuery, currentPage } = medicalRecordFilters;
+  const {
+    data: appointments = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery(appointmentQueries.list());
+
+  const patients = useMemo(() => {
+    const uniquePatients = new Map(
+      appointments.map(({ patient }) => [patient.id, patient]),
+    );
+    const search = normalizeSearch(searchQuery);
+    return [...uniquePatients.values()]
+      .filter((patient) =>
+        normalizeSearch(
+          `${getUserFullName(patient)} ${patient.study_group || ''}`,
+        ).includes(search),
+      )
+      .sort((a, b) =>
+        getUserFullName(a).localeCompare(getUserFullName(b), 'ru'),
+      );
+  }, [appointments, searchQuery]);
+
+  const page = Math.min(
+    currentPage,
+    Math.max(1, Math.ceil(patients.length / ITEMS_PER_PAGE)),
+  );
+
+  return (
+    <section className={styles.wrapper}>
+      <h2>Медицинские карты</h2>
+      <Input
+        placeholder="Поиск по ФИО или группе"
+        aria-label="Поиск по ФИО или группе"
+        allowClear
+        value={searchQuery}
+        onChange={(event) => setMedicalRecordSearch(event.target.value)}
+      />
+      {isLoading ? (
+        <Loader />
+      ) : isError ? (
+        <Alert
+          type="error"
+          showIcon
+          message="Не удалось загрузить медицинские карты"
+          description={getErrorMessage(error)}
+        />
+      ) : (
+        <>
+          <div role="list">
+            {!patients.length && <Empty description="Студенты не найдены" />}
+            {patients
+              .slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE)
+              .map((patient) => (
+                <article
+                  className={styles.row}
+                  role="listitem"
+                  key={patient.id}
+                >
+                  <div className={styles.patient}>
+                    <span>{getUserFullName(patient)}</span>
+                    {patient.study_group && <span>{patient.study_group}</span>}
+                  </div>
+                  <ButtonLink
+                    to={`${SLUG.CABINET_MEDICAL_RECORD}/${patient.id}`}
+                  >
+                    Открыть
+                  </ButtonLink>
+                </article>
+              ))}
+          </div>
+          {patients.length > ITEMS_PER_PAGE && (
+            <Pagination
+              current={page}
+              total={patients.length}
+              pageSize={ITEMS_PER_PAGE}
+              onChange={setMedicalRecordPage}
+              showSizeChanger={false}
+            />
+          )}
+        </>
+      )}
+    </section>
+  );
+};
+
+export default MedicalRecords;

@@ -1,21 +1,16 @@
 import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { Alert, Empty, Pagination } from 'antd';
-import clsx from 'clsx';
+import { Alert } from 'antd';
 import { appointmentQueries } from '@/entities/appointment/api';
-import type { TAppointment } from '@/entities/appointment/types';
+import { getUserFullName } from '@/entities/auth/model/user-name';
 import { usePsychologistView } from '@/features/personal-cabinet/model/psychologist-view';
+import { AppointmentList } from '@/features/personal-cabinet/ui/appointment-list/AppointmentList';
 import PsychologistListFilters from '@/features/personal-cabinet/ui/psychologist-filters/PsychologistFilters';
-import { AppointmentStatusTag } from '@/pages/personal-cabinet/constants';
 import { getErrorMessage } from '@/shared/api/errors';
-import { SLUG } from '@/shared/config/slug';
 import { moscowDate } from '@/shared/lib/date-time';
 import Loader from '@/shared/ui/loader/loader';
 import { normalizeSearch } from '@/shared/utils/normalizeSearch';
 import styles from './PsychologistAppointments.module.scss';
-
-const ITEMS_PER_PAGE = 5;
 
 const APPOINTMENT_STATUS_OPTIONS = [
   { value: 'all', label: 'Все статусы' },
@@ -30,46 +25,8 @@ const APPOINTMENT_FORMAT_OPTIONS = [
   { value: 'online', label: 'Онлайн' },
 ];
 
-const getPatientName = (appointment: TAppointment) =>
-  [
-    appointment.patient?.last_name,
-    appointment.patient?.first_name,
-    appointment.patient?.middle_name,
-  ]
-    .filter(Boolean)
-    .join(' ') || 'Имя не указано';
-
-const getTimeRange = (time: string) => {
-  const start = moscowDate(time);
-  return `${start.toFormat('HH:mm')} - ${start.plus({ hours: 1 }).toFormat('HH:mm')}`;
-};
-
-const getVenueDisplay = (appointment: TAppointment) => {
-  if (appointment.type === 'Online') return appointment.venue || 'Онлайн';
-  return appointment.venue || 'Очно';
-};
-
-const groupByDate = <T,>(
-  items: T[],
-  getDateStr: (item: T) => string,
-): { date: string; items: T[] }[] => {
-  const groups: { date: string; items: T[] }[] = [];
-  let currentDate = '';
-  for (const item of items) {
-    const date = getDateStr(item);
-    if (date !== currentDate) {
-      currentDate = date;
-      groups.push({ date, items: [item] });
-    } else {
-      groups[groups.length - 1].items.push(item);
-    }
-  }
-  return groups;
-};
-
 const PsychologistAppointments = () => {
   const FILTERS_TAB = 'appointments' as const;
-  const navigate = useNavigate();
 
   const {
     appointmentFilters,
@@ -121,7 +78,7 @@ const PsychologistAppointments = () => {
 
     if (searchTerm) {
       result = result.filter((a) =>
-        normalizeSearch(getPatientName(a)).includes(searchTerm),
+        normalizeSearch(getUserFullName(a.patient)).includes(searchTerm),
       );
     }
 
@@ -151,19 +108,13 @@ const PsychologistAppointments = () => {
     sortDirection,
   ]);
 
-  const currentItems = filteredAppointments;
-  const page = Math.min(
-    currentPage,
-    Math.max(1, Math.ceil(currentItems.length / ITEMS_PER_PAGE)),
-  );
-  const paginated = currentItems.slice(
-    (page - 1) * ITEMS_PER_PAGE,
-    page * ITEMS_PER_PAGE,
-  );
-
   const searchSuggestions = useMemo(() => {
     if (!searchTerm) return [];
-    const names = new Set(allAppointments.map(getPatientName));
+    const names = new Set(
+      allAppointments.map((appointment) =>
+        getUserFullName(appointment.patient),
+      ),
+    );
     return [...names]
       .filter((name) => normalizeSearch(name).includes(searchTerm))
       .map((name) => ({ value: name }));
@@ -182,54 +133,6 @@ const PsychologistAppointments = () => {
         style={{ margin: '2.4rem 0' }}
       />
     );
-
-  const renderAppointmentRow = (appointment: TAppointment) => {
-    const statusUI = AppointmentStatusTag[appointment.status];
-
-    return (
-      <article
-        className={styles.appointmentRow}
-        key={appointment.id}
-        role="listitem"
-      >
-        <div className={styles.contentCol}>
-          <div className={styles.timeStatusRow}>
-            <div className={styles.timeCol}>
-              {getTimeRange(appointment.scheduled_time)}
-            </div>
-            <div className={styles['status']}>
-              <div
-                className={clsx(
-                  styles['status-dot'],
-                  styles[statusUI.className],
-                )}
-              ></div>
-              <span className={styles['status-text']}>{statusUI.text}</span>
-            </div>
-          </div>
-          <div className={styles.infoCol}>
-            <span className={styles.patientName}>
-              {getPatientName(appointment)}
-            </span>
-            <span className={styles.location}>
-              {getVenueDisplay(appointment)}
-            </span>
-          </div>
-        </div>
-        <div className={styles.actionsCol}>
-          <button
-            className={styles.btnPrimary}
-            onClick={() =>
-              navigate(`${SLUG.CABINET_APPOINTMENT}/${appointment.id}`)
-            }
-            type="button"
-          >
-            Открыть
-          </button>
-        </div>
-      </article>
-    );
-  };
 
   return (
     <section className={styles.wrapper}>
@@ -257,29 +160,11 @@ const PsychologistAppointments = () => {
         onResetFilters={() => resetFilters(FILTERS_TAB)}
       />
 
-      <div className={styles.list} role="list">
-        {paginated.length === 0 && <Empty description="Записей нет" />}
-
-        {groupByDate(paginated, (appointment) =>
-          moscowDate(appointment.scheduled_time).toFormat('d MMMM yyyy'),
-        ).map((group) => (
-          <div className={styles.dateGroup} key={group.date}>
-            <h3 className={styles.dateHeader}>{group.date}</h3>
-            {group.items.map(renderAppointmentRow)}
-          </div>
-        ))}
-      </div>
-
-      {currentItems.length > ITEMS_PER_PAGE && (
-        <Pagination
-          className={styles.pagination}
-          current={page}
-          total={currentItems.length}
-          pageSize={ITEMS_PER_PAGE}
-          onChange={(page) => setCurrentPage(FILTERS_TAB, page)}
-          showSizeChanger={false}
-        />
-      )}
+      <AppointmentList
+        appointments={filteredAppointments}
+        currentPage={currentPage}
+        onPageChange={(page) => setCurrentPage(FILTERS_TAB, page)}
+      />
     </section>
   );
 };

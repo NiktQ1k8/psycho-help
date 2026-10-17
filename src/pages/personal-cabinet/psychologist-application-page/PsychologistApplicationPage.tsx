@@ -35,8 +35,6 @@ const MEETING_TYPE_OPTIONS = [
   { value: 'offline' as const, label: 'Очно' },
 ];
 
-const PSYCHOLOGIST_TABS = getTabsForRole('psychologist');
-
 const getMoscowDateTime = (date: DateTime, time: string) =>
   moscowDate(`${date.toFormat('yyyy-MM-dd')}T${time}`);
 
@@ -297,7 +295,11 @@ const PsychologistApplicationPage = () => {
         <Sidebar
           user={user}
           activeTab="applications"
-          tabs={PSYCHOLOGIST_TABS}
+          tabs={getTabsForRole(
+            new Role(user?.roles ?? []).isPsychologist()
+              ? 'psychologist'
+              : 'admin',
+          )}
         />
       </div>
 

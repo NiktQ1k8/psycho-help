@@ -6,12 +6,12 @@ import { Alert, Button } from 'antd';
 import clsx from 'clsx';
 import type { DateTime } from 'luxon';
 import { appointmentQueries } from '@/entities/appointment/api';
+import { AppointmentStatusTag } from '@/entities/appointment/status';
 import {
   CONSULTATION_END_HOUR,
   CONSULTATION_START_HOUR,
 } from '@/features/personal-cabinet/model/consultation-time';
 import { usePsychologistView } from '@/features/personal-cabinet/model/psychologist-view';
-import { AppointmentStatusTag } from '@/pages/personal-cabinet/constants';
 import { getErrorMessage } from '@/shared/api/errors';
 import { SLUG } from '@/shared/config/slug';
 import { moscowDate } from '@/shared/lib/date-time';

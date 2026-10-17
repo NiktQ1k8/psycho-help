@@ -76,6 +76,11 @@ export const roleBasedTabs: Record<string, ITabConfig[]> = {
       label: 'Профиль',
       render: ({ user }) => <PersonalData user={user} />,
     },
+    {
+      id: 'medicalRecords',
+      label: 'Медицинские карты',
+      render: () => <MedicalRecords />,
+    },
   ],
 };
 
@@ -87,16 +92,6 @@ export const defaultTabForRole: Record<string, TTabId> = {
 };
 
 export function getTabsForRole(roleCode: string): ITabConfig[] {
-  if (roleCode === 'psychologist') {
-    return [
-      ...roleBasedTabs.psychologist,
-      {
-        id: 'medicalRecords',
-        label: 'Медицинские карты',
-        render: () => <MedicalRecords />,
-      },
-    ];
-  }
   // Временно общий кабинет для психолога, администратора и контент-менеджера.
   const tabRole =
     roleCode === 'admin' || roleCode === 'content_manager'

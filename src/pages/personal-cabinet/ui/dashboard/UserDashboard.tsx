@@ -1,6 +1,11 @@
 import { useMemo, useState } from 'react';
 import type { FC } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQueries,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { Alert, App, Input, Modal } from 'antd';
 import {
   applicationQueries,
@@ -16,9 +21,14 @@ import {
   appointmentQueries,
   appointmentQueryKey,
   cancelAppointment,
+  confirmAppointmentReschedule,
   createAppointment,
+  rejectAppointmentReschedule,
 } from '@/entities/appointment/api';
-import type { TAppointment } from '@/entities/appointment/types';
+import type {
+  TAppointment,
+  TAppointmentReschedule,
+} from '@/entities/appointment/types';
 import { useAuth } from '@/entities/auth/model/useAuth';
 import { useCabinetDrafts } from '@/features/personal-cabinet/model/cabinet-drafts';
 import {
@@ -75,7 +85,7 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName }) => {
 
   const [cancelModal, setCancelModal] = useState<{
     visible: boolean;
-    type: 'appointment' | 'application';
+    type: 'appointment' | 'application' | 'reschedule';
     id: string;
   }>({ visible: false, type: 'appointment', id: '' });
   const reasonKey = `${cancelModal.type}:${cancelModal.id}`;
@@ -125,6 +135,25 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName }) => {
 
     return { upcoming: upc, past: pst };
   }, [serverAppointments]);
+
+  // В списке записей бэк пока не возвращает ожидающий перенос.
+  const rescheduleQueries = useQueries({
+    queries: upcoming.map((appointment) =>
+      appointmentQueries.reschedules(appointment.id),
+    ),
+  });
+  const awaitingReschedules = upcoming.flatMap((appointment, index) => {
+    const request = rescheduleQueries[index].data?.find(
+      (item) => item.status === 'pending',
+    );
+    return request ? [{ appointment, request }] : [];
+  });
+  const regularUpcoming = upcoming.filter(
+    (appointment) =>
+      !awaitingReschedules.some(
+        (item) => item.appointment.id === appointment.id,
+      ),
+  );
 
   const { awaitingConfirmation, inProcessing, closedApplications } =
     useMemo(() => {
@@ -202,6 +231,42 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName }) => {
     });
   };
 
+  const confirmRescheduleMutation = useMutation({
+    mutationFn: (request: TAppointmentReschedule) => {
+      if (
+        !isConsultationTimeValid(moscowDate(request.requested_scheduled_time))
+      ) {
+        throw new Error(
+          'Предложенное время уже недоступно. Свяжитесь с психологом для выбора нового времени.',
+        );
+      }
+      return confirmAppointmentReschedule(request.id);
+    },
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: [appointmentQueryKey.list] }),
+        queryClient.invalidateQueries({ queryKey: [appointmentQueryKey.byId] }),
+        queryClient.invalidateQueries({
+          queryKey: [appointmentQueryKey.reschedules],
+        }),
+      ]);
+      message.success('Перенос записи подтверждён');
+    },
+    onError: (error) => {
+      message.error(getErrorMessage(error, 'Не удалось подтвердить перенос'));
+    },
+  });
+
+  const handleConfirmReschedule = (request: TAppointmentReschedule) => {
+    modal.confirm({
+      title: 'Подтверждение переноса',
+      content: `Перенести запись с ${moscowDate(request.old_scheduled_time).toFormat('d MMMM yyyy, HH:mm')} на ${moscowDate(request.requested_scheduled_time).toFormat('d MMMM yyyy, HH:mm')} по Москве?`,
+      okText: 'Подтвердить',
+      cancelText: 'Назад',
+      onOk: () => confirmRescheduleMutation.mutateAsync(request),
+    });
+  };
+
   const cancelMutation = useMutation({
     mutationFn: async ({
       id,
@@ -209,22 +274,28 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName }) => {
       reason,
     }: {
       id: string;
-      type: 'appointment' | 'application';
+      type: 'appointment' | 'application' | 'reschedule';
       reason: string;
     }) => {
+      if (type === 'reschedule') {
+        return rejectAppointmentReschedule(id, reason);
+      }
       if (type === 'application') {
         return cancelApplication(id, {
           cancel_reason: reason,
           cancel_initiator: 'user',
         });
-      } else {
-        return cancelAppointment(id, reason);
       }
+      return cancelAppointment(id, reason);
     },
     onSuccess: async (_data, variables) => {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: [applicationQueryKey.list] }),
         queryClient.invalidateQueries({ queryKey: [appointmentQueryKey.list] }),
+        queryClient.invalidateQueries({ queryKey: [appointmentQueryKey.byId] }),
+        queryClient.invalidateQueries({
+          queryKey: [appointmentQueryKey.reschedules],
+        }),
       ]);
       message.success('Успешно отменено');
       setCancelModal({ visible: false, type: 'appointment', id: '' });
@@ -255,7 +326,10 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName }) => {
     });
   };
 
-  const isLoading = isLoadingAppointments || isLoadingApplications;
+  const isLoading =
+    isLoadingAppointments ||
+    isLoadingApplications ||
+    rescheduleQueries.some((query) => query.isPending);
 
   if (isLoading) {
     return (
@@ -265,7 +339,10 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName }) => {
     );
   }
 
-  const loadError = appointmentsError || applicationsError;
+  const loadError =
+    appointmentsError ||
+    applicationsError ||
+    rescheduleQueries.find((query) => query.error)?.error;
   if (loadError) {
     return (
       <Alert
@@ -290,8 +367,8 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName }) => {
       <section className={styles.section}>
         <h3 className={styles.sectionTitle}>Ваши записи</h3>
         <div className={styles.cardsGrid}>
-          {upcoming.length > 0 ? (
-            upcoming.map((app) => (
+          {regularUpcoming.length > 0 ? (
+            regularUpcoming.map((app) => (
               <AppointmentCard
                 key={app.id}
                 date={moscowDate(app.scheduled_time).toFormat('d MMMM, HH:mm')}
@@ -312,7 +389,9 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName }) => {
             ))
           ) : (
             <p className={styles.emptyText}>
-              У вас пока что нет активных записей
+              {awaitingReschedules.length
+                ? 'Переносы записей ожидают вашего подтверждения ниже'
+                : 'У вас пока что нет активных записей'}
             </p>
           )}
         </div>
@@ -349,10 +428,38 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName }) => {
         </section>
       )}
 
-      {awaitingConfirmation.length > 0 && (
+      {(awaitingConfirmation.length > 0 || awaitingReschedules.length > 0) && (
         <section className={styles.section}>
           <h3 className={styles.sectionTitle}>Требуют подтверждения</h3>
           <div className={styles.cardsGrid}>
+            {awaitingReschedules.map(({ appointment, request }) => (
+              <AppointmentCard
+                key={request.id}
+                date={moscowDate(request.requested_scheduled_time).toFormat(
+                  'd MMMM, HH:mm',
+                )}
+                doctorName={getTherapistName(appointment.psychologist)}
+                address={
+                  appointment.type === 'Online'
+                    ? 'Онлайн'
+                    : request.requested_venue || appointment.venue || 'Офлайн'
+                }
+                description={`Психолог предлагает перенос с ${moscowDate(appointment.scheduled_time).toFormat('d MMMM yyyy, HH:mm')} на ${moscowDate(request.requested_scheduled_time).toFormat('d MMMM yyyy, HH:mm')} по Москве. При отказе запись будет отменена.`}
+                type="confirmation"
+                disabled={
+                  confirmRescheduleMutation.isPending ||
+                  cancelMutation.isPending
+                }
+                onConfirm={() => handleConfirmReschedule(request)}
+                onCancel={() =>
+                  setCancelModal({
+                    visible: true,
+                    type: 'reschedule',
+                    id: request.id,
+                  })
+                }
+              />
+            ))}
             {awaitingConfirmation.map((app) => {
               const scheduledStr = app.scheduled_at
                 ? moscowDate(app.scheduled_at).toFormat('d MMMM, HH:mm')
@@ -493,7 +600,11 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName }) => {
       </Modal>
 
       <Modal
-        title="Отмена"
+        title={
+          cancelModal.type === 'reschedule'
+            ? 'Отказ от переноса и отмена записи'
+            : 'Отмена'
+        }
         open={cancelModal.visible}
         onCancel={() => {
           if (cancelMutation.isPending) return;
@@ -509,6 +620,11 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName }) => {
         cancelText="Назад"
         okButtonProps={{ danger: true, disabled: !cancelReason.trim() }}
       >
+        {cancelModal.type === 'reschedule' && (
+          <p>
+            Отказ от переноса отменит саму запись. Прежнее время не сохранится.
+          </p>
+        )}
         <p style={{ marginBottom: 12 }}>Пожалуйста, укажите причину отмены:</p>
         <Input.TextArea
           rows={4}

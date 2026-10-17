@@ -30,7 +30,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
-  margin-bottom: 0.8rem;
+  margin-bottom: auto;
 }
 
 .infoItem {
@@ -162,6 +162,17 @@
   background-color: var(--labels-success-primary);
 }
 
+.description {
+  font: var(--font-text-medium);
+  color: var(--labels-neutral-secondary);
+}
+
+.confirmButton:disabled,
+.cancelButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 .dotDanger {
   background-color: var(--labels-danger-primary);
 }
@@ -193,6 +204,10 @@
 
   .status {
     color: var(--interactive-neutural-active-secondary);
+  }
+
+  .description {
+    color: var(--labels-neutral-inverted-primary);
   }
 
   .commentLink {

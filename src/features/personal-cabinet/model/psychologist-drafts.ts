@@ -10,6 +10,7 @@ type TReasonDrafts = Record<
 >;
 
 export type TOfferDraft = {
+  psychologistId?: string;
   meetingType?: TMeetingType;
   date?: string;
   time?: string;

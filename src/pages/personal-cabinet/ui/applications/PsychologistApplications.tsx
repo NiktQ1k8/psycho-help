@@ -236,7 +236,7 @@ const PsychologistApplications = () => {
 
   const renderApplicationRow = (application: TApplication) => {
     const statusUI = ApplicationStatusTag[application.status];
-    const preferPsychologistName = getShortPsychologistName(
+    const psychologistName = getShortPsychologistName(
       application.psychologist?.user,
     );
 
@@ -260,8 +260,8 @@ const PsychologistApplications = () => {
               ></div>
               <span className={styles['status-text']}>{statusUI.text}</span>
             </div>
-            {application.status === 'new' && preferPsychologistName && (
-              <div className={styles.timeCol}>{preferPsychologistName}</div>
+            {psychologistName && (
+              <div className={styles.timeCol}>{psychologistName}</div>
             )}
           </div>
           <div className={styles.infoCol}>

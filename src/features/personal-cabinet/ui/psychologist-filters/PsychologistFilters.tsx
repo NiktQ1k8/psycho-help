@@ -1,9 +1,10 @@
 import {
+  CloseCircleFilled,
   SearchOutlined,
   SortAscendingOutlined,
   SortDescendingOutlined,
 } from '@ant-design/icons';
-import { AutoComplete, Input, Select } from 'antd';
+import { AutoComplete, Input } from 'antd';
 import type { DateTime } from 'luxon';
 import type { TSortDirection } from '@/features/personal-cabinet/model/psychologist-view';
 import { moscowDate, toApiDate } from '@/shared/lib/date-time';
@@ -77,23 +78,59 @@ const PsychologistListFilters = ({
           />
         </AutoComplete>
 
-        <Select
-          className={styles['filters__status-select']}
-          value={statusFilter === 'all' ? null : statusFilter}
-          onChange={(value) => onStatusFilterChange(value || 'all')}
-          options={statusOptions}
-          placeholder={statusPlaceholder}
-          allowClear
-        />
+        <div className={styles['filters__status-select']}>
+          <select
+            className={styles['filters__native-select']}
+            aria-label="Статус"
+            value={statusFilter}
+            onChange={(event) =>
+              onStatusFilterChange(event.currentTarget.value)
+            }
+          >
+            {statusOptions.map(({ value, label }) => (
+              <option key={value} value={value}>
+                {value === 'all' ? statusPlaceholder : label}
+              </option>
+            ))}
+          </select>
+          {statusFilter !== 'all' && (
+            <button
+              className={styles['filters__clear-select']}
+              type="button"
+              aria-label="Очистить фильтр по статусу"
+              onClick={() => onStatusFilterChange('all')}
+            >
+              <CloseCircleFilled aria-hidden />
+            </button>
+          )}
+        </div>
 
-        <Select
-          className={styles['filters__format-select']}
-          value={formatFilter === 'all' ? null : formatFilter}
-          onChange={(value) => onFormatFilterChange(value || 'all')}
-          options={formatOptions}
-          placeholder={formatPlaceholder}
-          allowClear
-        />
+        <div className={styles['filters__format-select']}>
+          <select
+            className={styles['filters__native-select']}
+            aria-label="Формат встречи"
+            value={formatFilter}
+            onChange={(event) =>
+              onFormatFilterChange(event.currentTarget.value)
+            }
+          >
+            {formatOptions.map(({ value, label }) => (
+              <option key={value} value={value}>
+                {value === 'all' ? formatPlaceholder : label}
+              </option>
+            ))}
+          </select>
+          {formatFilter !== 'all' && (
+            <button
+              className={styles['filters__clear-select']}
+              type="button"
+              aria-label="Очистить фильтр по формату"
+              onClick={() => onFormatFilterChange('all')}
+            >
+              <CloseCircleFilled aria-hidden />
+            </button>
+          )}
+        </div>
 
         <DatePicker.RangePicker
           dropdownClassName="custom-range-picker-dropdown"

@@ -20,7 +20,7 @@ const MedicalRecordPage = () => {
   const { id } = useParams<{ id: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
   const user = useAuth((state) => state.user);
-  const isPsychologist = new Role(user?.roles ?? []).isPsychologist();
+  const isStaff = new Role(user?.roles ?? []).isStaff();
   const {
     data: appointments = [],
     isLoading,
@@ -28,10 +28,10 @@ const MedicalRecordPage = () => {
     error,
   } = useQuery({
     ...appointmentQueries.list(),
-    enabled: isPsychologist,
+    enabled: isStaff,
   });
 
-  if (!isPsychologist) return <Navigate to={SLUG.CABINET} replace />;
+  if (!isStaff) return <Navigate to={SLUG.CABINET} replace />;
 
   const patientAppointments = appointments
     .filter((appointment) => appointment.patient.id === id)

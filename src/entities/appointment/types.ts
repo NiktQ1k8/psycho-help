@@ -34,3 +34,21 @@ export type TAppointmentCreateRequest = {
   venue?: string | null;
   comment?: string | null;
 };
+
+export type TAppointmentReschedule = {
+  id: string;
+  appointment_id: string;
+  requested_by_user_id: string | null;
+  status: 'pending' | 'confirmed' | 'rejected';
+  old_scheduled_time: string;
+  old_remind_time: string | null;
+  old_venue: string;
+  old_comment: string | null;
+  requested_scheduled_time: string;
+  requested_remind_time: string | null;
+  requested_venue: string | null;
+  requested_comment: string | null;
+  rejection_comment: string | null;
+  created_at: string;
+  responded_at: string | null;
+};

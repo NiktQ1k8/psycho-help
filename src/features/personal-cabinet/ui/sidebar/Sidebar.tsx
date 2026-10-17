@@ -1,8 +1,9 @@
-import type { FC, ReactNode } from 'react';
+import type { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { UserOutlined } from '@ant-design/icons';
 import clsx from 'clsx';
 import type { TUser } from '@/entities/auth/types';
+import { useApplicationsCount } from '@/features/personal-cabinet/model/use-applications-count';
 import { SLUG } from '@/shared/config/slug';
 import styles from './sidebar.module.scss';
 
@@ -11,22 +12,14 @@ export type TTabConfig = {
   label: string;
 };
 
-export type TTabBadge = {
-  tabId: string;
-  content: (isActive: boolean) => ReactNode;
-};
-
 type TSidebarProps = {
   user: TUser | null;
   activeTab: string;
   tabs: TTabConfig[];
-  tabBadges?: TTabBadge[];
 };
 
-const Sidebar: FC<TSidebarProps> = ({ user, activeTab, tabs, tabBadges }) => {
-  const getBadgeForTab = (tabId: string) => {
-    return tabBadges?.find((b) => b.tabId === tabId)?.content;
-  };
+const Sidebar: FC<TSidebarProps> = ({ user, activeTab, tabs }) => {
+  const applicationsCount = useApplicationsCount(user);
 
   return (
     <aside className={styles.sidebar}>
@@ -42,7 +35,6 @@ const Sidebar: FC<TSidebarProps> = ({ user, activeTab, tabs, tabBadges }) => {
       </div>
       <nav className={styles.nav}>
         {tabs.map((tab) => {
-          const badgeContent = getBadgeForTab(tab.id);
           const isActive = activeTab === tab.id;
           return (
             <Link
@@ -52,7 +44,16 @@ const Sidebar: FC<TSidebarProps> = ({ user, activeTab, tabs, tabBadges }) => {
               aria-current={isActive ? 'page' : undefined}
             >
               <span className={styles.navLabel}>{tab.label}</span>
-              {badgeContent && <>{badgeContent(isActive)}</>}
+              {tab.id === 'applications' && applicationsCount > 0 && (
+                <span
+                  className={clsx(
+                    styles.countBadge,
+                    isActive && styles.countBadgeActive,
+                  )}
+                >
+                  {applicationsCount}
+                </span>
+              )}
             </Link>
           );
         })}

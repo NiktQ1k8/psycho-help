@@ -24,7 +24,7 @@ export default defineConfig(({ mode }) => {
       preprocessorOptions: {
         scss: {
           // Make CSS-free mixins available to each SCSS entry point.
-          additionalData: "@use '@/shared/scss/abstracts' as *;\n",
+          additionalData: "@use '@/shared/scss/mixins' as *;\n",
         },
       },
     },

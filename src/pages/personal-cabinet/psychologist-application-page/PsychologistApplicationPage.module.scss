@@ -216,9 +216,45 @@
 
 .actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 1.2rem;
   justify-content: flex-end;
+
   margin-top: 3.6rem;
+}
+
+.resetOfferButton {
+  cursor: pointer;
+
+  display: inline-flex;
+  gap: 0.8rem;
+  align-items: center;
+  justify-content: center;
+
+  padding: calc(1rem - 1px) 2.4rem;
+  border: 1px solid var(--border-neutral-base);
+  border-radius: 1.6rem;
+
+  font: var(--font-text-large-button);
+  color: var(--labels-neutral-primary);
+
+  background-color: var(--fills-neutral-quaternary);
+
+  transition: background-color 0.2s;
+
+  &:hover:not(:disabled) {
+    background-color: var(--fills-neutral-secondary);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--labels-brand-primary);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 }
 
 .btnPrimary {
@@ -326,14 +362,20 @@
   color: var(--labels-neutral-primary, #111827);
 }
 
+.psychologistField {
+  grid-column: 1 / -1;
+}
+
 .fieldPicker {
   width: 100%;
   padding: 1.2rem;
 }
 
 .fieldSelect {
-  width: 100%;
-  height: 100%;
+  @include native-select;
+
+  padding: 1.2rem;
+  border-radius: 0.4rem;
 }
 
 .fieldSelect,
@@ -343,16 +385,12 @@
   min-height: 5.06rem;
 }
 
-// это война с бибилтотечным селектом
-.fieldSelectWrapper,
 .timeWrapper {
   width: 100%;
   height: 100%;
   min-height: 5.06rem;
 }
 
-// Базовые стили для обоих компонентов
-.fieldSelectWrapper :global(.customSelect-selector),
 .timeWrapper :global(.ant-picker) {
   max-height: 5.06rem !important;
   padding: 1.2rem !important;
@@ -365,10 +403,6 @@
 }
 
 // Убираем все эффекты наведения и фокуса
-.fieldSelectWrapper :global(.customSelect-selector):hover,
-.fieldSelectWrapper :global(.customSelect-selector):focus,
-.fieldSelectWrapper :global(.customSelect-selector):active,
-.fieldSelectWrapper :global(.customSelect-focused .customSelect-selector),
 .timeWrapper :global(.ant-picker):hover,
 .timeWrapper :global(.ant-picker):focus,
 .timeWrapper :global(.ant-picker):active,
@@ -377,15 +411,6 @@
   background: #fff !important;
   outline: none !important;
   box-shadow: none !important;
-}
-
-// Текст и плейсхолдер для Select
-.fieldSelectWrapper :global(.customSelect-selection-item),
-.fieldSelectWrapper :global(.customSelect-selection-placeholder) {
-  padding: 0 !important;
-  font-family: var(--font-text-medium) !important;
-  font-size: 1.6rem !important;
-  line-height: 2.4rem !important;
 }
 
 // Инпут и текст для DatePicker
@@ -414,7 +439,8 @@
   }
 
   .btnPrimary,
-  .btnSecondary {
+  .btnSecondary,
+  .resetOfferButton {
     width: 100%;
   }
 }
@@ -468,7 +494,8 @@
   .statusLabel,
   .dataLabel,
   .sidebarTitle,
-  .fieldLabel {
+  .fieldLabel,
+  .resetOfferButton {
     color: var(--labels-neutral-inverted-primary);
   }
 
@@ -487,7 +514,6 @@
     }
   }
 
-  .fieldSelectWrapper :global(.customSelect-selector),
   .timeWrapper :global(.ant-picker),
   .dataValue:global(.ant-input-outlined[disabled]) {
     border: 0.1rem solid var(--border-neutral-base, #e5e7eb) !important;

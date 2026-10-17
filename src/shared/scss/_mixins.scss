@@ -1,0 +1,72 @@
+$breakpoint-desktop: 1024px;
+$breakpoint-tablet: 634px;
+
+// Да, тут нет screen. Но как будто бы никто для print и speech отдельно делать ничего не будет
+@mixin desktop-specific {
+  @media (min-width: $breakpoint-desktop) {
+    @content;
+  }
+}
+
+@mixin tablet-specific {
+  @media (min-width: $breakpoint-tablet) and (max-width: $breakpoint-desktop - 1) {
+    @content;
+  }
+}
+
+@mixin mobile-specific {
+  @media (max-width: $breakpoint-tablet - 1) {
+    @content;
+  }
+}
+
+@mixin past-tablet {
+  @media (min-width: $breakpoint-tablet) {
+    @content;
+  }
+}
+
+@mixin past-desktop {
+  @media (min-width: $breakpoint-desktop) {
+    @content;
+  }
+}
+
+@mixin header($level) {
+  font: var(--font-h#{$level});
+  letter-spacing: var(--font-header-letter-spacing);
+
+  @if $level == 5 {
+    letter-spacing: var(--font-header-letter-spacing-h5);
+  }
+}
+
+@mixin native-select {
+  cursor: pointer;
+
+  width: 100%;
+  min-width: 0;
+  padding: 8px 12px;
+  border: 1px solid var(--border-neutral-base);
+  border-radius: 6px;
+
+  font: var(--font-text-medium);
+  color: var(--labels-neutral-primary);
+
+  background-color: var(--backgrounds-neutral-primary);
+
+  &:focus-visible {
+    outline: 2px solid var(--labels-brand-primary);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  [data-theme='dark'] & {
+    color: var(--labels-neutral-inverted-primary);
+    background-color: var(--backgrounds-neutral-inverted);
+  }
+}

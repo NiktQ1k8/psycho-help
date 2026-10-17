@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Alert, Empty, Input, Pagination } from 'antd';
+import { Alert, AutoComplete, Empty, Input, Pagination } from 'antd';
 import { appointmentQueries } from '@/entities/appointment/api';
 import { getUserFullName } from '@/entities/auth/model/user-name';
 import { usePsychologistView } from '@/features/personal-cabinet/model/psychologist-view';
@@ -40,6 +40,21 @@ const MedicalRecords = () => {
       );
   }, [appointments, searchQuery]);
 
+  const searchSuggestions = useMemo(() => {
+    const search = normalizeSearch(searchQuery);
+    if (!search) return [];
+
+    const values = new Set(
+      patients.flatMap((patient) => [
+        getUserFullName(patient),
+        patient.study_group || '',
+      ]),
+    );
+    return [...values]
+      .filter((value) => normalizeSearch(value).includes(search))
+      .map((value) => ({ value }));
+  }, [patients, searchQuery]);
+
   const page = Math.min(
     currentPage,
     Math.max(1, Math.ceil(patients.length / ITEMS_PER_PAGE)),
@@ -48,13 +63,17 @@ const MedicalRecords = () => {
   return (
     <section className={styles.wrapper}>
       <h2>Медицинские карты</h2>
-      <Input
-        placeholder="Поиск по ФИО или группе"
-        aria-label="Поиск по ФИО или группе"
-        allowClear
+      <AutoComplete
         value={searchQuery}
-        onChange={(event) => setMedicalRecordSearch(event.target.value)}
-      />
+        options={searchSuggestions}
+        onChange={setMedicalRecordSearch}
+      >
+        <Input
+          placeholder="Поиск по ФИО или группе"
+          aria-label="Поиск по ФИО или группе"
+          allowClear
+        />
+      </AutoComplete>
       {isLoading ? (
         <Loader />
       ) : isError ? (

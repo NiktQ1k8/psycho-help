@@ -74,6 +74,11 @@ export const routes: IRoutePath[] = [
     authOnly: true,
   },
   {
+    path: `${SLUG.CABINET_APPLICATION}/:id`,
+    Component: PsychologistApplicationPage,
+    authOnly: true,
+  },
+  {
     path: `${SLUG.CABINET_APPOINTMENT}/:id`,
     Component: PsychologistAppointmentPage,
     authOnly: true,
@@ -81,11 +86,6 @@ export const routes: IRoutePath[] = [
   {
     path: `${SLUG.CABINET_MEDICAL_RECORD}/:id`,
     Component: MedicalRecordPage,
-    authOnly: true,
-  },
-  {
-    path: `${SLUG.CABINET_APPLICATION}/:id`,
-    Component: PsychologistApplicationPage,
     authOnly: true,
   },
 ];

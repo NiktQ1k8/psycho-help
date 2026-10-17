@@ -51,36 +51,59 @@
   cursor: pointer;
 
   display: flex;
-  gap: 0.8rem;
+  gap: 8px;
   align-items: center;
   justify-content: space-between;
 
-  padding: 1.2rem;
+  padding: 12px;
   border: none;
   border-radius: 0.8rem;
 
   font: var(--font-text-large);
-  color: var(--labels-neutral-secondary);
+  color: var(--labels-neutral-primary);
   text-align: left;
   text-decoration: none;
 
-  background: none;
-
-  transition: all 0.2s;
+  transition:
+    color 0.3s,
+    background-color 0.3s;
 
   &:hover {
-    color: var(--labels-neutral-primary);
+    background-color: var(--interactive-neutral-hover-secondary);
   }
 
   &.active {
-    font: var(--font-text-large-button);
-    color: var(--interactive-brand-primary);
-    background-color: var(--interactive-brand-secondary);
+    color: var(--labels-brand-primary);
+    background-color: var(--fills-brand-quaternary);
   }
 }
 
 .navLabel {
   flex: 1;
+}
+
+.countBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 26px;
+  padding: 2px 4px;
+  border-radius: 6px;
+
+  font: var(--font-text-medium);
+  color: var(--labels-neutral-primary);
+
+  background-color: var(--fills-neutral-primary);
+
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+.countBadgeActive {
+  color: var(--labels-neutral-inverted-primary);
+  background-color: var(--fills-brand-primary);
 }
 
 @media (width <= 1023px) {
@@ -104,6 +127,14 @@
 }
 
 [data-theme='dark'] {
+  .countBadge {
+    color: var(--labels-neutral-inverted-primary);
+  }
+
+  .countBadgeActive {
+    background-color: var(--fills-neutral-primary);
+  }
+
   .sidebar {
     background-color: var(--fills-neutral-primary);
   }
@@ -123,8 +154,8 @@
   .navItem {
     color: var(--labels-neutral-inverted-primary);
 
-    &:hover:not(.active) {
-      color: var(--interactive-brand-primary);
+    &:hover {
+      background-color: var(--interactive-neutral-hover);
     }
 
     &.active {

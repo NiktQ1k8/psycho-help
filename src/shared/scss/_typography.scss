@@ -1,4 +1,4 @@
-@use '../abstracts/breakpoints';
+@use 'mixins';
 
 @font-face {
   font-family: Geist;
@@ -103,7 +103,7 @@ $font-weight-semi-bold: 600;
   --font-text-xsmall: #{$font-weight-regular 1rem/1.4rem $font-family-body};
 }
 
-@include breakpoints.past-tablet {
+@include mixins.past-tablet {
   :root {
     --font-header-letter-spacing: -0.15rem;
     --font-h1: #{$font-weight-semi-bold 4.8rem/5.6rem $font-family-header};
@@ -116,7 +116,7 @@ $font-weight-semi-bold: 600;
   }
 }
 
-@include breakpoints.past-desktop {
+@include mixins.past-desktop {
   :root {
     --font-h1: #{$font-weight-semi-bold 6rem/6.8rem $font-family-header};
     --font-h2: #{$font-weight-semi-bold 4.8rem/5.2rem $font-family-header};

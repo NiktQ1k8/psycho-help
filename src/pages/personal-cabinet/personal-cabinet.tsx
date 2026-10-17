@@ -1,13 +1,9 @@
 import { type FC, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import clsx from 'clsx';
-import { applicationQueries } from '@/entities/application/api';
 import { useAuth } from '@/entities/auth/model/useAuth';
 import { Role } from '@/entities/role/helpers';
 import type { TRoleCode } from '@/entities/role/types';
 import Sidebar from '@/features/personal-cabinet/ui/sidebar/Sidebar';
-import type { TTabBadge } from '@/features/personal-cabinet/ui/sidebar/Sidebar';
 import Loader from '@/shared/ui/loader/loader';
 import { getDefaultTabForRole, getTabsForRole } from './config/tabs';
 import styles from './personal-cabinet.module.scss';
@@ -26,46 +22,6 @@ const PersonalCabinet: FC = () => {
     if (roleHelper.isContentManager()) return 'content_manager';
     return 'user';
   }, [authUser?.roles]);
-
-  const isStaff = new Role(authUser?.roles ?? []).isStaff();
-
-  const { data: applications = [] } = useQuery({
-    ...applicationQueries.list(),
-    enabled: isStaff,
-  });
-
-  const activeApplicationsCount = useMemo(
-    () =>
-      applications.filter(
-        (a) =>
-          a.status === 'new' ||
-          (a.status === 'in_progress' &&
-            a.assigned_to_user?.id === authUser?.id),
-      ).length,
-    [applications, authUser?.id],
-  );
-
-  const tabBadges = useMemo<TTabBadge[]>(() => {
-    const badges: TTabBadge[] = [];
-
-    if (isStaff && activeApplicationsCount > 0) {
-      badges.push({
-        tabId: 'applications',
-        content: (isActive) => (
-          <span
-            className={clsx(
-              styles.countBage,
-              isActive && styles.countBageActive,
-            )}
-          >
-            {activeApplicationsCount}
-          </span>
-        ),
-      });
-    }
-
-    return badges;
-  }, [isStaff, activeApplicationsCount]);
 
   const tabs = useMemo(
     () => getTabsForRole(primaryRoleCode),
@@ -87,12 +43,7 @@ const PersonalCabinet: FC = () => {
   return (
     <div className={styles.layout}>
       <div className={styles.sidebarWrapper}>
-        <Sidebar
-          user={authUser}
-          activeTab={activeTab}
-          tabs={tabs}
-          tabBadges={tabBadges}
-        />
+        <Sidebar user={authUser} activeTab={activeTab} tabs={tabs} />
       </div>
 
       <main className={styles.mainContent}>

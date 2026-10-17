@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Alert, App, Empty, Input, Result, Select } from 'antd';
+import { Alert, App, Button, Empty, Input, Result } from 'antd';
 import clsx from 'clsx';
 import type { DateTime } from 'luxon';
 import {
@@ -11,8 +11,11 @@ import {
   offerConsultation,
 } from '@/entities/application/api';
 import { getApplicationMeetingType } from '@/entities/application/meeting';
+import type { TMeetingType } from '@/entities/application/types';
 import { useAuth } from '@/entities/auth/model/useAuth';
+import { getUserFullName } from '@/entities/auth/model/user-name';
 import { Role } from '@/entities/role/helpers';
+import { therapistQueries } from '@/entities/therapist/queries';
 import {
   CONSULTATION_TIMES,
   CONSULTATION_TIME_HINT,
@@ -86,6 +89,20 @@ const PsychologistApplicationPage = () => {
     enabled: isStaff && !!id,
   });
 
+  const {
+    data: psychologists = [],
+    isLoading: isLoadingPsychologists,
+    error: psychologistsError,
+    refetch: refetchPsychologists,
+  } = useQuery({
+    ...therapistQueries.list(),
+    enabled:
+      isStaff &&
+      ['new', 'in_progress', 'awaiting_user_confirmation'].includes(
+        application?.status ?? '',
+      ),
+  });
+
   const draft = usePsychologistDrafts((state) =>
     id ? state.offerDrafts[id] : undefined,
   );
@@ -94,6 +111,12 @@ const PsychologistApplicationPage = () => {
     (state) => state.clearOfferDraft,
   );
   const [rejectModalOpen, setRejectModalOpen] = useState(false);
+  const selectedPsychologistId =
+    psychologists.find(
+      (psychologist) => psychologist.id === draft?.psychologistId,
+    )?.id ??
+    application?.psychologist?.id ??
+    '';
 
   const applicationScheduledAt = useMemo(
     () =>
@@ -151,13 +174,16 @@ const PsychologistApplicationPage = () => {
 
   const offerMutation = useMutation({
     mutationFn: () => {
+      if (!selectedPsychologistId) {
+        throw new Error('Выберите психолога');
+      }
       if (!selectedDateTime || !isConsultationTimeValid(selectedDateTime)) {
         throw new Error(
           `Выберите будущее время консультации. ${CONSULTATION_TIME_HINT}`,
         );
       }
       return offerConsultation(id!, {
-        psychologist_id: user!.id,
+        psychologist_id: selectedPsychologistId,
         meeting_type: meetingType,
         scheduled_at: toApiDate(selectedDateTime),
         location_address:
@@ -221,9 +247,11 @@ const PsychologistApplicationPage = () => {
   const canEdit = canChange && !isSaving;
 
   const hasOfferChanges =
+    selectedPsychologistId !== (application.psychologist?.id ?? '') ||
     meetingType !== getApplicationMeetingType(application) ||
-    selectedDateTime?.startOf('minute').toMillis() !==
-      applicationScheduledAt?.startOf('minute').toMillis() ||
+    selectedDate?.toFormat('yyyy-MM-dd') !==
+      applicationScheduledAt?.toFormat('yyyy-MM-dd') ||
+    selectedTime !== (applicationScheduledAt?.toFormat('HH:mm') ?? null) ||
     (meetingType === 'offline'
       ? locationAddress.trim() !==
         (
@@ -234,6 +262,9 @@ const PsychologistApplicationPage = () => {
       : meetingUrl.trim() !== (application.meeting_url ?? '').trim());
 
   const offerIssues: string[] = [];
+  if (!selectedPsychologistId) {
+    offerIssues.push('Выберите психолога из списка.');
+  }
   if (!selectedDate) offerIssues.push('Выберите дату консультации.');
   if (!selectedTime) offerIssues.push('Выберите время консультации.');
   if (selectedDateTime && !isConsultationTimeValid(selectedDateTime)) {
@@ -255,6 +286,7 @@ const PsychologistApplicationPage = () => {
   const canSave =
     canChange &&
     !isSaving &&
+    !isLoadingPsychologists &&
     !offerIssues.length &&
     (!isAwaitingConfirmation || hasOfferChanges);
 
@@ -273,14 +305,9 @@ const PsychologistApplicationPage = () => {
     ]
       .filter(Boolean)
       .join(' ') || 'Имя не указано';
-  const preferPsychologistName =
-    [
-      application.psychologist?.user?.last_name,
-      application.psychologist?.user?.first_name,
-      application.psychologist?.user?.middle_name,
-    ]
-      .filter(Boolean)
-      .join(' ') || '—';
+  const preferPsychologistName = application.psychologist?.user
+    ? getUserFullName(application.psychologist.user)
+    : '—';
 
   return (
     <div className={styles.page}>
@@ -288,11 +315,7 @@ const PsychologistApplicationPage = () => {
         <Sidebar
           user={user}
           activeTab="applications"
-          tabs={getTabsForRole(
-            new Role(user?.roles ?? []).isPsychologist()
-              ? 'psychologist'
-              : 'admin',
-          )}
+          tabs={getTabsForRole('psychologist')}
         />
       </div>
 
@@ -368,6 +391,53 @@ const PsychologistApplicationPage = () => {
           </div>
 
           <h3 className={styles.sidebarTitle}>Запись на сессию</h3>
+          <label className={clsx(styles.fieldLabel, styles.psychologistField)}>
+            <span className={styles.dataLabel}>Психолог</span>
+            <select
+              id="field-psychologist"
+              className={styles.fieldSelect}
+              value={selectedPsychologistId}
+              disabled={
+                !canEdit || isLoadingPsychologists || !!psychologistsError
+              }
+              onChange={(event) =>
+                setOfferDraft(id!, {
+                  psychologistId: event.currentTarget.value,
+                })
+              }
+            >
+              <option value="" disabled hidden>
+                Выберите психолога
+              </option>
+              {selectedPsychologistId &&
+                !psychologists.some(
+                  (psychologist) => psychologist.id === selectedPsychologistId,
+                ) && (
+                  <option value={selectedPsychologistId} disabled>
+                    {preferPsychologistName}
+                  </option>
+                )}
+              {psychologists.map((psychologist) => (
+                <option key={psychologist.id} value={psychologist.id}>
+                  {getUserFullName(psychologist)}
+                </option>
+              ))}
+            </select>
+          </label>
+          {psychologistsError && (
+            <Alert
+              className={styles.psychologistField}
+              type="error"
+              showIcon
+              message="Не удалось загрузить список психологов"
+              description={getErrorMessage(psychologistsError)}
+              action={
+                <Button onClick={() => refetchPsychologists()}>
+                  Повторить
+                </Button>
+              }
+            />
+          )}
           {canAccept && (
             <div className={styles.dataItemFull}>
               <Alert
@@ -377,7 +447,6 @@ const PsychologistApplicationPage = () => {
               />
             </div>
           )}
-          <p className={styles.dataItemFull}>{CONSULTATION_TIME_HINT}</p>
 
           <label className={styles.fieldLabel}>
             <span className={styles.dataLabel}>Дата</span>
@@ -401,34 +470,45 @@ const PsychologistApplicationPage = () => {
 
           <label className={styles.fieldLabel}>
             <span className={styles.fieldLabel}>Время</span>
-            <div className={styles.fieldSelectWrapper}>
-              <Select
-                id="field-time"
-                className={styles.fieldSelect}
-                prefixCls="customSelect"
-                value={selectedTime || undefined}
-                onChange={(time) => setOfferDraft(id!, { time })}
-                placeholder="—"
-                options={timeOptions}
-                disabled={!canEdit}
-              />
-            </div>
+            <select
+              id="field-time"
+              className={styles.fieldSelect}
+              value={selectedTime ?? ''}
+              onChange={(event) =>
+                setOfferDraft(id!, { time: event.currentTarget.value })
+              }
+              disabled={!canEdit}
+            >
+              <option value="" disabled hidden>
+                —
+              </option>
+              {timeOptions.map(({ value, label, disabled }) => (
+                <option key={value} value={value} disabled={disabled}>
+                  {label}
+                </option>
+              ))}
+            </select>
           </label>
 
           <label className={styles.fieldLabel}>
             <span className={styles.fieldLabel}>Формат</span>
-            <div className={styles.fieldSelectWrapper}>
-              <Select
-                id="field-meeting-type"
-                className={styles.fieldSelect}
-                prefixCls="customSelect"
-                value={meetingType}
-                onChange={(meetingType) => setOfferDraft(id!, { meetingType })}
-                options={MEETING_TYPE_OPTIONS}
-                placeholder="—"
-                disabled={!canEdit}
-              />
-            </div>
+            <select
+              id="field-meeting-type"
+              className={styles.fieldSelect}
+              value={meetingType}
+              onChange={(event) =>
+                setOfferDraft(id!, {
+                  meetingType: event.currentTarget.value as TMeetingType,
+                })
+              }
+              disabled={!canEdit}
+            >
+              {MEETING_TYPE_OPTIONS.map(({ value, label }) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
           </label>
 
           {meetingType === 'offline' && (
@@ -480,14 +560,14 @@ const PsychologistApplicationPage = () => {
             message={
               offerIssues.length
                 ? 'Чтобы запросить подтверждение'
-                : 'Ожидаем подтверждения пользователя'
+                : 'Повторный запрос подтверждения'
             }
             description={
               offerIssues.length
                 ? offerIssues.join(' ')
                 : hasOfferChanges
-                  ? 'Условия встречи изменены. Отправьте запрос повторно, чтобы пользователь подтвердил новые данные.'
-                  : 'Можно изменить дату, время, формат, адрес или ссылку на встречу и отправить запрос повторно. Кнопка станет активной после изменения данных.'
+                  ? 'Психолог или условия встречи изменены. Отправьте запрос повторно, чтобы пользователь подтвердил новые данные.'
+                  : 'Можно изменить психолога, дату, время, формат, адрес или ссылку на встречу и отправить запрос повторно. Кнопка станет активной после изменения данных.'
             }
           />
         )}
@@ -512,6 +592,16 @@ const PsychologistApplicationPage = () => {
                 type="button"
               >
                 {acceptMutation.isPending ? 'Сохранение...' : 'В работу'}
+              </button>
+            )}
+            {canChange && hasOfferChanges && (
+              <button
+                className={styles.resetOfferButton}
+                onClick={() => clearOfferDraft(id!)}
+                disabled={isSaving}
+                type="button"
+              >
+                Сбросить изменения
               </button>
             )}
             {canChange && (

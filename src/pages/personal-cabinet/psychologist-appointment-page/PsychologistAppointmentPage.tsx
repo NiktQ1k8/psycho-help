@@ -1,25 +1,32 @@
 import { useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Alert, App, Empty, Input, Result } from 'antd';
+import { Alert, App, Button, Empty, Input, Result } from 'antd';
 import clsx from 'clsx';
 import { applicationQueries } from '@/entities/application/api';
 import {
   appointmentQueries,
   appointmentQueryKey,
   completeAppointment,
+  requestAppointmentReschedule,
 } from '@/entities/appointment/api';
 import { AppointmentStatusTag } from '@/entities/appointment/status';
 import { useAuth } from '@/entities/auth/model/useAuth';
 import { Role } from '@/entities/role/helpers';
+import {
+  CONSULTATION_TIMES,
+  CONSULTATION_TIME_HINT,
+  isConsultationTimeValid,
+} from '@/features/personal-cabinet/model/consultation-time';
 import { usePsychologistDrafts } from '@/features/personal-cabinet/model/psychologist-drafts';
 import PsychologistRejectModal from '@/features/personal-cabinet/ui/PsychologistRejectModal';
 import Sidebar from '@/features/personal-cabinet/ui/sidebar/Sidebar';
 import { getTabsForRole } from '@/pages/personal-cabinet/config/tabs';
 import { getErrorMessage } from '@/shared/api/errors';
 import { SLUG } from '@/shared/config/slug';
-import { moscowDate } from '@/shared/lib/date-time';
+import { moscowDate, toApiDate } from '@/shared/lib/date-time';
 import { BackButton } from '@/shared/ui/back-button/BackButton';
+import { DatePicker } from '@/shared/ui/date-picker/MoscowDatePicker';
 import Loader from '@/shared/ui/loader/loader';
 import styles from './PsychologistAppointmentPage.module.scss';
 
@@ -63,6 +70,44 @@ const PsychologistAppointmentPage = () => {
   );
   const reason = application?.problem_description || appointment?.reason;
 
+  const {
+    data: reschedules,
+    isLoading: isLoadingReschedules,
+    error: reschedulesError,
+    refetch: refetchReschedules,
+  } = useQuery({
+    ...appointmentQueries.reschedules(appointmentId),
+    enabled: isStaff && appointment?.status === 'awaiting',
+  });
+  const pendingRequest = reschedules?.find(
+    (request) => request.status === 'pending',
+  );
+  const scheduleDraftKey = `appointment:${appointmentId}`;
+  const scheduleDraft = usePsychologistDrafts(
+    (state) => state.offerDrafts[scheduleDraftKey],
+  );
+  const setScheduleDraft = usePsychologistDrafts(
+    (state) => state.setOfferDraft,
+  );
+  const clearScheduleDraft = usePsychologistDrafts(
+    (state) => state.clearOfferDraft,
+  );
+  const scheduled = appointment ? moscowDate(appointment.scheduled_time) : null;
+  const selectedDate = scheduleDraft?.date
+    ? moscowDate(scheduleDraft.date)
+    : (scheduled?.startOf('day') ?? null);
+  const selectedTime = scheduleDraft?.time ?? scheduled?.toFormat('HH:mm');
+  const selectedDateTime =
+    selectedDate && selectedTime
+      ? moscowDate(`${selectedDate.toFormat('yyyy-MM-dd')}T${selectedTime}`)
+      : null;
+  const hasScheduleChanges =
+    !!selectedDateTime &&
+    selectedDateTime.toFormat('yyyy-MM-dd HH:mm') !==
+      scheduled?.toFormat('yyyy-MM-dd HH:mm');
+  const isScheduleValid =
+    !!selectedDateTime && isConsultationTimeValid(selectedDateTime);
+
   const conclusionDraft = usePsychologistDrafts(
     (state) => state.conclusionDrafts[appointmentId],
   );
@@ -75,6 +120,11 @@ const PsychologistAppointmentPage = () => {
     : !hasConclusionChanges
       ? 'Заключение не изменено. Внесите изменения, чтобы завершить запись.'
       : '';
+  const actionHint = hasScheduleChanges
+    ? isScheduleValid
+      ? 'Новое время вступит в силу после подтверждения студентом. При отказе запись будет отменена.'
+      : `Выберите будущее время консультации. ${CONSULTATION_TIME_HINT}`
+    : completionHint;
 
   const setConclusionDraft = usePsychologistDrafts(
     (state) => state.setConclusionDraft,
@@ -103,6 +153,37 @@ const PsychologistAppointmentPage = () => {
       message.error(getErrorMessage(error, 'Не удалось завершить запись'));
     },
   });
+
+  const rescheduleMutation = useMutation({
+    mutationFn: () => {
+      if (
+        !hasScheduleChanges ||
+        !selectedDateTime ||
+        !isConsultationTimeValid(selectedDateTime)
+      ) {
+        throw new Error(
+          `Выберите новое будущее время. ${CONSULTATION_TIME_HINT}`,
+        );
+      }
+      return requestAppointmentReschedule(
+        appointmentId,
+        toApiDate(selectedDateTime),
+      );
+    },
+    onSuccess: async () => {
+      clearScheduleDraft(scheduleDraftKey);
+      await queryClient.invalidateQueries({
+        queryKey: [appointmentQueryKey.reschedules, appointmentId],
+      });
+      message.success('Перенос отправлен на подтверждение студенту');
+    },
+    onError: (error) => {
+      message.error(getErrorMessage(error, 'Не удалось запросить перенос'));
+    },
+  });
+  const isSaving = completeMutation.isPending || rescheduleMutation.isPending;
+  const canEditSchedule =
+    !isSaving && !isLoadingReschedules && !reschedulesError && !pendingRequest;
 
   if (!isStaff) return <Navigate to={SLUG.MAIN} replace />;
   if (isLoading) return <Loader />;
@@ -135,11 +216,7 @@ const PsychologistAppointmentPage = () => {
         <Sidebar
           user={user}
           activeTab="psychologistAppointments"
-          tabs={getTabsForRole(
-            new Role(user?.roles ?? []).isPsychologist()
-              ? 'psychologist'
-              : 'admin',
-          )}
+          tabs={getTabsForRole('psychologist')}
         />
       </div>
 
@@ -208,16 +285,77 @@ const PsychologistAppointmentPage = () => {
 
           <div className={styles.infoGrid}>
             <div className={styles.infoRowGrid}>
-              <span className={styles.infoLabel}>Дата</span>
-              <span className={styles.infoValueGrid}>
-                {formatDate(appointment.scheduled_time) || '—'}
-              </span>
+              <label className={styles.infoLabel} htmlFor="appointment-date">
+                Дата
+              </label>
+              {appointment.status === 'awaiting' ? (
+                <DatePicker
+                  className={styles.datePicker}
+                  id="appointment-date"
+                  value={selectedDate}
+                  format="DD.MM.YYYY"
+                  allowClear={false}
+                  disabled={!canEditSchedule}
+                  disabledDate={(current) =>
+                    current.startOf('day') < moscowDate().startOf('day')
+                  }
+                  onChange={(date) =>
+                    date &&
+                    setScheduleDraft(scheduleDraftKey, {
+                      date: date.toFormat('yyyy-MM-dd'),
+                    })
+                  }
+                />
+              ) : (
+                <span className={styles.infoValueGrid}>
+                  {formatDate(appointment.scheduled_time) || '—'}
+                </span>
+              )}
             </div>
             <div className={styles.infoRowGrid}>
-              <span className={styles.infoLabel}>Время</span>
-              <span className={styles.infoValueGrid}>
-                {formatTime(appointment.scheduled_time) || '—'}
-              </span>
+              <label className={styles.infoLabel} htmlFor="appointment-time">
+                Время
+              </label>
+              {appointment.status === 'awaiting' ? (
+                <select
+                  id="appointment-time"
+                  className={styles.timeSelect}
+                  value={selectedTime ?? ''}
+                  disabled={!canEditSchedule}
+                  onChange={(event) =>
+                    setScheduleDraft(scheduleDraftKey, {
+                      time: event.currentTarget.value,
+                    })
+                  }
+                >
+                  {selectedTime &&
+                    !CONSULTATION_TIMES.includes(selectedTime) && (
+                      <option value={selectedTime} disabled>
+                        {selectedTime}
+                      </option>
+                    )}
+                  {CONSULTATION_TIMES.map((time) => (
+                    <option
+                      key={time}
+                      value={time}
+                      disabled={
+                        !selectedDate ||
+                        !isConsultationTimeValid(
+                          moscowDate(
+                            `${selectedDate.toFormat('yyyy-MM-dd')}T${time}`,
+                          ),
+                        )
+                      }
+                    >
+                      {time}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <span className={styles.infoValueGrid}>
+                  {formatTime(appointment.scheduled_time) || '—'}
+                </span>
+              )}
             </div>
             <div className={styles.infoRowGrid}>
               <span className={styles.infoLabel}>Формат</span>
@@ -232,6 +370,33 @@ const PsychologistAppointmentPage = () => {
               </span>
             </div>
           </div>
+
+          {appointment.status === 'awaiting' && (
+            <div className={styles.scheduleInfo}>
+              {isLoadingReschedules && <p>Загрузка данных переноса…</p>}
+              {reschedulesError && (
+                <Alert
+                  type="error"
+                  showIcon
+                  message="Не удалось проверить перенос записи"
+                  description={getErrorMessage(reschedulesError)}
+                  action={
+                    <Button onClick={() => refetchReschedules()}>
+                      Повторить
+                    </Button>
+                  }
+                />
+              )}
+              {pendingRequest && (
+                <Alert
+                  type="info"
+                  showIcon
+                  message="Ожидаем подтверждения переноса"
+                  description={`Предложено: ${moscowDate(pendingRequest.requested_scheduled_time).toFormat('d MMMM yyyy, HH:mm')} по Москве. До подтверждения действует прежнее время. При отказе студента запись будет отменена.`}
+                />
+              )}
+            </div>
+          )}
 
           {applicationError && (
             <Alert
@@ -261,7 +426,7 @@ const PsychologistAppointmentPage = () => {
             </div>
           )}
 
-          {appointment.status === 'awaiting' && (
+          {appointment.status === 'awaiting' && !hasScheduleChanges && (
             <div className={styles.infoRow}>
               <span className={styles.infoLabel}>Заключение</span>
               <span className={styles.infoValue}>
@@ -274,20 +439,20 @@ const PsychologistAppointmentPage = () => {
                   placeholder="Введите заключение по консультации"
                   maxLength={2048}
                   showCount
-                  disabled={completeMutation.isPending}
+                  disabled={isSaving}
                 />
               </span>
             </div>
           )}
         </div>
 
-        {appointment.status === 'awaiting' && completionHint && (
+        {appointment.status === 'awaiting' && actionHint && (
           <Alert
-            id="completion-requirements"
-            className={styles.completionHint}
+            id="appointment-requirements"
+            className={styles.actionHint}
             type="info"
             showIcon
-            message={completionHint}
+            message={actionHint}
           />
         )}
 
@@ -295,23 +460,47 @@ const PsychologistAppointmentPage = () => {
           <div className={styles.actions}>
             <button
               className={styles.actionButtonEnd}
-              onClick={() => completeMutation.mutate()}
-              disabled={!!completionHint || completeMutation.isPending}
+              onClick={() =>
+                hasScheduleChanges
+                  ? rescheduleMutation.mutate()
+                  : completeMutation.mutate()
+              }
+              disabled={
+                isSaving ||
+                (hasScheduleChanges
+                  ? !canEditSchedule || !isScheduleValid
+                  : !!completionHint)
+              }
               aria-describedby={
-                completionHint ? 'completion-requirements' : undefined
+                actionHint ? 'appointment-requirements' : undefined
               }
               type="button"
             >
-              {completeMutation.isPending ? 'Завершение...' : 'Завершить'}
+              {hasScheduleChanges
+                ? rescheduleMutation.isPending
+                  ? 'Перенос...'
+                  : 'Перенести'
+                : completeMutation.isPending
+                  ? 'Завершение...'
+                  : 'Завершить'}
             </button>
             <button
               className={styles.actionButtonCancel}
               onClick={() => setCancelModalOpen(true)}
-              disabled={completeMutation.isPending}
+              disabled={isSaving}
               type="button"
             >
               Отменить
             </button>
+            {hasScheduleChanges && (
+              <Button
+                className={styles.resetScheduleButton}
+                disabled={isSaving}
+                onClick={() => clearScheduleDraft(scheduleDraftKey)}
+              >
+                Сбросить дату и время
+              </Button>
+            )}
           </div>
         )}
 

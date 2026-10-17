@@ -126,8 +126,25 @@
   color: var(--labels-neutral-primary, #111827);
 }
 
-.completionHint {
+.actionHint {
   margin-top: 16px;
+}
+
+.resetScheduleButton {
+  height: auto;
+  padding: 1.2rem 2.4rem;
+  white-space: normal;
+}
+
+.scheduleInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+
+  &:empty {
+    display: none;
+  }
 }
 
 .actions {
@@ -159,9 +176,18 @@
 }
 
 .infoValueGrid {
-  padding: 1.2rem;
   border: 1px solid var(--border-neutral-base, #e5e7eb);
   border-radius: 4px;
+}
+
+.datePicker :global(.ant-picker-input > input) {
+  height: 40px;
+}
+
+.timeSelect {
+  @include native-select;
+
+  height: 50px;
 }
 
 .infoName {

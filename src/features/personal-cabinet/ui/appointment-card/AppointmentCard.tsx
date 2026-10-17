@@ -18,6 +18,8 @@ interface IAppointmentCardProps {
   onConfirm?: () => void;
   onComment?: () => void;
   onCancel?: () => void;
+  description?: string;
+  disabled?: boolean;
 }
 
 const getStatusConfig = (status?: string) => {
@@ -46,6 +48,8 @@ const AppointmentCard: FC<IAppointmentCardProps> = ({
   onConfirm,
   onComment,
   onCancel,
+  description,
+  disabled = false,
 }) => {
   const statusConfig = getStatusConfig(status);
 
@@ -69,6 +73,8 @@ const AppointmentCard: FC<IAppointmentCardProps> = ({
         </div>
       </div>
 
+      {description && <p className={styles.description}>{description}</p>}
+
       <div className={styles.footer}>
         {(type === 'upcoming' || type === 'past') && (
           <div className={styles.status}>
@@ -81,13 +87,23 @@ const AppointmentCard: FC<IAppointmentCardProps> = ({
 
         <div className={styles.actions}>
           {type === 'confirmation' && (
-            <button className={styles.confirmButton} onClick={onConfirm}>
+            <button
+              type="button"
+              className={styles.confirmButton}
+              onClick={onConfirm}
+              disabled={disabled}
+            >
               Подтвердить
             </button>
           )}
 
           {(type === 'upcoming' || type === 'confirmation') && onCancel && (
-            <button className={styles.cancelButton} onClick={onCancel}>
+            <button
+              type="button"
+              className={styles.cancelButton}
+              onClick={onCancel}
+              disabled={disabled}
+            >
               Отменить
             </button>
           )}

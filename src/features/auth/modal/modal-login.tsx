@@ -20,7 +20,6 @@ const ModalLogin: React.FC<TAuthModalProps> = ({
 }) => {
   const [formValue, setFormValue] = useState({ ...INITIAL_FORM_VALUE });
   const [errors, setErrors] = useState({ ...INITIAL_FORM_VALUE });
-  const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const { login } = useAuth();
@@ -150,29 +149,15 @@ const ModalLogin: React.FC<TAuthModalProps> = ({
                 <span className={styles.errorText}>{errors.password}</span>
               )}
             </label>
-            <div className={styles.rememberContainer}>
-              <div className={styles.rememberCheckbox}>
-                <label className={styles.checkboxLabel}>
-                  <input
-                    type="checkbox"
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                    className={styles.checkbox}
-                  />
-                  <span className={styles.checkbox_custom}></span>
-                  <span className={styles.checkboxText}>Запомнить меня</span>
-                </label>
-              </div>
-              <a
-                className={styles.forgotLink}
-                onClick={(e) => {
-                  e.preventDefault();
-                  setWindow('forgot');
-                }}
-              >
-                Забыли пароль?
-              </a>
-            </div>
+            <a
+              className={styles.forgotLink}
+              onClick={(e) => {
+                e.preventDefault();
+                setWindow('forgot');
+              }}
+            >
+              Забыли пароль?
+            </a>
           </div>
 
           {error.message && (

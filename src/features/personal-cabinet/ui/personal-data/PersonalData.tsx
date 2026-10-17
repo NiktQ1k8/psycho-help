@@ -2,13 +2,13 @@ import { type ChangeEvent, type FormEvent, useState } from 'react';
 import type { FC } from 'react';
 import { UserOutlined } from '@ant-design/icons';
 import { App, Input, Modal } from 'antd';
+import { templateParser } from 'input-format';
 import { authApi } from '@/entities/auth/api';
 import { getAuthErrorMessage } from '@/entities/auth/model/auth-errors';
 import {
   type TProfileFormData,
   type TProfileFormErrors,
   getProfileFormData,
-  normalizePhoneInput,
   validatePassword,
   validateProfileField,
 } from '@/entities/auth/model/profile-form';
@@ -19,7 +19,20 @@ import { useCabinetDrafts } from '@/features/personal-cabinet/model/cabinet-draf
 import { getErrorMessage } from '@/shared/api/errors';
 import EditIcon from '@/shared/assets/images/cabinet/edit.svg?react';
 import ExitIcon from '@/shared/assets/images/cabinet/exit.svg?react';
+import { FormattedInput } from '@/shared/ui/formatted-input/FormattedInput';
+import { PhoneInput } from '@/shared/ui/phone-input/PhoneInput';
 import styles from './PersonalData.module.scss';
+
+const parseStudyGroup = templateParser('xxx-xxxx', (character, value) => {
+  const symbol = character.toUpperCase().replace('A', 'А');
+  const pattern = value.length === 2 ? /^[1-4А]$/ : /^\d$/;
+  if (pattern.test(symbol)) return symbol;
+});
+
+const formatStudyGroup = (value = '') => ({
+  text: value.length >= 3 ? `${value.slice(0, 3)}-${value.slice(3)}` : value,
+  template: 'xxx-xxxx',
+});
 
 type TPersonalDataProps = {
   user: TUser | null;
@@ -56,17 +69,16 @@ const PersonalData: FC<TPersonalDataProps> = ({ user }) => {
   );
   const [errors, setErrors] = useState<TProfileFormErrors>({});
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const name = e.target.name as keyof TProfileFormData;
-    const value =
-      name === 'phone_number'
-        ? normalizePhoneInput(e.target.value)
-        : e.target.value;
+  const handleFieldChange = (name: keyof TProfileFormData, value: string) => {
     setProfileDraft({ [name]: value });
     setErrors((prev) => ({
       ...prev,
       [name]: validateProfileField(name, value),
     }));
+  };
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    handleFieldChange(e.target.name as keyof TProfileFormData, e.target.value);
   };
 
   const handleNameEdit = () => {
@@ -327,14 +339,20 @@ const PersonalData: FC<TPersonalDataProps> = ({ user }) => {
               <div className={styles.field}>
                 <label htmlFor="study_group">Учебная группа</label>
                 <div className={styles.editableField}>
-                  <input
+                  <FormattedInput
                     type="text"
                     id="study_group"
                     name="study_group"
                     disabled={isSaving}
-                    maxLength={50}
-                    value={formData.study_group}
-                    onChange={handleInputChange}
+                    value={formData.study_group.replace('-', '')}
+                    parse={parseStudyGroup}
+                    format={formatStudyGroup}
+                    onChange={(value) =>
+                      handleFieldChange(
+                        'study_group',
+                        formatStudyGroup(value).text,
+                      )
+                    }
                     placeholder="Введите номер группы"
                     aria-invalid={!!errors.study_group}
                   />
@@ -351,16 +369,12 @@ const PersonalData: FC<TPersonalDataProps> = ({ user }) => {
             <div className={styles.field}>
               <label htmlFor="phone_number">Номер телефона</label>
               <div className={styles.editableField}>
-                <input
-                  type="tel"
+                <PhoneInput
                   id="phone_number"
                   name="phone_number"
                   disabled={isSaving}
                   value={formData.phone_number}
-                  onChange={handleInputChange}
-                  placeholder="+79991234567"
-                  autoComplete="tel"
-                  inputMode="tel"
+                  onChange={(value) => handleFieldChange('phone_number', value)}
                   aria-invalid={!!errors.phone_number}
                 />
                 <button type="button" className={styles.editButton}>

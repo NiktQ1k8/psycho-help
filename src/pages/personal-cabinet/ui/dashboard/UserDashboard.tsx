@@ -34,13 +34,12 @@ import styles from './UserDashboard.module.scss';
 
 type TUserDashboardProps = {
   userName: string;
-  onBookClick: () => void;
 };
 
-const MEETING_TYPE_LABELS: Record<string, string> = {
-  online: 'Онлайн',
-  offline: 'Очно',
-};
+const getApplicationAddress = (application: TApplication) =>
+  getApplicationMeetingType(application) === 'online'
+    ? 'Онлайн'
+    : `Очно — ${getApplicationVenue(application)}`;
 
 const INITIATOR_LABELS: Record<string, string> = {
   user: 'Пользователь (Вы)',
@@ -62,7 +61,7 @@ const getTherapistName = (psychologist: TApplication['psychologist']) => {
   );
 };
 
-const UserDashboard: FC<TUserDashboardProps> = ({ userName, onBookClick }) => {
+const UserDashboard: FC<TUserDashboardProps> = ({ userName }) => {
   const { message, modal } = App.useApp();
   const queryClient = useQueryClient();
   const user = useAuth((s) => s.user);
@@ -280,7 +279,7 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName, onBookClick }) => {
 
   return (
     <>
-      <GreetingCard userName={userName} onBookClick={onBookClick} />
+      <GreetingCard userName={userName} />
 
       <div className={styles.contactNotice}>
         *По любым организационным вопросам или в случае чрезвычайной ситуации вы
@@ -298,8 +297,7 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName, onBookClick }) => {
                 date={moscowDate(app.scheduled_time).toFormat('d MMMM, HH:mm')}
                 doctorName={getTherapistName(app.psychologist)}
                 address={
-                  app.venue ||
-                  (app.type === 'Online' ? 'Онлайн сессия' : 'Офлайн')
+                  app.type === 'Online' ? 'Онлайн' : app.venue || 'Офлайн'
                 }
                 type="upcoming"
                 status={app.status}
@@ -325,9 +323,6 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName, onBookClick }) => {
           <h3 className={styles.sectionTitle}>В обработке у специалиста</h3>
           <div className={styles.cardsGrid}>
             {inProcessing.map((app) => {
-              const meetingTypeStr =
-                MEETING_TYPE_LABELS[getApplicationMeetingType(app)];
-              const locationStr = getApplicationVenue(app);
               const scheduledStr = app.scheduled_at
                 ? moscowDate(app.scheduled_at).toFormat('d MMMM, HH:mm')
                 : 'Время подбирается специалистом';
@@ -337,7 +332,7 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName, onBookClick }) => {
                   key={app.id}
                   date={scheduledStr}
                   doctorName={getTherapistName(app.psychologist)}
-                  address={`${meetingTypeStr} — ${locationStr}`}
+                  address={getApplicationAddress(app)}
                   type="upcoming"
                   status={app.status}
                   onCancel={() =>
@@ -359,9 +354,6 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName, onBookClick }) => {
           <h3 className={styles.sectionTitle}>Требуют подтверждения</h3>
           <div className={styles.cardsGrid}>
             {awaitingConfirmation.map((app) => {
-              const meetingTypeStr =
-                MEETING_TYPE_LABELS[getApplicationMeetingType(app)];
-              const locationStr = getApplicationVenue(app);
               const scheduledStr = app.scheduled_at
                 ? moscowDate(app.scheduled_at).toFormat('d MMMM, HH:mm')
                 : 'Время не назначено';
@@ -371,7 +363,7 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName, onBookClick }) => {
                   key={app.id}
                   date={scheduledStr}
                   doctorName={getTherapistName(app.psychologist)}
-                  address={`${meetingTypeStr} — ${locationStr}`}
+                  address={getApplicationAddress(app)}
                   type="confirmation"
                   status={app.status}
                   onConfirm={() => handleConfirm(app)}
@@ -423,8 +415,7 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName, onBookClick }) => {
                   )}
                   doctorName={getTherapistName(app.psychologist)}
                   address={
-                    app.venue ||
-                    (app.type === 'Online' ? 'Онлайн сессия' : 'Офлайн')
+                    app.type === 'Online' ? 'Онлайн' : app.venue || 'Офлайн'
                   }
                   type="past"
                   status={app.status}
@@ -457,7 +448,7 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName, onBookClick }) => {
                     'd MMMM, HH:mm',
                   )}
                   doctorName={getTherapistName(app.psychologist)}
-                  address={`${MEETING_TYPE_LABELS[getApplicationMeetingType(app)]} — ${getApplicationVenue(app)}`}
+                  address={getApplicationAddress(app)}
                   type="past"
                   status={app.status}
                   hasComment={!!reason}

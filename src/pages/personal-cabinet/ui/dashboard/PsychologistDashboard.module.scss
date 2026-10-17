@@ -313,6 +313,45 @@
   background: #f9fafb;
 }
 
+@media (width <= 600px) {
+  h2 {
+    font-size: 2rem;
+  }
+
+  .detailsPanel {
+    width: 100%;
+  }
+
+  .wrapper {
+    flex-direction: column;
+  }
+
+  .dayItem {
+    flex-direction: column;
+  }
+
+  .navigationRow {
+    flex-flow: column-reverse wrap;
+    gap: 1.6rem;
+  }
+
+  .weekSelector {
+    gap: 1rem;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .pageTitle {
+    font-size: 2rem;
+    line-height: 2.8rem;
+  }
+
+  .btnAdd {
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+  }
+}
+
 [data-theme='dark'] {
   .pageTitle,
   .dayName,
@@ -358,6 +397,10 @@
     background-color: var(--backgrounds-neutral-inverted);
   }
 
+  .gridLine {
+    border-color: var(--fills-neutral-primary);
+  }
+
   .eventCard {
     background-color: var(--fills-neutral-primary);
 
@@ -373,44 +416,5 @@
     &:hover {
       background-color: var(--interactive-brand-hover);
     }
-  }
-}
-
-@media (width <= 600px) {
-  h2 {
-    font-size: 2rem;
-  }
-
-  .detailsPanel {
-    width: 100%;
-  }
-
-  .wrapper {
-    flex-direction: column;
-  }
-
-  .dayItem {
-    flex-direction: column;
-  }
-
-  .navigationRow {
-    flex-flow: column-reverse wrap;
-    gap: 1.6rem;
-  }
-
-  .weekSelector {
-    gap: 1rem;
-    justify-content: space-between;
-    width: 100%;
-  }
-
-  .pageTitle {
-    font-size: 2rem;
-    line-height: 2.8rem;
-  }
-
-  .btnAdd {
-    font-size: 1.6rem;
-    line-height: 2.4rem;
   }
 }

@@ -35,22 +35,8 @@
 }
 
 .button {
-  cursor: pointer;
-
+  display: inline-flex;
   padding: 1.6rem 5.2rem;
-  border: none;
-  border-radius: 1.6rem;
-
-  font: var(--font-text-large-button);
-  color: var(--labels-neutral-inverted-primary);
-
-  background-color: var(--interactive-brand-primary);
-
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: var(--interactive-brand-hover);
-  }
 }
 
 .illustration {
@@ -74,10 +60,5 @@
 
   .card {
     background-color: var(--fills-neutral-primary);
-  }
-
-  .button {
-    color: var(--interactive-neutral-primary);
-    background-color: var(--backgrounds-neutral-primary);
   }
 }

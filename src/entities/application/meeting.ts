@@ -11,4 +11,4 @@ export const getApplicationVenue = (application: TApplication): string =>
     ? application.location_address ||
       application.preferred_campus ||
       'Адрес уточняется'
-    : application.meeting_url || 'Ссылка будет отправлена позже';
+    : 'Онлайн';

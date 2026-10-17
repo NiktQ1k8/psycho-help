@@ -1,13 +1,14 @@
 import type { FC } from 'react';
 import egorImg from '@/shared/assets/images/cabinet/egor.png';
+import { SLUG } from '@/shared/config/slug';
+import { ButtonLink } from '@/shared/ui/button-link/ButtonLink';
 import styles from './greeting-card.module.scss';
 
-interface GreetingCardProps {
+interface IGreetingCardProps {
   userName: string;
-  onBookClick: () => void;
 }
 
-const GreetingCard: FC<GreetingCardProps> = ({ userName, onBookClick }) => {
+const GreetingCard: FC<IGreetingCardProps> = ({ userName }) => {
   return (
     <div className={styles.card}>
       <div className={styles.content}>
@@ -17,9 +18,12 @@ const GreetingCard: FC<GreetingCardProps> = ({ userName, onBookClick }) => {
           <br />
           Выберите удобное время или специалиста.
         </p>
-        <button className={styles.button} onClick={onBookClick}>
+        <ButtonLink
+          to={`${SLUG.CABINET}?tab=userAppointments`}
+          className={styles.button}
+        >
           Записаться
-        </button>
+        </ButtonLink>
       </div>
       <div className={styles.illustration}>
         <img src={egorImg} alt="Иллюстрация" className={styles.image} />

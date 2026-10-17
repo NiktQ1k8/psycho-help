@@ -1,3 +1,10 @@
+import { StrictMode } from 'react';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import {
+  cleanup as cleanupRender,
+  render,
+  screen,
+} from '@testing-library/react';
 import axios, { AxiosError } from 'axios';
 import type {
   AxiosAdapter,
@@ -13,6 +20,8 @@ import {
   expect,
   it,
 } from 'vitest';
+import { useAppContext } from '@/app/context';
+import { AppContextProvider } from '@/app/context/provider';
 import { authApi } from '@/entities/auth/api';
 import { useAuth } from '@/entities/auth/model/useAuth';
 import type { TUser } from '@/entities/auth/types';
@@ -20,6 +29,7 @@ import { useApplication } from '@/features/personal-cabinet/model/application';
 import { useCabinetDrafts } from '@/features/personal-cabinet/model/cabinet-drafts';
 import { usePsychologistDrafts } from '@/features/personal-cabinet/model/psychologist-drafts';
 import { usePsychologistView } from '@/features/personal-cabinet/model/psychologist-view';
+import Logout from '@/pages/Logout/Logout';
 import { $api, $serviceClient } from '@/shared/api/http';
 import { queryClient } from '@/shared/api/queryClient';
 import { setupSession } from './setupSession';
@@ -65,6 +75,28 @@ const fail = (config: InternalAxiosRequestConfig, status = 401): never => {
   );
 };
 
+const SessionRoutes = () => {
+  const { isAppLoading } = useAppContext();
+  if (isAppLoading) return null;
+  return (
+    <Routes>
+      <Route path="/logout" element={<Logout />} />
+      <Route path="/" element={<p>Главная</p>} />
+    </Routes>
+  );
+};
+
+const renderSession = (pathname: string) =>
+  render(
+    <StrictMode>
+      <MemoryRouter initialEntries={[pathname]}>
+        <AppContextProvider>
+          <SessionRoutes />
+        </AppContextProvider>
+      </MemoryRouter>
+    </StrictMode>,
+  );
+
 let requests: string[];
 let respond: (
   config: InternalAxiosRequestConfig,
@@ -90,7 +122,10 @@ beforeEach(() => {
   $api.defaults.adapter = $serviceClient.defaults.adapter = adapter;
   $api.defaults.baseURL = $serviceClient.defaults.baseURL = '/api/';
 });
-afterEach(() => queryClient.clear());
+afterEach(() => {
+  cleanupRender();
+  queryClient.clear();
+});
 afterAll(() => {
   cleanup();
   $api.defaults.adapter = originalApiAdapter;
@@ -100,6 +135,25 @@ afterAll(() => {
 });
 
 describe('Авторизация и сессия', () => {
+  it('при запуске под StrictMode проверяет пользователя одним запросом', async () => {
+    renderSession('/');
+    await screen.findByText('Главная');
+    expect(requests).toEqual(['/api/users/user']);
+    expect(useAuth.getState()).toMatchObject({ isAuth: true, user });
+  });
+
+  it('на /logout отправляет один запрос выхода без повторной проверки сессии', async () => {
+    useAuth.setState({ isAuth: true, user });
+    respond = (config) => {
+      if (config.url !== '/users/logout') fail(config);
+      return response(config, null);
+    };
+    renderSession('/logout');
+    await screen.findByText('Главная');
+    expect(requests).toEqual(['/api/users/logout']);
+    expect(useAuth.getState()).toMatchObject({ isAuth: false, user: null });
+  });
+
   it.each([
     {
       action: 'запрос письма',
@@ -134,6 +188,10 @@ describe('Авторизация и сессия', () => {
   it.each(['login', 'registration'] as const)(
     'успешный %s сохраняет пользователя и очищает старый кэш',
     async (action) => {
+      respond = (config) => fail(config);
+      renderSession('/');
+      await screen.findByText('Главная');
+      requests = [];
       queryClient.setQueryData(['application.list'], ['private data']);
       respond = (config) => {
         expect(config.method).toBe('post');
@@ -175,6 +233,33 @@ describe('Авторизация и сессия', () => {
       '/api/users/refresh',
       '/api/users/user',
     ]);
+  });
+
+  it('объединяет параллельные проверки пользователя в один запрос', async () => {
+    expect(
+      await Promise.all([
+        useAuth.getState().getUser(),
+        useAuth.getState().getUser(),
+      ]),
+    ).toEqual([user, user]);
+    expect(requests).toEqual(['/api/users/user']);
+    expect(useAuth.getState()).toMatchObject({ isAuth: true, user });
+
+    await useAuth.getState().getUser();
+    expect(requests).toEqual(['/api/users/user', '/api/users/user']);
+  });
+
+  it('позволяет повторить проверку пользователя после ошибки сервера', async () => {
+    respond = (config) => fail(config, 503);
+    await expect(useAuth.getState().getUser()).rejects.toMatchObject({
+      response: { status: 503 },
+    });
+    expect(useAuth.getState()).toMatchObject({ isAuth: false, user: null });
+
+    respond = (config) => response(config);
+    expect(await useAuth.getState().getUser()).toEqual(user);
+    expect(requests).toEqual(['/api/users/user', '/api/users/user']);
+    expect(useAuth.getState()).toMatchObject({ isAuth: true, user });
   });
 
   it('использует один refresh для параллельных запросов', async () => {

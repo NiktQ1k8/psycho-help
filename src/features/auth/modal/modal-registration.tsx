@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { getAuthErrorMessage } from '@/entities/auth/model/auth-errors';
 import {
-  normalizePhoneInput,
   validatePassword,
   validateProfileField,
 } from '@/entities/auth/model/profile-form';
 import { useAuth } from '@/entities/auth/model/useAuth';
 import { useFetch } from '@/shared/api/useFetch';
+import { PhoneInput } from '@/shared/ui/phone-input/PhoneInput';
 import type { TAuthModalProps } from '../model/modal-types';
 import styles from './Modal.module.scss';
 import EyeIcon from './icons/Eye.svg?react';
@@ -97,16 +97,11 @@ const ModalRegistration: React.FC<TAuthModalProps> = ({
     const name = e.target.name as keyof typeof formValue;
     setErrors((prev) => ({
       ...prev,
-      [name]: validateField(name, e.target.value),
+      [name]: validateField(name, formValue[name]),
     }));
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const name = e.target.name as keyof typeof formValue;
-    const value =
-      name === 'phone_number'
-        ? normalizePhoneInput(e.target.value)
-        : e.target.value;
+  const handleFieldChange = (name: keyof typeof formValue, value: string) => {
     clearError();
     setFormValue((prevValues) => ({
       ...prevValues,
@@ -121,6 +116,10 @@ const ModalRegistration: React.FC<TAuthModalProps> = ({
             formValue.confirm_password === value ? '' : 'Пароли не совпадают',
         }),
     }));
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleFieldChange(e.target.name as keyof typeof formValue, e.target.value);
   };
 
   const [showPassword, setShowPassword] = useState(false);
@@ -192,17 +191,13 @@ const ModalRegistration: React.FC<TAuthModalProps> = ({
             </div>
             <label>
               <span className={styles.required}>Номер телефона</span>
-              <input
-                type="tel"
+              <PhoneInput
                 disabled={isLoading}
-                inputMode="tel"
-                autoComplete="tel"
                 name="phone_number"
                 aria-invalid={!!errors.phone_number}
                 onBlur={handleBlur}
                 value={formValue.phone_number}
-                placeholder="+79999999999"
-                onChange={handleInputChange}
+                onChange={(value) => handleFieldChange('phone_number', value)}
                 className={styles.input}
               />
               {errors.phone_number && (

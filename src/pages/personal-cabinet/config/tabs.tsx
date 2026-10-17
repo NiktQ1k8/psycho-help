@@ -17,7 +17,6 @@ export type TTabId =
 export interface ITabRenderProps {
   user: TUser;
   primaryRoleCode: TRoleCode;
-  onBookClick: () => void;
 }
 
 export interface ITabConfig {
@@ -31,11 +30,10 @@ export const roleBasedTabs: Record<string, ITabConfig[]> = {
     {
       id: 'main',
       label: 'Главная',
-      render: ({ user, primaryRoleCode, onBookClick }) => (
+      render: ({ user, primaryRoleCode }) => (
         <Dashboard
           userName={user.first_name || 'Пользователь'}
           role={primaryRoleCode}
-          onBookClick={onBookClick}
         />
       ),
     },
@@ -54,11 +52,10 @@ export const roleBasedTabs: Record<string, ITabConfig[]> = {
     {
       id: 'main',
       label: 'Главная',
-      render: ({ user, primaryRoleCode, onBookClick }) => (
+      render: ({ user, primaryRoleCode }) => (
         <Dashboard
           userName={user.first_name || 'Пользователь'}
           role={primaryRoleCode}
-          onBookClick={onBookClick}
         />
       ),
     },

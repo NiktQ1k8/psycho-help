@@ -1,5 +1,5 @@
 import { type FC, useMemo } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { applicationQueries } from '@/entities/application/api';
@@ -8,7 +8,6 @@ import { Role } from '@/entities/role/helpers';
 import type { TRoleCode } from '@/entities/role/types';
 import Sidebar from '@/features/personal-cabinet/ui/sidebar/Sidebar';
 import type { TTabBadge } from '@/features/personal-cabinet/ui/sidebar/Sidebar';
-import { SLUG } from '@/shared/config/slug';
 import Loader from '@/shared/ui/loader/loader';
 import { getDefaultTabForRole, getTabsForRole } from './config/tabs';
 import styles from './personal-cabinet.module.scss';
@@ -16,7 +15,6 @@ import styles from './personal-cabinet.module.scss';
 const PersonalCabinet: FC = () => {
   const authUser = useAuth((state) => state.user);
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
 
   const primaryRoleCode = useMemo<TRoleCode>(() => {
     if (!authUser?.roles || authUser.roles.length === 0) {
@@ -101,7 +99,6 @@ const PersonalCabinet: FC = () => {
         {activeTabConfig?.render({
           user: authUser,
           primaryRoleCode,
-          onBookClick: () => navigate(`${SLUG.CABINET}?tab=userAppointments`),
         })}
       </main>
     </div>

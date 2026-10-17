@@ -156,11 +156,7 @@ const PsychologistDashboard = () => {
                 const durationHeight = HOUR_HEIGHT;
 
                 const venueStr =
-                  apt.type === 'Online'
-                    ? 'Онлайн'
-                    : apt.venue
-                      ? `${apt.venue}`
-                      : 'Очно';
+                  apt.type === 'Online' ? 'Онлайн' : apt.venue || 'Очно';
 
                 return (
                   <div
@@ -222,7 +218,7 @@ const PsychologistDashboard = () => {
               <div className={styles.commentBlock}>
                 <h4 className={styles.commentLabel}>Комментарий</h4>
                 <p className={styles.commentText}>
-                  {selectedAppointment.comment || 'Комментарий отсутствует'}
+                  {selectedAppointment.venue || 'Комментарий отсутствует'}
                 </p>
               </div>
 

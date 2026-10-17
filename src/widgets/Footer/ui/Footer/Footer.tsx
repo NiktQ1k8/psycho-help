@@ -39,6 +39,7 @@ export const Footer: FC = () => {
                 key={social.link}
                 href={social.link}
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 <social.icon width={20} height={20} />
               </a>
@@ -62,6 +63,7 @@ export const Footer: FC = () => {
             className={styles.issuesLink}
             href={EXTERNAL_LINKS.ISSUE}
             target="_blank"
+            rel="noopener noreferrer"
           >
             создайте issue
           </a>{' '}

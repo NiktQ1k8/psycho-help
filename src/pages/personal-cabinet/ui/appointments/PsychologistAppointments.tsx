@@ -12,6 +12,7 @@ import { getErrorMessage } from '@/shared/api/errors';
 import { SLUG } from '@/shared/config/slug';
 import { moscowDate } from '@/shared/lib/date-time';
 import Loader from '@/shared/ui/loader/loader';
+import { normalizeSearch } from '@/shared/utils/normalizeSearch';
 import styles from './PsychologistAppointments.module.scss';
 
 const ITEMS_PER_PAGE = 5;
@@ -90,7 +91,7 @@ const PsychologistAppointments = () => {
     searchQuery,
     dateRange,
   } = filters;
-  const searchTerm = searchQuery.trim().replace(/\s+/g, ' ').toLowerCase();
+  const searchTerm = normalizeSearch(searchQuery);
 
   const hasActiveFilters =
     searchTerm !== '' ||
@@ -120,7 +121,7 @@ const PsychologistAppointments = () => {
 
     if (searchTerm) {
       result = result.filter((a) =>
-        getPatientName(a).toLowerCase().includes(searchTerm),
+        normalizeSearch(getPatientName(a)).includes(searchTerm),
       );
     }
 
@@ -164,7 +165,7 @@ const PsychologistAppointments = () => {
     if (!searchTerm) return [];
     const names = new Set(allAppointments.map(getPatientName));
     return [...names]
-      .filter((name) => name.toLowerCase().includes(searchTerm))
+      .filter((name) => normalizeSearch(name).includes(searchTerm))
       .map((name) => ({ value: name }));
   }, [allAppointments, searchTerm]);
 

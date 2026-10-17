@@ -14,6 +14,8 @@ type TAuthState = {
   logOut: () => Promise<void>;
 };
 
+let userPromise: Promise<TUser> | null = null;
+
 export const useAuth = create<TAuthState>((set, get) => ({
   isAuth: false,
   user: null,
@@ -38,10 +40,19 @@ export const useAuth = create<TAuthState>((set, get) => ({
     return user;
   },
 
-  async getUser() {
-    const user = await authApi.getUser();
-    set({ isAuth: true, user });
-    return user;
+  getUser() {
+    if (!userPromise) {
+      userPromise = authApi
+        .getUser()
+        .then((user) => {
+          set({ isAuth: true, user });
+          return user;
+        })
+        .finally(() => {
+          userPromise = null;
+        });
+    }
+    return userPromise;
   },
 
   async logOut() {

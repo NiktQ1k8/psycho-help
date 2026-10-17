@@ -1,7 +1,6 @@
 import { isValidPhoneNumber } from 'libphonenumber-js/max';
 import type { TUser } from '@/entities/auth/types';
-
-export const PHONE_MAX_LENGTH = 16; // «+» и до 15 цифр в международном номере.
+import { PHONE_MAX_LENGTH } from '@/shared/lib/phone';
 
 export type TProfileFormData = {
   first_name: string;
@@ -26,19 +25,6 @@ export const getProfileFormData = (user: TUser | null): TProfileFormData => ({
   social_media: user?.social_media ?? '',
   study_group: user?.study_group ?? '',
 });
-
-export const normalizePhoneInput = (value: string): string => {
-  const digits = value.replace(/\D/g, '');
-  if (!digits) return value.trimStart().startsWith('+') ? '+' : '';
-  const normalizedDigits = value.trimStart().startsWith('+')
-    ? digits
-    : digits.startsWith('8')
-      ? `7${digits.slice(1)}`
-      : digits.startsWith('7')
-        ? digits
-        : `7${digits}`;
-  return `+${normalizedDigits}`.slice(0, PHONE_MAX_LENGTH);
-};
 
 export const validatePassword = (password: string): string | undefined => {
   if (!password) return 'Введите пароль';
@@ -66,6 +52,11 @@ export const validateProfileField = (
   }
 
   switch (name) {
+    case 'study_group':
+      if (!/^\d{2}[1-4А]-\d{3,4}$/.test(value)) {
+        return 'Две цифры, затем цифра от 1 до 4 или заглавная русская буква «А», дефис и ещё 3–4 цифры';
+      }
+      break;
     case 'first_name':
     case 'last_name':
     case 'middle_name':

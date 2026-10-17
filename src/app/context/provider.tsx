@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Button, Result } from 'antd';
@@ -13,6 +13,7 @@ type TProps = {
 
 export const AppContextProvider = ({ children }: TProps) => {
   const [isAppLoading, setAppLoading] = useState(true);
+  const hasCheckedSession = useRef(false);
   const { pathname } = useLocation();
   const skipUserRequest =
     pathname === SLUG.LOGOUT || pathname === SLUG.RESET_PASSWORD;
@@ -22,15 +23,23 @@ export const AppContextProvider = ({ children }: TProps) => {
   const { fetching, error } = useFetch(async () => {
     try {
       setAppLoading(true);
-      if (!skipUserRequest) await getUser();
+      await getUser();
     } finally {
       setAppLoading(false);
     }
   });
 
   useEffect(() => {
-    fetching();
-  }, [fetching, skipUserRequest]);
+    if (skipUserRequest) {
+      if (pathname === SLUG.LOGOUT) hasCheckedSession.current = true;
+      setAppLoading(false);
+      return;
+    }
+    if (!hasCheckedSession.current) {
+      hasCheckedSession.current = true;
+      void fetching();
+    }
+  }, [fetching, pathname, skipUserRequest]);
 
   const memoizedValues = useMemo(() => ({ isAppLoading }), [isAppLoading]);
 

@@ -392,7 +392,7 @@ const AppointmentForm: FC = () => {
           </div>
 
           <div className={styles.field}>
-            <label className={styles.label}>Выберите дату и время (МСК)</label>
+            <label className={styles.label}>Выберите дату и время</label>
             <DatePicker
               showTime={{
                 format: 'HH:mm',
@@ -461,7 +461,11 @@ const AppointmentForm: FC = () => {
               *Все данные пользователя надежно защищены и строго
               конфиденциальны. Доступны для просмотра исключительно психологу.
             </p>
-            <a href={privacyFile} className={styles.privacy_link}>
+            <a
+              className={styles.privacy_link}
+              href={privacyFile}
+              target="_blank"
+            >
               Правила обработки специальных категорий персональных данных
             </a>
           </div>

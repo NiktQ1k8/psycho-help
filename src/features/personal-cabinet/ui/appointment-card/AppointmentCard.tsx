@@ -26,9 +26,7 @@ const getStatusConfig = (status?: string) => {
     case 'in_progress':
       return { text: 'В обработке', dotClass: styles.dotWarning };
     case 'rejected':
-      return { text: 'Отклонено', dotClass: styles.dotDanger };
     case 'expired':
-      return { text: 'Срок истёк', dotClass: styles.dotNeutral };
     case 'cancelled':
       return { text: 'Отменено', dotClass: styles.dotDanger };
     case 'done':

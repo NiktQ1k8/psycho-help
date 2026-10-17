@@ -6,10 +6,9 @@ import UserDashboard from './UserDashboard';
 interface IDashboardProps {
   userName: string;
   role: TRoleCode;
-  onBookClick?: () => void;
 }
 
-const Dashboard: FC<IDashboardProps> = ({ userName, role, onBookClick }) => {
+const Dashboard: FC<IDashboardProps> = ({ userName, role }) => {
   switch (role) {
     case 'psychologist':
     case 'admin':
@@ -17,12 +16,7 @@ const Dashboard: FC<IDashboardProps> = ({ userName, role, onBookClick }) => {
       return <PsychologistDashboard />;
     case 'user':
     default:
-      return (
-        <UserDashboard
-          userName={userName}
-          onBookClick={onBookClick || (() => {})}
-        />
-      );
+      return <UserDashboard userName={userName} />;
   }
 };
 

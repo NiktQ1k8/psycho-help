@@ -6,17 +6,108 @@
 
 .row {
   display: flex;
+  flex-direction: row;
   gap: 1.6rem;
   align-items: center;
   justify-content: space-between;
 
-  padding: 1.6rem 0;
-  border-bottom: 1px solid var(--border-neutral-base);
+  padding: 1.6rem;
+}
+
+.row:not(:first-of-type) {
+  border-top: 1px solid var(--border-neutral-base);
 }
 
 .patient {
   display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  overflow-wrap: anywhere;
+  flex-direction: row;
+  max-width: 450px;
+}
+
+.patient_name {
+  font: var(--font-text-large);
+  color: var(--labels-neutral-primary);
+}
+
+.study_group {
+  max-width: 250px;
+  font: var(--font-text-large);
+  color: var(--labels-neutral-secondary);
+}
+
+.study_group::before {
+  content: '|';
+  margin: 0 1.2rem;
+}
+
+.patient_name,
+.study_group {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.btnPrimary {
+  cursor: pointer;
+
+  padding: 0.8rem 2.7rem;
+  border: none;
+  border-radius: 12px;
+
+  font: var(--font-text-medium);
+  color: var(--labels-neutral-inverted-primary);
+  white-space: nowrap;
+
+  background-color: var(--interactive-brand-primary);
+
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: var(--interactive-brand-hover);
+  }
+
+  &:active {
+    background-color: var(--interactive-brand-active);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+
+  margin-top: 1.6rem;
+  margin-bottom: 2.4rem;
+
+  font: var(--font-text-medium);
+
+  :global(.ant-pagination-item-active) {
+    border-color: var(--labels-brand-primary);
+    background-color: var(--labels-brand-primary);
+
+    a {
+      color: var(--labels-neutral-inverted-primary) !important;
+    }
+  }
+}
+
+@media (width <= 550px) {
+  .row {
+    flex-direction: column;
+    align-items: start;
+    min-height: 150px;
+  }
+
+  .patient {
+    flex-direction: column;
+  }
+
+  .study_group::before {
+    content: none;
+    margin: 0;
+  }
 }

@@ -11,7 +11,7 @@ import Loader from '@/shared/ui/loader/loader';
 import { normalizeSearch } from '@/shared/utils/normalizeSearch';
 import styles from './MedicalRecords.module.scss';
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 10;
 
 const MedicalRecords = () => {
   const { medicalRecordFilters, setMedicalRecordSearch, setMedicalRecordPage } =
@@ -77,10 +77,17 @@ const MedicalRecords = () => {
                   key={patient.id}
                 >
                   <div className={styles.patient}>
-                    <span>{getUserFullName(patient)}</span>
-                    {patient.study_group && <span>{patient.study_group}</span>}
+                    <span className={styles.patient_name}>
+                      {getUserFullName(patient)}
+                    </span>
+                    {patient.study_group && (
+                      <span className={styles.study_group}>
+                        {patient.study_group}
+                      </span>
+                    )}
                   </div>
                   <ButtonLink
+                    className={styles.btnPrimary}
                     to={`${SLUG.CABINET_MEDICAL_RECORD}/${patient.id}`}
                   >
                     Открыть
@@ -90,6 +97,8 @@ const MedicalRecords = () => {
           </div>
           {patients.length > ITEMS_PER_PAGE && (
             <Pagination
+              className={styles.pagination}
+
               current={page}
               total={patients.length}
               pageSize={ITEMS_PER_PAGE}

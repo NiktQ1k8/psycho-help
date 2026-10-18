@@ -111,3 +111,17 @@
     margin: 0;
   }
 }
+
+[data-theme='dark'] {
+  .patient_name {
+    color: var(--labels-neutral-inverted-primary);
+  }
+
+  .study_group {
+    color: color-mix(
+      in srgb,
+      var(--labels-neutral-quaternary),
+      var(--labels-neutral-inverted-primary)
+    );
+  }
+}

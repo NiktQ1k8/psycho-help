@@ -66,7 +66,7 @@ const MedicalRecordPage = () => {
       </div>
       <main className={styles.wrapper}>
         <BackButton text="Вернуться назад" />
-        <h1>Медицинская карта пользователя</h1>
+        <h1 className={styles.title}>Медицинская карта пользователя</h1>
         {isLoading ? (
           <Loader />
         ) : isError ? (
@@ -81,30 +81,20 @@ const MedicalRecordPage = () => {
         ) : (
           <>
             <dl className={styles.details}>
-              <div>
-                <dt>Фамилия</dt>
-                <dd>{patient.last_name}</dd>
-              </div>
-              <div>
-                <dt>Имя</dt>
-                <dd>{patient.first_name}</dd>
-              </div>
-              <div>
-                <dt>Отчество</dt>
-                <dd>{patient.middle_name || '—'}</dd>
-              </div>
-              <div>
-                <dt>Академическая группа/отделение</dt>
-                <dd>{patient.study_group || '—'}</dd>
-              </div>
-              <div>
-                <dt>Ведущий психолог</dt>
-                <dd>
-                  {leadingPsychologist
-                    ? getUserFullName(leadingPsychologist)
-                    : '—'}
-                </dd>
-              </div>
+              <dt>Фамилия</dt>
+              <dd>{patient.last_name}</dd>
+              <dt>Имя</dt>
+              <dd>{patient.first_name}</dd>
+              <dt>Отчество</dt>
+              <dd>{patient.middle_name || '—'}</dd>
+              <dt>Академическая группа/отделение</dt>
+              <dd>{patient.study_group || '—'}</dd>
+              <dt>Ведущий психолог</dt>
+              <dd>
+                {leadingPsychologist
+                  ? getUserFullName(leadingPsychologist)
+                  : '—'}
+              </dd>
             </dl>
             <h2>История приёмов</h2>
             <AppointmentList

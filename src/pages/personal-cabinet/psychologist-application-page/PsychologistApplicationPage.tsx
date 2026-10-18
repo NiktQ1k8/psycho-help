@@ -118,10 +118,10 @@ const PsychologistApplicationPage = () => {
     application?.psychologist?.id ??
     '';
 
+  const scheduledAt = application?.scheduled_at;
   const applicationScheduledAt = useMemo(
-    () =>
-      application?.scheduled_at ? moscowDate(application.scheduled_at) : null,
-    [application?.scheduled_at],
+    () => (scheduledAt ? moscowDate(scheduledAt) : null),
+    [scheduledAt],
   );
 
   const meetingType =
@@ -432,7 +432,7 @@ const PsychologistApplicationPage = () => {
               message="Не удалось загрузить список психологов"
               description={getErrorMessage(psychologistsError)}
               action={
-                <Button onClick={() => refetchPsychologists()}>
+                <Button onClick={() => void refetchPsychologists()}>
                   Повторить
                 </Button>
               }

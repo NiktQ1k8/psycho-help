@@ -212,7 +212,11 @@ const PersonalData: FC<TPersonalDataProps> = ({ user }) => {
 
   return (
     <>
-      <form className={styles.container} onSubmit={handleSubmit} noValidate>
+      <form
+        className={styles.container}
+        onSubmit={(event) => void handleSubmit(event)}
+        noValidate
+      >
         <div className={styles.avatarSection}>
           <div className={styles.avatar}>
             {avatar ? (
@@ -299,7 +303,7 @@ const PersonalData: FC<TPersonalDataProps> = ({ user }) => {
                     <button
                       type="button"
                       className={styles.saveNameButton}
-                      onClick={() => handleSubmit()}
+                      onClick={() => void handleSubmit()}
                       disabled={isSaving || !hasChanges}
                     >
                       {isSaving ? 'Сохранение...' : 'Сохранить'}
@@ -484,7 +488,7 @@ const PersonalData: FC<TPersonalDataProps> = ({ user }) => {
       <Modal
         title="Смена пароля"
         open={isPasswordModalOpen}
-        onOk={handlePasswordSubmit}
+        onOk={() => void handlePasswordSubmit()}
         onCancel={() => {
           setIsPasswordModalOpen(false);
           setPasswordData({

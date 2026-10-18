@@ -205,7 +205,9 @@ const AppointmentForm: FC = () => {
 
     try {
       await createApplication(requestData);
-      queryClient.invalidateQueries({ queryKey: [applicationQueryKey.list] });
+      void queryClient.invalidateQueries({
+        queryKey: [applicationQueryKey.list],
+      });
       message.success('Заявка успешно отправлена');
       useApplication.getState().resetApplication();
       const nextParams = new URLSearchParams(searchParams);
@@ -540,7 +542,7 @@ const AppointmentForm: FC = () => {
 
             <button
               className={styles.submitBtn}
-              onClick={handleSubmit}
+              onClick={() => void handleSubmit()}
               disabled={isSubmitting}
             >
               {isSubmitting ? 'Отправка...' : 'Записаться'}

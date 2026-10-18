@@ -381,7 +381,7 @@ const PsychologistAppointmentPage = () => {
                   message="Не удалось проверить перенос записи"
                   description={getErrorMessage(reschedulesError)}
                   action={
-                    <Button onClick={() => refetchReschedules()}>
+                    <Button onClick={() => void refetchReschedules()}>
                       Повторить
                     </Button>
                   }

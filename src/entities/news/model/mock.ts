@@ -79,7 +79,7 @@ export const mockNews: TNews[] = [
   },
   {
     id: '5',
-    images: ['/news/5.jpg'],
+    images: ['/images/news/5.jpg'],
     type: 'Анонс мероприятия',
     date: '2026-03-13T16:30:00+03:00',
     title:
@@ -95,7 +95,7 @@ export const mockNews: TNews[] = [
   },
   {
     id: '6',
-    images: ['/news/6.jpg'],
+    images: ['/images/news/6.jpg'],
     type: 'Анонс мероприятия',
     date: '2026-03-04T16:00:00+03:00',
     title:
@@ -118,7 +118,7 @@ export const mockNews: TNews[] = [
   },
   {
     id: '7',
-    images: ['/news/7.jpg'],
+    images: ['/images/news/7.jpg'],
     type: 'Анонс мероприятия',
     date: '2025-12-18T16:00:00+03:00',
     title:
@@ -133,7 +133,7 @@ export const mockNews: TNews[] = [
   },
   {
     id: '2',
-    images: ['/news/2.jpg'],
+    images: ['/images/news/2.jpg'],
     type: 'Отчет о мероприятии',
     date: '2025-11-24T16:30:00+03:00',
     title: '🎉 ПСИХОparty: незабываемый «День психолога»!',
@@ -146,7 +146,7 @@ export const mockNews: TNews[] = [
   },
   {
     id: '1',
-    images: ['/news/1.jpg'],
+    images: ['/images/news/1.jpg'],
     type: 'Анонс мероприятия',
     date: '2025-11-24T15:00:00+03:00',
     title: 'Мы уже придумали, как тебе весело провести вечер понедельника!',
@@ -186,7 +186,7 @@ export const mockNews: TNews[] = [
   },
   {
     id: '8',
-    images: ['/news/8.jpg'],
+    images: ['/images/news/8.jpg'],
     type: 'Отчет о мероприятии',
     date: '2025-05-17T12:00:00+03:00',
     title: 'Нет ни одной семьи, не пострадавшей от войны',
@@ -202,7 +202,7 @@ export const mockNews: TNews[] = [
   },
   {
     id: '3',
-    images: ['/news/3.jpg'],
+    images: ['/images/news/3.jpg'],
     type: 'Анонс мероприятия',
     date: '2025-04-18T17:40:00+03:00',
     title: 'Психологическая мастерская для сотрудников Московского Политеха ✨',
@@ -218,7 +218,7 @@ export const mockNews: TNews[] = [
   },
   {
     id: '4',
-    images: ['/news/4.jpg'],
+    images: ['/images/news/4.jpg'],
     type: 'Анонс мероприятия',
     date: '2024-12-25T14:30:00+03:00',
     title: '«Круглый стол» на тему семейных ценностей',

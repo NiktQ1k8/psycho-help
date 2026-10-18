@@ -1,6 +1,6 @@
 # Сборка фронтенда и отдача статики через nginx (он же терминирует TLS
 # и проксирует /api/ в бэкенд стенда).
-FROM node:20-alpine AS build
+FROM node:24-alpine AS build
 
 WORKDIR /app
 

@@ -29,7 +29,8 @@ export const BackButton = ({
   } as CSSProperties;
   const goBack = () => {
     // React Router хранит номер перехода внутри сайта в idx.
-    if (window.history.state?.idx > 0) navigate(-1);
+    const historyState = window.history.state as { idx?: number } | null;
+    if ((historyState?.idx ?? 0) > 0) navigate(-1);
     else navigate(SLUG.MAIN, { replace: true });
   };
 

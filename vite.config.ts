@@ -35,16 +35,24 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       outDir: 'build',
-      rollupOptions: {
+      // Preserve the browser support used by Vite 7.
+      target: ['chrome107', 'edge107', 'firefox104', 'safari16'],
+      rolldownOptions: {
         output: {
-          manualChunks: (id) => {
-            if (id.includes('node_modules')) {
-              return 'vendor';
-            }
-            if (id.includes('src/pages')) {
-              const pageName = id.split('src/pages/')[1].split('/')[0];
-              return `page-${pageName}`;
-            }
+          codeSplitting: {
+            groups: [
+              {
+                name: 'vendor',
+                test: /node_modules/,
+                priority: 10,
+              },
+              {
+                name: (id) => {
+                  const pageName = id.split('src/pages/')[1]?.split('/')[0];
+                  return pageName ? `page-${pageName}` : null;
+                },
+              },
+            ],
           },
         },
       },

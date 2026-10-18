@@ -52,6 +52,8 @@ export const validateProfileField = (
   }
 
   switch (name) {
+    case 'social_media':
+      break;
     case 'study_group':
       if (!/^\d{2}[1-4А]-\d{3,4}$/.test(value)) {
         return 'Две цифры, затем цифра от 1 до 4 или заглавная русская буква «А», дефис и ещё 3–4 цифры';

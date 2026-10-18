@@ -12,11 +12,12 @@ type TProps = {
 };
 
 export const AppContextProvider = ({ children }: TProps) => {
-  const [isAppLoading, setAppLoading] = useState(true);
-  const hasCheckedSession = useRef(false);
   const { pathname } = useLocation();
   const skipUserRequest =
     pathname === SLUG.LOGOUT || pathname === SLUG.RESET_PASSWORD;
+  const [isSessionLoading, setAppLoading] = useState(!skipUserRequest);
+  const hasCheckedSession = useRef(false);
+  const isAppLoading = !skipUserRequest && isSessionLoading;
 
   const getUser = useAuth((state) => state.getUser);
 
@@ -32,7 +33,6 @@ export const AppContextProvider = ({ children }: TProps) => {
   useEffect(() => {
     if (skipUserRequest) {
       if (pathname === SLUG.LOGOUT) hasCheckedSession.current = true;
-      setAppLoading(false);
       return;
     }
     if (!hasCheckedSession.current) {

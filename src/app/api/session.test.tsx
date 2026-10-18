@@ -1,7 +1,8 @@
 import { StrictMode } from 'react';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { Link, MemoryRouter, Route, Routes } from 'react-router-dom';
 import {
   cleanup as cleanupRender,
+  fireEvent,
   render,
   screen,
 } from '@testing-library/react';
@@ -81,6 +82,7 @@ const SessionRoutes = () => {
   return (
     <Routes>
       <Route path="/logout" element={<Logout />} />
+      <Route path="/reset-password" element={<Link to="/">На главную</Link>} />
       <Route path="/" element={<p>Главная</p>} />
     </Routes>
   );
@@ -135,6 +137,14 @@ afterAll(() => {
 });
 
 describe('Авторизация и сессия', () => {
+  it('проверяет сессию после перехода со страницы восстановления на главную', async () => {
+    renderSession('/reset-password');
+    expect(requests).toEqual([]);
+    fireEvent.click(screen.getByRole('link', { name: 'На главную' }));
+    await screen.findByText('Главная');
+    expect(requests).toEqual(['/api/users/user']);
+  });
+
   it('при запуске под StrictMode проверяет пользователя одним запросом', async () => {
     renderSession('/');
     await screen.findByText('Главная');
@@ -177,7 +187,7 @@ describe('Авторизация и сессия', () => {
       const result = { message: 'Запрос выполнен' };
       respond = (config) => {
         expect(config.method).toBe('post');
-        expect(JSON.parse(config.data)).toEqual(body);
+        expect(JSON.parse(config.data as string)).toEqual(body);
         return response(config, result);
       };
       expect(await request()).toEqual(result);
@@ -195,7 +205,7 @@ describe('Авторизация и сессия', () => {
       queryClient.setQueryData(['application.list'], ['private data']);
       respond = (config) => {
         expect(config.method).toBe('post');
-        expect(JSON.parse(config.data)).toEqual(
+        expect(JSON.parse(config.data as string)).toEqual(
           action === 'login' ? credentials : registration,
         );
         return response(config);
@@ -276,8 +286,8 @@ describe('Авторизация и сессия', () => {
       return response(config, { ok: true });
     };
     const pending = Promise.all([
-      $api.get('/appointments/'),
-      $api.get('/applications/'),
+      $api.get<{ ok: boolean }>('/appointments/'),
+      $api.get<{ ok: boolean }>('/applications/'),
     ]);
     await expect.poll(() => requests.length).toBe(3);
     finishRefresh();
@@ -329,9 +339,8 @@ describe('Авторизация и сессия', () => {
       '',
     );
     expect(
-      JSON.parse(sessionStorage.getItem('psychologist-drafts')!).state
-        .conclusionDrafts,
-    ).toEqual({});
+      JSON.parse(sessionStorage.getItem('psychologist-drafts')!),
+    ).toHaveProperty('state.conclusionDrafts', {});
   });
 
   it.each(['network', 'server'])(

@@ -15,7 +15,7 @@ const rejectWithMessage = (error: unknown) => {
   if (axios.isAxiosError(error) && !axios.isCancel(error)) {
     error.message = getErrorMessage(error);
   }
-  return Promise.reject(error);
+  throw error;
 };
 
 $serviceClient.interceptors.response.use(

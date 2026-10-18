@@ -14,7 +14,7 @@ type TModalWindowProps = {
   resetToken?: string;
 };
 
-const ModalWindow: FC<TModalWindowProps> = ({
+const ModalContent: FC<TModalWindowProps> = ({
   isOpen,
   onClose,
   initialView = 'log',
@@ -22,12 +22,6 @@ const ModalWindow: FC<TModalWindowProps> = ({
 }) => {
   const [modalWindow, setModalWindow] =
     React.useState<TAuthModalView>(initialView);
-
-  React.useEffect(() => {
-    if (isOpen) {
-      setModalWindow(initialView);
-    }
-  }, [isOpen, initialView]);
 
   const handleSetModalOpen = (open: boolean) => {
     if (!open) onClose();
@@ -77,6 +71,11 @@ const ModalWindow: FC<TModalWindowProps> = ({
   if (!isOpen) return null;
 
   return createPortal(renderContent(), document.body);
+};
+
+const ModalWindow: FC<TModalWindowProps> = (props) => {
+  if (!props.isOpen) return null;
+  return <ModalContent key={props.initialView ?? 'log'} {...props} />;
 };
 
 export default ModalWindow;

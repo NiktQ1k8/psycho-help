@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ResourceEntities } from '@/pages/resources-page/consts/entities.ts';
 import { Articles } from '@/pages/resources-page/entities/articles';
@@ -29,14 +29,12 @@ const TABS = [
 export const ResourcesPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const features = TRANSLATES.features.join(' • ');
-  const [, setCurrentTab] = useState<typeof ResourceEntities | null>(null);
-
   useEffect(() => {
     const tabParam = searchParams.get('entity');
-    if (tabParam && Object.values(ResourceEntities)?.includes(tabParam)) {
-      setCurrentTab(tabParam as unknown as typeof ResourceEntities);
-    } else {
-      setCurrentTab(null);
+    if (
+      searchParams.has('entity') &&
+      (!tabParam || !Object.values(ResourceEntities).includes(tabParam))
+    ) {
       searchParams.delete('entity');
       setSearchParams(searchParams);
     }

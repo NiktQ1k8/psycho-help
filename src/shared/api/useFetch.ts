@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { isAxiosError } from 'axios';
 import { getErrorMessage } from './errors';
 import type { TResponseError } from './types';
@@ -21,7 +21,9 @@ export function useFetch<T>(
   });
 
   const requestRef = useRef({ foo, formatError });
-  requestRef.current = { foo, formatError };
+  useLayoutEffect(() => {
+    requestRef.current = { foo, formatError };
+  }, [foo, formatError]);
 
   const clearError = useCallback(() => {
     setError({ message: '', status: undefined });

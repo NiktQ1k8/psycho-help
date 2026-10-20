@@ -9,7 +9,22 @@ ENV HUSKY=0 \
     NODE_OPTIONS=--max-old-space-size=2048
 
 COPY package.json package-lock.json ./
-RUN npm ci
+# Keep downloaded packages even if a build fails. Print network requests and
+# the npm debug log so a failed deploy can be diagnosed from Actions logs.
+RUN --mount=type=cache,id=psycho-help-npm,target=/root/.npm,sharing=locked \
+    npm ci \
+        --prefer-offline \
+        --no-audit \
+        --no-fund \
+        --loglevel=verbose \
+        --fetch-timeout=60000 \
+        --fetch-retries=2 \
+        --fetch-retry-mintimeout=1000 \
+        --fetch-retry-maxtimeout=10000 \
+        --logs-dir=/tmp/npm-logs \
+    || { npm_ci_status=$?; \
+         tail -n 200 /tmp/npm-logs/*-debug-0.log || true; \
+         exit "$npm_ci_status"; }
 
 COPY . .
 

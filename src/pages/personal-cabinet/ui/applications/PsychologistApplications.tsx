@@ -257,7 +257,7 @@ const PsychologistApplications = () => {
                   styles['status-dot'],
                   styles[statusUI.className],
                 )}
-              ></div>
+              />
               <span className={styles['status-text']}>{statusUI.text}</span>
             </div>
             {psychologistName && (

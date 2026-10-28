@@ -3,7 +3,6 @@ import type { InternalAxiosRequestConfig } from 'axios';
 import { refreshSession } from '@/entities/auth/api';
 import { useAuth } from '@/entities/auth/model/useAuth';
 import { useApplication } from '@/features/personal-cabinet/model/application';
-import { useAppointment } from '@/features/personal-cabinet/model/appointment';
 import { useCabinetDrafts } from '@/features/personal-cabinet/model/cabinet-drafts';
 import { usePsychologistDrafts } from '@/features/personal-cabinet/model/psychologist-drafts';
 import { usePsychologistView } from '@/features/personal-cabinet/model/psychologist-view';
@@ -17,7 +16,6 @@ export const setupSession = () => {
       return;
     }
     useApplication.setState(useApplication.getInitialState(), true);
-    useAppointment.setState(useAppointment.getInitialState(), true);
     useCabinetDrafts.setState(useCabinetDrafts.getInitialState(), true);
     usePsychologistDrafts.setState(
       usePsychologistDrafts.getInitialState(),

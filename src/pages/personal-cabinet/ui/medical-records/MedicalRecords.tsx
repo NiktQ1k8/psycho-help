@@ -62,7 +62,7 @@ const MedicalRecords = () => {
 
   return (
     <section className={styles.wrapper}>
-      <h2>Медицинские карты</h2>
+      <h1>Карты консультируемых</h1>
       <AutoComplete
         value={searchQuery}
         options={searchSuggestions}
@@ -80,7 +80,7 @@ const MedicalRecords = () => {
         <Alert
           type="error"
           showIcon
-          message="Не удалось загрузить медицинские карты"
+          message="Не удалось загрузить карты консультируемых"
           description={getErrorMessage(error)}
         />
       ) : (

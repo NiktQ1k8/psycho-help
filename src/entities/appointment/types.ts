@@ -23,13 +23,13 @@ export type TAppointment = {
 export type TAppointmentStatus = 'awaiting' | 'cancelled' | 'done';
 export type TAppointmentType = 'Offline' | 'Online';
 
-export type TAppointmentCreateRequest = {
-  application_id?: string | null;
-  patient_id: string;
-  psychologist_id: string;
-  type: TAppointmentType;
+export type TAppointmentDoneRequest = {
+  patient_comment?: string | null;
+  psychologist_comment?: string | null;
+};
+
+export type TAppointmentRescheduleRequest = {
   scheduled_time: string;
-  reason?: string | null;
   remind_time?: string | null;
   venue?: string | null;
   comment?: string | null;

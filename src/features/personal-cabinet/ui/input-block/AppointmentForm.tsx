@@ -19,7 +19,6 @@ import { therapistQueries } from '@/entities/therapist/queries';
 import { useApplication } from '@/features/personal-cabinet/model/application';
 import {
   CONSULTATION_START_HOUR,
-  CONSULTATION_TIME_HINT,
   disabledConsultationTime,
   isConsultationTimeValid,
 } from '@/features/personal-cabinet/model/consultation-time';
@@ -157,9 +156,7 @@ const AppointmentForm: FC = () => {
       return;
     }
     if (!isConsultationTimeValid(selectedDate)) {
-      message.error(
-        `Выберите будущее время консультации. ${CONSULTATION_TIME_HINT}`,
-      );
+      message.error('Выберите будущее время консультации');
       return;
     }
     if (!application.university_status) {
@@ -186,9 +183,7 @@ const AppointmentForm: FC = () => {
     )
       return;
     if (!isConsultationTimeValid(selectedDate)) {
-      message.error(
-        `Выберите будущее время консультации. ${CONSULTATION_TIME_HINT}`,
-      );
+      message.error('Выберите будущее время консультации');
       setWindow('form');
       return;
     }

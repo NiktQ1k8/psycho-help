@@ -2,8 +2,10 @@ import { queryOptions } from '@tanstack/react-query';
 import { $api } from '@/shared/api/http';
 import type {
   TApplication,
+  TApplicationConfirmRequest,
   TApplicationCreateRequest,
   TApplicationListParams,
+  TApplicationReassignRequest,
   TCancelRequest,
   TOfferConsultationRequest,
   TUniversityStatus,
@@ -76,6 +78,28 @@ export const offerConsultation = async (
 ) => {
   const { data } = await $api.post<TApplication>(
     `/applications/${applicationId}/offer`,
+    body,
+  );
+  return data;
+};
+
+export const confirmApplication = async (
+  applicationId: string,
+  body: TApplicationConfirmRequest,
+) => {
+  const { data } = await $api.post<TApplication>(
+    `/applications/${applicationId}/confirm`,
+    body,
+  );
+  return data;
+};
+
+export const reassignApplication = async (
+  applicationId: string,
+  body: TApplicationReassignRequest,
+) => {
+  const { data } = await $api.post<TApplication>(
+    `/applications/${applicationId}/reassign`,
     body,
   );
   return data;

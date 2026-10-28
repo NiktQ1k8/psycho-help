@@ -66,18 +66,18 @@ const MedicalRecordPage = () => {
       </div>
       <main className={styles.wrapper}>
         <BackButton text="Вернуться назад" />
-        <h1 className={styles.title}>Медицинская карта пользователя</h1>
+        <h1 className={styles.title}>Карта консультируемого пользователя</h1>
         {isLoading ? (
           <Loader />
         ) : isError ? (
           <Alert
             type="error"
             showIcon
-            message="Не удалось загрузить медицинскую карту"
+            message="Не удалось загрузить карту консультируемого"
             description={getErrorMessage(error)}
           />
         ) : !patient ? (
-          <Empty description="Медицинская карта не найдена" />
+          <Empty description="Карта консультируемого не найдена" />
         ) : (
           <>
             <dl className={styles.details}>

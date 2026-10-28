@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Alert, App, Button, Empty, Input, Result } from 'antd';
+import { isAxiosError } from 'axios';
 import clsx from 'clsx';
 import type { DateTime } from 'luxon';
 import {
@@ -18,7 +19,6 @@ import { Role } from '@/entities/role/helpers';
 import { therapistQueries } from '@/entities/therapist/queries';
 import {
   CONSULTATION_TIMES,
-  CONSULTATION_TIME_HINT,
   isConsultationTimeValid,
 } from '@/features/personal-cabinet/model/consultation-time';
 import { usePsychologistDrafts } from '@/features/personal-cabinet/model/psychologist-drafts';
@@ -157,19 +157,26 @@ const PsychologistApplicationPage = () => {
       : !CONSULTATION_TIMES.includes(slot),
   }));
 
+  const refreshApplication = () =>
+    Promise.all([
+      queryClient.invalidateQueries({ queryKey: [applicationQueryKey.list] }),
+      queryClient.invalidateQueries({
+        queryKey: [applicationQueryKey.byId, id],
+      }),
+    ]);
+
+  const handleSaveError = async (error: unknown) => {
+    if (isAxiosError(error) && error.response?.status === 409) {
+      await refreshApplication();
+    }
+    message.error(getErrorMessage(error, 'Не удалось сохранить изменения'));
+  };
+
   const acceptMutation = useMutation({
     mutationFn: (applicationId: string) =>
       acceptApplication(applicationId, userId!),
-    onSuccess: () =>
-      Promise.all([
-        queryClient.invalidateQueries({ queryKey: [applicationQueryKey.list] }),
-        queryClient.invalidateQueries({
-          queryKey: [applicationQueryKey.byId, id],
-        }),
-      ]),
-    onError: (error) => {
-      message.error(getErrorMessage(error, 'Не удалось выполнить операцию'));
-    },
+    onSuccess: refreshApplication,
+    onError: handleSaveError,
   });
 
   const offerMutation = useMutation({
@@ -178,9 +185,7 @@ const PsychologistApplicationPage = () => {
         throw new Error('Выберите психолога');
       }
       if (!selectedDateTime || !isConsultationTimeValid(selectedDateTime)) {
-        throw new Error(
-          `Выберите будущее время консультации. ${CONSULTATION_TIME_HINT}`,
-        );
+        throw new Error('Выберите будущее время консультации');
       }
       return offerConsultation(id!, {
         psychologist_id: selectedPsychologistId,
@@ -192,21 +197,14 @@ const PsychologistApplicationPage = () => {
       });
     },
     onSuccess: async () => {
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: [applicationQueryKey.list] }),
-        queryClient.invalidateQueries({
-          queryKey: [applicationQueryKey.byId, id],
-        }),
-      ]);
+      await refreshApplication();
       clearOfferDraft(id!);
       message.success(
         'Консультация предложена, ожидаем подтверждения пользователя',
       );
       navigate(-1);
     },
-    onError: (error) => {
-      message.error(getErrorMessage(error, 'Не удалось сохранить изменения'));
-    },
+    onError: handleSaveError,
   });
 
   if (!isStaff) return <Navigate to={SLUG.MAIN} replace />;
@@ -268,12 +266,13 @@ const PsychologistApplicationPage = () => {
   if (!selectedDate) offerIssues.push('Выберите дату консультации.');
   if (!selectedTime) offerIssues.push('Выберите время консультации.');
   if (selectedDateTime && !isConsultationTimeValid(selectedDateTime)) {
-    offerIssues.push(
-      `Выберите будущее время консультации. ${CONSULTATION_TIME_HINT}`,
-    );
+    offerIssues.push('Выберите будущее время консультации');
   }
   if (meetingType === 'offline' && !locationAddress.trim()) {
     offerIssues.push('Укажите адрес проведения очной встречи.');
+  }
+  if (meetingType === 'offline' && locationAddress.trim().length > 128) {
+    offerIssues.push('Сократите адрес встречи до 128 символов.');
   }
   if (meetingType === 'online') {
     if (!meetingUrl.trim())
@@ -331,7 +330,7 @@ const PsychologistApplicationPage = () => {
           <div className={styles['status']}>
             <div
               className={clsx(styles['status-dot'], styles[statusUI.className])}
-            ></div>
+            />
             <span className={styles['status-text']}>{statusUI.text}</span>
           </div>
         </div>
@@ -519,6 +518,8 @@ const PsychologistApplicationPage = () => {
                 className={styles.dataValue}
                 placeholder="—"
                 value={locationAddress}
+                maxLength={128}
+                showCount
                 onChange={(e) =>
                   setOfferDraft(id!, { locationAddress: e.target.value })
                 }

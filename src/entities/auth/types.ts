@@ -36,10 +36,6 @@ export type TUserPasswordUpdate = {
   new_password: string;
 };
 
-export type TAuthMessageResponse = {
-  message: string;
-};
-
 export type TPasswordResetRequest = { email: string };
 export type TPasswordResetConfirmRequest = {
   token: string;

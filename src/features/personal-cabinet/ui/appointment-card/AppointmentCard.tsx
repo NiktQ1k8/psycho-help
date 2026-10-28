@@ -77,9 +77,7 @@ const AppointmentCard: FC<IAppointmentCardProps> = ({
       <div className={styles.footer}>
         {(type === 'upcoming' || type === 'past') && (
           <div className={styles.status}>
-            <span
-              className={clsx(styles.statusDot, statusConfig.dotClass)}
-            ></span>
+            <span className={clsx(styles.statusDot, statusConfig.dotClass)} />
             {statusConfig.text}
           </div>
         )}

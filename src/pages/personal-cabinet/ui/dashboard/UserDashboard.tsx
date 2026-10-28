@@ -7,10 +7,12 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { Alert, App, Input, Modal } from 'antd';
+import { isAxiosError } from 'axios';
 import {
   applicationQueries,
   applicationQueryKey,
   cancelApplication,
+  confirmApplication,
 } from '@/entities/application/api';
 import {
   getApplicationMeetingType,
@@ -22,19 +24,14 @@ import {
   appointmentQueryKey,
   cancelAppointment,
   confirmAppointmentReschedule,
-  createAppointment,
   rejectAppointmentReschedule,
 } from '@/entities/appointment/api';
 import type {
   TAppointment,
   TAppointmentReschedule,
 } from '@/entities/appointment/types';
-import { useAuth } from '@/entities/auth/model/useAuth';
 import { useCabinetDrafts } from '@/features/personal-cabinet/model/cabinet-drafts';
-import {
-  CONSULTATION_TIME_HINT,
-  isConsultationTimeValid,
-} from '@/features/personal-cabinet/model/consultation-time';
+import { isConsultationTimeValid } from '@/features/personal-cabinet/model/consultation-time';
 import AppointmentCard from '@/features/personal-cabinet/ui/appointment-card/AppointmentCard';
 import GreetingCard from '@/features/personal-cabinet/ui/greeting-card/GreetingCard';
 import { getErrorMessage } from '@/shared/api/errors';
@@ -74,7 +71,6 @@ const getTherapistName = (psychologist: TApplication['psychologist']) => {
 const UserDashboard: FC<TUserDashboardProps> = ({ userName }) => {
   const { message, modal } = App.useApp();
   const queryClient = useQueryClient();
-  const user = useAuth((s) => s.user);
 
   const [commentModalData, setCommentModalData] = useState<{
     visible: boolean;
@@ -179,36 +175,8 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName }) => {
     }, [applications]);
 
   const confirmMutation = useMutation({
-    mutationFn: async (app: TApplication) => {
-      if (!user || !app.psychologist || !app.scheduled_at) {
-        throw new Error('В заявке не указаны данные консультации');
-      }
-      if (!isConsultationTimeValid(moscowDate(app.scheduled_at))) {
-        throw new Error(
-          `Попросите психолога выбрать будущее время консультации. ${CONSULTATION_TIME_HINT}`,
-        );
-      }
-
-      const isOnline = getApplicationMeetingType(app) === 'online';
-      const venue = isOnline
-        ? app.meeting_url
-        : app.location_address || app.preferred_campus;
-      if (isOnline && (!venue || venue.length > 128)) {
-        throw new Error(
-          'Попросите психолога указать ссылку на встречу длиной до 128 символов',
-        );
-      }
-
-      // Создание приёма на бэке также подтверждает связанную заявку.
-      return createAppointment({
-        application_id: app.id,
-        patient_id: user.id,
-        psychologist_id: app.psychologist.id,
-        type: isOnline ? 'Online' : 'Offline',
-        scheduled_time: app.scheduled_at,
-        venue,
-      });
-    },
+    mutationFn: (app: TApplication) =>
+      confirmApplication(app.id, { expected_version: app.version }),
     onSuccess: async () => {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: [applicationQueryKey.list] }),
@@ -216,7 +184,17 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName }) => {
       ]);
       message.success('Заявка успешно подтверждена');
     },
-    onError: (error) => {
+    onError: async (error) => {
+      if (isAxiosError(error) && error.response?.status === 409) {
+        await Promise.all([
+          queryClient.invalidateQueries({
+            queryKey: [applicationQueryKey.list],
+          }),
+          queryClient.invalidateQueries({
+            queryKey: [appointmentQueryKey.list],
+          }),
+        ]);
+      }
       message.error(getErrorMessage(error, 'Не удалось подтвердить заявку'));
     },
   });
@@ -227,9 +205,19 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName }) => {
       content: 'Вы уверены, что хотите подтвердить предложенное время и дату?',
       okText: 'Подтвердить',
       cancelText: 'Назад',
-      onOk: () => confirmMutation.mutateAsync(app),
+      // Ошибка уже показана в onError. Новая попытка требует нового подтверждения.
+      onOk: () => confirmMutation.mutateAsync(app).catch(() => undefined),
     });
   };
+
+  const refreshAppointments = () =>
+    Promise.all([
+      queryClient.invalidateQueries({ queryKey: [appointmentQueryKey.list] }),
+      queryClient.invalidateQueries({ queryKey: [appointmentQueryKey.byId] }),
+      queryClient.invalidateQueries({
+        queryKey: [appointmentQueryKey.reschedules],
+      }),
+    ]);
 
   const confirmRescheduleMutation = useMutation({
     mutationFn: (request: TAppointmentReschedule) => {
@@ -243,16 +231,16 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName }) => {
       return confirmAppointmentReschedule(request.id);
     },
     onSuccess: async () => {
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: [appointmentQueryKey.list] }),
-        queryClient.invalidateQueries({ queryKey: [appointmentQueryKey.byId] }),
-        queryClient.invalidateQueries({
-          queryKey: [appointmentQueryKey.reschedules],
-        }),
-      ]);
+      await refreshAppointments();
       message.success('Перенос записи подтверждён');
     },
-    onError: (error) => {
+    onError: async (error) => {
+      if (
+        isAxiosError(error) &&
+        [400, 409].includes(error.response?.status ?? 0)
+      ) {
+        await refreshAppointments();
+      }
       message.error(getErrorMessage(error, 'Не удалось подтвердить перенос'));
     },
   });
@@ -263,7 +251,8 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName }) => {
       content: `Перенести запись с ${moscowDate(request.old_scheduled_time).toFormat('d MMMM yyyy, HH:mm')} на ${moscowDate(request.requested_scheduled_time).toFormat('d MMMM yyyy, HH:mm')} по Москве?`,
       okText: 'Подтвердить',
       cancelText: 'Назад',
-      onOk: () => confirmRescheduleMutation.mutateAsync(request),
+      onOk: () =>
+        confirmRescheduleMutation.mutateAsync(request).catch(() => undefined),
     });
   };
 
@@ -291,17 +280,25 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName }) => {
     onSuccess: async (_data, variables) => {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: [applicationQueryKey.list] }),
-        queryClient.invalidateQueries({ queryKey: [appointmentQueryKey.list] }),
-        queryClient.invalidateQueries({ queryKey: [appointmentQueryKey.byId] }),
-        queryClient.invalidateQueries({
-          queryKey: [appointmentQueryKey.reschedules],
-        }),
+        refreshAppointments(),
       ]);
       message.success('Успешно отменено');
       setCancelModal({ visible: false, type: 'appointment', id: '' });
       clearCancellationReason(`${variables.type}:${variables.id}`);
     },
-    onError: (error) => {
+    onError: async (error) => {
+      if (
+        isAxiosError(error) &&
+        [400, 409].includes(error.response?.status ?? 0)
+      ) {
+        await Promise.all([
+          queryClient.invalidateQueries({
+            queryKey: [applicationQueryKey.list],
+          }),
+          refreshAppointments(),
+        ]);
+        setCancelModal({ visible: false, type: 'appointment', id: '' });
+      }
       message.error(getErrorMessage(error, 'Ошибка при отмене'));
     },
   });
@@ -473,6 +470,9 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName }) => {
                   address={getApplicationAddress(app)}
                   type="confirmation"
                   status={app.status}
+                  disabled={
+                    confirmMutation.isPending || cancelMutation.isPending
+                  }
                   onConfirm={() => handleConfirm(app)}
                   onCancel={() =>
                     setCancelModal({

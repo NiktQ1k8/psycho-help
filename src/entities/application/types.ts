@@ -63,7 +63,7 @@ export type TApplicationListParams = {
   limit?: number;
   status?: TApplicationStatus | null;
   assigned_to?: string | null;
-  sort_by?: string;
+  sort_by?: 'created_at' | 'updated_at' | 'scheduled_at' | 'status';
   sort_desc?: boolean;
 };
 
@@ -73,6 +73,17 @@ export type TOfferConsultationRequest = {
   scheduled_at: string;
   location_address?: string | null;
   meeting_url?: string | null;
+};
+
+export type TApplicationReassignRequest = {
+  meeting_type?: TMeetingType;
+  scheduled_at?: string;
+  location_address?: string | null;
+  meeting_url?: string | null;
+};
+
+export type TApplicationConfirmRequest = {
+  expected_version: number;
 };
 
 export type TApplicationAppointment = Omit<

@@ -78,7 +78,7 @@ export const roleBasedTabs: Record<string, ITabConfig[]> = {
     },
     {
       id: 'medicalRecords',
-      label: 'Медицинские карты',
+      label: 'Карты консультируемых',
       render: () => <MedicalRecords />,
     },
   ],

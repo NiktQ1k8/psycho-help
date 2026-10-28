@@ -4,10 +4,12 @@ import { navPages } from '@/app/router/routes';
 import { useAuth } from '@/entities/auth/model/useAuth';
 import ModalWindow from '@/features/auth/modal/modal';
 import Auth from '@/shared/assets/images/header/auth.svg?react';
+import Moon from '@/shared/assets/images/header/moon.svg?react';
 import Profile from '@/shared/assets/images/header/profile.svg?react';
+import Sun from '@/shared/assets/images/header/sun.svg?react';
 import Logo from '@/shared/assets/images/logo.svg?react';
 import { SLUG } from '@/shared/config/slug';
-import ThemeToggle from '@/shared/ui/theme-toggle/ThemeToggle';
+import { useTheme } from '@/shared/hooks/useTheme';
 import styles from './header.module.scss';
 
 const Header = () => {
@@ -17,6 +19,7 @@ const Header = () => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
   const animatingTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  const { currentTheme, toggleTheme } = useTheme();
 
   const closeMenu = useCallback(() => {
     setMenuOpen(false);
@@ -92,7 +95,7 @@ const Header = () => {
           to={SLUG.MAIN}
           aria-label="Вернуться на главную страницу"
         >
-          <Logo aria-hidden="true" />
+          <Logo aria-hidden />
         </Link>
         <button
           className={`${styles.header__burger} ${menuOpen ? styles['header__burger--open'] : ''}`}
@@ -103,9 +106,9 @@ const Header = () => {
           aria-controls="main-nav-menu"
           data-testid="burger-button"
         >
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
+          <span aria-hidden />
+          <span aria-hidden />
+          <span aria-hidden />
         </button>
         <ul
           id="main-nav-menu"
@@ -124,7 +127,23 @@ const Header = () => {
             </li>
           ))}
           <li className={styles.header__item}>
-            <ThemeToggle className={styles.header__link} />
+            <button
+              className={styles.header__link}
+              onClick={toggleTheme}
+              data-testid="theme-toggle-button"
+              type="button"
+              aria-label={
+                currentTheme === 'light'
+                  ? 'Переключить на тёмную тему'
+                  : 'Переключить на светлую тему'
+              }
+            >
+              {currentTheme === 'light' ? (
+                <Moon aria-hidden />
+              ) : (
+                <Sun aria-hidden />
+              )}
+            </button>
             {isAuth ? (
               <Link
                 className={`${styles.header__link}`}
@@ -132,7 +151,7 @@ const Header = () => {
                 onClick={closeMenu}
                 aria-label="Личный кабинет"
               >
-                <Profile aria-hidden="true" />
+                <Profile aria-hidden />
               </Link>
             ) : (
               <button
@@ -142,7 +161,7 @@ const Header = () => {
                 aria-label="Открыть окно входа"
                 data-testid="auth-button"
               >
-                <Auth aria-hidden="true" />
+                <Auth aria-hidden />
                 <span>Войти</span>
               </button>
             )}

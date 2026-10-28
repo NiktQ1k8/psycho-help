@@ -1,6 +1,7 @@
+import { isAxiosError } from 'axios';
 import { $api, $serviceClient } from '@/shared/api/http';
+import type { TMessageResponse } from '@/shared/api/types';
 import type {
-  TAuthMessageResponse,
   TLoginData,
   TPasswordResetConfirmRequest,
   TPasswordResetRequest,
@@ -36,7 +37,12 @@ export const authApi = {
   },
 
   logout: async (): Promise<void> => {
-    await $serviceClient.post<void>('/users/logout');
+    try {
+      await $api.post<TMessageResponse>('/users/logout');
+    } catch (error) {
+      // После неудачного refresh сессии уже нет. Остальные ошибки не скрываем.
+      if (!isAxiosError(error) || error.response?.status !== 401) throw error;
+    }
   },
 
   getUser: async (signal?: AbortSignal): Promise<TUser> => {
@@ -50,16 +56,15 @@ export const authApi = {
 
   updatePassword: async (
     data: TUserPasswordUpdate,
-  ): Promise<TAuthMessageResponse> => {
-    return (await $api.post<TAuthMessageResponse>('/users/me/password', data))
-      .data;
+  ): Promise<TMessageResponse> => {
+    return (await $api.post<TMessageResponse>('/users/me/password', data)).data;
   },
 
   requestPasswordReset: async (
     data: TPasswordResetRequest,
-  ): Promise<TAuthMessageResponse> => {
+  ): Promise<TMessageResponse> => {
     return (
-      await $serviceClient.post<TAuthMessageResponse>(
+      await $serviceClient.post<TMessageResponse>(
         '/users/password-reset/request',
         data,
       )
@@ -68,9 +73,9 @@ export const authApi = {
 
   resetPassword: async (
     data: TPasswordResetConfirmRequest,
-  ): Promise<TAuthMessageResponse> => {
+  ): Promise<TMessageResponse> => {
     return (
-      await $serviceClient.post<TAuthMessageResponse>(
+      await $serviceClient.post<TMessageResponse>(
         '/users/password-reset/confirm',
         data,
       )

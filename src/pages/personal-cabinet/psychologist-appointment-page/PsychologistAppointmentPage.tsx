@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Alert, App, Button, Empty, Input, Result } from 'antd';
+import { isAxiosError } from 'axios';
 import clsx from 'clsx';
 import { applicationQueries } from '@/entities/application/api';
 import {
@@ -15,7 +16,6 @@ import { useAuth } from '@/entities/auth/model/useAuth';
 import { Role } from '@/entities/role/helpers';
 import {
   CONSULTATION_TIMES,
-  CONSULTATION_TIME_HINT,
   isConsultationTimeValid,
 } from '@/features/personal-cabinet/model/consultation-time';
 import { usePsychologistDrafts } from '@/features/personal-cabinet/model/psychologist-drafts';
@@ -123,7 +123,7 @@ const PsychologistAppointmentPage = () => {
   const actionHint = hasScheduleChanges
     ? isScheduleValid
       ? 'Новое время вступит в силу после подтверждения студентом. При отказе запись будет отменена.'
-      : `Выберите будущее время консультации. ${CONSULTATION_TIME_HINT}`
+      : 'Выберите будущее время консультации'
     : completionHint;
 
   const setConclusionDraft = usePsychologistDrafts(
@@ -134,24 +134,39 @@ const PsychologistAppointmentPage = () => {
   );
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
 
+  const refreshAppointment = () =>
+    Promise.all([
+      queryClient.invalidateQueries({ queryKey: [appointmentQueryKey.list] }),
+      queryClient.invalidateQueries({
+        queryKey: [appointmentQueryKey.byId, id],
+      }),
+      queryClient.invalidateQueries({
+        queryKey: [appointmentQueryKey.reschedules, appointmentId],
+      }),
+    ]);
+
+  const handleSaveError = async (error: unknown) => {
+    if (
+      isAxiosError(error) &&
+      [400, 409].includes(error.response?.status ?? 0)
+    ) {
+      await refreshAppointment();
+    }
+    message.error(getErrorMessage(error, 'Не удалось сохранить изменения'));
+  };
+
   const completeMutation = useMutation({
-    mutationFn: () => completeAppointment(id!, conclusion.trim()),
+    mutationFn: () =>
+      completeAppointment(id!, { patient_comment: conclusion.trim() }),
     onSuccess: async () => {
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: [appointmentQueryKey.list] }),
-        queryClient.invalidateQueries({
-          queryKey: [appointmentQueryKey.byId, id],
-        }),
-      ]);
+      await refreshAppointment();
       message.success('Запись завершена');
       if (appointmentId) {
         clearConclusionDraft(appointmentId);
       }
       navigate(-1);
     },
-    onError: (error) => {
-      message.error(getErrorMessage(error, 'Не удалось завершить запись'));
-    },
+    onError: handleSaveError,
   });
 
   const rescheduleMutation = useMutation({
@@ -161,25 +176,18 @@ const PsychologistAppointmentPage = () => {
         !selectedDateTime ||
         !isConsultationTimeValid(selectedDateTime)
       ) {
-        throw new Error(
-          `Выберите новое будущее время. ${CONSULTATION_TIME_HINT}`,
-        );
+        throw new Error('Выберите новое будущее время');
       }
-      return requestAppointmentReschedule(
-        appointmentId,
-        toApiDate(selectedDateTime),
-      );
+      return requestAppointmentReschedule(appointmentId, {
+        scheduled_time: toApiDate(selectedDateTime),
+      });
     },
     onSuccess: async () => {
       clearScheduleDraft(scheduleDraftKey);
-      await queryClient.invalidateQueries({
-        queryKey: [appointmentQueryKey.reschedules, appointmentId],
-      });
+      await refreshAppointment();
       message.success('Перенос отправлен на подтверждение студенту');
     },
-    onError: (error) => {
-      message.error(getErrorMessage(error, 'Не удалось запросить перенос'));
-    },
+    onError: handleSaveError,
   });
   const isSaving = completeMutation.isPending || rescheduleMutation.isPending;
   const canEditSchedule =
@@ -250,7 +258,7 @@ const PsychologistAppointmentPage = () => {
                     styles['status-dot'],
                     styles[statusUI.className],
                   )}
-                ></div>
+                />
                 <span className={styles['status-text']}>{statusUI.text}</span>
               </div>
             </div>

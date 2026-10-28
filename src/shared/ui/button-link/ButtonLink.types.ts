@@ -5,14 +5,14 @@ import type {
 } from 'react';
 import type { LinkProps } from 'react-router-dom';
 
-export type TButtonLinkStyleProps = {
+type TButtonLinkStyleProps = {
   variant?: 'primary_' | 'secondary';
   color?: 'brand_' | 'neutral';
   iconPosition?: 'left_' | 'right';
   icon?: ReactNode;
 };
 
-export type TButtonLinkButtonProps = Omit<
+type TButtonLinkButtonProps = Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
   keyof TButtonLinkStyleProps
 > &
@@ -21,7 +21,7 @@ export type TButtonLinkButtonProps = Omit<
     href?: never;
   };
 
-export type TButtonLinkAnchorProps = Omit<
+type TButtonLinkAnchorProps = Omit<
   AnchorHTMLAttributes<HTMLAnchorElement>,
   keyof TButtonLinkStyleProps | 'href'
 > &
@@ -30,10 +30,7 @@ export type TButtonLinkAnchorProps = Omit<
     to?: never;
   };
 
-export type TButtonLinkRouterProps = Omit<
-  LinkProps,
-  keyof TButtonLinkStyleProps
-> &
+type TButtonLinkRouterProps = Omit<LinkProps, keyof TButtonLinkStyleProps> &
   TButtonLinkStyleProps & {
     href?: never;
   };

@@ -35,6 +35,6 @@ export const SLUG = {
   /** Запись в личном кабинете */
   CABINET_APPOINTMENT: '/cabinet/appointment',
 
-  /** Медицинская карта пациента */
+  /** Карта консультируемого пациента */
   CABINET_MEDICAL_RECORD: '/cabinet/medical-record',
 } as const;

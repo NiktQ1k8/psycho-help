@@ -5,9 +5,6 @@ export const CONSULTATION_START_HOUR = 9;
 export const CONSULTATION_END_HOUR = 19;
 const LAST_START_HOUR = CONSULTATION_END_HOUR - 1;
 
-export const CONSULTATION_TIME_HINT =
-  'Приём с 09:00 до 19:00 по Москве. Начало встреч — только в целый час, последняя запись — в 18:00.';
-
 export const CONSULTATION_TIMES = Array.from(
   { length: LAST_START_HOUR - CONSULTATION_START_HOUR + 1 },
   (_, i) => `${String(CONSULTATION_START_HOUR + i).padStart(2, '0')}:00`,

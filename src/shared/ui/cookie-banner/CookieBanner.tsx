@@ -24,6 +24,7 @@ export const CookieBanner: FC = () => {
         для лучшей работы
       </p>
       <ButtonLink
+        className={styles.button}
         onClick={() => {
           localStorage.setItem(LOCAL_STORAGE_KEY, 'true');
           setIsShown(false);

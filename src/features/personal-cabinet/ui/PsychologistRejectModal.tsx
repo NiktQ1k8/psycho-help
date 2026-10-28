@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { App, Input, Modal } from 'antd';
+import { isAxiosError } from 'axios';
 import {
   applicationQueryKey,
   rejectApplication,
@@ -72,26 +73,36 @@ const PsychologistRejectModal = ({
   );
   const config = CONFIG[type];
 
+  const refreshEntity = (id: string) =>
+    Promise.all([
+      queryClient.invalidateQueries({ queryKey: [config.queryKey] }),
+      queryClient.invalidateQueries({
+        queryKey: [
+          type === 'application'
+            ? applicationQueryKey.byId
+            : appointmentQueryKey.byId,
+          id,
+        ],
+      }),
+    ]);
+
   const mutation = useMutation({
     mutationFn: ({ id, reason }: { id: string; reason: string }) =>
       config.mutationFn(id, reason),
     onSuccess: async (_data, variables) => {
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: [config.queryKey] }),
-        queryClient.invalidateQueries({
-          queryKey: [
-            type === 'application'
-              ? applicationQueryKey.byId
-              : appointmentQueryKey.byId,
-            variables.id,
-          ],
-        }),
-      ]);
+      await refreshEntity(variables.id);
       clearReasonDraft(type, variables.id);
       onClose();
       onSuccess?.();
     },
-    onError: (error) => {
+    onError: async (error, variables) => {
+      if (
+        isAxiosError(error) &&
+        [400, 409].includes(error.response?.status ?? 0)
+      ) {
+        await refreshEntity(variables.id);
+        onClose();
+      }
       message.error(getErrorMessage(error, 'Не удалось выполнить операцию'));
     },
   });

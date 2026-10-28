@@ -40,13 +40,13 @@ const InfoBlock: FC<Props> = ({ therapist: therapist }) => {
             <p className={styles.qual}>{therapist.qualification}</p>
             <p className={styles.exp}>Опыт: {therapist.experience}</p>
           </div>
-          <div className={styles.line}></div>
+          <div className={styles.line} />
           <div className={styles.infoBlock}>
             <p className={styles.qual}>Принимает лично и онлайн</p>{' '}
             {/* TODO: Потом будет браться из бд*/}
             <p className={styles.office}>{therapist.office}</p>
           </div>
-          <div className={styles.line}></div>
+          <div className={styles.line} />
           <p className={styles.qual}>С чем поможет:</p>
           <div className={styles.consultAreas}>
             {therapist.consult_areas.split(', ').map((item) => (

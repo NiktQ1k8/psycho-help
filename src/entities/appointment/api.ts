@@ -1,10 +1,12 @@
 import { queryOptions } from '@tanstack/react-query';
 import type {
   TAppointment,
-  TAppointmentCreateRequest,
+  TAppointmentDoneRequest,
   TAppointmentReschedule,
+  TAppointmentRescheduleRequest,
 } from '@/entities/appointment/types';
 import { $api } from '@/shared/api/http';
+import type { TMessageResponse } from '@/shared/api/types';
 
 export const appointmentQueryKey = {
   list: 'appointment.list',
@@ -46,36 +48,35 @@ export const appointmentQueries = {
 export const cancelAppointment = async (
   id: string,
   cancelReason: string,
-): Promise<void> => {
-  await $api.put<void>(`/appointments/${id}/cancel`, {
-    cancel_reason: cancelReason,
-  });
+): Promise<TMessageResponse> => {
+  const { data } = await $api.put<TMessageResponse>(
+    `/appointments/${id}/cancel`,
+    {
+      cancel_reason: cancelReason,
+    },
+  );
+  return data;
 };
 
 export const completeAppointment = async (
   id: string,
-  conclusion: string,
-): Promise<void> => {
-  await $api.put<void>(`/appointments/${id}/done`, {
-    patient_comment: conclusion,
-  });
-};
-
-export const createAppointment = async (
-  body: TAppointmentCreateRequest,
-): Promise<TAppointment> => {
-  const { data } = await $api.post<TAppointment>('/appointments/create', body);
+  body: TAppointmentDoneRequest,
+): Promise<TMessageResponse> => {
+  const { data } = await $api.put<TMessageResponse>(
+    `/appointments/${id}/done`,
+    body,
+  );
   return data;
 };
 
 export const requestAppointmentReschedule = async (
   id: string,
-  scheduledTime: string,
+  body: TAppointmentRescheduleRequest,
 ): Promise<TAppointmentReschedule> =>
   (
     await $api.post<TAppointmentReschedule>(
       `/appointments/${id}/reschedule-requests`,
-      { scheduled_time: scheduledTime },
+      body,
     )
   ).data;
 

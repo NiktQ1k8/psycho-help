@@ -164,6 +164,31 @@ describe('Авторизация и сессия', () => {
     expect(useAuth.getState()).toMatchObject({ isAuth: false, user: null });
   });
 
+  it('при выходе с истёкшим access обновляет cookies и повторяет logout', async () => {
+    useAuth.setState({ isAuth: true, user });
+    let refreshed = false;
+    respond = (config) => {
+      if (config.url === '/users/refresh') refreshed = true;
+      else if (!refreshed) fail(config);
+      return response(config, { message: 'Успешный выход из системы' });
+    };
+    await useAuth.getState().logOut();
+    expect(requests).toEqual([
+      '/api/users/logout',
+      '/api/users/refresh',
+      '/api/users/logout',
+    ]);
+    expect(useAuth.getState()).toMatchObject({ isAuth: false, user: null });
+  });
+
+  it('завершает выход, когда обе cookies авторизации уже истекли', async () => {
+    useAuth.setState({ isAuth: true, user });
+    respond = (config) => fail(config);
+    await useAuth.getState().logOut();
+    expect(requests).toEqual(['/api/users/logout', '/api/users/refresh']);
+    expect(useAuth.getState()).toMatchObject({ isAuth: false, user: null });
+  });
+
   it.each([
     {
       action: 'запрос письма',

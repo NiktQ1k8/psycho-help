@@ -8,7 +8,7 @@
   margin: 0 auto;
   padding: 4rem 2.4rem;
 
-  @media (width <= 1023px) {
+  @media (width <= 1200px) {
     grid-template-columns: 1fr;
     gap: 2.4rem;
     padding: 2.4rem 1.6rem;
@@ -20,7 +20,7 @@
   top: calc(var(--header-height) + 4rem);
   height: fit-content;
 
-  @media (height <= 900px), (width <= 1023px) {
+  @media (height <= 900px), (width <= 1200px) {
     position: static;
   }
 }
@@ -37,7 +37,7 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    padding: 0 10px 100px;
+    padding: 16px 10px;
   }
 
   h2 {

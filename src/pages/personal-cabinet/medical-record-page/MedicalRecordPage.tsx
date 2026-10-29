@@ -66,7 +66,7 @@ const MedicalRecordPage = () => {
       </div>
       <main className={styles.wrapper}>
         <BackButton text="Вернуться назад" />
-        <h1 className={styles.title}>Карта консультируемого пользователя</h1>
+        <h1 className={styles.title}>Карта консультируемого</h1>
         {isLoading ? (
           <Loader />
         ) : isError ? (

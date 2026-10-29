@@ -16,36 +16,13 @@
   color: #1a1a1a;
 }
 
-.btnAdd {
-  cursor: pointer;
-
-  display: flex;
-  gap: 6px;
-  align-items: center;
-
-  margin-left: auto;
-  padding: 0;
-  border: none;
-
-  font-size: 15px;
-  font-weight: 400;
-  color: #3b82f6;
-
-  background: transparent;
-
-  transition: opacity 0.2s;
-
-  &:hover {
-    opacity: 0.8;
-  }
-}
-
 .navigationRow {
   display: flex;
+  flex-wrap: wrap;
+  gap: 1.6rem;
   align-items: center;
   justify-content: space-between;
 
-  width: 100%;
   margin-bottom: 32px;
 }
 
@@ -121,6 +98,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
+  width: 100%;
 }
 
 .scheduleGrid {
@@ -313,42 +291,30 @@
   background: #f9fafb;
 }
 
-@media (width <= 600px) {
-  h2 {
-    font-size: 2rem;
+@media (width <= 800px) {
+  .wrapper {
+    flex-direction: column;
   }
 
   .detailsPanel {
     width: 100%;
   }
+}
 
-  .wrapper {
-    flex-direction: column;
-  }
-
-  .dayItem {
-    flex-direction: column;
-  }
-
-  .navigationRow {
-    flex-flow: column-reverse wrap;
-    gap: 1.6rem;
-  }
-
-  .weekSelector {
-    gap: 1rem;
-    justify-content: space-between;
-    width: 100%;
-  }
-
+@media (width <= 600px) {
   .pageTitle {
     font-size: 2rem;
     line-height: 2.8rem;
   }
 
-  .btnAdd {
-    font-size: 1.6rem;
-    line-height: 2.4rem;
+  .weekSelector {
+    gap: 0;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .dayItem {
+    flex-direction: column;
   }
 }
 

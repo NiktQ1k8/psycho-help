@@ -1,8 +1,8 @@
 import type { FC } from 'react';
 import { Link } from 'react-router-dom';
-import { UserOutlined } from '@ant-design/icons';
 import clsx from 'clsx';
 import type { TUser } from '@/entities/auth/types';
+import { UserAvatar } from '@/entities/auth/ui/UserAvatar';
 import { useApplicationsCount } from '@/features/personal-cabinet/model/use-applications-count';
 import { SLUG } from '@/shared/config/slug';
 import styles from './sidebar.module.scss';
@@ -24,9 +24,7 @@ const Sidebar: FC<TSidebarProps> = ({ user, activeTab, tabs }) => {
   return (
     <aside className={styles.sidebar}>
       <div className={styles.profileInfo}>
-        <div className={styles.avatar}>
-          <UserOutlined />
-        </div>
+        <UserAvatar userId={user?.id} size="small" />
         <div className={styles.name}>
           {user
             ? `${user.last_name} ${user.first_name} ${user.middle_name || ''}`

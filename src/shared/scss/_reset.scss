@@ -34,6 +34,11 @@ img {
   display: block;
 }
 
+a {
+  text-underline-position: from-font;
+  text-underline-offset: 25%;
+}
+
 // Счётчик Ant Design расположен под полем вне его высоты.
 .ant-modal-body .ant-input-textarea-show-count {
   margin-bottom: 24px;

@@ -108,50 +108,6 @@
   background-color: var(--backgrounds-neutral-primary);
 }
 
-.avatar {
-  position: relative;
-
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 28.8rem;
-  height: 28.8rem;
-  border-radius: 50%;
-
-  background-color: var(--border-neutral-soft);
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .avatarIcon {
-    font-size: 16.4rem;
-    color: var(--labels-neutral-secondary);
-
-    @media (width >= 634px) and (width <= 1023px) {
-      font-size: 12rem;
-    }
-
-    @media (width <= 633px) {
-      font-size: 10rem;
-    }
-  }
-
-  @media (width >= 634px) and (width <= 1023px) {
-    width: 20rem;
-    height: 20rem;
-  }
-
-  @media (width <= 633px) {
-    width: 17rem;
-    height: 17rem;
-  }
-}
-
 .avatarUpload {
   cursor: pointer;
 
@@ -162,20 +118,23 @@
 
   margin-top: 1.2rem;
   padding: 0.8rem 1.6rem;
+  border: none;
   border-radius: 0.8rem;
 
-  transition: background-color 0.2s ease;
+  font: var(--font-text-medium);
+  color: var(--labels-brand-primary);
+  text-underline-position: from-font;
+  text-underline-offset: 25%;
 
-  &:hover {
-    label {
-      border-bottom: 1px solid var(--labels-brand-primary);
-    }
+  background: transparent;
+
+  &:hover:not(:disabled) {
+    text-decoration: underline;
   }
 
-  label {
-    cursor: pointer;
-    font: var(--font-text-medium);
-    color: var(--labels-brand-primary);
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
   }
 
   svg {
@@ -183,10 +142,6 @@
       stroke: var(--labels-brand-primary);
     }
   }
-}
-
-.hiddenInput {
-  display: none;
 }
 
 .profileSection {
@@ -535,14 +490,6 @@
 
   .avatarSection {
     background-color: transparent;
-  }
-
-  .avatarIcon {
-    color: color-mix(
-      in srgb,
-      var(--labels-neutral-secondary),
-      var(--labels-neutral-inverted-primary)
-    );
   }
 
   .avatarUpload rect {

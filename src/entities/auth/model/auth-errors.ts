@@ -6,10 +6,12 @@ type TAuthAction =
   | 'requestPasswordReset'
   | 'resetPassword'
   | 'changePassword'
+  | 'updateAvatar'
   | 'logout';
 type TValidationError = {
   loc?: (string | number)[];
   type?: string;
+  msg?: string;
   ctx?: { min_length?: number; max_length?: number };
 };
 
@@ -19,6 +21,7 @@ const actionMessages: Record<TAuthAction, string> = {
   requestPasswordReset: 'Не удалось отправить письмо для восстановления пароля',
   resetPassword: 'Не удалось восстановить пароль',
   changePassword: 'Не удалось изменить пароль',
+  updateAvatar: 'Не удалось сохранить фотографию',
   logout: 'Не удалось выйти из аккаунта',
 };
 
@@ -52,11 +55,17 @@ export const getAuthErrorMessage = (
       ? 'Неверная почта или пароль'
       : 'Сессия истекла. Войдите в аккаунт и повторите действие';
   if (status === 403) return 'Недостаточно прав для этого действия';
+  if (action === 'updateAvatar') {
+    if (status === 400)
+      return 'Файл повреждён или имеет неподдерживаемый формат. Выберите изображение JPEG, PNG или WebP';
+    if (status === 413) return 'Размер фотографии не должен превышать 10 МБ';
+  }
 
   const detail = data?.detail;
   if (typeof detail === 'string' && /[а-яё]/i.test(detail)) return detail;
   if (Array.isArray(detail)) {
-    const messages = detail.map(({ loc, type, ctx }) => {
+    const messages = detail.map(({ loc, type, ctx, msg }) => {
+      if (msg && /[а-яё]/i.test(msg)) return msg.replace(/^Value error, /, '');
       const field = String(loc?.at(-1) ?? '');
       const label = fieldNames[field];
       if (!label) return 'Проверьте заполненные поля';

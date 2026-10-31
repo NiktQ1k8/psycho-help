@@ -32,6 +32,16 @@ it.each([
     ],
     'Пароль: не более 64 символов',
   ],
+  [
+    [
+      {
+        type: 'value_error',
+        loc: ['body'],
+        msg: 'Value error, Новый пароль должен отличаться от текущего',
+      },
+    ],
+    'Новый пароль должен отличаться от текущего',
+  ],
 ])('переводит ошибки валидации бэкенда на понятный язык', (detail, message) => {
   expect(getAuthErrorMessage(responseError(422, detail), 'registration')).toBe(
     message,

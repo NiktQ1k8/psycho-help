@@ -24,6 +24,7 @@ import {
 import { useAppContext } from '@/app/context';
 import { AppContextProvider } from '@/app/context/provider';
 import { authApi } from '@/entities/auth/api';
+import { getAuthErrorMessage } from '@/entities/auth/model/auth-errors';
 import { useAuth } from '@/entities/auth/model/useAuth';
 import type { TUser } from '@/entities/auth/types';
 import { useApplication } from '@/features/personal-cabinet/model/application';
@@ -254,6 +255,69 @@ describe('Авторизация и сессия', () => {
     expect(requests).toEqual(['/api/users/login']);
     expect(useAuth.getState()).toMatchObject({ isAuth: false, user: null });
   });
+
+  it('отправляет текущий и новый пароль без повторного запроса пользователя', async () => {
+    const data = {
+      old_password: credentials.password,
+      new_password: 'NewPassword123!',
+    };
+    const result = { message: 'Пароль успешно изменён' };
+    useAuth.setState({ isAuth: true, user });
+    respond = (config) => {
+      expect(config.method).toBe('post');
+      expect(JSON.parse(config.data as string)).toEqual(data);
+      return response(config, result);
+    };
+    expect(await authApi.updatePassword(data)).toEqual(result);
+    expect(requests).toEqual(['/api/users/me/password']);
+    expect(useAuth.getState()).toMatchObject({ isAuth: true, user });
+  });
+
+  it.each([
+    [400, 'Неверный старый пароль'],
+    [
+      422,
+      [
+        {
+          type: 'value_error',
+          loc: ['body'],
+          msg: 'Value error, Новый пароль должен отличаться от текущего',
+        },
+      ],
+    ],
+  ])(
+    'ошибка смены пароля %s сохраняет сессию и сообщение сервера',
+    async (status, detail) => {
+      useAuth.setState({ isAuth: true, user });
+      respond = (config) => {
+        throw new AxiosError(
+          'Request failed',
+          'ERR_BAD_REQUEST',
+          config,
+          undefined,
+          {
+            ...response(config, { detail }),
+            status,
+          },
+        );
+      };
+      const error = await authApi
+        .updatePassword({
+          old_password:
+            status === 400 ? 'WrongPassword123!' : credentials.password,
+          new_password:
+            status === 400 ? 'NewPassword123!' : credentials.password,
+        })
+        .catch((error: unknown) => error);
+      expect(getAuthErrorMessage(error, 'changePassword')).toBe(
+        status === 400
+          ? 'Неверный старый пароль'
+          : 'Новый пароль должен отличаться от текущего',
+      );
+      expect(requests).toEqual(['/api/users/me/password']);
+      expect(useAuth.getState()).toMatchObject({ isAuth: true, user });
+    },
+  );
 
   it('восстанавливает пользователя после истечения access cookie', async () => {
     let profileAttempts = 0;

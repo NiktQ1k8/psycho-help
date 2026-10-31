@@ -1,9 +1,15 @@
-import { type ChangeEvent, type FormEvent, useState } from 'react';
+import {
+  type ChangeEvent,
+  type FormEvent,
+  type MouseEvent,
+  useState,
+} from 'react';
 import type { FC } from 'react';
-import { UserOutlined } from '@ant-design/icons';
-import { App, Input, Modal } from 'antd';
+import { useQueryClient } from '@tanstack/react-query';
+import { App, Input, Modal, Upload } from 'antd';
+import ImgCrop from 'antd-img-crop';
 import { templateParser } from 'input-format';
-import { authApi } from '@/entities/auth/api';
+import { authApi, authQueries } from '@/entities/auth/api';
 import { getAuthErrorMessage } from '@/entities/auth/model/auth-errors';
 import {
   type TProfileFormData,
@@ -14,6 +20,7 @@ import {
 } from '@/entities/auth/model/profile-form';
 import { useAuth } from '@/entities/auth/model/useAuth';
 import type { TUser, TUserProfileUpdate } from '@/entities/auth/types';
+import { UserAvatar } from '@/entities/auth/ui/UserAvatar';
 import { Role } from '@/entities/role/helpers';
 import { useCabinetDrafts } from '@/features/personal-cabinet/model/cabinet-drafts';
 import { getErrorMessage } from '@/shared/api/errors';
@@ -21,6 +28,7 @@ import EditIcon from '@/shared/assets/images/cabinet/edit.svg?react';
 import ExitIcon from '@/shared/assets/images/cabinet/exit.svg?react';
 import { FormattedInput } from '@/shared/ui/formatted-input/FormattedInput';
 import { PhoneInput } from '@/shared/ui/phone-input/PhoneInput';
+import './PersonalData.img-crop.scss';
 import styles from './PersonalData.module.scss';
 
 const parseStudyGroup = templateParser('xxx-xxxx', (character, value) => {
@@ -34,6 +42,21 @@ const formatStudyGroup = (value = '') => ({
   template: 'xxx-xxxx',
 });
 
+const getAvatarFileError = async (file: File): Promise<string | undefined> => {
+  if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+    return 'Выберите изображение JPEG, PNG или WebP';
+  }
+  if (file.size > 10 * 1024 * 1024) {
+    return 'Размер фотографии не должен превышать 10 МБ';
+  }
+  try {
+    const image = await createImageBitmap(file);
+    image.close();
+  } catch {
+    return 'Не удалось открыть фотографию. Выберите другое изображение';
+  }
+};
+
 type TPersonalDataProps = {
   user: TUser | null;
 };
@@ -42,10 +65,11 @@ const PersonalData: FC<TPersonalDataProps> = ({ user }) => {
   const { logOut, setUser } = useAuth();
   const showStudyGroup = !new Role(user?.roles ?? []).isStaff();
   const { message: messageApi, modal } = App.useApp();
+  const queryClient = useQueryClient();
 
   const [isEditingName, setIsEditingName] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [avatar, setAvatar] = useState<string | null>(null);
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
 
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [isSavingPassword, setIsSavingPassword] = useState(false);
@@ -102,14 +126,24 @@ const PersonalData: FC<TPersonalDataProps> = ({ user }) => {
     ...(showStudyGroup && { study_group: data.study_group.trim() || null }),
   });
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setAvatar(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+  const handleAvatarUpload = async (file: File) => {
+    if (!user || isUploadingAvatar) return;
+    const error = await getAvatarFileError(file);
+    if (error) {
+      messageApi.error(error);
+      return;
+    }
+    setIsUploadingAvatar(true);
+    try {
+      await authApi.updateAvatar(file);
+      await queryClient.invalidateQueries({
+        queryKey: authQueries.avatar(user.id).queryKey,
+      });
+      messageApi.success('Фотография сохранена');
+    } catch (error) {
+      messageApi.error(getAuthErrorMessage(error, 'updateAvatar'));
+    } finally {
+      setIsUploadingAvatar(false);
     }
   };
 
@@ -172,6 +206,10 @@ const PersonalData: FC<TPersonalDataProps> = ({ user }) => {
       messageApi.error(passwordError);
       return;
     }
+    if (passwordData.new_password === passwordData.old_password) {
+      messageApi.error('Новый пароль должен отличаться от текущего');
+      return;
+    }
 
     setIsSavingPassword(true);
     try {
@@ -218,24 +256,45 @@ const PersonalData: FC<TPersonalDataProps> = ({ user }) => {
         noValidate
       >
         <div className={styles.avatarSection}>
-          <div className={styles.avatar}>
-            {avatar ? (
-              <img src={avatar} alt="Аватар пользователя" />
-            ) : (
-              <UserOutlined className={styles.avatarIcon} />
-            )}
-          </div>
-          <div className={styles.avatarUpload}>
-            <EditIcon />
-            <label htmlFor="avatar-upload">Изменить фотографию</label>
-          </div>
-          <input
-            type="file"
-            id="avatar-upload"
-            accept="image/*"
-            className={styles.hiddenInput}
-            onChange={handleFileChange}
-          />
+          <UserAvatar userId={user?.id} />
+          <ImgCrop
+            cropShape="round"
+            quality={0.9}
+            rotationSlider
+            showReset
+            resetText="Сбросить"
+            modalTitle="Настроить фотографию"
+            modalOk="Сохранить"
+            modalCancel="Отмена"
+            modalProps={{
+              // antd-img-crop принудительно включает maskClosable в Ant Design 5.
+              wrapProps: {
+                'data-avatar-crop': true,
+                onClick: (event: MouseEvent<HTMLDivElement>) =>
+                  event.stopPropagation(),
+              },
+            }}
+            beforeCrop={async (file) => !(await getAvatarFileError(file))}
+          >
+            <Upload
+              accept="image/jpeg,image/png,image/webp"
+              showUploadList={false}
+              disabled={!user || isUploadingAvatar}
+              beforeUpload={async (file) => {
+                await handleAvatarUpload(file);
+                return Upload.LIST_IGNORE;
+              }}
+            >
+              <button
+                type="button"
+                className={styles.avatarUpload}
+                disabled={!user || isUploadingAvatar}
+              >
+                <EditIcon />
+                {isUploadingAvatar ? 'Загрузка...' : 'Изменить фотографию'}
+              </button>
+            </Upload>
+          </ImgCrop>
         </div>
 
         <div className={styles.profileSection}>

@@ -13,24 +13,10 @@
 .profileInfo {
   display: flex;
   flex-direction: column;
+  gap: 1.2rem;
   align-items: center;
+
   margin-bottom: 6.4rem;
-}
-
-.avatar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 10.6rem;
-  height: 10.6rem;
-  margin-bottom: 1.2rem;
-  border-radius: 50%;
-
-  font-size: 5.4rem;
-  color: var(--labels-neutral-secondary);
-
-  background-color: var(--border-neutral-soft);
 }
 
 .name {
@@ -137,14 +123,6 @@
 
   .sidebar {
     background-color: var(--fills-neutral-primary);
-  }
-
-  .avatar {
-    color: color-mix(
-      in srgb,
-      var(--labels-neutral-secondary),
-      var(--labels-neutral-inverted-primary)
-    );
   }
 
   .name {

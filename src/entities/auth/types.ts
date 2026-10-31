@@ -36,6 +36,13 @@ export type TUserPasswordUpdate = {
   new_password: string;
 };
 
+export type TUserAvatar = {
+  id: string;
+  avatar_url: string | null;
+};
+
+export type TAvatarUpdateResponse = { msg: string };
+
 export type TPasswordResetRequest = { email: string };
 export type TPasswordResetConfirmRequest = {
   token: string;

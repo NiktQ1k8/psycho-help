@@ -4,6 +4,7 @@ import { Alert, Empty } from 'antd';
 import { appointmentQueries } from '@/entities/appointment/api';
 import { useAuth } from '@/entities/auth/model/useAuth';
 import { getUserFullName } from '@/entities/auth/model/user-name';
+import { UserAvatar } from '@/entities/auth/ui/UserAvatar';
 import { Role } from '@/entities/role/helpers';
 import { AppointmentList } from '@/features/personal-cabinet/ui/appointment-list/AppointmentList';
 import Sidebar from '@/features/personal-cabinet/ui/sidebar/Sidebar';
@@ -80,22 +81,25 @@ const MedicalRecordPage = () => {
           <Empty description="Карта консультируемого не найдена" />
         ) : (
           <>
-            <dl className={styles.details}>
-              <dt>Фамилия</dt>
-              <dd>{patient.last_name}</dd>
-              <dt>Имя</dt>
-              <dd>{patient.first_name}</dd>
-              <dt>Отчество</dt>
-              <dd>{patient.middle_name || '—'}</dd>
-              <dt>Академическая группа/отделение</dt>
-              <dd>{patient.study_group || '—'}</dd>
-              <dt>Ведущий психолог</dt>
-              <dd>
-                {leadingPsychologist
-                  ? getUserFullName(leadingPsychologist)
-                  : '—'}
-              </dd>
-            </dl>
+            <div className={styles.patientInfo}>
+              <dl className={styles.details}>
+                <dt>Фамилия</dt>
+                <dd>{patient.last_name}</dd>
+                <dt>Имя</dt>
+                <dd>{patient.first_name}</dd>
+                <dt>Отчество</dt>
+                <dd>{patient.middle_name || '—'}</dd>
+                <dt>Академическая группа/отделение</dt>
+                <dd>{patient.study_group || '—'}</dd>
+                <dt>Ведущий психолог</dt>
+                <dd>
+                  {leadingPsychologist
+                    ? getUserFullName(leadingPsychologist)
+                    : '—'}
+                </dd>
+              </dl>
+              <UserAvatar userId={patient.id} size="medium" />
+            </div>
             <h2>История приёмов</h2>
             <AppointmentList
               appointments={history}

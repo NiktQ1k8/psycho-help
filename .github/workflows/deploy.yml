@@ -3,8 +3,9 @@ name: Deploy
 # Только main и develop. Существующий run-tests.yml и прочие ветки
 # этим workflow не затрагиваются.
 #
-# SSH до сервера доступен только через WireGuard, поэтому раннер сначала
-# поднимает туннель из конфига в секретах, а потом уже ходит по ssh.
+# Образ собирается на раннере до подключения WireGuard. На сервер передаётся
+# готовый архив: доступ к npm и сборка приложения на сервере больше не нужны.
+# SSH до сервера доступен только через WireGuard.
 #
 # Нужные секреты репозитория:
 #   WG_CONFIG      - конфиг ОТДЕЛЬНОГО пира WireGuard, выданного этому
@@ -32,20 +33,50 @@ concurrency:
   group: deploy-${{ github.repository }}
   cancel-in-progress: false
 
+permissions:
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
+    env:
+      IMAGE_REF: psycho-web:${{ github.sha }}
+      REMOTE_ARCHIVE: /tmp/psycho-web-${{ github.run_id }}-${{ github.run_attempt }}.tar.gz
 
     steps:
       - name: Определить стенд
         id: stand
+        env:
+          DEPLOY_BRANCH: ${{ github.ref_name }}
         run: |
-          if [ "${{ github.ref_name }}" = "main" ]; then
-            echo "name=prod" >> "$GITHUB_OUTPUT"
-          else
-            echo "name=dev" >> "$GITHUB_OUTPUT"
-          fi
+          case "$DEPLOY_BRANCH" in
+            main) echo "name=prod" >> "$GITHUB_OUTPUT" ;;
+            develop) echo "name=dev" >> "$GITHUB_OUTPUT" ;;
+            *) echo "Деплой разрешён только из main и develop" >&2; exit 1 ;;
+          esac
+
+      - name: Получить код
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Подготовить Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Собрать образ
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          platforms: linux/amd64
+          tags: ${{ env.IMAGE_REF }}
+          labels: org.opencontainers.image.revision=${{ github.sha }}
+          outputs: type=docker,dest=${{ runner.temp }}/psycho-web.tar
+          cache-from: type=gha,scope=frontend
+          cache-to: type=gha,scope=frontend,mode=max
+
+      - name: Сжать образ для передачи
+        run: gzip -1 "$RUNNER_TEMP/psycho-web.tar"
 
       - name: Поднять туннель WireGuard
         env:
@@ -64,6 +95,8 @@ jobs:
         env:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
         run: |
+          # DEPLOY_HOST раскрывается в дочернем bash из переменной окружения.
+          # shellcheck disable=SC2016
           timeout 60 bash -c 'until nc -z -w2 "$DEPLOY_HOST" 22; do sleep 2; done' || {
             echo "Порт 22 недоступен через туннель за 60 секунд" >&2
             sudo wg show wg0
@@ -71,21 +104,55 @@ jobs:
           }
 
       - name: Подготовить SSH
+        id: ssh
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
         run: |
           install -m 700 -d ~/.ssh
-          printf '%s\n' "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/id_ed25519
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null
+          ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Передать образ
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -o BatchMode=yes \
+            "$DEPLOY_USER@$DEPLOY_HOST" \
+            "umask 077; cat > '$REMOTE_ARCHIVE'" < "$RUNNER_TEMP/psycho-web.tar.gz"
 
       - name: Деплой
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_STAND: ${{ steps.stand.outputs.name }}
+          DEPLOY_SHA: ${{ github.sha }}
         run: |
-          ssh -i ~/.ssh/id_ed25519 \
-            "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" \
-            "set -e
-             cd /opt/psycho/${{ steps.stand.outputs.name }}/frontend
-             git fetch --prune origin
-             git reset --hard origin/${{ github.ref_name }}
-             ./deploy/deploy.sh"
+          ssh -i ~/.ssh/id_ed25519 -o BatchMode=yes \
+            "$DEPLOY_USER@$DEPLOY_HOST" \
+            bash -s -- "$DEPLOY_STAND" "$DEPLOY_SHA" "$REMOTE_ARCHIVE" "$IMAGE_REF" <<'REMOTE'
+          set -euo pipefail
+          stand=$1
+          revision=$2
+          image_archive=$3
+          image_ref=$4
+          trap 'rm -f -- "$image_archive"' EXIT
+          cd "/opt/psycho/$stand/frontend"
+          git fetch --prune origin
+          git reset --hard "$revision"
+          ./deploy/deploy.sh "$image_archive" "$image_ref"
+          REMOTE
+
+      - name: Удалить временный архив на сервере
+        if: always() && steps.ssh.outcome == 'success'
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -o BatchMode=yes -o ConnectTimeout=10 \
+            "$DEPLOY_USER@$DEPLOY_HOST" "rm -f -- '$REMOTE_ARCHIVE'" || true
 
       - name: Опустить туннель
         if: always()

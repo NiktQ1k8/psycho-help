@@ -3,7 +3,11 @@ import { SLUG } from '@/shared/config/slug';
 
 const Logout = lazy(() => import('@/pages/Logout/Logout'));
 const ResetPassword = lazy(() => import('@/pages/ResetPassword/ResetPassword'));
-const HomePage = lazy(() => import('@/pages/home-page/home-page'));
+const Main = lazy(() =>
+  import('@/pages/Main/ui/Main/Main').then((module) => ({
+    default: module.Main,
+  })),
+);
 const DoctorsPage = lazy(() => import('@/pages/doctors-page/DoctorsPage'));
 const DoctorPage = lazy(() => import('@/pages/doctor-page/Doctor-page'));
 const News = lazy(() =>
@@ -61,7 +65,7 @@ export const routes: IRoutePath[] = [
   { path: SLUG.RESET_PASSWORD, Component: ResetPassword },
   {
     path: SLUG.MAIN,
-    Component: HomePage,
+    Component: Main,
     navText: 'Главная',
   },
   {

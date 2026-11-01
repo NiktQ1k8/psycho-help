@@ -37,7 +37,7 @@ export const UserAvatar = ({
               event.currentTarget.click();
             }
           }}
-          preview={{ mask: 'Посмотреть', destroyOnHidden: true }}
+          preview={{ cover: 'Посмотреть' }}
           onError={() => setFailedSrc(src)}
         />
       ) : (

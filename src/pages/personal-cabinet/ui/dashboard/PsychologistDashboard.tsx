@@ -88,7 +88,7 @@ const PsychologistDashboard = () => {
       <Alert
         type="error"
         showIcon
-        message="Не удалось загрузить расписание"
+        title="Не удалось загрузить расписание"
         description={getErrorMessage(error)}
       />
     );

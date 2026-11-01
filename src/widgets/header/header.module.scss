@@ -1,14 +1,8 @@
-/* Это нужно для того, чтобы на компе при открытии бургер-меню не прыгала сама кнопка бургера */
-:global(html) {
-  transition: background-color 0.3s;
-}
-
-:global(html):has(.header__list--open) {
-  scrollbar-gutter: stable;
+html:has(.header__list--open) {
   background-color: var(--fills-brand-primary);
 }
 
-:global(html[data-theme='dark']):has(.header__list--open) {
+html[data-theme='dark']:has(.header__list--open) {
   background-color: var(--interactive-brand-hover);
 }
 

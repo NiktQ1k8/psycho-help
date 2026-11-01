@@ -121,7 +121,7 @@ const PsychologistRejectModal = ({
       cancelText="Закрыть"
       cancelButtonProps={{ disabled: mutation.isPending }}
       closable={!mutation.isPending}
-      maskClosable={!mutation.isPending}
+      mask={{ closable: !mutation.isPending }}
       keyboard={!mutation.isPending}
       okButtonProps={{
         danger: true,

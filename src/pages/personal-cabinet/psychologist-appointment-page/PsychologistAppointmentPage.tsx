@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Alert, App, Button, Empty, Input, Result } from 'antd';
 import { isAxiosError } from 'axios';
 import clsx from 'clsx';
+import type { DateTime } from 'luxon';
 import { applicationQueries } from '@/entities/application/api';
 import {
   appointmentQueries,
@@ -28,6 +29,7 @@ import { moscowDate, toApiDate } from '@/shared/lib/date-time';
 import { BackButton } from '@/shared/ui/back-button/BackButton';
 import { DatePicker } from '@/shared/ui/date-picker/MoscowDatePicker';
 import Loader from '@/shared/ui/loader/loader';
+import './PsychologistAppointmentPage.antd.scss';
 import styles from './PsychologistAppointmentPage.module.scss';
 
 const TYPE_LABELS: Record<string, string> = {
@@ -219,7 +221,7 @@ const PsychologistAppointmentPage = () => {
       .join(' ') || 'Имя не указано';
 
   return (
-    <div className={styles.page}>
+    <div className={styles.page} data-psychologist-appointment>
       <div className={styles.sidebarWrapper}>
         <Sidebar
           user={user}
@@ -297,8 +299,7 @@ const PsychologistAppointmentPage = () => {
                 Дата
               </label>
               {appointment.status === 'awaiting' ? (
-                <DatePicker
-                  className={styles.datePicker}
+                <DatePicker<DateTime>
                   id="appointment-date"
                   value={selectedDate}
                   format="DD.MM.YYYY"
@@ -386,7 +387,7 @@ const PsychologistAppointmentPage = () => {
                 <Alert
                   type="error"
                   showIcon
-                  message="Не удалось проверить перенос записи"
+                  title="Не удалось проверить перенос записи"
                   description={getErrorMessage(reschedulesError)}
                   action={
                     <Button onClick={() => void refetchReschedules()}>
@@ -399,7 +400,7 @@ const PsychologistAppointmentPage = () => {
                 <Alert
                   type="info"
                   showIcon
-                  message="Ожидаем подтверждения переноса"
+                  title="Ожидаем подтверждения переноса"
                   description={`Предложено: ${moscowDate(pendingRequest.requested_scheduled_time).toFormat('d MMMM yyyy, HH:mm')} по Москве. До подтверждения действует прежнее время. При отказе студента запись будет отменена.`}
                 />
               )}
@@ -409,7 +410,7 @@ const PsychologistAppointmentPage = () => {
           {applicationError && (
             <Alert
               type="error"
-              message="Не удалось загрузить данные заявки"
+              title="Не удалось загрузить данные заявки"
               description={getErrorMessage(applicationError)}
             />
           )}
@@ -460,7 +461,7 @@ const PsychologistAppointmentPage = () => {
             className={styles.actionHint}
             type="info"
             showIcon
-            message={actionHint}
+            title={actionHint}
           />
         )}
 

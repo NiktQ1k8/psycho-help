@@ -128,7 +128,7 @@ const PsychologistAppointments = () => {
       <Alert
         type="error"
         showIcon
-        message="Не удалось загрузить записи"
+        title="Не удалось загрузить записи"
         description={getErrorMessage(loadError)}
         style={{ margin: '2.4rem 0' }}
       />

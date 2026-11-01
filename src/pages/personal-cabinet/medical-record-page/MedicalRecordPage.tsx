@@ -74,7 +74,7 @@ const MedicalRecordPage = () => {
           <Alert
             type="error"
             showIcon
-            message="Не удалось загрузить карту консультируемого"
+            title="Не удалось загрузить карту консультируемого"
             description={getErrorMessage(error)}
           />
         ) : !patient ? (

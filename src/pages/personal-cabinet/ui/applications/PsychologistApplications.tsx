@@ -25,6 +25,7 @@ import { SLUG } from '@/shared/config/slug';
 import { moscowDate } from '@/shared/lib/date-time';
 import Loader from '@/shared/ui/loader/loader';
 import { normalizeSearch } from '@/shared/utils/normalizeSearch';
+import './PsychologistApplications.antd.scss';
 import styles from './PsychologistApplications.module.scss';
 
 const ITEMS_PER_PAGE = 5;
@@ -228,7 +229,7 @@ const PsychologistApplications = () => {
       <Alert
         type="error"
         showIcon
-        message="Не удалось загрузить заявки"
+        title="Не удалось загрузить заявки"
         description={getErrorMessage(loadError)}
         style={{ margin: '2.4rem 0' }}
       />
@@ -340,14 +341,15 @@ const PsychologistApplications = () => {
       </div>
 
       {currentItems.length > ITEMS_PER_PAGE && (
-        <Pagination
-          className={styles.pagination}
-          current={page}
-          total={currentItems.length}
-          pageSize={ITEMS_PER_PAGE}
-          onChange={(page) => setCurrentPage(FILTERS_TAB, page)}
-          showSizeChanger={false}
-        />
+        <div className={styles.pagination} data-application-pagination>
+          <Pagination
+            current={page}
+            total={currentItems.length}
+            pageSize={ITEMS_PER_PAGE}
+            onChange={(page) => setCurrentPage(FILTERS_TAB, page)}
+            showSizeChanger={false}
+          />
+        </div>
       )}
     </section>
   );

@@ -1,0 +1,14 @@
+[data-medical-record-pagination] {
+  .ant-pagination {
+    font: var(--font-text-medium);
+  }
+
+  .ant-pagination-item-active {
+    border-color: var(--labels-brand-primary);
+    background-color: var(--labels-brand-primary);
+
+    a {
+      color: var(--labels-neutral-inverted-primary) !important;
+    }
+  }
+}

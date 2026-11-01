@@ -391,39 +391,6 @@
   min-height: 5.06rem;
 }
 
-.timeWrapper :global(.ant-picker) {
-  max-height: 5.06rem !important;
-  padding: 1.2rem !important;
-  border: 0.1rem solid var(--border-neutral-base, #e5e7eb) !important;
-  border-radius: 0.4rem !important;
-
-  background: #fff !important;
-
-  transition: none !important;
-}
-
-// Убираем все эффекты наведения и фокуса
-.timeWrapper :global(.ant-picker):hover,
-.timeWrapper :global(.ant-picker):focus,
-.timeWrapper :global(.ant-picker):active,
-.timeWrapper :global(.ant-picker-focused) {
-  border: 0.1rem solid var(--border-neutral-base, #e5e7eb) !important;
-  background: #fff !important;
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-// Инпут и текст для DatePicker
-.timeWrapper :global(.ant-picker-input),
-.timeWrapper :global(.ant-picker-input input) {
-  height: 2.4rem !important;
-  padding: 0 !important;
-
-  font-family: var(--font-text-medium) !important;
-  font-size: 1.6rem !important;
-  line-height: 2.4rem !important;
-}
-
 @media (width <= 900px) {
   .page {
     grid-template-columns: 1fr;
@@ -511,25 +478,6 @@
   .status-dot {
     &--completed {
       background-color: var(--labels-neutral-inverted-primary);
-    }
-  }
-
-  .timeWrapper :global(.ant-picker),
-  .dataValue:global(.ant-input-outlined[disabled]) {
-    border: 0.1rem solid var(--border-neutral-base, #e5e7eb) !important;
-    color: color-mix(
-      in srgb,
-      var(--labels-neutral-secondary),
-      var(--labels-neutral-inverted-primary)
-    ) !important;
-    background: var(--backgrounds-neutral-inverted) !important;
-
-    input[disabled] {
-      color: color-mix(
-        in srgb,
-        var(--labels-neutral-secondary),
-        var(--labels-neutral-inverted-primary)
-      ) !important;
     }
   }
 

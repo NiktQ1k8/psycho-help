@@ -184,10 +184,6 @@
   border-radius: 4px;
 }
 
-.datePicker :global(.ant-picker-input > input) {
-  height: 40px;
-}
-
 .timeSelect {
   @include native-select;
 

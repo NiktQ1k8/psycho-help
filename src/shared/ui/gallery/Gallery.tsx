@@ -34,10 +34,10 @@ export const Gallery = ({ images, title }: IGalleryProps) => {
           cloneElement(image as ReactElement<{ alt: string }>, {
             alt: `${title} — изображение ${current + 1} из ${imageSources.length}`,
           }),
-        visible: previewIndex !== null,
+        open: previewIndex !== null,
         current: previewIndex ?? 0,
-        onVisibleChange: (visible) => {
-          if (!visible) {
+        onOpenChange: (open) => {
+          if (!open) {
             setPreviewIndex(null);
             swiperRef.current?.keyboard.enable();
           }

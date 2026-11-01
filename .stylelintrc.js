@@ -1,12 +1,4 @@
 export default {
-  rules: {
-    'selector-class-pattern': null,
-    'selector-pseudo-class-no-unknown': [
-      true,
-      {
-        ignorePseudoClasses: ['global'],
-      },
-    ],
-  },
+  rules: { 'selector-class-pattern': null },
   extends: ['stylelint-config-standard-scss', 'stylelint-config-clean-order'],
 };

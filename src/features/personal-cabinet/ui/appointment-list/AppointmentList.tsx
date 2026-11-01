@@ -6,6 +6,7 @@ import { getUserFullName } from '@/entities/auth/model/user-name';
 import { SLUG } from '@/shared/config/slug';
 import { moscowDate } from '@/shared/lib/date-time';
 import { ButtonLink } from '@/shared/ui/button-link/ButtonLink';
+import './AppointmentList.antd.scss';
 import styles from './AppointmentList.module.scss';
 
 const ITEMS_PER_PAGE = 5;
@@ -96,14 +97,15 @@ export const AppointmentList = ({
         ))}
       </div>
       {appointments.length > ITEMS_PER_PAGE && (
-        <Pagination
-          className={styles.pagination}
-          current={page}
-          total={appointments.length}
-          pageSize={ITEMS_PER_PAGE}
-          onChange={onPageChange}
-          showSizeChanger={false}
-        />
+        <div className={styles.pagination} data-appointment-pagination>
+          <Pagination
+            current={page}
+            total={appointments.length}
+            pageSize={ITEMS_PER_PAGE}
+            onChange={onPageChange}
+            showSizeChanger={false}
+          />
+        </div>
       )}
     </>
   );

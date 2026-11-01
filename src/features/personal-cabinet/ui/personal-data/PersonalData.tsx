@@ -1,9 +1,4 @@
-import {
-  type ChangeEvent,
-  type FormEvent,
-  type MouseEvent,
-  useState,
-} from 'react';
+import { type ChangeEvent, type FormEvent, useState } from 'react';
 import type { FC } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { App, Input, Modal, Upload } from 'antd';
@@ -266,14 +261,6 @@ const PersonalData: FC<TPersonalDataProps> = ({ user }) => {
             modalTitle="Настроить фотографию"
             modalOk="Сохранить"
             modalCancel="Отмена"
-            modalProps={{
-              // antd-img-crop принудительно включает maskClosable в Ant Design 5.
-              wrapProps: {
-                'data-avatar-crop': true,
-                onClick: (event: MouseEvent<HTMLDivElement>) =>
-                  event.stopPropagation(),
-              },
-            }}
             beforeCrop={async (file) => !(await getAvatarFileError(file))}
           >
             <Upload

@@ -5,7 +5,9 @@
 }
 
 html {
+  scrollbar-gutter: stable;
   font-size: 62.5%;
+  transition: background-color 0.3s;
 }
 
 body {

@@ -1,0 +1,53 @@
+[data-psychologist-application] {
+  .ant-picker {
+    max-height: 50.6px !important;
+    padding: 12px !important;
+    border: 1px solid var(--border-neutral-base, #e5e7eb) !important;
+    border-radius: 4px !important;
+
+    background: #fff !important;
+
+    transition: none !important;
+
+    &:hover,
+    &:focus,
+    &:active,
+    &.ant-picker-focused {
+      border: 1px solid var(--border-neutral-base, #e5e7eb) !important;
+      background: #fff !important;
+      outline: none !important;
+      box-shadow: none !important;
+    }
+  }
+
+  .ant-picker-input,
+  .ant-picker-input input {
+    height: 24px !important;
+    padding: 0 !important;
+
+    font: var(--font-text-medium) !important;
+    font-size: 16px !important;
+    line-height: 24px !important;
+  }
+}
+
+[data-theme='dark'] [data-psychologist-application] {
+  .ant-picker,
+  .ant-input-outlined.ant-input-disabled {
+    border: 1px solid var(--border-neutral-base, #e5e7eb) !important;
+    color: color-mix(
+      in srgb,
+      var(--labels-neutral-secondary),
+      var(--labels-neutral-inverted-primary)
+    ) !important;
+    background: var(--backgrounds-neutral-inverted) !important;
+
+    input[disabled] {
+      color: color-mix(
+        in srgb,
+        var(--labels-neutral-secondary),
+        var(--labels-neutral-inverted-primary)
+      ) !important;
+    }
+  }
+}

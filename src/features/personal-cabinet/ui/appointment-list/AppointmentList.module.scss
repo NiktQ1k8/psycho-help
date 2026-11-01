@@ -148,15 +148,6 @@
   justify-content: center;
   margin-top: 3.2rem;
   margin-bottom: 2.4rem;
-
-  :global(.ant-pagination-item-active) {
-    border-color: var(--labels-brand-primary);
-    background-color: var(--labels-brand-primary);
-
-    a {
-      color: var(--labels-neutral-inverted-primary) !important;
-    }
-  }
 }
 
 [data-theme='dark'] {

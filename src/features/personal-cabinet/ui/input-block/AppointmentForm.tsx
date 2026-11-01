@@ -4,6 +4,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { App, Result } from 'antd';
 import clsx from 'clsx';
+import type { DateTime } from 'luxon';
 import {
   applicationQueries,
   applicationQueryKey,
@@ -30,6 +31,7 @@ import { Img } from '@/shared/ui';
 import { BackButton } from '@/shared/ui/back-button/BackButton';
 import { DatePicker } from '@/shared/ui/date-picker/MoscowDatePicker';
 import Loader from '@/shared/ui/loader/loader';
+import './AppointmentForm.antd.scss';
 import styles from './AppointmentForm.module.scss';
 import privacyFile from './assets/Privacy_police.pdf';
 
@@ -229,7 +231,7 @@ const AppointmentForm: FC = () => {
   return (
     <>
       {window === 'form' ? (
-        <div className={styles.form}>
+        <div className={styles.form} data-appointment-form>
           <div className={styles.format}>
             <h3 className={styles.label}>Выберите формат консультации</h3>
             <div className={styles.format__btns}>
@@ -390,7 +392,7 @@ const AppointmentForm: FC = () => {
 
           <div className={styles.field}>
             <label className={styles.label}>Выберите дату и время</label>
-            <DatePicker
+            <DatePicker<DateTime>
               showTime={{
                 format: 'HH:mm',
                 defaultOpenValue: moscowDate().set({

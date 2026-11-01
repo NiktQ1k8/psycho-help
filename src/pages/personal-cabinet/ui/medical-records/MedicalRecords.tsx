@@ -9,6 +9,7 @@ import { SLUG } from '@/shared/config/slug';
 import { ButtonLink } from '@/shared/ui/button-link/ButtonLink';
 import Loader from '@/shared/ui/loader/loader';
 import { normalizeSearch } from '@/shared/utils/normalizeSearch';
+import './MedicalRecords.antd.scss';
 import styles from './MedicalRecords.module.scss';
 
 const ITEMS_PER_PAGE = 10;
@@ -80,7 +81,7 @@ const MedicalRecords = () => {
         <Alert
           type="error"
           showIcon
-          message="Не удалось загрузить карты консультируемых"
+          title="Не удалось загрузить карты консультируемых"
           description={getErrorMessage(error)}
         />
       ) : (
@@ -115,15 +116,15 @@ const MedicalRecords = () => {
               ))}
           </div>
           {patients.length > ITEMS_PER_PAGE && (
-            <Pagination
-              className={styles.pagination}
-
-              current={page}
-              total={patients.length}
-              pageSize={ITEMS_PER_PAGE}
-              onChange={setMedicalRecordPage}
-              showSizeChanger={false}
-            />
+            <div className={styles.pagination} data-medical-record-pagination>
+              <Pagination
+                current={page}
+                total={patients.length}
+                pageSize={ITEMS_PER_PAGE}
+                onChange={setMedicalRecordPage}
+                showSizeChanger={false}
+              />
+            </div>
           )}
         </>
       )}

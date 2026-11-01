@@ -32,6 +32,7 @@ import { moscowDate, toApiDate } from '@/shared/lib/date-time';
 import { BackButton } from '@/shared/ui/back-button/BackButton';
 import { DatePicker } from '@/shared/ui/date-picker/MoscowDatePicker';
 import Loader from '@/shared/ui/loader/loader';
+import './PsychologistApplicationPage.antd.scss';
 import styles from './PsychologistApplicationPage.module.scss';
 
 const MEETING_TYPE_OPTIONS = [
@@ -309,7 +310,7 @@ const PsychologistApplicationPage = () => {
     : '—';
 
   return (
-    <div className={styles.page}>
+    <div className={styles.page} data-psychologist-application>
       <div className={styles.sidebarWrapper}>
         <Sidebar
           user={user}
@@ -428,7 +429,7 @@ const PsychologistApplicationPage = () => {
               className={styles.psychologistField}
               type="error"
               showIcon
-              message="Не удалось загрузить список психологов"
+              title="Не удалось загрузить список психологов"
               description={getErrorMessage(psychologistsError)}
               action={
                 <Button onClick={() => void refetchPsychologists()}>
@@ -442,7 +443,7 @@ const PsychologistApplicationPage = () => {
               <Alert
                 type="info"
                 showIcon
-                message="Чтобы изменить дату, время и другие условия встречи, сначала нажмите «В работу»."
+                title="Чтобы изменить дату, время и другие условия встречи, сначала нажмите «В работу»."
               />
             </div>
           )}
@@ -450,7 +451,7 @@ const PsychologistApplicationPage = () => {
           <label className={styles.fieldLabel}>
             <span className={styles.dataLabel}>Дата</span>
             <div className={styles.timeWrapper}>
-              <DatePicker
+              <DatePicker<DateTime>
                 id="field-date"
                 className={styles.fieldPicker}
                 value={selectedDate}
@@ -558,7 +559,7 @@ const PsychologistApplicationPage = () => {
             className={styles.offerHint}
             type="info"
             showIcon
-            message={
+            title={
               offerIssues.length
                 ? 'Чтобы запросить подтверждение'
                 : 'Повторный запрос подтверждения'

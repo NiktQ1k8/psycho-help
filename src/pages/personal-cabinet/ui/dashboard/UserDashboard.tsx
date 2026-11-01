@@ -345,7 +345,7 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName }) => {
       <Alert
         type="error"
         showIcon
-        message="Не удалось загрузить личный кабинет"
+        title="Не удалось загрузить личный кабинет"
         description={getErrorMessage(loadError)}
       />
     );
@@ -614,7 +614,7 @@ const UserDashboard: FC<TUserDashboardProps> = ({ userName }) => {
         confirmLoading={cancelMutation.isPending}
         cancelButtonProps={{ disabled: cancelMutation.isPending }}
         closable={!cancelMutation.isPending}
-        maskClosable={!cancelMutation.isPending}
+        mask={{ closable: !cancelMutation.isPending }}
         keyboard={!cancelMutation.isPending}
         okText="Подтвердить отмену"
         cancelText="Назад"

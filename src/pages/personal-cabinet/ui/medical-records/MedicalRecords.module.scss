@@ -77,15 +77,6 @@
   margin-bottom: 2.4rem;
 
   font: var(--font-text-medium);
-
-  :global(.ant-pagination-item-active) {
-    border-color: var(--labels-brand-primary);
-    background-color: var(--labels-brand-primary);
-
-    a {
-      color: var(--labels-neutral-inverted-primary) !important;
-    }
-  }
 }
 
 @media (width <= 900px) {

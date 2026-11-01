@@ -133,7 +133,7 @@ const PsychologistListFilters = ({
         </div>
 
         <DatePicker.RangePicker
-          dropdownClassName="custom-range-picker-dropdown"
+          classNames={{ popup: { root: 'custom-range-picker-dropdown' } }}
           className={styles['filters__date-range']}
           separator={<span style={{ color: '#C4C4C4' }}>&#10132;</span>}
           value={

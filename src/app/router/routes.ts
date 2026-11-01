@@ -1,20 +1,52 @@
-import type { FC } from 'react';
-import Logout from '@/pages/Logout/Logout';
-import { News } from '@/pages/News/ui/News/News';
-import { NewsItem } from '@/pages/NewsItem/ui/NewsItem/NewsItem';
-import ResetPassword from '@/pages/ResetPassword/ResetPassword';
-import { ArticlePage } from '@/pages/article-page/ArticlePage';
-import { DoctorPage } from '@/pages/doctor-page';
-import { DoctorsPage } from '@/pages/doctors-page';
-import { FaqPage } from '@/pages/faq-page';
-import { HomePage } from '@/pages/home-page';
-import MedicalRecordPage from '@/pages/personal-cabinet/medical-record-page/MedicalRecordPage';
-import PersonalCabinet from '@/pages/personal-cabinet/personal-cabinet';
-import PsychologistApplicationPage from '@/pages/personal-cabinet/psychologist-application-page/PsychologistApplicationPage';
-import PsychologistAppointmentPage from '@/pages/personal-cabinet/psychologist-appointment-page/PsychologistAppointmentPage';
-import { ResourcesPage } from '@/pages/resources-page';
-import { TestPage } from '@/pages/test-page';
+import { type FC, lazy } from 'react';
 import { SLUG } from '@/shared/config/slug';
+
+const Logout = lazy(() => import('@/pages/Logout/Logout'));
+const ResetPassword = lazy(() => import('@/pages/ResetPassword/ResetPassword'));
+const HomePage = lazy(() => import('@/pages/home-page/home-page'));
+const DoctorsPage = lazy(() => import('@/pages/doctors-page/DoctorsPage'));
+const DoctorPage = lazy(() => import('@/pages/doctor-page/Doctor-page'));
+const News = lazy(() =>
+  import('@/pages/News/ui/News/News').then((module) => ({
+    default: module.News,
+  })),
+);
+const NewsItem = lazy(() =>
+  import('@/pages/NewsItem/ui/NewsItem/NewsItem').then((module) => ({
+    default: module.NewsItem,
+  })),
+);
+const ResourcesPage = lazy(() =>
+  import('@/pages/resources-page').then((module) => ({
+    default: module.ResourcesPage,
+  })),
+);
+const ArticlePage = lazy(() =>
+  import('@/pages/article-page/ArticlePage').then((module) => ({
+    default: module.ArticlePage,
+  })),
+);
+const TestPage = lazy(() =>
+  import('@/pages/test-page').then((module) => ({
+    default: module.TestPage,
+  })),
+);
+const FaqPage = lazy(() => import('@/pages/faq-page/faq-page'));
+const PersonalCabinet = lazy(
+  () => import('@/pages/personal-cabinet/personal-cabinet'),
+);
+const PsychologistApplicationPage = lazy(
+  () =>
+    import('@/pages/personal-cabinet/psychologist-application-page/PsychologistApplicationPage'),
+);
+const PsychologistAppointmentPage = lazy(
+  () =>
+    import('@/pages/personal-cabinet/psychologist-appointment-page/PsychologistAppointmentPage'),
+);
+const MedicalRecordPage = lazy(
+  () =>
+    import('@/pages/personal-cabinet/medical-record-page/MedicalRecordPage'),
+);
 
 interface IRoutePath {
   path: string;

@@ -37,25 +37,6 @@ export default defineConfig(({ mode }) => {
       outDir: 'build',
       // Preserve the browser support used by Vite 7.
       target: ['chrome107', 'edge107', 'firefox104', 'safari16'],
-      rolldownOptions: {
-        output: {
-          codeSplitting: {
-            groups: [
-              {
-                name: 'vendor',
-                test: /node_modules/,
-                priority: 10,
-              },
-              {
-                name: (id) => {
-                  const pageName = id.split('src/pages/')[1]?.split('/')[0];
-                  return pageName ? `page-${pageName}` : null;
-                },
-              },
-            ],
-          },
-        },
-      },
     },
     server: {
       port: 3000, // Бек принимает кросс запросы только на порту 3000. Кто не согласен, ругайтесь с ними :)

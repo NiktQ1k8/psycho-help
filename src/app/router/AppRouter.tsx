@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { useAppContext } from '@/app/context';
 import { useAuth } from '@/entities/auth/model/useAuth';
@@ -25,14 +25,16 @@ const AppRouter = () => {
   return (
     <>
       <ScrollToTop />
-      <Routes>
-        {routes
-          .filter(({ authOnly }) => !authOnly || isAuth)
-          .map(({ path, Component }) => (
-            <Route key={path} path={path} element={<Component />} />
-          ))}
-        <Route path="*" element={<Navigate to={SLUG.MAIN} />} />
-      </Routes>
+      <Suspense fallback={<Loader />}>
+        <Routes>
+          {routes
+            .filter(({ authOnly }) => !authOnly || isAuth)
+            .map(({ path, Component }) => (
+              <Route key={path} path={path} element={<Component />} />
+            ))}
+          <Route path="*" element={<Navigate to={SLUG.MAIN} />} />
+        </Routes>
+      </Suspense>
     </>
   );
 };

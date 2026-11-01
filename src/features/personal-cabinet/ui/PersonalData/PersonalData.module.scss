@@ -1,0 +1,567 @@
+@mixin input-field {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--border-neutral-soft);
+  border-radius: 8px;
+
+  font-size: 16px;
+  color: var(--labels-neutral-primary);
+
+  background-color: var(--backgrounds-neutral-primary);
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &::placeholder {
+    color: var(--labels-neutral-quaternary);
+  }
+
+  &:hover {
+    border-color: var(--fills-neutral-primary);
+  }
+
+  &:focus {
+    border-color: var(--labels-brand-secondary);
+    box-shadow: 0 0 0 3px rgb(64 123 254 / 15%);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: var(--backgrounds-neutral-secondary);
+  }
+}
+
+@mixin field-label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: var(--labels-neutral-secondary);
+}
+
+@mixin editable-field {
+  position: relative;
+
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  padding: 12px;
+  border: 1px solid var(--border-neutral-soft);
+  border-radius: 8px;
+
+  background-color: var(--backgrounds-neutral-primary);
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    border-color: var(--fills-neutral-primary);
+  }
+
+  &:focus-within {
+    border-color: var(--labels-brand-secondary);
+    box-shadow: 0 0 0 3px rgb(64 123 254 / 15%);
+  }
+
+  input {
+    flex: 1;
+
+    padding: 0;
+    border: none;
+
+    font-size: 16px;
+    color: var(--labels-neutral-primary);
+
+    background: transparent;
+    outline: none;
+
+    &::placeholder {
+      color: var(--labels-neutral-quaternary);
+    }
+  }
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  max-width: 1200px;
+
+  @media (width >= 634px) {
+    grid-template-columns: 320px 1fr;
+    gap: 32px;
+  }
+}
+
+.avatarSection {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+
+  background-color: var(--backgrounds-neutral-primary);
+}
+
+.avatarUpload {
+  cursor: pointer;
+
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 12px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+
+  font: var(--font-text-medium);
+  color: var(--labels-brand-primary);
+  text-underline-position: from-font;
+  text-underline-offset: 25%;
+
+  background: transparent;
+
+  &:hover:not(:disabled) {
+    text-decoration: underline;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  svg {
+    path {
+      stroke: var(--labels-brand-primary);
+    }
+  }
+}
+
+.profileSection {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  font: var(--font-text-medium);
+
+  background-color: var(--backgrounds-neutral-primary);
+}
+
+.header {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+
+  h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--labels-neutral-primary);
+  }
+}
+
+.nameWrapper {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+
+  .name {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--labels-neutral-primary);
+  }
+}
+
+.nameEditContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.nameFieldsRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+
+  @media (width >= 634px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.nameInputWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  input {
+    @include input-field;
+
+    height: 48px;
+
+    &.inputError {
+      border-color: var(--labels-danger-primary);
+
+      &:focus {
+        border-color: var(--labels-danger-primary);
+        box-shadow: 0 0 0 3px rgb(255 77 79 / 15%);
+      }
+    }
+  }
+}
+
+.nameErrorText {
+  padding-left: 4px;
+  font-size: 12px;
+  color: var(--labels-danger-primary);
+}
+
+.nameActions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.saveNameButton {
+  cursor: pointer;
+
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--backgrounds-neutral-primary);
+
+  background-color: var(--interactive-brand-primary);
+
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: var(--interactive-brand-hover);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: var(--interactive-neutral-disable);
+  }
+}
+
+.cancelButton {
+  cursor: pointer;
+
+  padding: 8px 16px;
+  border: 1px solid var(--border-neutral-soft);
+  border-radius: 8px;
+
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--labels-neutral-secondary);
+
+  background-color: transparent;
+
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: var(--fills-neutral-primary);
+    background-color: var(--backgrounds-neutral-secondary);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.editButton {
+  cursor: pointer;
+
+  border: none;
+  border-radius: 4px;
+
+  background: transparent;
+
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: var(--interactive-brand-disable);
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+    color: var(--interactive-neutral-hover);
+  }
+}
+
+.fieldsGrid {
+  display: grid;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  label {
+    @include field-label;
+  }
+
+  &:focus-within {
+    label {
+      color: var(--labels-brand-secondary);
+    }
+  }
+
+  .editableField {
+    @include editable-field;
+
+    height: 48px;
+  }
+
+  .errorText {
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--labels-danger-primary);
+  }
+}
+
+.passwordField {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  box-sizing: border-box;
+  height: 48px;
+  padding: 12px;
+  border: 1px solid var(--border-neutral-soft);
+  border-radius: 8px;
+
+  background-color: var(--backgrounds-neutral-primary);
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    border-color: var(--fills-neutral-primary);
+  }
+
+  &:focus-within {
+    border-color: var(--labels-brand-secondary);
+    box-shadow: 0 0 0 3px rgb(64 123 254 / 15%);
+  }
+
+  input {
+    flex: 1;
+
+    height: 100%;
+    padding: 0;
+    border: none;
+
+    font-size: 16px;
+    color: var(--labels-neutral-primary);
+
+    background: transparent;
+    outline: none;
+
+    &::placeholder {
+      color: var(--labels-neutral-quaternary);
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.changePasswordLink {
+  cursor: pointer;
+
+  margin-left: auto;
+  padding: 0;
+  border: none;
+
+  font: var(--font-text-medium);
+  color: var(--interactive-brand-primary);
+
+  background: none;
+
+  &:hover {
+    color: var(--interactive-brand-hover);
+  }
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-end;
+
+  padding-top: 16px;
+
+  .cancelButton {
+    padding: 11px 20px;
+    font: var(--font-text-medium);
+  }
+}
+
+.logoutButton {
+  cursor: pointer;
+
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 12px;
+  align-items: center;
+
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+
+  font: var(--font-text-large);
+  color: var(--labels-danger-primary);
+
+  background-color: transparent;
+
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: var(--interactive-brand-disable);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: var(--interactive-neutral-disable);
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.saveButton {
+  cursor: pointer;
+
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+
+  font: var(--font-text-medium);
+  color: var(--backgrounds-neutral-primary);
+
+  background-color: var(--interactive-brand-primary);
+
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: var(--interactive-brand-hover);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: var(--interactive-neutral-disable);
+  }
+}
+
+[data-theme='dark'] {
+  .name {
+    color: var(--labels-neutral-inverted-primary);
+  }
+
+  .avatarSection {
+    background-color: transparent;
+  }
+
+  .avatarUpload rect {
+    fill: transparent;
+  }
+
+  .profileSection {
+    background-color: transparent;
+  }
+
+  .editButton rect {
+    fill: transparent;
+  }
+
+  .editButton path {
+    stroke: var(--border-neutral-inverted);
+  }
+
+  .editButton:hover {
+    background-color: var(--interactive-neutral-hover);
+  }
+
+  .nameFieldsRow input {
+    color: var(--labels-neutral-inverted-primary);
+    background-color: var(--fills-neutral-primary);
+  }
+
+  .nameFieldsRow input::placeholder {
+    color: color-mix(
+      in srgb,
+      var(--labels-neutral-secondary),
+      var(--labels-neutral-inverted-primary)
+    );
+  }
+
+  .cancelButton {
+    border: 1px solid
+      color-mix(
+        in srgb,
+        var(--labels-neutral-secondary),
+        var(--labels-neutral-inverted-primary)
+      );
+    color: var(--labels-neutral-inverted-primary);
+  }
+
+  .cancelButton:hover {
+    color: var(--interactive-neutral-active);
+    background-color: var(--interactive-neutral-hover-secondary);
+  }
+
+  .fieldsGrid label {
+    color: var(--labels-neutral-inverted-primary);
+  }
+
+  .editableField {
+    background-color: var(--fills-neutral-primary);
+
+    input {
+      color: var(--labels-neutral-inverted-primary);
+
+      &::placeholder {
+        color: color-mix(
+          in srgb,
+          var(--labels-neutral-secondary),
+          var(--labels-neutral-inverted-primary)
+        );
+      }
+    }
+  }
+
+  .passwordField {
+    color: var(--labels-neutral-inverted-primary);
+    background-color: var(--fills-neutral-primary);
+
+    input::placeholder {
+      color: color-mix(
+        in srgb,
+        var(--labels-neutral-secondary),
+        var(--labels-neutral-inverted-primary)
+      );
+    }
+  }
+}

@@ -5,8 +5,8 @@ export type TAppointment = {
   id: string;
   patient: TUserContact;
   psychologist: TPsychologist & { user: TUserContact };
-  application_id: string | null;
   type: TAppointmentType;
+  duration: TAppointmentDuration;
   reason: string | null;
   status: TAppointmentStatus;
   scheduled_time: string;
@@ -15,6 +15,8 @@ export type TAppointment = {
   venue: string;
   comment: string | null;
   cancel_reason: string | null;
+  cancelled_by: string | null;
+  emergency_cancellation: boolean;
   patient_comment: string | null;
   conclusion: string | null;
   emergency_contact: string | null;
@@ -22,6 +24,29 @@ export type TAppointment = {
 
 export type TAppointmentStatus = 'awaiting' | 'cancelled' | 'done';
 export type TAppointmentType = 'Offline' | 'Online';
+export type TAppointmentDuration = 60 | 90;
+
+export type TAppointmentListParams = { user_id?: string };
+
+export type TAppointmentCreateRequest = {
+  psychologist_id: string;
+  type: TAppointmentType;
+  duration?: TAppointmentDuration;
+  scheduled_time: string;
+  reason?: string | null;
+  remind_time?: string | null;
+  venue?: string | null;
+  comment?: string | null;
+};
+
+export type TAppointmentCancelRequest = {
+  cancel_reason: string;
+  is_emergency?: boolean;
+};
+
+export type TAppointmentEmergencyContactRequest = {
+  emergency_contact: string | null;
+};
 
 export type TAppointmentDoneRequest = {
   patient_comment?: string | null;

@@ -1,40 +1,26 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import type { TMeetingType } from '@/entities/application/types';
 
-export type TPsychologistReasonDraftType = 'application' | 'appointment';
-
-type TReasonDrafts = Record<
-  TPsychologistReasonDraftType,
-  Record<string, string>
->;
-
-export type TOfferDraft = {
-  psychologistId?: string;
-  meetingType?: TMeetingType;
+export type TScheduleDraft = {
   date?: string;
   time?: string;
-  locationAddress?: string;
-  meetingUrl?: string;
+  venue?: string;
+  comment?: string;
 };
 
 interface IPsychologistDraftsState {
-  reasonDrafts: TReasonDrafts;
-  conclusionDrafts: Record<string, string>;
-  offerDrafts: Record<string, TOfferDraft>;
-  setOfferDraft: (id: string, patch: TOfferDraft) => void;
-  clearOfferDraft: (id: string) => void;
-  setReasonDraft: (
-    type: TPsychologistReasonDraftType,
-    entityId: string,
-    reason: string,
-  ) => void;
-  clearReasonDraft: (
-    type: TPsychologistReasonDraftType,
-    entityId: string,
-  ) => void;
-  setConclusionDraft: (appointmentId: string, conclusion: string) => void;
-  clearConclusionDraft: (appointmentId: string) => void;
+  reasonDrafts: Record<string, string>;
+  patientCommentDrafts: Record<string, string>;
+  psychologistCommentDrafts: Record<string, string>;
+  scheduleDrafts: Record<string, TScheduleDraft>;
+  setScheduleDraft: (id: string, patch: TScheduleDraft) => void;
+  clearScheduleDraft: (id: string) => void;
+  setReasonDraft: (appointmentId: string, reason: string) => void;
+  clearReasonDraft: (appointmentId: string) => void;
+  setPatientCommentDraft: (appointmentId: string, comment: string) => void;
+  clearPatientCommentDraft: (appointmentId: string) => void;
+  setPsychologistCommentDraft: (appointmentId: string, comment: string) => void;
+  clearPsychologistCommentDraft: (appointmentId: string) => void;
 }
 
 const omitKey = <T>(record: Record<string, T>, key: string) => {
@@ -45,56 +31,67 @@ const omitKey = <T>(record: Record<string, T>, key: string) => {
 export const usePsychologistDrafts = create<IPsychologistDraftsState>()(
   persist(
     (set) => ({
-      reasonDrafts: {
-        application: {},
-        appointment: {},
-      },
-      conclusionDrafts: {},
-      offerDrafts: {},
-      setOfferDraft: (id, patch) =>
+      reasonDrafts: {},
+      patientCommentDrafts: {},
+      psychologistCommentDrafts: {},
+      scheduleDrafts: {},
+      setScheduleDraft: (id, patch) =>
         set((state) => ({
-          offerDrafts: {
-            ...state.offerDrafts,
-            [id]: { ...state.offerDrafts[id], ...patch },
+          scheduleDrafts: {
+            ...state.scheduleDrafts,
+            [id]: { ...state.scheduleDrafts[id], ...patch },
           },
         })),
-      clearOfferDraft: (id) =>
-        set((state) => ({ offerDrafts: omitKey(state.offerDrafts, id) })),
+      clearScheduleDraft: (id) =>
+        set((state) => ({ scheduleDrafts: omitKey(state.scheduleDrafts, id) })),
 
-      setReasonDraft: (type, entityId, reason) =>
+      setReasonDraft: (appointmentId, reason) =>
         set((state) => ({
           reasonDrafts: {
             ...state.reasonDrafts,
-            [type]: {
-              ...(state.reasonDrafts[type] ?? {}),
-              [entityId]: reason,
-            },
+            [appointmentId]: reason,
           },
         })),
 
-      clearReasonDraft: (type, entityId) =>
+      clearReasonDraft: (appointmentId) =>
         set((state) => ({
-          reasonDrafts: {
-            ...state.reasonDrafts,
-            [type]: omitKey(state.reasonDrafts[type] ?? {}, entityId),
+          reasonDrafts: omitKey(state.reasonDrafts, appointmentId),
+        })),
+
+      setPatientCommentDraft: (appointmentId, comment) =>
+        set((state) => ({
+          patientCommentDrafts: {
+            ...state.patientCommentDrafts,
+            [appointmentId]: comment,
           },
         })),
 
-      setConclusionDraft: (appointmentId, conclusion) =>
+      clearPatientCommentDraft: (appointmentId) =>
         set((state) => ({
-          conclusionDrafts: {
-            ...state.conclusionDrafts,
-            [appointmentId]: conclusion,
+          patientCommentDrafts: omitKey(
+            state.patientCommentDrafts,
+            appointmentId,
+          ),
+        })),
+
+      setPsychologistCommentDraft: (appointmentId, comment) =>
+        set((state) => ({
+          psychologistCommentDrafts: {
+            ...state.psychologistCommentDrafts,
+            [appointmentId]: comment,
           },
         })),
 
-      clearConclusionDraft: (appointmentId) =>
+      clearPsychologistCommentDraft: (appointmentId) =>
         set((state) => ({
-          conclusionDrafts: omitKey(state.conclusionDrafts, appointmentId),
+          psychologistCommentDrafts: omitKey(
+            state.psychologistCommentDrafts,
+            appointmentId,
+          ),
         })),
     }),
     {
-      name: 'psychologist-drafts',
+      name: 'psychologist-appointment-drafts',
       storage: createJSONStorage(() => sessionStorage),
     },
   ),

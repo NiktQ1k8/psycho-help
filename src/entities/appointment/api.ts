@@ -1,7 +1,11 @@
 import { queryOptions } from '@tanstack/react-query';
 import type {
   TAppointment,
+  TAppointmentCancelRequest,
+  TAppointmentCreateRequest,
   TAppointmentDoneRequest,
+  TAppointmentEmergencyContactRequest,
+  TAppointmentListParams,
   TAppointmentReschedule,
   TAppointmentRescheduleRequest,
 } from '@/entities/appointment/types';
@@ -28,7 +32,7 @@ export const appointmentQueries = {
       enabled: !!id,
     }),
 
-  list: (params?: { user_id?: string }) =>
+  list: (params?: TAppointmentListParams) =>
     queryOptions<TAppointment[]>({
       queryKey: [appointmentQueryKey.list, params],
       queryFn: async ({ signal }) =>
@@ -47,13 +51,11 @@ export const appointmentQueries = {
 
 export const cancelAppointment = async (
   id: string,
-  cancelReason: string,
+  body: TAppointmentCancelRequest,
 ): Promise<TMessageResponse> => {
   const { data } = await $api.put<TMessageResponse>(
     `/appointments/${id}/cancel`,
-    {
-      cancel_reason: cancelReason,
-    },
+    body,
   );
   return data;
 };
@@ -97,5 +99,19 @@ export const rejectAppointmentReschedule = async (
     await $api.post<TAppointmentReschedule>(
       `/appointments/reschedule-requests/${requestId}/cancel`,
       { rejection_comment: reason },
+    )
+  ).data;
+
+export const createAppointment = async (body: TAppointmentCreateRequest) =>
+  (await $api.post<TAppointment>('/appointments/create', body)).data;
+
+export const updateAppointmentEmergencyContact = async (
+  id: string,
+  body: TAppointmentEmergencyContactRequest,
+) =>
+  (
+    await $api.patch<TAppointment>(
+      `/appointments/${id}/emergency-contact`,
+      body,
     )
   ).data;

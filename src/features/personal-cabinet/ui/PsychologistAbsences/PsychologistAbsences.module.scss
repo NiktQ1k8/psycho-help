@@ -1,0 +1,152 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  min-width: 0;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-neutral-soft);
+
+  font: var(--font-text-medium);
+  color: var(--labels-neutral-primary);
+
+  h2,
+  h3,
+  p {
+    margin: 0;
+  }
+
+  h2 {
+    font-size: 24px;
+  }
+
+  h3 {
+    font-size: 18px;
+  }
+}
+
+.header,
+.period {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hint {
+  color: var(--labels-neutral-secondary);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--border-neutral-soft);
+  border-radius: 8px;
+}
+
+.kind {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+
+  legend {
+    margin-bottom: 8px;
+  }
+
+  label {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  input {
+    accent-color: var(--interactive-brand-primary);
+  }
+}
+
+.rangeLabels {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.datePicker {
+  width: 100%;
+  min-width: 0;
+}
+
+.calendarPopup {
+  overflow-y: auto;
+  max-height: calc(100dvh - 24px);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.period {
+  padding: 16px;
+  border: 1px solid var(--border-neutral-soft);
+  border-radius: 8px;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  min-width: 0;
+
+  overflow-wrap: anywhere;
+}
+
+[data-theme='dark'] {
+  .section {
+    color: var(--labels-neutral-inverted-primary);
+  }
+
+  .hint {
+    color: color-mix(
+      in srgb,
+      var(--labels-neutral-inverted-primary) 70%,
+      transparent
+    );
+  }
+}
+
+@media (width <= 633px) {
+  .form {
+    padding: 16px;
+  }
+}

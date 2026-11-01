@@ -18,3 +18,31 @@ export type TTherapistListParams = {
   skip?: number;
   take?: number;
 };
+
+export type TTherapistScheduleParams = {
+  date?: string;
+  duration?: 60 | 90;
+};
+
+export type TTherapistScheduleSlot = {
+  datetime: string;
+  duration: number;
+  format: string;
+  address: string | null;
+  price: number;
+};
+
+export type TTherapistSchedule = {
+  available_slots: TTherapistScheduleSlot[];
+};
+
+export type TTherapistStatusRequest = {
+  status: 'vacation' | 'sick';
+  start_date: string;
+  end_date: string;
+};
+
+export type TTherapistStatus = TTherapistStatusRequest & {
+  id: string;
+  pid: string;
+};

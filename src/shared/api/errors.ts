@@ -1,5 +1,23 @@
 import { isAxiosError } from 'axios';
 
+export const getRequestErrorMessage = (
+  error: unknown,
+  fallback = 'Не удалось загрузить данные. Обновите страницу или попробуйте позже.',
+): string => {
+  if (!isAxiosError(error)) return fallback;
+  if (!error.response)
+    return 'Не удалось связаться с сервером. Проверьте подключение и повторите попытку.';
+  const { status } = error.response;
+  if (status === 401)
+    return 'Сессия истекла. Войдите в аккаунт и повторите действие.';
+  if (status === 403)
+    return 'Недостаточно прав для этого действия. Обратитесь к администратору.';
+  if (status === 429)
+    return 'Слишком много запросов. Подождите немного и повторите попытку.';
+  if (status >= 500) return 'Ошибка сервера. Повторите попытку позже.';
+  return fallback;
+};
+
 export const getErrorMessage = (
   error: unknown,
   fallback = 'Не удалось выполнить запрос',

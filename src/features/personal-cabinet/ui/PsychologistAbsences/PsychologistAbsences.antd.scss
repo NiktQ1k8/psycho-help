@@ -1,0 +1,16 @@
+@media (width <= 633px) {
+  [data-psychologist-absence-calendar] {
+    .ant-picker-panels,
+    .ant-picker-datetime-panel {
+      flex-direction: column;
+    }
+
+    .ant-picker-time-panel {
+      border-inline-start: 0;
+    }
+
+    .ant-picker-time-panel .ant-picker-content {
+      height: 144px;
+    }
+  }
+}

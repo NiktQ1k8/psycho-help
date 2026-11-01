@@ -29,9 +29,6 @@ export const SLUG = {
   /** Личный кабинет */
   CABINET: '/cabinet',
 
-  /** Заявка в личном кабинете */
-  CABINET_APPLICATION: '/cabinet/application',
-
   /** Запись в личном кабинете */
   CABINET_APPOINTMENT: '/cabinet/appointment',
 

@@ -12,7 +12,7 @@ export type TUser = {
   roles: TRole[];
 };
 
-// Вложенный пользователь в заявках и записях приходит без ролей.
+// Вложенный пользователь в записях приходит без ролей.
 export type TUserContact = Omit<TUser, 'roles'>;
 
 export type TRegistrationData = {

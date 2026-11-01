@@ -2,7 +2,7 @@ import { isAxiosError } from 'axios';
 import type { InternalAxiosRequestConfig } from 'axios';
 import { refreshSession } from '@/entities/auth/api';
 import { useAuth } from '@/entities/auth/model/useAuth';
-import { useApplication } from '@/features/personal-cabinet/model/application';
+import { useAppointmentBooking } from '@/features/personal-cabinet/model/appointment-booking';
 import { useCabinetDrafts } from '@/features/personal-cabinet/model/cabinet-drafts';
 import { usePsychologistDrafts } from '@/features/personal-cabinet/model/psychologist-drafts';
 import { usePsychologistView } from '@/features/personal-cabinet/model/psychologist-view';
@@ -15,7 +15,10 @@ export const setupSession = () => {
     if (state.user && (!previous.user || state.user.id === previous.user.id)) {
       return;
     }
-    useApplication.setState(useApplication.getInitialState(), true);
+    useAppointmentBooking.setState(
+      useAppointmentBooking.getInitialState(),
+      true,
+    );
     useCabinetDrafts.setState(useCabinetDrafts.getInitialState(), true);
     usePsychologistDrafts.setState(
       usePsychologistDrafts.getInitialState(),

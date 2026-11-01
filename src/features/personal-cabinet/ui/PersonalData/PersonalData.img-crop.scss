@@ -1,0 +1,14 @@
+[data-avatar-crop] {
+  .img-crop-control-zoom button {
+    font-size: 0;
+
+    &::before {
+      content: '-';
+      font-size: 18px;
+    }
+
+    &:last-child::before {
+      content: '+';
+    }
+  }
+}

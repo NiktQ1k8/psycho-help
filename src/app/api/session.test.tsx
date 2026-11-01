@@ -27,7 +27,7 @@ import { authApi } from '@/entities/auth/api';
 import { getAuthErrorMessage } from '@/entities/auth/model/auth-errors';
 import { useAuth } from '@/entities/auth/model/useAuth';
 import type { TUser } from '@/entities/auth/types';
-import { useApplication } from '@/features/personal-cabinet/model/application';
+import { useAppointmentBooking } from '@/features/personal-cabinet/model/appointment-booking';
 import { useCabinetDrafts } from '@/features/personal-cabinet/model/cabinet-drafts';
 import { usePsychologistDrafts } from '@/features/personal-cabinet/model/psychologist-drafts';
 import { usePsychologistView } from '@/features/personal-cabinet/model/psychologist-view';
@@ -228,7 +228,7 @@ describe('Авторизация и сессия', () => {
       renderSession('/');
       await screen.findByText('Главная');
       requests = [];
-      queryClient.setQueryData(['application.list'], ['private data']);
+      queryClient.setQueryData(['appointment.list'], ['private data']);
       respond = (config) => {
         expect(config.method).toBe('post');
         expect(JSON.parse(config.data as string)).toEqual(
@@ -243,7 +243,7 @@ describe('Авторизация и сессия', () => {
         action === 'login' ? '/api/users/login' : '/api/users/register',
       ]);
       expect(useAuth.getState()).toMatchObject({ isAuth: true, user });
-      expect(queryClient.getQueryData(['application.list'])).toBeUndefined();
+      expect(queryClient.getQueryData(['appointment.list'])).toBeUndefined();
     },
   );
 
@@ -376,7 +376,7 @@ describe('Авторизация и сессия', () => {
     };
     const pending = Promise.all([
       $api.get<{ ok: boolean }>('/appointments/'),
-      $api.get<{ ok: boolean }>('/applications/'),
+      $api.get<{ ok: boolean }>('/therapists/'),
     ]);
     await expect.poll(() => requests.length).toBe(3);
     finishRefresh();
@@ -391,52 +391,65 @@ describe('Авторизация и сессия', () => {
 
   it('при истёкшем refresh очищает пользователя, кэш и личные черновики', async () => {
     useAuth.setState({ isAuth: true, user });
-    queryClient.setQueryData(['application.list'], ['private data']);
-    useApplication
+    queryClient.setQueryData(['appointment.list'], ['private data']);
+    useAppointmentBooking.getState().setAppointment({
+      reason: 'Личный черновик',
+      emergency_contact: 'Мама, +79990000000',
+    });
+    useAppointmentBooking
       .getState()
-      .setApplication({ problem_description: 'Личный черновик' });
+      .setCreatedAppointmentId('created-appointment');
     usePsychologistDrafts
       .getState()
-      .setConclusionDraft('appointment', 'Личное заключение');
-    usePsychologistDrafts.getState().setOfferDraft('application', {
-      meetingUrl: 'https://example.com/private',
+      .setPatientCommentDraft('appointment', 'Личное заключение');
+    usePsychologistDrafts
+      .getState()
+      .setPsychologistCommentDraft('appointment', 'Внутренняя заметка');
+    usePsychologistDrafts.getState().setScheduleDraft('appointment', {
+      date: '2026-12-01',
     });
     useCabinetDrafts.getState().setProfile({ social_media: '@private' });
     useCabinetDrafts
       .getState()
-      .setCancellationReason('application:private', 'Личная причина');
-    useApplication.getState().setMeetingType('offline');
-    usePsychologistView.getState().setSearchQuery('applications', 'Иванов');
-    usePsychologistView.getState().setSearchQuery('appointments', 'Петров');
+      .setCancellationReason('appointment:private', 'Личная причина');
+    useAppointmentBooking.getState().setType('Offline');
+    usePsychologistView.getState().setSearchQuery('Петров');
     respond = (config) => fail(config);
     await expect($api.get('/appointments/')).rejects.toMatchObject({
       response: { status: 401 },
     });
     expect(requests).toEqual(['/api/appointments/', '/api/users/refresh']);
     expect(useAuth.getState()).toMatchObject({ isAuth: false, user: null });
-    expect(queryClient.getQueryData(['application.list'])).toBeUndefined();
-    expect(useApplication.getState().application.problem_description).toBe('');
-    expect(usePsychologistDrafts.getState().conclusionDrafts).toEqual({});
-    expect(usePsychologistDrafts.getState().offerDrafts).toEqual({});
+    expect(queryClient.getQueryData(['appointment.list'])).toBeUndefined();
+    expect(useAppointmentBooking.getState().appointment.reason).toBe('');
+    expect(
+      useAppointmentBooking.getState().appointment.emergency_contact,
+    ).toBeUndefined();
+    expect(useAppointmentBooking.getState().createdAppointmentId).toBeNull();
+    expect(usePsychologistDrafts.getState().patientCommentDrafts).toEqual({});
+    expect(usePsychologistDrafts.getState().psychologistCommentDrafts).toEqual(
+      {},
+    );
+    expect(usePsychologistDrafts.getState().scheduleDrafts).toEqual({});
     expect(useCabinetDrafts.getState().profile).toEqual({});
     expect(useCabinetDrafts.getState().cancellationReasons).toEqual({});
-    expect(useApplication.getState().meetingType).toBeNull();
-    expect(usePsychologistView.getState().applicationFilters.searchQuery).toBe(
-      '',
-    );
+    expect(useAppointmentBooking.getState().appointment.type).toBeUndefined();
     expect(usePsychologistView.getState().appointmentFilters.searchQuery).toBe(
       '',
     );
     expect(
-      JSON.parse(sessionStorage.getItem('psychologist-drafts')!),
-    ).toHaveProperty('state.conclusionDrafts', {});
+      JSON.parse(sessionStorage.getItem('psychologist-appointment-drafts')!),
+    ).toHaveProperty('state.patientCommentDrafts', {});
+    expect(
+      JSON.parse(sessionStorage.getItem('psychologist-appointment-drafts')!),
+    ).toHaveProperty('state.psychologistCommentDrafts', {});
   });
 
   it.each(['network', 'server'])(
     'сохраняет пользователя при временной ошибке refresh: %s',
     async (failure) => {
       useAuth.setState({ isAuth: true, user });
-      queryClient.setQueryData(['application.list'], ['private data']);
+      queryClient.setQueryData(['appointment.list'], ['private data']);
       let recovered = false;
       let refreshed = false;
       respond = (config) => {
@@ -453,7 +466,7 @@ describe('Авторизация и сессия', () => {
         AxiosError,
       );
       expect(useAuth.getState()).toMatchObject({ isAuth: true, user });
-      expect(queryClient.getQueryData(['application.list'])).toEqual([
+      expect(queryClient.getQueryData(['appointment.list'])).toEqual([
         'private data',
       ]);
       recovered = true;
@@ -496,33 +509,30 @@ describe('Авторизация и сессия', () => {
 
   it('очищает личные данные после успешного выхода, сохраняя их при сбое запроса', async () => {
     useAuth.setState({ isAuth: true, user });
-    queryClient.setQueryData(['application.list'], ['private data']);
-    useApplication
+    queryClient.setQueryData(['appointment.list'], ['private data']);
+    useAppointmentBooking
       .getState()
-      .setApplication({ problem_description: 'Личный черновик' });
+      .setAppointment({ reason: 'Личный черновик' });
     usePsychologistDrafts
       .getState()
-      .setReasonDraft('application', 'application', 'Личная причина');
-    usePsychologistView.getState().setSearchQuery('applications', 'Иванов');
+      .setReasonDraft('appointment', 'Личная причина');
+    usePsychologistView.getState().setSearchQuery('Иванов');
     respond = (config) => fail(config, 503);
     await expect(useAuth.getState().logOut()).rejects.toBeInstanceOf(
       AxiosError,
     );
     expect(useAuth.getState()).toMatchObject({ isAuth: true, user });
-    expect(usePsychologistView.getState().applicationFilters.searchQuery).toBe(
+    expect(usePsychologistView.getState().appointmentFilters.searchQuery).toBe(
       'Иванов',
     );
     respond = (config) => response(config, null);
     await useAuth.getState().logOut();
     expect(requests).toEqual(['/api/users/logout', '/api/users/logout']);
     expect(useAuth.getState()).toMatchObject({ isAuth: false, user: null });
-    expect(queryClient.getQueryData(['application.list'])).toBeUndefined();
-    expect(useApplication.getState().application.problem_description).toBe('');
-    expect(usePsychologistDrafts.getState().reasonDrafts).toEqual({
-      application: {},
-      appointment: {},
-    });
-    expect(usePsychologistView.getState().applicationFilters.searchQuery).toBe(
+    expect(queryClient.getQueryData(['appointment.list'])).toBeUndefined();
+    expect(useAppointmentBooking.getState().appointment.reason).toBe('');
+    expect(usePsychologistDrafts.getState().reasonDrafts).toEqual({});
+    expect(usePsychologistView.getState().appointmentFilters.searchQuery).toBe(
       '',
     );
   });

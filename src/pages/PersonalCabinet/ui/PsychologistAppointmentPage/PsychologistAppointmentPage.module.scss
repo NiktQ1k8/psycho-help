@@ -1,0 +1,349 @@
+.page {
+  display: grid;
+  grid-template-columns: 288px minmax(0, 1fr);
+  gap: 24px;
+
+  max-width: 1224px;
+  min-height: calc(100vh - 80px);
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.sidebarWrapper {
+  position: sticky;
+  top: calc(var(--header-height) + 40px);
+  height: fit-content;
+
+  @media (height <= 900px), (width <= 1024px) {
+    position: static;
+  }
+}
+
+.wrapper {
+  overflow-wrap: anywhere;
+}
+
+.title {
+  margin: 24px 0;
+
+  font: var(--font-h4);
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 36px;
+}
+
+.status {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: var(--labels-neutral-primary);
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
+
+  &--awaiting {
+    background-color: var(--labels-neutral-secondary);
+  }
+
+  &--done {
+    background-color: var(--labels-success-primary);
+  }
+
+  &--cancelled {
+    background-color: var(--labels-danger-primary);
+  }
+}
+
+.status-text {
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--labels-neutral-primary);
+}
+
+.reasonBlockCancelled {
+  margin-bottom: 24px;
+  padding: 16px;
+  border-left: 4px solid var(--labels-warning-primary, #f59e0b);
+  border-radius: 4px;
+
+  background-color: var(--bg-warning-light, #fffbeb);
+
+  .reasonLabel {
+    margin-right: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--labels-warning-primary, #f59e0b);
+  }
+
+  .reasonText {
+    font-size: 14px;
+    color: var(--labels-neutral-primary);
+  }
+}
+
+.infoBlock {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.infoRow {
+  display: flex;
+  flex-direction: column;
+
+  padding: 16px 0;
+
+  font: var(--font-text-medium);
+  font-size: 16px;
+  line-height: 28px;
+}
+
+.infoLabel {
+  margin-bottom: 8px;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--labels-neutral-tetriary);
+}
+
+.infoValue,
+.infoValueGrid {
+  padding: 12px;
+
+  font: var(--font-text-medium);
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--labels-neutral-primary);
+}
+
+.actionHint {
+  margin-top: 16px;
+}
+
+.changeSummary {
+  white-space: pre-wrap;
+}
+
+.fieldHint {
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--labels-neutral-secondary);
+}
+
+.contactActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.contactError {
+  margin-top: 12px;
+}
+
+.resetScheduleButton {
+  height: auto;
+  padding: 12px 24px;
+  white-space: normal;
+}
+
+.scheduleInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+
+  &:empty {
+    display: none;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-flow: row-reverse wrap;
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  justify-items: center;
+
+  width: 100%;
+  padding: 16px 0;
+}
+
+.infoRowGrid {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+
+  font: var(--font-text-medium);
+  font-size: 16px;
+  line-height: 28px;
+}
+
+.infoValueGrid {
+  border: 1px solid var(--border-neutral-base, #e5e7eb);
+  border-radius: 4px;
+}
+
+.timePicker {
+  width: 100%;
+  height: 50px;
+}
+
+.venueRow {
+  grid-column: 1 / -1;
+}
+
+.venueInput,
+.textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 8px 12px;
+  border: 1px solid var(--border-neutral-base);
+  border-radius: 6px;
+
+  font: var(--font-text-medium);
+  color: var(--labels-neutral-primary);
+
+  background-color: var(--backgrounds-neutral-primary);
+
+  &:focus-visible {
+    border-color: var(--labels-brand-primary);
+    outline: none;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.textarea {
+  resize: vertical;
+}
+
+.infoName {
+  font: var(--font-text-large);
+  font-size: 20px;
+  line-height: 28px;
+  color: var(--labels-neutral-primary);
+}
+
+.actionButtonCancel,
+.actionButtonEnd {
+  cursor: pointer;
+
+  padding: 12px 50px;
+  border: none;
+  border-radius: 16px;
+
+  font: var(--font-text-large);
+  font-weight: 500;
+
+  transition: background-color 0.2s;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.actionButtonEnd {
+  color: var(--labels-neutral-inverted-primary);
+  background-color: var(--interactive-brand-primary);
+
+  &:hover:not(:disabled) {
+    background-color: var(--interactive-brand-hover);
+  }
+}
+
+.actionButtonCancel {
+  color: var(--labels-danger-primary);
+  background-color: var(--fills-danger-tetriary);
+
+  &:hover:not(:disabled) {
+    background-color: var(--fills-danger-secondary);
+  }
+}
+
+@media (width <= 1024px) {
+  .page {
+    display: flex;
+    flex-direction: column;
+    padding: 0 24px 40px;
+  }
+
+  .sidebarWrapper {
+    display: none;
+  }
+}
+
+@media (width <= 600px) {
+  .actions {
+    flex-direction: column;
+  }
+
+  .page {
+    gap: 20px;
+    padding: 0 10px 100px;
+  }
+
+  .infoGrid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .title {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  .infoName {
+    font: var(--font-h5);
+    font-size: 18px;
+    line-height: 24px;
+  }
+}
+
+[data-theme='dark'] {
+  .venueInput,
+  .textarea {
+    color: var(--labels-neutral-inverted-primary);
+    background-color: var(--backgrounds-neutral-inverted);
+  }
+
+  .title,
+  .infoLabel {
+    color: var(--labels-neutral-inverted-primary);
+  }
+
+  .infoName,
+  .status-text,
+  .infoValueGrid,
+  .infoValue,
+  .fieldHint {
+    color: color-mix(
+      in srgb,
+      var(--labels-neutral-secondary),
+      var(--labels-neutral-inverted-primary)
+    );
+  }
+
+  .reasonBlockCancelled {
+    background-color: var(--fills-neutral-primary);
+  }
+
+  .reasonText {
+    color: var(--labels-neutral-inverted-primary);
+  }
+}

@@ -1,4 +1,4 @@
-import { type FC, lazy } from 'react';
+import { type ComponentType, lazy } from 'react';
 import { SLUG } from '@/shared/config/slug';
 
 const Logout = lazy(() => import('@/pages/Logout/Logout'));
@@ -32,25 +32,25 @@ const TestPage = lazy(() =>
   })),
 );
 const FaqPage = lazy(() => import('@/pages/faq-page/faq-page'));
-const PersonalCabinet = lazy(
-  () => import('@/pages/personal-cabinet/personal-cabinet'),
+const PersonalCabinet = lazy(() =>
+  import('@/pages/PersonalCabinet/ui/PersonalCabinet/PersonalCabinet').then(
+    (module) => ({ default: module.PersonalCabinet }),
+  ),
 );
-const PsychologistApplicationPage = lazy(
-  () =>
-    import('@/pages/personal-cabinet/psychologist-application-page/PsychologistApplicationPage'),
+const PsychologistAppointmentPage = lazy(() =>
+  import('@/pages/PersonalCabinet/ui/PsychologistAppointmentPage/PsychologistAppointmentPage').then(
+    (module) => ({ default: module.PsychologistAppointmentPage }),
+  ),
 );
-const PsychologistAppointmentPage = lazy(
-  () =>
-    import('@/pages/personal-cabinet/psychologist-appointment-page/PsychologistAppointmentPage'),
-);
-const MedicalRecordPage = lazy(
-  () =>
-    import('@/pages/personal-cabinet/medical-record-page/MedicalRecordPage'),
+const MedicalRecordPage = lazy(() =>
+  import('@/pages/PersonalCabinet/ui/MedicalRecordPage/MedicalRecordPage').then(
+    (module) => ({ default: module.MedicalRecordPage }),
+  ),
 );
 
 interface IRoutePath {
   path: string;
-  Component: FC;
+  Component: ComponentType;
   navText?: string;
   authOnly?: boolean;
 }
@@ -103,11 +103,6 @@ export const routes: IRoutePath[] = [
   {
     path: SLUG.CABINET,
     Component: PersonalCabinet,
-    authOnly: true,
-  },
-  {
-    path: `${SLUG.CABINET_APPLICATION}/:id`,
-    Component: PsychologistApplicationPage,
     authOnly: true,
   },
   {

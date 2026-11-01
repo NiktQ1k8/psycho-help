@@ -25,11 +25,6 @@ yarn-debug.log*
 yarn-error.log*
 test-results
 
-# ai tools
-/.claude/
-/CLAUDE.md
-/.codex
-
 # statistics
 /.VSCodeCounter/
 

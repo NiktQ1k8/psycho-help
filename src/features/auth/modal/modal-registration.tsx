@@ -134,8 +134,8 @@ const ModalRegistration: React.FC<TAuthModalProps> = ({
           <h2 className={styles.modalTitle}>Регистрация</h2>
           <button
             className={styles.closeButton}
-            onClick={handleCancel}
             aria-label="Закрыть окно регистрации"
+            onClick={handleCancel}
           >
             ✕
           </button>
@@ -153,17 +153,17 @@ const ModalRegistration: React.FC<TAuthModalProps> = ({
               <label>
                 <span className={styles.required}>Ваше имя</span>
                 <input
-                  type="text"
-                  disabled={isLoading}
-                  name="first_name"
-                  aria-invalid={!!errors.first_name}
-                  onBlur={handleBlur}
-                  maxLength={50}
-                  value={formValue.first_name}
-                  placeholder="Введите имя"
-                  onChange={handleInputChange}
                   className={styles.input}
+                  aria-invalid={!!errors.first_name}
                   aria-label="Строка для ввода имени"
+                  disabled={isLoading}
+                  maxLength={50}
+                  name="first_name"
+                  placeholder="Введите имя"
+                  type="text"
+                  value={formValue.first_name}
+                  onBlur={handleBlur}
+                  onChange={handleInputChange}
                 />
                 {errors.first_name && (
                   <p className={styles.errorText}>{errors.first_name}</p>
@@ -172,17 +172,17 @@ const ModalRegistration: React.FC<TAuthModalProps> = ({
               <label>
                 <span className={styles.required}>Ваша фамилия</span>
                 <input
-                  type="text"
-                  disabled={isLoading}
-                  name="last_name"
-                  aria-invalid={!!errors.last_name}
-                  onBlur={handleBlur}
-                  maxLength={50}
-                  value={formValue.last_name}
-                  placeholder="Введите фамилию"
-                  onChange={handleInputChange}
                   className={styles.input}
+                  aria-invalid={!!errors.last_name}
                   aria-label="Строка для ввода фамилии"
+                  disabled={isLoading}
+                  maxLength={50}
+                  name="last_name"
+                  placeholder="Введите фамилию"
+                  type="text"
+                  value={formValue.last_name}
+                  onBlur={handleBlur}
+                  onChange={handleInputChange}
                 />
                 {errors.last_name && (
                   <p className={styles.errorText}>{errors.last_name}</p>
@@ -192,13 +192,13 @@ const ModalRegistration: React.FC<TAuthModalProps> = ({
             <label>
               <span className={styles.required}>Номер телефона</span>
               <PhoneInput
+                className={styles.input}
+                aria-invalid={!!errors.phone_number}
                 disabled={isLoading}
                 name="phone_number"
-                aria-invalid={!!errors.phone_number}
-                onBlur={handleBlur}
                 value={formValue.phone_number}
+                onBlur={handleBlur}
                 onChange={(value) => handleFieldChange('phone_number', value)}
-                className={styles.input}
               />
               {errors.phone_number && (
                 <span className={styles.errorText}>{errors.phone_number}</span>
@@ -207,18 +207,18 @@ const ModalRegistration: React.FC<TAuthModalProps> = ({
             <label>
               <span className={styles.required}>Электронная почта</span>
               <input
-                type="email"
-                disabled={isLoading}
-                name="email"
-                aria-invalid={!!errors.email}
-                onBlur={handleBlur}
-                maxLength={64}
-                autoComplete="email"
-                value={formValue.email}
-                placeholder="Введите почту"
-                onChange={handleInputChange}
                 className={styles.input}
+                aria-invalid={!!errors.email}
                 aria-label="Строка для ввода электронной почты"
+                autoComplete="email"
+                disabled={isLoading}
+                maxLength={64}
+                name="email"
+                placeholder="Введите почту"
+                type="email"
+                value={formValue.email}
+                onBlur={handleBlur}
+                onChange={handleInputChange}
               />
               {errors.email && (
                 <span className={styles.errorText}>{errors.email}</span>
@@ -228,27 +228,27 @@ const ModalRegistration: React.FC<TAuthModalProps> = ({
               <span className={styles.required}>Пароль</span>
               <div className={styles.passwordWrapper}>
                 <input
-                  type={showPassword ? 'text' : 'password'}
-                  name="password"
-                  disabled={isLoading}
-                  aria-invalid={!!errors.password}
-                  onBlur={handleBlur}
-                  maxLength={64}
-                  autoComplete="new-password"
-                  value={formValue.password}
-                  placeholder="Введите пароль"
-                  onChange={handleInputChange}
                   className={styles.passwordInput}
+                  aria-invalid={!!errors.password}
                   aria-label="Строка для ввода пароля"
+                  autoComplete="new-password"
+                  disabled={isLoading}
+                  maxLength={64}
+                  name="password"
+                  placeholder="Введите пароль"
+                  type={showPassword ? 'text' : 'password'}
+                  value={formValue.password}
+                  onBlur={handleBlur}
+                  onChange={handleInputChange}
                 />
                 <button
-                  type="button"
                   className={styles.showPassButton}
-                  onClick={() => setShowPassword((s) => !s)}
-                  aria-pressed={showPassword}
                   aria-label={
                     showPassword ? 'Скрыть пароль' : 'Показать пароль'
                   }
+                  aria-pressed={showPassword}
+                  type="button"
+                  onClick={() => setShowPassword((s) => !s)}
                 >
                   {showPassword ? <EyeIcon /> : <EyeOffIcon />}
                 </button>
@@ -265,27 +265,27 @@ const ModalRegistration: React.FC<TAuthModalProps> = ({
               <span className={styles.required}>Повторите пароль</span>
               <div className={styles.passwordWrapper}>
                 <input
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  name="confirm_password"
-                  disabled={isLoading}
-                  aria-invalid={!!errors.confirm_password}
-                  onBlur={handleBlur}
-                  maxLength={64}
-                  autoComplete="new-password"
-                  value={formValue.confirm_password}
-                  placeholder="Введите пароль ещё раз"
-                  onChange={handleInputChange}
                   className={styles.passwordInput}
+                  aria-invalid={!!errors.confirm_password}
                   aria-label="Строка для повторного ввода пароля"
+                  autoComplete="new-password"
+                  disabled={isLoading}
+                  maxLength={64}
+                  name="confirm_password"
+                  placeholder="Введите пароль ещё раз"
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  value={formValue.confirm_password}
+                  onBlur={handleBlur}
+                  onChange={handleInputChange}
                 />
                 <button
-                  type="button"
                   className={styles.showPassButton}
-                  onClick={() => setShowConfirmPassword((s) => !s)}
-                  aria-pressed={showConfirmPassword}
                   aria-label={
                     showConfirmPassword ? 'Скрыть пароль' : 'Показать пароль'
                   }
+                  aria-pressed={showConfirmPassword}
+                  type="button"
+                  onClick={() => setShowConfirmPassword((s) => !s)}
                 >
                   {showConfirmPassword ? <EyeIcon /> : <EyeOffIcon />}
                 </button>
@@ -305,8 +305,8 @@ const ModalRegistration: React.FC<TAuthModalProps> = ({
           <div className={styles.footer}>
             <button
               className={styles.submitButton}
-              type="submit"
               disabled={isLoading}
+              type="submit"
             >
               {isLoading ? 'Загрузка...' : 'Зарегистрироваться'}
             </button>

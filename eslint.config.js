@@ -1,4 +1,5 @@
 import js from '@eslint/js';
+import perfectionist from 'eslint-plugin-perfectionist';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import { defineConfig, globalIgnores } from 'eslint/config';
@@ -59,6 +60,24 @@ export default defineConfig([
           caughtErrorsIgnorePattern: '^_',
           destructuredArrayIgnorePattern: '^_',
           ignoreRestSiblings: true,
+        },
+      ],
+    },
+  },
+  {
+    files: ['**/*.tsx'],
+    plugins: { perfectionist },
+    rules: {
+      'perfectionist/sort-jsx-props': [
+        'error',
+        {
+          type: 'alphabetical',
+          order: 'asc',
+          groups: ['className', 'unknown', 'callbacks'],
+          customGroups: [
+            { groupName: 'className', elementNamePattern: '^className$' },
+            { groupName: 'callbacks', elementNamePattern: '^on[A-Z]' },
+          ],
         },
       ],
     },

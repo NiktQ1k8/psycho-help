@@ -21,18 +21,18 @@ export const Polls = () => {
         {polls.map((item, index) => {
           return (
             <PollCard
+              bottomSlot={
+                <button className={styles.passBtn}>{TRANSLATES.pass}</button>
+              }
+              description={item.description}
               ellipseDescription
-              title={item.title}
+              hasHorizontalDesktopVersion
               info={{
                 key: item.author,
                 value: item.date,
               }}
-              description={item.description}
-              bottomSlot={
-                <button className={styles.passBtn}>{TRANSLATES.pass}</button>
-              }
-              hasHorizontalDesktopVersion
               key={`polls-${index}`}
+              title={item.title}
             />
           );
         })}

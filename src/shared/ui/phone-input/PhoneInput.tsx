@@ -9,12 +9,12 @@ type TPhoneInputProps = Omit<
 
 export const PhoneInput = (props: TPhoneInputProps) => (
   <FormattedInput
-    type="tel"
     autoComplete="tel"
     inputMode="tel"
     placeholder="+7 (999) 123-45-67"
+    type="tel"
     {...props}
-    parse={parsePhoneCharacter}
     format={formatPhone}
+    parse={parsePhoneCharacter}
   />
 );

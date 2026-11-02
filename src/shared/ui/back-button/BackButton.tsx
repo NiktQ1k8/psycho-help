@@ -36,7 +36,7 @@ export const BackButton = ({
 
   const content = (
     <>
-      <ChevronLeft aria-hidden focusable="false" width={24} height={24} />
+      <ChevronLeft aria-hidden focusable="false" height={24} width={24} />
       {text}
     </>
   );
@@ -44,7 +44,7 @@ export const BackButton = ({
 
   if (to !== undefined) {
     return (
-      <Link to={to} className={classNames} style={style} onClick={onClick}>
+      <Link className={classNames} style={style} to={to} onClick={onClick}>
         {content}
       </Link>
     );
@@ -52,9 +52,9 @@ export const BackButton = ({
 
   return (
     <button
-      type="button"
       className={classNames}
       style={style}
+      type="button"
       onClick={onClick ?? goBack}
     >
       {content}

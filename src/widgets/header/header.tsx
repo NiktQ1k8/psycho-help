@@ -92,27 +92,27 @@ const Header = () => {
       <nav className={styles.header__nav} aria-label="Основная навигация">
         <Link
           className={styles.header__logo}
-          to={SLUG.MAIN}
           aria-label="Вернуться на главную страницу"
+          to={SLUG.MAIN}
         >
           <Logo aria-hidden />
         </Link>
         <button
           className={`${styles.header__burger} ${menuOpen ? styles['header__burger--open'] : ''}`}
-          onClick={toggleMenu}
-          type="button"
-          aria-label={menuOpen ? 'Закрыть меню' : 'Открыть меню'}
-          aria-expanded={menuOpen}
           aria-controls="main-nav-menu"
+          aria-expanded={menuOpen}
+          aria-label={menuOpen ? 'Закрыть меню' : 'Открыть меню'}
           data-testid="burger-button"
+          type="button"
+          onClick={toggleMenu}
         >
           <span aria-hidden />
           <span aria-hidden />
           <span aria-hidden />
         </button>
         <ul
-          id="main-nav-menu"
           className={`${styles.header__list} ${isAnimating ? styles['header__list--animating'] : ''} ${menuOpen ? styles['header__list--open'] : ''}`}
+          id="main-nav-menu"
           role="list"
         >
           {navPages.map((item, index) => (
@@ -129,14 +129,14 @@ const Header = () => {
           <li className={styles.header__item}>
             <button
               className={styles.header__link}
-              onClick={toggleTheme}
-              data-testid="theme-toggle-button"
-              type="button"
               aria-label={
                 currentTheme === 'light'
                   ? 'Переключить на тёмную тему'
                   : 'Переключить на светлую тему'
               }
+              data-testid="theme-toggle-button"
+              type="button"
+              onClick={toggleTheme}
             >
               {currentTheme === 'light' ? (
                 <Moon aria-hidden />
@@ -147,19 +147,19 @@ const Header = () => {
             {isAuth ? (
               <Link
                 className={`${styles.header__link}`}
+                aria-label="Личный кабинет"
                 to={SLUG.CABINET}
                 onClick={closeMenu}
-                aria-label="Личный кабинет"
               >
                 <Profile aria-hidden />
               </Link>
             ) : (
               <button
                 className={`${styles.header__link} ${styles['header__link--auth']}`}
-                onClick={handleAuthClick}
-                type="button"
                 aria-label="Открыть окно входа"
                 data-testid="auth-button"
+                type="button"
+                onClick={handleAuthClick}
               >
                 <Auth aria-hidden />
                 <span>Войти</span>

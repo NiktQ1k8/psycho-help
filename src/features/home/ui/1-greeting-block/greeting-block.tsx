@@ -30,9 +30,9 @@ const GreetingBlock = () => {
             <source media="(max-width: 425px)" srcSet={GreetingMobile} />
             <source media="(max-width: 768px)" srcSet={GreetingTablet} />
             <img
-              src={GreetingDesktop}
-              alt="Иллюстрация на главной странице"
               className={styles.greeting__image}
+              alt="Иллюстрация на главной странице"
+              src={GreetingDesktop}
             />
           </picture>
         </div>

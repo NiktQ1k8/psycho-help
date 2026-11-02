@@ -36,12 +36,12 @@ export const Footer: FC = () => {
             {socials.map((social) => (
               <a
                 className={styles.social}
-                key={social.link}
                 href={social.link}
-                target="_blank"
+                key={social.link}
                 rel="noopener noreferrer"
+                target="_blank"
               >
-                <social.icon width={20} height={20} />
+                <social.icon height={20} width={20} />
               </a>
             ))}
           </div>
@@ -62,8 +62,8 @@ export const Footer: FC = () => {
           <a
             className={styles.issuesLink}
             href={EXTERNAL_LINKS.ISSUE}
-            target="_blank"
             rel="noopener noreferrer"
+            target="_blank"
           >
             создайте issue
           </a>{' '}

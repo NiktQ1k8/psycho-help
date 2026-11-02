@@ -43,7 +43,7 @@ export const PersonalCabinet = () => {
   return (
     <div className={styles.layout}>
       <div className={styles.sidebarWrapper}>
-        <Sidebar user={authUser} activeTab={activeTab} tabs={tabs} />
+        <Sidebar activeTab={activeTab} tabs={tabs} user={authUser} />
       </div>
 
       <main className={styles.mainContent}>

@@ -90,10 +90,10 @@ export const PsychologistDashboard = () => {
   if (error)
     return (
       <Alert
-        type="error"
+        description={getRequestErrorMessage(error)}
         showIcon
         title="Не удалось загрузить расписание"
-        description={getRequestErrorMessage(error)}
+        type="error"
       />
     );
 
@@ -109,12 +109,12 @@ export const PsychologistDashboard = () => {
             const isSelected = day.hasSame(currentDate, 'day');
             return (
               <button
-                type="button"
-                key={day.toFormat('dd')}
                 className={clsx(styles.dayItem, isSelected && styles.dayActive)}
-                onClick={() => handleDaySelect(day)}
-                aria-pressed={isSelected}
                 aria-label={day.toFormat('d MMMM yyyy')}
+                aria-pressed={isSelected}
+                key={day.toFormat('dd')}
+                type="button"
+                onClick={() => handleDaySelect(day)}
               >
                 <span className={styles.dayName}>{day.toFormat('ccc')}</span>
                 <span className={styles.dayNumber}>{day.toFormat('d')}</span>
@@ -124,13 +124,13 @@ export const PsychologistDashboard = () => {
         </div>
 
         <DatePicker
+          className={styles.datePicker}
+          allowClear={false}
+          aria-label="Дата расписания"
+          format="DD.MM.YYYY"
+          placeholder="Выберите дату"
           value={currentDate}
           onChange={(date) => date && handleDaySelect(date)}
-          format="DD.MM.YYYY"
-          allowClear={false}
-          className={styles.datePicker}
-          placeholder="Выберите дату"
-          aria-label="Дата расписания"
         />
       </div>
 
@@ -140,8 +140,8 @@ export const PsychologistDashboard = () => {
             <div className={styles.timeLabels}>
               {dayHours.map((hour) => (
                 <div
-                  key={hour}
                   className={styles.timeLabelRow}
+                  key={hour}
                   style={{ height: HOUR_HEIGHT }}
                 >
                   <span
@@ -168,18 +168,18 @@ export const PsychologistDashboard = () => {
 
                 return (
                   <button
-                    type="button"
-                    key={apt.id}
                     className={clsx(
                       styles.eventCard,
                       isSelected && styles.eventCardActive,
                     )}
+                    aria-pressed={isSelected}
+                    key={apt.id}
                     style={{
                       top: `${topPosition}px`,
                       height: `${durationHeight}px`,
                     }}
+                    type="button"
                     onClick={() => setSelectedAptId(apt.id)}
-                    aria-pressed={isSelected}
                   >
                     <div className={styles.eventTime}>
                       {getTimeRange(apt.scheduled_time, apt.duration)} ·{' '}
@@ -236,8 +236,8 @@ export const PsychologistDashboard = () => {
               </div>
 
               <Button
-                type="primary"
                 className={styles.btnNavigate}
+                type="primary"
                 onClick={() =>
                   navigate(
                     `${SLUG.CABINET_APPOINTMENT}/${selectedAppointment.id}`,

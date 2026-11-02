@@ -12,7 +12,7 @@ export const NewsHero = () => {
             изменений в работе нашей Службы психологической помощи.
           </p>
         </div>
-        <img src={newsHero} className={styles.image} alt="" />
+        <img className={styles.image} alt="" src={newsHero} />
       </div>
     </header>
   );

@@ -20,7 +20,7 @@ export const Sidebar = ({ user, activeTab, tabs }: TSidebarProps) => {
   return (
     <aside className={styles.sidebar}>
       <div className={styles.profileInfo}>
-        <UserAvatar userId={user?.id} size="small" />
+        <UserAvatar size="small" userId={user?.id} />
         <div className={styles.name}>
           {user
             ? `${user.last_name} ${user.first_name} ${user.middle_name || ''}`
@@ -32,10 +32,10 @@ export const Sidebar = ({ user, activeTab, tabs }: TSidebarProps) => {
           const isActive = activeTab === tab.id;
           return (
             <Link
-              key={tab.id}
               className={clsx(styles.navItem, isActive && styles.active)}
-              to={`${SLUG.CABINET}?tab=${tab.id}`}
               aria-current={isActive ? 'page' : undefined}
+              key={tab.id}
+              to={`${SLUG.CABINET}?tab=${tab.id}`}
             >
               <span className={styles.navLabel}>{tab.label}</span>
             </Link>

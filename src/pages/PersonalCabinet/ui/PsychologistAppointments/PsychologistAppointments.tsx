@@ -91,11 +91,11 @@ export const PsychologistAppointments = () => {
   if (isErrorAppointments)
     return (
       <Alert
-        type="error"
-        showIcon
-        title="Не удалось загрузить записи"
         description={getRequestErrorMessage(loadError)}
+        showIcon
         style={{ margin: '24px 0' }}
+        title="Не удалось загрузить записи"
+        type="error"
       />
     );
 

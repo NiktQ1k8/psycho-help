@@ -12,12 +12,12 @@ export const NewsBanner = () => {
           Подпишитесь, чтобы узнавать актуальную информацию первыми
         </p>
       </div>
-      <img className={styles.icon} src={vk} alt="" />
+      <img className={styles.icon} alt="" src={vk} />
       <ButtonLink
         className={styles.link}
         href={EXTERNAL_LINKS.VK}
-        target="_blank"
         rel="noopener noreferrer"
+        target="_blank"
       >
         Подписаться
       </ButtonLink>

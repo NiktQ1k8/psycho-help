@@ -78,8 +78,8 @@ const ModalLogin: React.FC<TAuthModalProps> = ({
           <h2 className={styles.modalTitle}>Вход</h2>
           <button
             className={styles.closeButton}
-            onClick={handleCancel}
             aria-label="Закрыть окно входа"
+            onClick={handleCancel}
           >
             ✕
           </button>
@@ -96,23 +96,23 @@ const ModalLogin: React.FC<TAuthModalProps> = ({
             <label>
               <span>Электронная почта</span>
               <input
-                type="email"
+                className={styles.input}
+                aria-details="Строка для ввода электронной почты"
+                aria-invalid={!!errors.email}
+                autoComplete="email"
                 disabled={isLoading}
                 maxLength={64}
-                autoComplete="email"
                 name="email"
-                aria-invalid={!!errors.email}
+                placeholder="Введите почту"
+                type="email"
+                value={formValue.email}
                 onBlur={() =>
                   setErrors((prev) => ({
                     ...prev,
                     email: validateProfileField('email', formValue.email) || '',
                   }))
                 }
-                value={formValue.email}
-                placeholder="Введите почту"
                 onChange={handleInputChange}
-                className={styles.input}
-                aria-details="Строка для ввода электронной почты"
               />
               {errors.email && (
                 <span className={styles.errorText}>{errors.email}</span>
@@ -122,25 +122,25 @@ const ModalLogin: React.FC<TAuthModalProps> = ({
               <span>Пароль</span>
               <div className={styles.passwordWrapper}>
                 <input
-                  type={showPassword ? 'text' : 'password'}
-                  name="password"
-                  disabled={isLoading}
-                  aria-invalid={!!errors.password}
-                  maxLength={64}
-                  autoComplete="current-password"
-                  value={formValue.password}
-                  placeholder="Введите пароль"
-                  onChange={handleInputChange}
                   className={styles.passwordInput}
+                  aria-invalid={!!errors.password}
+                  autoComplete="current-password"
+                  disabled={isLoading}
+                  maxLength={64}
+                  name="password"
+                  placeholder="Введите пароль"
+                  type={showPassword ? 'text' : 'password'}
+                  value={formValue.password}
+                  onChange={handleInputChange}
                 />
                 <button
-                  type="button"
                   className={styles.showPassButton}
-                  onClick={() => setShowPassword((s) => !s)}
-                  aria-pressed={showPassword}
                   aria-label={
                     showPassword ? 'Скрыть пароль' : 'Показать пароль'
                   }
+                  aria-pressed={showPassword}
+                  type="button"
+                  onClick={() => setShowPassword((s) => !s)}
                 >
                   {showPassword ? <EyeIcon /> : <EyeOffIcon />}
                 </button>
@@ -169,8 +169,8 @@ const ModalLogin: React.FC<TAuthModalProps> = ({
           <div className={styles.footer}>
             <button
               className={styles.submitButton}
-              type="submit"
               disabled={isLoading}
+              type="submit"
             >
               {isLoading ? 'Загрузка...' : 'Войти'}
             </button>

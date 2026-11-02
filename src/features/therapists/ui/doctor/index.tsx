@@ -16,8 +16,8 @@ export const DoctorCard: FC<Props> = ({ doctor, linkToDetails = true }) => {
     <div className={styles.wrapper}>
       <Img
         className={styles.photo}
-        photo={`${import.meta.env.VITE_REACT_APP_IMAGE_URL}` + doctor.photo}
         altPhoto={altPhoto}
+        photo={`${import.meta.env.VITE_REACT_APP_IMAGE_URL}` + doctor.photo}
       />
 
       <div className={styles.info}>
@@ -39,8 +39,8 @@ export const DoctorCard: FC<Props> = ({ doctor, linkToDetails = true }) => {
 
   return (
     <Link
-      to={`${SLUG.THERAPISTS}/${doctor.id}`}
       style={{ textDecoration: 'none', color: 'inherit' }}
+      to={`${SLUG.THERAPISTS}/${doctor.id}`}
     >
       {content}
     </Link>

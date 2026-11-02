@@ -32,14 +32,14 @@ export const TestCard = ({
   return (
     <div
       {...props}
-      onClick={onClick}
       className={clsx(styles.wrapper, className, {
         [styles.desktop]: hasHorizontalDesktopVersion,
         [styles.clickable]: onClick,
       })}
+      onClick={onClick}
     >
       <div className={styles.imageWrapper}>
-        {!!imageSrc && <img src={imageSrc} alt={`image-${title}`} />}
+        {!!imageSrc && <img alt={`image-${title}`} src={imageSrc} />}
       </div>
       <div className={styles.content}>
         <h4 className={styles.title}>{title}</h4>

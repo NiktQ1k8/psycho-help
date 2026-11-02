@@ -84,10 +84,10 @@ export const AppointmentCard = ({
         <div className={styles.actions}>
           {type === 'confirmation' && (
             <button
-              type="button"
               className={styles.confirmButton}
-              onClick={onConfirm}
               disabled={disabled}
+              type="button"
+              onClick={onConfirm}
             >
               Подтвердить
             </button>
@@ -95,10 +95,10 @@ export const AppointmentCard = ({
 
           {onEmergencyContact && (
             <button
-              type="button"
               className={styles.contactButton}
-              onClick={onEmergencyContact}
               disabled={disabled}
+              type="button"
+              onClick={onEmergencyContact}
             >
               Экстренный контакт
             </button>
@@ -106,10 +106,10 @@ export const AppointmentCard = ({
 
           {(type === 'upcoming' || type === 'confirmation') && onCancel && (
             <button
-              type="button"
               className={styles.cancelButton}
-              onClick={onCancel}
               disabled={disabled}
+              type="button"
+              onClick={onCancel}
             >
               Отменить
             </button>
@@ -117,8 +117,8 @@ export const AppointmentCard = ({
 
           {type === 'past' && hasComment && (
             <button
-              type="button"
               className={styles.commentLink}
+              type="button"
               onClick={onComment}
             >
               Посмотреть комментарий

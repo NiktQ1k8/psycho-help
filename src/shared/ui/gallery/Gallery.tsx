@@ -54,14 +54,14 @@ export const Gallery = ({ images, title }: IGalleryProps) => {
       <div className={styles.gallery}>
         <button
           className={`${styles.imageButton} ${styles.singleImageButton}`}
-          type="button"
           aria-label={`Открыть изображение «${title}» во весь экран`}
+          type="button"
           onClick={(event) => openPreview(0, event.currentTarget)}
         >
           <img
             className={styles.singleImage}
-            src={imageSources[0]}
             alt={title}
+            src={imageSources[0]}
           />
         </button>
         {preview}
@@ -73,15 +73,6 @@ export const Gallery = ({ images, title }: IGalleryProps) => {
     <div className={styles.gallery} data-image-gallery>
       <Swiper
         className={styles.slider}
-        modules={[A11y, Keyboard, Navigation, Pagination]}
-        slidesPerView={1}
-        spaceBetween={24}
-        navigation
-        pagination={{ clickable: true }}
-        keyboard={{ enabled: true, pageUpDown: false }}
-        onSwiper={(swiper) => {
-          swiperRef.current = swiper;
-        }}
         a11y={{
           containerRole: 'region',
           containerMessage: `Изображения: ${title}`,
@@ -92,22 +83,31 @@ export const Gallery = ({ images, title }: IGalleryProps) => {
           paginationBulletMessage: 'Перейти к изображению {{index}}',
           slideLabelMessage: 'Изображение {{index}} из {{slidesLength}}',
         }}
+        keyboard={{ enabled: true, pageUpDown: false }}
+        modules={[A11y, Keyboard, Navigation, Pagination]}
+        navigation
+        pagination={{ clickable: true }}
+        slidesPerView={1}
+        spaceBetween={24}
+        onSwiper={(swiper) => {
+          swiperRef.current = swiper;
+        }}
       >
         {imageSources.map((image, index) => (
           <SwiperSlide className={styles.slide} key={`${image}-${index}`}>
             {({ isActive }) => (
               <button
                 className={styles.imageButton}
-                type="button"
-                tabIndex={isActive ? 0 : -1}
                 aria-label={`Открыть изображение ${index + 1} из ${imageSources.length} во весь экран`}
+                tabIndex={isActive ? 0 : -1}
+                type="button"
                 onClick={(event) => openPreview(index, event.currentTarget)}
               >
                 <img
                   className={styles.slideImage}
-                  src={image}
                   alt={`${title} — изображение ${index + 1} из ${imageSources.length}`}
                   loading={index === 0 ? 'eager' : 'lazy'}
+                  src={image}
                 />
               </button>
             )}

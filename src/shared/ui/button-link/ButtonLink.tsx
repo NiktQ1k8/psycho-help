@@ -69,7 +69,7 @@ export const ButtonLink = ({
   const { type = 'button', ...buttonProps } = props;
 
   return (
-    <button {...buttonProps} type={type} className={classNames}>
+    <button {...buttonProps} className={classNames} type={type}>
       {content}
     </button>
   );

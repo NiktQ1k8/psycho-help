@@ -35,17 +35,17 @@ export const NewsItem = () => {
     return (
       <div className={styles.wrapper} role="alert">
         <Result
-          status="error"
-          title={
-            <h1 className={styles.statusTitle}>Не удалось загрузить новость</h1>
-          }
           extra={
             <div className={styles.actions}>
-              <ButtonLink onClick={() => void refetch()} disabled={isFetching}>
+              <ButtonLink disabled={isFetching} onClick={() => void refetch()}>
                 Попробовать снова
               </ButtonLink>
               <ButtonLink to={SLUG.NEWS}>Все новости</ButtonLink>
             </div>
+          }
+          status="error"
+          title={
+            <h1 className={styles.statusTitle}>Не удалось загрузить новость</h1>
           }
         />
       </div>
@@ -56,13 +56,13 @@ export const NewsItem = () => {
     return (
       <div className={styles.wrapper}>
         <Result
-          status="404"
-          title={<h1 className={styles.statusTitle}>Новость не найдена</h1>}
           extra={
             <div className={styles.actions}>
               <ButtonLink to={SLUG.NEWS}>Все новости</ButtonLink>
             </div>
           }
+          status="404"
+          title={<h1 className={styles.statusTitle}>Новость не найдена</h1>}
         />
       </div>
     );
@@ -88,8 +88,8 @@ export const NewsItem = () => {
         <h1 className={styles.title}>{newsItem.title}</h1>
       </header>
       <Gallery
-        key={newsItem.id}
         images={newsItem.images?.map(getImageSrc)}
+        key={newsItem.id}
         title={newsItem.title}
       />
 
@@ -107,8 +107,8 @@ export const NewsItem = () => {
       <ButtonLink
         className={styles.bottomBtn}
         icon={<ChevronLeft aria-hidden />}
-        variant="secondary"
         to={SLUG.NEWS}
+        variant="secondary"
       >
         Другие новости
       </ButtonLink>

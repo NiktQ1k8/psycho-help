@@ -30,26 +30,26 @@ export const Articles = () => {
         {articles.map((item, index) => {
           return (
             <ArticleCard
-              data-testid="article-card"
-              ellipseDescription
-              title={item.title}
-              info={{
-                key: item.author,
-                value: item.date,
-              }}
-              description={item.description}
               bottomSlot={
                 <ButtonLink
+                  className={styles.readBtn}
                   variant="secondary"
                   // TODO: добавить настоящий id, когда появится бэк
                   onClick={handleOpenArticle.bind(null, MOCK_ARTICLE_ID)}
-                  className={styles.readBtn}
                 >
                   {TRANSLATES.read}
                 </ButtonLink>
               }
+              data-testid="article-card"
+              description={item.description}
+              ellipseDescription
               hasHorizontalDesktopVersion
+              info={{
+                key: item.author,
+                value: item.date,
+              }}
               key={`articles-${index}`}
+              title={item.title}
             />
           );
         })}

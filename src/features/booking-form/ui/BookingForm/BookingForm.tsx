@@ -56,10 +56,10 @@ export const BookingForm = () => {
           >
             <input
               className={styles.radio}
-              type="radio"
-              name={formatName}
-              value="offline"
               checked={format === 'offline'}
+              name={formatName}
+              type="radio"
+              value="offline"
               onChange={() => setFormat('offline')}
             />
             <OfflineIcon className={styles.icon} aria-hidden />
@@ -73,10 +73,10 @@ export const BookingForm = () => {
           >
             <input
               className={styles.radio}
-              type="radio"
-              name={formatName}
-              value="online"
               checked={format === 'online'}
+              name={formatName}
+              type="radio"
+              value="online"
               onChange={() => setFormat('online')}
             />
             <OnlineIcon className={styles.icon} aria-hidden />

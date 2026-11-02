@@ -40,10 +40,10 @@ const ModalForgotPassword = ({
             {successMessage ? 'Проверьте почту' : 'Забыли пароль?'}
           </h2>
           <button
-            type="button"
             className={styles.closeButton}
-            onClick={() => setModalOpen(false)}
             aria-label="Закрыть"
+            type="button"
+            onClick={() => setModalOpen(false)}
           >
             ✕
           </button>
@@ -55,8 +55,8 @@ const ModalForgotPassword = ({
               пароль.
             </p>
             <button
-              type="button"
               className={styles.submitButton}
+              type="button"
               onClick={() => setWindow('log')}
             >
               Вернуться ко входу
@@ -78,23 +78,23 @@ const ModalForgotPassword = ({
                 <label>
                   <span>Электронная почта</span>
                   <input
-                    type="email"
-                    disabled={isLoading}
-                    name="email"
-                    autoComplete="email"
-                    maxLength={64}
-                    value={email}
-                    placeholder="Введите почту"
                     className={styles.input}
                     aria-invalid={!!emailError}
+                    autoComplete="email"
+                    disabled={isLoading}
+                    maxLength={64}
+                    name="email"
+                    placeholder="Введите почту"
+                    type="email"
+                    value={email}
+                    onBlur={() =>
+                      setEmailError(validateProfileField('email', email) || '')
+                    }
                     onChange={(e) => {
                       setEmail(e.target.value);
                       setEmailError('');
                       clearError();
                     }}
-                    onBlur={() =>
-                      setEmailError(validateProfileField('email', email) || '')
-                    }
                   />
                   {emailError && (
                     <span className={styles.errorText}>{emailError}</span>
@@ -108,9 +108,9 @@ const ModalForgotPassword = ({
               )}
               <div className={styles.footer}>
                 <button
-                  type="submit"
                   className={styles.submitButton}
                   disabled={isLoading}
+                  type="submit"
                 >
                   {isLoading ? 'Отправка...' : 'Восстановить'}
                 </button>

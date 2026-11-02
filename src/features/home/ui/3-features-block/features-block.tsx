@@ -17,9 +17,9 @@ const FeaturesBlock = () => {
             <source media="(max-width: 425px)" srcSet={FeatureMobile_1} />
             <source media="(max-width: 768px)" srcSet={FeatureTablet_1} />
             <img
-              src={FeatureDesktop_1}
-              alt=""
               className={styles.features__1_image}
+              alt=""
+              src={FeatureDesktop_1}
             />
           </picture>
           <div className={styles.features__1_content}>
@@ -32,7 +32,7 @@ const FeaturesBlock = () => {
               помощь.
             </span>
           </div>
-          <ButtonLink to={SLUG.THERAPISTS} color="neutral">
+          <ButtonLink color="neutral" to={SLUG.THERAPISTS}>
             Смотреть всех
           </ButtonLink>
         </div>
@@ -65,9 +65,9 @@ const FeaturesBlock = () => {
               <source media="(max-width: 425px)" srcSet={FeatureMobile_2} />
               <source media="(max-width: 768px)" srcSet={FeatureTablet_2} />
               <img
-                src={FeatureDesktop_2}
-                alt=""
                 className={styles.features__2_image}
+                alt=""
+                src={FeatureDesktop_2}
               />
             </picture>
           </div>

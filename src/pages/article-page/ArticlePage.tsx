@@ -31,12 +31,12 @@ const parseContentData = (
     case 'image':
       return (
         <div className={styles.imageWrapper} key={key}>
-          <img src={item.src} alt={item.alt} />
+          <img alt={item.alt} src={item.src} />
         </div>
       );
     case 'ul':
       return (
-        <ul key={key} className={styles.list}>
+        <ul className={styles.list} key={key}>
           {item.items.map((listItem, listIndex) => (
             <li key={`${key}-${listIndex}`}>{listItem}</li>
           ))}

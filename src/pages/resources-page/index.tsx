@@ -52,7 +52,7 @@ export const ResourcesPage = () => {
           <p className={styles.features}>{features}</p>
         </div>
         <div className={styles.image}>
-          <img src={TRANSLATES.imgSrc} alt={'resources-image'} />
+          <img alt={'resources-image'} src={TRANSLATES.imgSrc} />
         </div>
       </div>
 
@@ -60,8 +60,8 @@ export const ResourcesPage = () => {
         <Tabs
           contentClassName={styles.tabsContent}
           fullWidth
-          onChange={handleChangeTab}
           tabs={TABS}
+          onChange={handleChangeTab}
         />
       </div>
     </div>

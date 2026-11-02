@@ -62,16 +62,16 @@ export const AppointmentFilters = ({
       <div className={styles['filters__bar']} role="search">
         <AutoComplete
           className={styles['filters__search-autocomplete']}
-          value={searchQuery}
           options={searchSuggestions}
+          value={searchQuery}
           onChange={setSearchQuery}
         >
           <Input
             className={styles['filters__search-input']}
-            placeholder="Поиск по ФИО"
-            aria-label="Поиск по ФИО"
-            suffix={<SearchOutlined style={{ color: '#bfbfbf' }} />}
             allowClear
+            aria-label="Поиск по ФИО"
+            placeholder="Поиск по ФИО"
+            suffix={<SearchOutlined style={{ color: '#bfbfbf' }} />}
           />
         </AutoComplete>
 
@@ -95,8 +95,8 @@ export const AppointmentFilters = ({
           {statusFilter !== 'all' && (
             <button
               className={styles['filters__clear-select']}
-              type="button"
               aria-label="Очистить фильтр по статусу"
+              type="button"
               onClick={() => setStatusFilter('all')}
             >
               <CloseCircleFilled aria-hidden />
@@ -122,8 +122,8 @@ export const AppointmentFilters = ({
           {formatFilter !== 'all' && (
             <button
               className={styles['filters__clear-select']}
-              type="button"
               aria-label="Очистить фильтр по формату"
+              type="button"
               onClick={() => setFormatFilter('all')}
             >
               <CloseCircleFilled aria-hidden />
@@ -133,6 +133,9 @@ export const AppointmentFilters = ({
 
         <DatePicker.RangePicker
           className={styles['filters__date-range']}
+          allowClear
+          format="DD.MM.YYYY"
+          placeholder={['От', 'До']}
           separator={<span style={{ color: '#C4C4C4' }}>&#10132;</span>}
           value={
             dateRange
@@ -149,19 +152,16 @@ export const AppointmentFilters = ({
             }
             setDateRange(null);
           }}
-          format="DD.MM.YYYY"
-          placeholder={['От', 'До']}
-          allowClear
         />
       </div>
 
       <div className={styles['filters__bar__second']}>
         <button
           className={styles['filters__sort-button']}
+          type="button"
           onClick={() =>
             setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
           }
-          type="button"
         >
           Сортировка по дате
           {sortDirection === 'desc' ? (
@@ -174,8 +174,8 @@ export const AppointmentFilters = ({
         {hasActiveFilters && (
           <button
             className={styles['filters__reset-button']}
-            onClick={resetFilters}
             type="button"
+            onClick={resetFilters}
           >
             Сбросить фильтры
           </button>

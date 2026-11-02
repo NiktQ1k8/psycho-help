@@ -57,8 +57,8 @@ export const TestPage = () => {
         <div className={styles.options}>
           {currentQuestion.options.map((option, index) => (
             <div
-              key={index}
               className={`${styles.option} ${answers[currentQuestion.id] === option ? styles.selected : ''}`}
+              key={index}
               onClick={() => handleAnswer(option)}
             >
               {option}
@@ -78,16 +78,16 @@ export const TestPage = () => {
         {isLastQuestion ? (
           <button
             className={`${styles.buttonAction} ${styles.buttonActionComplete}`}
-            onClick={handleFinish}
             disabled={!answers[currentQuestion.id]}
+            onClick={handleFinish}
           >
             Завершить
           </button>
         ) : (
           <button
             className={`${styles.buttonAction} ${styles.buttonActionNext}`}
-            onClick={handleNext}
             disabled={!answers[currentQuestion.id]}
+            onClick={handleNext}
           >
             Далее
           </button>

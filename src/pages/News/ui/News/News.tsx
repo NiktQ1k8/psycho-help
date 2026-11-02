@@ -29,18 +29,18 @@ export const News = () => {
           ) : isError && !news ? (
             <div role="alert">
               <Result
-                status="error"
-                title="Не удалось загрузить новости"
                 extra={
                   <div className={styles.actions}>
                     <ButtonLink
-                      onClick={() => void refetch()}
                       disabled={isFetching}
+                      onClick={() => void refetch()}
                     >
                       Попробовать снова
                     </ButtonLink>
                   </div>
                 }
+                status="error"
+                title="Не удалось загрузить новости"
               />
             </div>
           ) : (

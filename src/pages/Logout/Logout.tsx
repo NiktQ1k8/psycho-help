@@ -32,9 +32,6 @@ const Logout = () => {
   if (!error) return <Loader />;
   return (
     <Result
-      status="error"
-      title="Не удалось выйти из аккаунта"
-      subTitle={error}
       extra={
         <Button
           type="primary"
@@ -47,6 +44,9 @@ const Logout = () => {
           Повторить
         </Button>
       }
+      status="error"
+      subTitle={error}
+      title="Не удалось выйти из аккаунта"
     />
   );
 };

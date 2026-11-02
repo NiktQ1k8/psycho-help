@@ -82,9 +82,9 @@ const SessionRoutes = () => {
   if (isAppLoading) return null;
   return (
     <Routes>
-      <Route path="/logout" element={<Logout />} />
-      <Route path="/reset-password" element={<Link to="/">На главную</Link>} />
-      <Route path="/" element={<p>Главная</p>} />
+      <Route element={<Logout />} path="/logout" />
+      <Route element={<Link to="/">На главную</Link>} path="/reset-password" />
+      <Route element={<p>Главная</p>} path="/" />
     </Routes>
   );
 };

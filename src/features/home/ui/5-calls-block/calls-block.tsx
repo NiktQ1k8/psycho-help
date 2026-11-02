@@ -18,9 +18,9 @@ const CallsBlock = () => {
             <source media="(max-width: 425px)" srcSet={CallsMobile} />
             <source media="(max-width: 768px)" srcSet={CallsTablet} />
             <img
-              src={CallsDesktop}
               className={styles.calls__image}
               alt="Иллюстрация диалога"
+              src={CallsDesktop}
             />
           </picture>
         </div>

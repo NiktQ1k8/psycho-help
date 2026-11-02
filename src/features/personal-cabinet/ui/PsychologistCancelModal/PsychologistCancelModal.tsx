@@ -75,25 +75,25 @@ export const PsychologistCancelModal = ({
 
   return (
     <Modal
+      cancelButtonProps={{ disabled: mutation.isPending }}
+      cancelText="Назад"
       centered
-      title="Отмена записи"
+      closable={!mutation.isPending}
+      confirmLoading={mutation.isPending}
+      keyboard={!mutation.isPending}
+      mask={{ closable: !mutation.isPending }}
+      okButtonProps={{
+        danger: true,
+        disabled: !isEmergency || !reason.trim() || reason.trim().length > 512,
+      }}
+      okText="Отменить запись"
       open={appointmentId !== null}
+      title="Отмена записи"
       onCancel={() => {
         if (!mutation.isPending) {
           setIsEmergency(false);
           onClose();
         }
-      }}
-      okText="Отменить запись"
-      cancelText="Назад"
-      confirmLoading={mutation.isPending}
-      cancelButtonProps={{ disabled: mutation.isPending }}
-      closable={!mutation.isPending}
-      mask={{ closable: !mutation.isPending }}
-      keyboard={!mutation.isPending}
-      okButtonProps={{
-        danger: true,
-        disabled: !isEmergency || !reason.trim() || reason.trim().length > 512,
       }}
       onOk={() => {
         if (
@@ -108,16 +108,16 @@ export const PsychologistCancelModal = ({
     >
       <p>Укажите причину отмены. Клиент увидит это сообщение.</p>
       <Input.TextArea
-        rows={6}
+        aria-label="Причина отмены записи"
         disabled={mutation.isPending}
+        maxLength={512}
+        placeholder="Причина отмены и рекомендации"
+        rows={6}
+        showCount
         value={reason}
         onChange={(event) => {
           if (appointmentId) setReasonDraft(appointmentId, event.target.value);
         }}
-        aria-label="Причина отмены записи"
-        placeholder="Причина отмены и рекомендации"
-        maxLength={512}
-        showCount
       />
       <p>
         <Checkbox

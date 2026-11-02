@@ -296,15 +296,15 @@ export const PsychologistAppointmentPage = () => {
   const canEditSchedule =
     !isSaving && !isLoadingReschedules && !reschedulesError && !pendingRequest;
 
-  if (!isStaff) return <Navigate to={SLUG.MAIN} replace />;
+  if (!isStaff) return <Navigate replace to={SLUG.MAIN} />;
   if (isLoading) return <Loader />;
   if (isError) {
     return (
       <Result
-        status="error"
-        title="Не удалось загрузить запись"
-        subTitle={getRequestErrorMessage(error)}
         extra={<BackButton text="Вернуться назад" />}
+        status="error"
+        subTitle={getRequestErrorMessage(error)}
+        title="Не удалось загрузить запись"
       />
     );
   }
@@ -317,9 +317,9 @@ export const PsychologistAppointmentPage = () => {
     <div className={styles.page} data-psychologist-appointment>
       <div className={styles.sidebarWrapper}>
         <Sidebar
-          user={user}
           activeTab="psychologistAppointments"
           tabs={getTabsForRole('psychologist')}
+          user={user}
         />
       </div>
 
@@ -405,14 +405,14 @@ export const PsychologistAppointmentPage = () => {
               </label>
               {appointment.status === 'awaiting' ? (
                 <DatePicker<DateTime>
-                  id="appointment-date"
-                  value={selectedDate}
-                  format="DD.MM.YYYY"
                   allowClear={false}
                   disabled={!canEditSchedule}
                   disabledDate={(current) =>
                     current.startOf('day') < moscowDate().startOf('day')
                   }
+                  format="DD.MM.YYYY"
+                  id="appointment-date"
+                  value={selectedDate}
                   onChange={(date) =>
                     date &&
                     setScheduleDraft(appointmentId, {
@@ -432,13 +432,13 @@ export const PsychologistAppointmentPage = () => {
               </label>
               {appointment.status === 'awaiting' ? (
                 <DatePicker.TimePicker<DateTime>
-                  id="appointment-time"
                   className={styles.timePicker}
-                  value={selectedDateTime}
-                  format="HH:mm"
-                  placeholder="Выберите время"
                   allowClear={false}
                   disabled={!canEditSchedule}
+                  format="HH:mm"
+                  id="appointment-time"
+                  placeholder="Выберите время"
+                  value={selectedDateTime}
                   onChange={(time) =>
                     time &&
                     setScheduleDraft(appointmentId, {
@@ -461,20 +461,20 @@ export const PsychologistAppointmentPage = () => {
               {appointment.status === 'awaiting' ? (
                 <input
                   className={styles.venueInput}
-                  id="appointment-venue"
-                  type="text"
-                  value={venue}
-                  maxLength={128}
                   disabled={!canEditSchedule}
-                  onChange={(event) =>
-                    setScheduleDraft(appointmentId, {
-                      venue: event.target.value,
-                    })
-                  }
+                  id="appointment-venue"
+                  maxLength={128}
                   placeholder={
                     appointment.type === 'Online'
                       ? 'Ссылка на встречу'
                       : 'Адрес и кабинет'
+                  }
+                  type="text"
+                  value={venue}
+                  onChange={(event) =>
+                    setScheduleDraft(appointmentId, {
+                      venue: event.target.value,
+                    })
                   }
                 />
               ) : (
@@ -490,22 +490,19 @@ export const PsychologistAppointmentPage = () => {
               {isLoadingReschedules && <p>Загрузка данных переноса…</p>}
               {reschedulesError && (
                 <Alert
-                  type="error"
-                  showIcon
-                  title="Не удалось проверить перенос записи"
-                  description={getRequestErrorMessage(reschedulesError)}
                   action={
                     <Button onClick={() => void refetchReschedules()}>
                       Повторить
                     </Button>
                   }
+                  description={getRequestErrorMessage(reschedulesError)}
+                  showIcon
+                  title="Не удалось проверить перенос записи"
+                  type="error"
                 />
               )}
               {pendingRequest && (
                 <Alert
-                  type="info"
-                  showIcon
-                  title="Ожидаем подтверждения изменений"
                   description={
                     <div className={styles.changeSummary}>
                       {getRescheduleDescription(pendingRequest)}
@@ -514,15 +511,18 @@ export const PsychologistAppointmentPage = () => {
                       }
                     </div>
                   }
+                  showIcon
+                  title="Ожидаем подтверждения изменений"
+                  type="info"
                 />
               )}
               {hasAppointmentChanges &&
                 !hasScheduleChanges &&
                 !pendingRequest && (
                   <Alert
-                    type="warning"
                     showIcon
                     title="Для изменения места или комментария выберите также другую дату или время"
+                    type="warning"
                   />
                 )}
             </div>
@@ -544,32 +544,32 @@ export const PsychologistAppointmentPage = () => {
             </label>
             <textarea
               className={styles.textarea}
+              aria-describedby="appointment-emergency-contact-hint"
+              disabled={isSaving}
               id="appointment-emergency-contact"
+              maxLength={512}
+              placeholder={
+                appointment.status === 'awaiting'
+                  ? 'Например, мама Анна, +7 999 123-45-67'
+                  : 'Не указан'
+              }
+              readOnly={appointment.status !== 'awaiting' || contactUnavailable}
               rows={3}
               value={
                 appointment.status === 'awaiting'
                   ? contact
                   : (appointment.emergency_contact ?? '')
               }
-              maxLength={512}
-              disabled={isSaving}
-              readOnly={appointment.status !== 'awaiting' || contactUnavailable}
               onChange={(event) =>
                 setContactDrafts((drafts) => ({
                   ...drafts,
                   [appointmentId]: event.target.value,
                 }))
               }
-              placeholder={
-                appointment.status === 'awaiting'
-                  ? 'Например, мама Анна, +7 999 123-45-67'
-                  : 'Не указан'
-              }
-              aria-describedby="appointment-emergency-contact-hint"
             />
             <p
-              id="appointment-emergency-contact-hint"
               className={styles.fieldHint}
+              id="appointment-emergency-contact-hint"
             >
               {appointment.status === 'awaiting'
                 ? 'Контакт виден пациенту. Чтобы удалить контакт, очистите поле и сохраните.'
@@ -578,21 +578,21 @@ export const PsychologistAppointmentPage = () => {
             {contactErrorMessage && (
               <Alert
                 className={styles.contactError}
-                type="error"
                 showIcon
                 title={contactErrorMessage}
+                type="error"
               />
             )}
             {appointment.status === 'awaiting' && hasContactChanges && (
               <div className={styles.contactActions}>
                 <Button
-                  type="primary"
-                  loading={contactMutation.isPending}
                   disabled={
                     isSaving ||
                     contactUnavailable ||
                     contact.trim().length > 512
                   }
+                  loading={contactMutation.isPending}
+                  type="primary"
                   onClick={() => {
                     if (
                       !isSaving &&
@@ -630,20 +630,20 @@ export const PsychologistAppointmentPage = () => {
                 <>
                   <textarea
                     className={styles.textarea}
+                    aria-describedby="appointment-comment-hint"
+                    disabled={!canEditSchedule}
                     id="appointment-comment"
+                    maxLength={512}
+                    placeholder="Организационные детали консультации"
                     rows={3}
                     value={comment}
-                    maxLength={512}
-                    disabled={!canEditSchedule}
                     onChange={(event) =>
                       setScheduleDraft(appointmentId, {
                         comment: event.target.value,
                       })
                     }
-                    placeholder="Организационные детали консультации"
-                    aria-describedby="appointment-comment-hint"
                   />
-                  <p id="appointment-comment-hint" className={styles.fieldHint}>
+                  <p className={styles.fieldHint} id="appointment-comment-hint">
                     Пациент увидит этот комментарий. Изменения требуют его
                     подтверждения.
                   </p>
@@ -669,15 +669,15 @@ export const PsychologistAppointmentPage = () => {
                 </label>
                 <textarea
                   className={styles.textarea}
+                  disabled={isSaving}
                   id="patient-comment"
+                  maxLength={2048}
+                  placeholder="Итоги консультации и рекомендации пациенту"
                   rows={4}
                   value={patientComment}
                   onChange={(e) =>
                     setPatientCommentDraft(appointment.id, e.target.value)
                   }
-                  placeholder="Итоги консультации и рекомендации пациенту"
-                  maxLength={2048}
-                  disabled={isSaving}
                 />
               </div>
               <div className={styles.infoRow}>
@@ -689,7 +689,11 @@ export const PsychologistAppointmentPage = () => {
                 </label>
                 <textarea
                   className={styles.textarea}
+                  aria-describedby="psychologist-comment-hint"
+                  disabled={isSaving}
                   id="psychologist-comment"
+                  maxLength={2048}
+                  placeholder="Заметки для психологов"
                   rows={4}
                   value={psychologistComment}
                   onChange={(event) =>
@@ -698,12 +702,8 @@ export const PsychologistAppointmentPage = () => {
                       event.target.value,
                     )
                   }
-                  placeholder="Заметки для психологов"
-                  maxLength={2048}
-                  disabled={isSaving}
-                  aria-describedby="psychologist-comment-hint"
                 />
-                <p id="psychologist-comment-hint" className={styles.fieldHint}>
+                <p className={styles.fieldHint} id="psychologist-comment-hint">
                   Пациенту этот текст не передаётся. После завершения он
                   сохраняется, но его просмотр пока недоступен.
                 </p>
@@ -716,9 +716,9 @@ export const PsychologistAppointmentPage = () => {
           <Alert
             className={styles.actionHint}
             id="appointment-requirements"
-            type="info"
             showIcon
             title={actionHint}
+            type="info"
           />
         )}
 
@@ -726,10 +726,8 @@ export const PsychologistAppointmentPage = () => {
           <div className={styles.actions}>
             <button
               className={styles.actionButtonEnd}
-              onClick={() =>
-                hasAppointmentChanges
-                  ? rescheduleMutation.mutate()
-                  : completeMutation.mutate()
+              aria-describedby={
+                actionHint ? 'appointment-requirements' : undefined
               }
               disabled={
                 isSaving ||
@@ -737,10 +735,12 @@ export const PsychologistAppointmentPage = () => {
                   ? !canEditSchedule || !!changeHint
                   : !!completionHint)
               }
-              aria-describedby={
-                actionHint ? 'appointment-requirements' : undefined
-              }
               type="button"
+              onClick={() =>
+                hasAppointmentChanges
+                  ? rescheduleMutation.mutate()
+                  : completeMutation.mutate()
+              }
             >
               {hasAppointmentChanges
                 ? rescheduleMutation.isPending
@@ -752,9 +752,9 @@ export const PsychologistAppointmentPage = () => {
             </button>
             <button
               className={styles.actionButtonCancel}
-              onClick={() => setCancelModalOpen(true)}
               disabled={isSaving}
               type="button"
+              onClick={() => setCancelModalOpen(true)}
             >
               Отменить
             </button>

@@ -85,18 +85,16 @@ export const Tabs: React.FC<ITabsProps> = ({
     <div className={clsx(styles.tabsContainer, className)}>
       <div
         className={clsx(styles.tabList, { [styles.fullWidth]: fullWidth })}
-        role="tablist"
         aria-label="Вкладки"
+        role="tablist"
       >
         {tabs.map((tab) => (
           <TabItem
-            key={tab.id}
-            id={tab.id}
-            label={tab.label}
-            isActive={activeTab === tab.id}
             disabled={tab.disabled}
-            onClick={handleTabClick}
-            onKeyDown={handleKeyDown}
+            id={tab.id}
+            isActive={activeTab === tab.id}
+            key={tab.id}
+            label={tab.label}
             tabRef={(el) => {
               if (el) {
                 tabRefs.current.set(tab.id, el);
@@ -104,15 +102,17 @@ export const Tabs: React.FC<ITabsProps> = ({
                 tabRefs.current.delete(tab.id);
               }
             }}
+            onClick={handleTabClick}
+            onKeyDown={handleKeyDown}
           />
         ))}
       </div>
 
       <div
         className={clsx(styles.tabPanel, contentClassName)}
-        role="tabpanel"
-        id={`tabpanel-${activeTab}`}
         aria-labelledby={`tab-${activeTab}`}
+        id={`tabpanel-${activeTab}`}
+        role="tabpanel"
         tabIndex={0}
       >
         {activeTabContent}

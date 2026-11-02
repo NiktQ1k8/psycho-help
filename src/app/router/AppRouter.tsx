@@ -30,9 +30,9 @@ const AppRouter = () => {
           {routes
             .filter(({ authOnly }) => !authOnly || isAuth)
             .map(({ path, Component }) => (
-              <Route key={path} path={path} element={<Component />} />
+              <Route element={<Component />} key={path} path={path} />
             ))}
-          <Route path="*" element={<Navigate to={SLUG.MAIN} />} />
+          <Route element={<Navigate to={SLUG.MAIN} />} path="*" />
         </Routes>
       </Suspense>
     </>

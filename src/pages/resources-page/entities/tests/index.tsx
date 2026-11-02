@@ -28,16 +28,16 @@ export const Tests = () => {
           return (
             <TestCard
               data-testid="test-card"
+              description={item.description}
               ellipseDescription
-              title={item.title}
+              hasHorizontalDesktopVersion
               info={{
                 key: item.countQuestion,
                 value: item.time,
               }}
-              description={item.description}
-              hasHorizontalDesktopVersion
-              onClick={() => handleTestClick(item.id)}
               key={`tests-${index}`}
+              title={item.title}
+              onClick={() => handleTestClick(item.id)}
             />
           );
         })}

@@ -14,9 +14,9 @@ const FaqPage = () => {
               <p className={styles.description}>{TRANSLATES.description}</p>
             </div>
             <img
-              src={FaqImage}
-              alt={TRANSLATES.imgAlt}
               className={styles.image}
+              alt={TRANSLATES.imgAlt}
+              src={FaqImage}
             />
           </div>
           <QuestionsList questions={faq} />

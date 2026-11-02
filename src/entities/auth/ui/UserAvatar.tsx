@@ -24,21 +24,21 @@ export const UserAvatar = ({
     <div className={clsx(styles.avatar, styles[size])}>
       {src && src !== failedSrc ? (
         <Image
-          width="100%"
-          height="100%"
-          src={src}
           alt="Аватар пользователя"
-          role="button"
-          tabIndex={0}
           aria-label="Открыть фотографию"
+          height="100%"
+          preview={{ cover: 'Посмотреть' }}
+          role="button"
+          src={src}
+          tabIndex={0}
+          width="100%"
+          onError={() => setFailedSrc(src)}
           onKeyDown={(event) => {
             if (event.key === 'Enter' || event.key === ' ') {
               event.preventDefault();
               event.currentTarget.click();
             }
           }}
-          preview={{ cover: 'Посмотреть' }}
-          onError={() => setFailedSrc(src)}
         />
       ) : (
         <UserOutlined className={styles.icon} />

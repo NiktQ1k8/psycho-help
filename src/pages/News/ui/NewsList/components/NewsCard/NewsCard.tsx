@@ -17,17 +17,17 @@ export const NewsCard = ({ news }: INewsCardProps) => {
     <article className={styles.article}>
       <Link
         className={styles.link}
-        to={`${SLUG.NEWS}/${encodeURIComponent(news.id)}`}
         aria-label={news.title}
+        to={`${SLUG.NEWS}/${encodeURIComponent(news.id)}`}
       >
         {image && (
           <div className={styles.imageWrapper}>
             <img
               className={styles.image}
-              src={getImageSrc(image)}
               alt=""
-              loading="lazy"
               decoding="async"
+              loading="lazy"
+              src={getImageSrc(image)}
             />
           </div>
         )}
@@ -40,7 +40,7 @@ export const NewsCard = ({ news }: INewsCardProps) => {
           )}
         </div>
         <h2 className={styles.title}>{news.title}</h2>
-        <img className={styles.icon} src={link} width={25} height={25} alt="" />
+        <img className={styles.icon} alt="" height={25} src={link} width={25} />
       </Link>
     </article>
   );

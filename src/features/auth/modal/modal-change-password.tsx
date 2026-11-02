@@ -51,10 +51,10 @@ const ModalChangePassword = ({
         <div className={styles.modalHeaderPassword}>
           <h2 className={styles.modalTitle}>Восстановление пароля</h2>
           <button
-            type="button"
             className={styles.closeButton}
-            onClick={() => setModalOpen(false)}
             aria-label="Закрыть"
+            type="button"
+            onClick={() => setModalOpen(false)}
           >
             ✕
           </button>
@@ -65,8 +65,8 @@ const ModalChangePassword = ({
               {successMessage}. Войдите с новым паролем.
             </p>
             <button
-              type="button"
               className={styles.submitButton}
+              type="button"
               onClick={() => setWindow('log')}
             >
               Войти
@@ -79,8 +79,8 @@ const ModalChangePassword = ({
               перейдите по ссылке из него.
             </p>
             <button
-              type="button"
               className={styles.submitButton}
+              type="button"
               onClick={() => setWindow('forgot')}
             >
               Запросить новое письмо
@@ -97,14 +97,20 @@ const ModalChangePassword = ({
             <div className={styles.form}>
               <label htmlFor="reset-password">Новый пароль</label>
               <Input.Password
-                id="reset-password"
-                disabled={isLoading}
                 aria-invalid={!!errors.password}
-                value={newPassword}
                 autoComplete="new-password"
+                disabled={isLoading}
+                id="reset-password"
                 maxLength={64}
                 size="large"
                 status={errors.password ? 'error' : undefined}
+                value={newPassword}
+                onBlur={() =>
+                  setErrors((prev) => ({
+                    ...prev,
+                    password: validatePassword(newPassword) || '',
+                  }))
+                }
                 onChange={(e) => {
                   setNewPassword(e.target.value);
                   clearError();
@@ -116,12 +122,6 @@ const ModalChangePassword = ({
                         : '',
                   });
                 }}
-                onBlur={() =>
-                  setErrors((prev) => ({
-                    ...prev,
-                    password: validatePassword(newPassword) || '',
-                  }))
-                }
               />
               {errors.password ? (
                 <span className={styles.errorText}>{errors.password}</span>
@@ -132,14 +132,14 @@ const ModalChangePassword = ({
               )}
               <label htmlFor="reset-password-confirm">Повторите пароль</label>
               <Input.Password
-                id="reset-password-confirm"
-                disabled={isLoading}
                 aria-invalid={!!errors.confirm}
-                value={confirmPassword}
                 autoComplete="new-password"
+                disabled={isLoading}
+                id="reset-password-confirm"
                 maxLength={64}
                 size="large"
                 status={errors.confirm ? 'error' : undefined}
+                value={confirmPassword}
                 onChange={(e) => {
                   setConfirmPassword(e.target.value);
                   clearError();
@@ -163,9 +163,9 @@ const ModalChangePassword = ({
             )}
             <div className={styles.footer}>
               <button
-                type="submit"
                 className={styles.submitButton}
                 disabled={isLoading}
+                type="submit"
               >
                 {isLoading ? 'Сохранение...' : 'Сохранить пароль'}
               </button>

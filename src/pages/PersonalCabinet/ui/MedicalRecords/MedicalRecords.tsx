@@ -65,24 +65,24 @@ export const MedicalRecords = () => {
     <section className={styles.wrapper}>
       <h1>Карты консультируемых</h1>
       <AutoComplete
-        value={searchQuery}
         options={searchSuggestions}
+        value={searchQuery}
         onChange={setMedicalRecordSearch}
       >
         <Input
-          placeholder="Поиск по ФИО или группе"
-          aria-label="Поиск по ФИО или группе"
           allowClear
+          aria-label="Поиск по ФИО или группе"
+          placeholder="Поиск по ФИО или группе"
         />
       </AutoComplete>
       {isLoading ? (
         <Loader />
       ) : isError ? (
         <Alert
-          type="error"
+          description={getRequestErrorMessage(error)}
           showIcon
           title="Не удалось загрузить карты консультируемых"
-          description={getRequestErrorMessage(error)}
+          type="error"
         />
       ) : (
         <>
@@ -93,8 +93,8 @@ export const MedicalRecords = () => {
               .map((patient) => (
                 <article
                   className={styles.row}
-                  role="listitem"
                   key={patient.id}
+                  role="listitem"
                 >
                   <div className={styles.patient}>
                     <span className={styles.patient_name}>
@@ -119,10 +119,10 @@ export const MedicalRecords = () => {
             <div className={styles.pagination} data-medical-record-pagination>
               <Pagination
                 current={page}
-                total={patients.length}
                 pageSize={ITEMS_PER_PAGE}
-                onChange={setMedicalRecordPage}
                 showSizeChanger={false}
+                total={patients.length}
+                onChange={setMedicalRecordPage}
               />
             </div>
           )}

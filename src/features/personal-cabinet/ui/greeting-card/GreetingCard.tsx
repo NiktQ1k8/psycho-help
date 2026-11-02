@@ -19,14 +19,14 @@ const GreetingCard: FC<IGreetingCardProps> = ({ userName }) => {
           Выберите удобное время или специалиста.
         </p>
         <ButtonLink
-          to={`${SLUG.CABINET}?tab=userAppointments`}
           className={styles.button}
+          to={`${SLUG.CABINET}?tab=userAppointments`}
         >
           Записаться
         </ButtonLink>
       </div>
       <div className={styles.illustration}>
-        <img src={egorImg} alt="Иллюстрация" className={styles.image} />
+        <img className={styles.image} alt="Иллюстрация" src={egorImg} />
       </div>
     </div>
   );

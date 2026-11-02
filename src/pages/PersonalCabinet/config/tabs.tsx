@@ -32,8 +32,8 @@ export const roleBasedTabs: Record<string, ITabConfig[]> = {
       label: 'Главная',
       render: ({ user, primaryRoleCode }) => (
         <Dashboard
-          userName={user.first_name || 'Пользователь'}
           role={primaryRoleCode}
+          userName={user.first_name || 'Пользователь'}
         />
       ),
     },
@@ -54,8 +54,8 @@ export const roleBasedTabs: Record<string, ITabConfig[]> = {
       label: 'Главная',
       render: ({ user, primaryRoleCode }) => (
         <Dashboard
-          userName={user.first_name || 'Пользователь'}
           role={primaryRoleCode}
+          userName={user.first_name || 'Пользователь'}
         />
       ),
     },

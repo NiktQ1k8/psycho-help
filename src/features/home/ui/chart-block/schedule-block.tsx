@@ -26,9 +26,9 @@ const ScheduleBlock = () => {
             <source media="(max-width: 425px)" srcSet={ScheduleMobile} />
             <source media="(max-width: 768px)" srcSet={ScheduleTablet} />
             <img
-              src={ScheduleDesktop}
-              alt=""
               className={styles.scheduleImage}
+              alt=""
+              src={ScheduleDesktop}
             />
           </picture>
         </div>

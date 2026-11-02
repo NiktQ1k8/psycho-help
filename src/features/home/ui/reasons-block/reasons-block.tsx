@@ -6,12 +6,12 @@ const ReasonsBlock = () => {
     <section className={styles.section}>
       <div className={styles.grid}>
         {REASONS_TO_VISIT.map((item, index) => (
-          <div key={index} className={styles.card}>
+          <div className={styles.card} key={index}>
             <div className={styles.imageWrapper}>
               <img
-                src={item.image}
-                alt="Иллюстрация"
                 className={`${styles.image} ${index === 0 ? styles.mirroredImage : ''}`}
+                alt="Иллюстрация"
+                src={item.image}
               />
             </div>
             <p className={styles.text}>{item.title}</p>

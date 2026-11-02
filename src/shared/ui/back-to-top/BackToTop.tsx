@@ -28,10 +28,10 @@ const BackToTop: React.FC = () => {
 
   return (
     <button
-      type="button"
+      className={clsx(styles.button, { [styles.visible]: visible })}
       aria-label="Наверх"
       title="Наверх"
-      className={clsx(styles.button, { [styles.visible]: visible })}
+      type="button"
       onClick={handleClick}
     >
       <span className={styles.icon} aria-hidden>

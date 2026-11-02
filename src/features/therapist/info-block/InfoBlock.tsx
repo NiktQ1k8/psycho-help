@@ -19,10 +19,10 @@ const InfoBlock: FC<Props> = ({ therapist: therapist }) => {
         <div className={styles.imgWrapper}>
           <Img
             className={styles.photo}
+            altPhoto={altPhoto}
             photo={
               `${import.meta.env.VITE_REACT_APP_IMAGE_URL}` + therapist.photo
             }
-            altPhoto={altPhoto}
           />
           <button className={[styles.regBtn, styles.regBtnTablet].join(' ')}>
             Записаться
@@ -50,7 +50,7 @@ const InfoBlock: FC<Props> = ({ therapist: therapist }) => {
           <p className={styles.qual}>С чем поможет:</p>
           <div className={styles.consultAreas}>
             {therapist.consult_areas.split(', ').map((item) => (
-              <span key={item} className={styles.consultArea}>
+              <span className={styles.consultArea} key={item}>
                 {item}
               </span>
             ))}

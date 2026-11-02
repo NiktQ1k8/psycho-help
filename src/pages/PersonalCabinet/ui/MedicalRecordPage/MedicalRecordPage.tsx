@@ -32,7 +32,7 @@ export const MedicalRecordPage = () => {
     enabled: isStaff,
   });
 
-  if (!isStaff) return <Navigate to={SLUG.CABINET} replace />;
+  if (!isStaff) return <Navigate replace to={SLUG.CABINET} />;
 
   const patientAppointments = appointments
     .filter((appointment) => appointment.patient.id === id)
@@ -60,9 +60,9 @@ export const MedicalRecordPage = () => {
     <div className={layout.layout}>
       <div className={layout.sidebarWrapper}>
         <Sidebar
-          user={user}
           activeTab="medicalRecords"
           tabs={getTabsForRole('psychologist')}
+          user={user}
         />
       </div>
       <main className={styles.wrapper}>
@@ -72,10 +72,10 @@ export const MedicalRecordPage = () => {
           <Loader />
         ) : isError ? (
           <Alert
-            type="error"
+            description={getRequestErrorMessage(error)}
             showIcon
             title="Не удалось загрузить карту консультируемого"
-            description={getRequestErrorMessage(error)}
+            type="error"
           />
         ) : !patient ? (
           <Empty description="Карта консультируемого не найдена" />
@@ -98,7 +98,7 @@ export const MedicalRecordPage = () => {
                     : '—'}
                 </dd>
               </dl>
-              <UserAvatar userId={patient.id} size="medium" />
+              <UserAvatar size="medium" userId={patient.id} />
             </div>
             <h2>История приёмов</h2>
             <AppointmentList

@@ -31,37 +31,37 @@ const ModalContent: FC<TModalWindowProps> = ({
     if (modalWindow === 'log') {
       return (
         <ModalLogin
-          setWindow={setModalWindow}
           isOpen={isOpen}
           setModalOpen={handleSetModalOpen}
+          setWindow={setModalWindow}
         />
       );
     }
     if (modalWindow === 'reg') {
       return (
         <ModalRegistration
-          setWindow={setModalWindow}
           isOpen={isOpen}
           setModalOpen={handleSetModalOpen}
+          setWindow={setModalWindow}
         />
       );
     }
     if (modalWindow === 'forgot') {
       return (
         <ModalForgotPassword
-          setWindow={setModalWindow}
           isOpen={isOpen}
           setModalOpen={handleSetModalOpen}
+          setWindow={setModalWindow}
         />
       );
     }
     if (modalWindow === 'change') {
       return (
         <ModalChangePassword
-          token={resetToken}
-          setWindow={setModalWindow}
           isOpen={isOpen}
           setModalOpen={handleSetModalOpen}
+          setWindow={setModalWindow}
+          token={resetToken}
         />
       );
     }

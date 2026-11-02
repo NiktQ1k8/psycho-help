@@ -45,6 +45,11 @@ npm run start
 | `npm run prepare`                             | Настроить Git-хуки (автоматически при `npm ci`) |
 | `npm run db:backup` / `npm run db:restore`    | Создать / восстановить копию БД и изображений   |
 
+ESLint проверяет порядок JSX-атрибутов: `className` первым, остальные по алфавиту,
+обработчики событий `onClick`, `onChange` и другие `on*` — в конце по алфавиту.
+`npm run lint:fix` исправляет порядок автоматически. Атрибуты сортируются отдельно
+по обе стороны от `{...props}`, сохраняя приоритет переданных значений.
+
 ## Локальный бэкенд через Docker
 
 Нужны GNU/Linux ([установка Debian](https://www.debian.org/releases/stable/amd64/index.en.html)), Docker с Docker Compose и Git.

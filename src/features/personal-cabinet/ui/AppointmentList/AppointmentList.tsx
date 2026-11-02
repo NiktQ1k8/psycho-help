@@ -102,10 +102,10 @@ export const AppointmentList = ({
         <div className={styles.pagination} data-appointment-pagination>
           <Pagination
             current={page}
-            total={appointments.length}
             pageSize={ITEMS_PER_PAGE}
-            onChange={onPageChange}
             showSizeChanger={false}
+            total={appointments.length}
+            onChange={onPageChange}
           />
         </div>
       )}

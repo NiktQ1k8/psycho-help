@@ -248,13 +248,13 @@ export const UserDashboard = ({ userName }: TUserDashboardProps) => {
   if (loadError) {
     return (
       <Alert
-        type="error"
-        showIcon
-        title="Не удалось загрузить личный кабинет"
-        description={getRequestErrorMessage(loadError)}
         action={
           <Button onClick={() => void refreshAppointments()}>Повторить</Button>
         }
+        description={getRequestErrorMessage(loadError)}
+        showIcon
+        title="Не удалось загрузить личный кабинет"
+        type="error"
       />
     );
   }
@@ -274,24 +274,23 @@ export const UserDashboard = ({ userName }: TUserDashboardProps) => {
           {regularUpcoming.length > 0 ? (
             regularUpcoming.map((app) => (
               <AppointmentCard
-                key={app.id}
-                date={moscowDate(app.scheduled_time).toFormat('d MMMM, HH:mm')}
-                doctorName={getUserFullName(app.psychologist.user)}
                 address={
                   app.venue || (app.type === 'Online' ? 'Онлайн' : 'Офлайн')
                 }
+                date={moscowDate(app.scheduled_time).toFormat('d MMMM, HH:mm')}
                 description={
                   app.comment
                     ? `Комментарий к записи: ${app.comment}`
                     : undefined
                 }
-                type="upcoming"
-                status={app.status}
                 disabled={
                   confirmRescheduleMutation.isPending ||
                   cancelMutation.isPending
                 }
-                onEmergencyContact={() => setContactAppointment(app)}
+                doctorName={getUserFullName(app.psychologist.user)}
+                key={app.id}
+                status={app.status}
+                type="upcoming"
                 onCancel={() =>
                   setCancelModal({
                     visible: true,
@@ -299,6 +298,7 @@ export const UserDashboard = ({ userName }: TUserDashboardProps) => {
                     id: app.id,
                   })
                 }
+                onEmergencyContact={() => setContactAppointment(app)}
               />
             ))
           ) : (
@@ -317,24 +317,22 @@ export const UserDashboard = ({ userName }: TUserDashboardProps) => {
           <div className={styles.cardsGrid}>
             {awaitingReschedules.map(({ appointment, request }) => (
               <AppointmentCard
-                key={request.id}
-                date={moscowDate(request.requested_scheduled_time).toFormat(
-                  'd MMMM, HH:mm',
-                )}
-                doctorName={getUserFullName(appointment.psychologist.user)}
                 address={
                   request.requested_venue ||
                   appointment.venue ||
                   (appointment.type === 'Online' ? 'Онлайн' : 'Офлайн')
                 }
+                date={moscowDate(request.requested_scheduled_time).toFormat(
+                  'd MMMM, HH:mm',
+                )}
                 description={`${getRescheduleDescription(request)}\nПри отказе запись будет отменена.`}
-                type="confirmation"
                 disabled={
                   confirmRescheduleMutation.isPending ||
                   cancelMutation.isPending
                 }
-                onConfirm={() => void handleConfirmReschedule(request)}
-                onEmergencyContact={() => setContactAppointment(appointment)}
+                doctorName={getUserFullName(appointment.psychologist.user)}
+                key={request.id}
+                type="confirmation"
                 onCancel={() =>
                   setCancelModal({
                     visible: true,
@@ -342,6 +340,8 @@ export const UserDashboard = ({ userName }: TUserDashboardProps) => {
                     id: request.id,
                   })
                 }
+                onConfirm={() => void handleConfirmReschedule(request)}
+                onEmergencyContact={() => setContactAppointment(appointment)}
               />
             ))}
           </div>
@@ -370,28 +370,28 @@ export const UserDashboard = ({ userName }: TUserDashboardProps) => {
 
               return (
                 <AppointmentCard
-                  key={app.id}
+                  address={
+                    app.type === 'Online' ? 'Онлайн' : app.venue || 'Офлайн'
+                  }
                   date={moscowDate(app.scheduled_time).toFormat(
                     'd MMMM, HH:mm',
                   )}
                   doctorName={getUserFullName(app.psychologist.user)}
-                  address={
-                    app.type === 'Online' ? 'Онлайн' : app.venue || 'Офлайн'
-                  }
-                  type="past"
-                  status={app.status}
                   hasComment={hasComment}
-                  onEmergencyContact={
-                    app.emergency_contact
-                      ? () => setContactAppointment(app)
-                      : undefined
-                  }
+                  key={app.id}
+                  status={app.status}
+                  type="past"
                   onComment={() =>
                     setCommentModalData({
                       status: app.status,
                       text: commentText,
                       initiator: cancelInitiator,
                     })
+                  }
+                  onEmergencyContact={
+                    app.emergency_contact
+                      ? () => setContactAppointment(app)
+                      : undefined
                   }
                 />
               );
@@ -402,25 +402,25 @@ export const UserDashboard = ({ userName }: TUserDashboardProps) => {
 
       {contactAppointment && (
         <EmergencyContactModal
-          key={contactAppointment.id}
           appointment={
             serverAppointments?.find(
               (item) => item.id === contactAppointment.id,
             ) ?? contactAppointment
           }
+          key={contactAppointment.id}
           onClose={() => setContactAppointment(null)}
         />
       )}
 
       <Modal
+        footer={null}
+        open={!!commentModalData}
         title={
           commentModalData?.status === 'cancelled'
             ? 'Причина отмены'
             : 'Комментарий психолога'
         }
-        open={!!commentModalData}
         onCancel={() => setCommentModalData(null)}
-        footer={null}
       >
         {commentModalData?.status === 'cancelled' &&
           commentModalData.initiator && (
@@ -434,25 +434,25 @@ export const UserDashboard = ({ userName }: TUserDashboardProps) => {
       </Modal>
 
       <Modal
+        cancelButtonProps={{ disabled: cancelMutation.isPending }}
+        cancelText="Назад"
+        closable={!cancelMutation.isPending}
+        confirmLoading={cancelMutation.isPending}
+        keyboard={!cancelMutation.isPending}
+        mask={{ closable: !cancelMutation.isPending }}
+        okButtonProps={{ danger: true, disabled: !cancelReason.trim() }}
+        okText="Подтвердить отмену"
+        open={cancelModal.visible}
         title={
           cancelModal.type === 'reschedule'
             ? 'Отказ от переноса и отмена записи'
             : 'Отмена'
         }
-        open={cancelModal.visible}
         onCancel={() => {
           if (cancelMutation.isPending) return;
           setCancelModal({ visible: false, type: 'appointment', id: '' });
         }}
         onOk={handleCancelSubmit}
-        confirmLoading={cancelMutation.isPending}
-        cancelButtonProps={{ disabled: cancelMutation.isPending }}
-        closable={!cancelMutation.isPending}
-        mask={{ closable: !cancelMutation.isPending }}
-        keyboard={!cancelMutation.isPending}
-        okText="Подтвердить отмену"
-        cancelText="Назад"
-        okButtonProps={{ danger: true, disabled: !cancelReason.trim() }}
       >
         {cancelModal.type === 'reschedule' && (
           <p>
@@ -466,14 +466,14 @@ export const UserDashboard = ({ userName }: TUserDashboardProps) => {
           Пожалуйста, укажите причину отмены:
         </label>
         <Input.TextArea
-          id="appointment-cancel-reason"
-          rows={4}
-          value={cancelReason}
-          maxLength={512}
-          showCount
           disabled={cancelMutation.isPending}
-          onChange={(e) => setCancellationReason(reasonKey, e.target.value)}
+          id="appointment-cancel-reason"
+          maxLength={512}
           placeholder="Например: Изменились планы, заболел(а)"
+          rows={4}
+          showCount
+          value={cancelReason}
+          onChange={(e) => setCancellationReason(reasonKey, e.target.value)}
         />
       </Modal>
     </>

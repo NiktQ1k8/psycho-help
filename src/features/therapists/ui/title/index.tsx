@@ -16,9 +16,9 @@ const Title = () => {
           <BookingForm />
         </div>
         <img
-          src={doctorImg}
-          alt="Изображение диалога с психологом"
           className={styles.titleImg}
+          alt="Изображение диалога с психологом"
+          src={doctorImg}
         />
       </div>
     </div>

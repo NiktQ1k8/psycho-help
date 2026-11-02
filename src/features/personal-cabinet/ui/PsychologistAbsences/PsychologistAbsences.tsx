@@ -239,9 +239,6 @@ export const PsychologistAbsences = ({
       {query.isPending && <p role="status">Загрузка периодов…</p>}
       {query.isError && (
         <Alert
-          type="error"
-          showIcon
-          title={statusError(query.error, 'Не удалось загрузить периоды.')}
           action={
             <Button
               disabled={query.isFetching}
@@ -250,22 +247,25 @@ export const PsychologistAbsences = ({
               Повторить
             </Button>
           }
+          showIcon
+          title={statusError(query.error, 'Не удалось загрузить периоды.')}
+          type="error"
         />
       )}
-      {errorMessage && <Alert type="error" showIcon title={errorMessage} />}
+      {errorMessage && <Alert showIcon title={errorMessage} type="error" />}
 
       {isFormOpen && (
-        <form className={styles.form} onSubmit={handleSubmit} noValidate>
+        <form className={styles.form} noValidate onSubmit={handleSubmit}>
           <h3>{editing ? 'Изменить период' : 'Новый период'}</h3>
           <fieldset className={styles.kind} disabled={disabled}>
             <legend>Тип периода</legend>
             {(['vacation', 'sick'] as const).map((value) => (
               <label key={value}>
                 <input
-                  type="radio"
-                  name="absence-status"
-                  value={value}
                   checked={status === value}
+                  name="absence-status"
+                  type="radio"
+                  value={value}
                   onChange={() => setStatus(value)}
                 />
                 {statusNames[value]}
@@ -278,21 +278,16 @@ export const PsychologistAbsences = ({
               <label htmlFor="absence-end">Окончание</label>
             </div>
             <DatePicker.RangePicker
-              id={{ start: 'absence-start', end: 'absence-end' }}
               className={styles.datePicker}
               classNames={{ popup: { root: styles.calendarPopup } }}
-              size="large"
-              format="DD.MM.YYYY HH:mm"
-              showTime={{ format: 'HH:mm' }}
-              needConfirm={false}
-              placeholder={['Дата и время начала', 'Дата и время окончания']}
-              value={[start, end]}
-              onCalendarChange={handleDatesChange}
-              onChange={handleDatesChange}
               disabled={disabled}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') event.preventDefault();
-              }}
+              format="DD.MM.YYYY HH:mm"
+              id={{ start: 'absence-start', end: 'absence-end' }}
+              needConfirm={false}
+              panelRender={(panel) => (
+                <div data-psychologist-absence-calendar>{panel}</div>
+              )}
+              placeholder={['Дата и время начала', 'Дата и время окончания']}
               popupAlign={{
                 offset: [0, 0],
                 overflow: {
@@ -302,9 +297,14 @@ export const PsychologistAbsences = ({
                   shiftY: true,
                 },
               }}
-              panelRender={(panel) => (
-                <div data-psychologist-absence-calendar>{panel}</div>
-              )}
+              showTime={{ format: 'HH:mm' }}
+              size="large"
+              value={[start, end]}
+              onCalendarChange={handleDatesChange}
+              onChange={handleDatesChange}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') event.preventDefault();
+              }}
             />
           </div>
           <div className={styles.actions}>
@@ -312,10 +312,10 @@ export const PsychologistAbsences = ({
               Отмена
             </Button>
             <Button
-              type="primary"
+              disabled={disabled}
               htmlType="submit"
               loading={saveMutation.isPending}
-              disabled={disabled}
+              type="primary"
             >
               {editing ? 'Сохранить изменения' : 'Добавить'}
             </Button>
@@ -329,7 +329,7 @@ export const PsychologistAbsences = ({
       {!!periods.length && (
         <ul className={styles.list} aria-label="Периоды отсутствия">
           {periods.map((period) => (
-            <li key={period.id} className={styles.period}>
+            <li className={styles.period} key={period.id}>
               <div className={styles.details}>
                 <h3>{statusNames[period.status]}</h3>
                 <p>
@@ -347,11 +347,11 @@ export const PsychologistAbsences = ({
                   Изменить
                 </Button>
                 <Popconfirm
-                  title="Удалить период?"
-                  description={`${statusNames[period.status]}: ${displayDate(period.start_date)} — ${displayDate(period.end_date)}`}
-                  okText="Удалить"
                   cancelText="Отмена"
+                  description={`${statusNames[period.status]}: ${displayDate(period.start_date)} — ${displayDate(period.end_date)}`}
                   disabled={disabled}
+                  okText="Удалить"
+                  title="Удалить период?"
                   onConfirm={() => {
                     if (!disabled) deleteMutation.mutate(period);
                   }}

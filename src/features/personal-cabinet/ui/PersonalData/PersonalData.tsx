@@ -247,38 +247,38 @@ export const PersonalData = ({ user }: TPersonalDataProps) => {
     <>
       <form
         className={styles.container}
-        onSubmit={(event) => void handleSubmit(event)}
         noValidate
+        onSubmit={(event) => void handleSubmit(event)}
       >
         <div className={styles.avatarSection}>
           <UserAvatar userId={user?.id} />
           <ImgCrop
+            beforeCrop={async (file) => !(await getAvatarFileError(file))}
             cropShape="round"
-            quality={0.9}
-            rotationSlider
-            showReset
-            resetText="Сбросить"
-            modalTitle="Настроить фотографию"
-            modalOk="Сохранить"
             modalCancel="Отмена"
+            modalOk="Сохранить"
             modalProps={{
               modalRender: (content) => <div data-avatar-crop>{content}</div>,
             }}
-            beforeCrop={async (file) => !(await getAvatarFileError(file))}
+            modalTitle="Настроить фотографию"
+            quality={0.9}
+            resetText="Сбросить"
+            rotationSlider
+            showReset
           >
             <Upload
               accept="image/jpeg,image/png,image/webp"
-              showUploadList={false}
-              disabled={!user || isUploadingAvatar}
               beforeUpload={async (file) => {
                 await handleAvatarUpload(file);
                 return Upload.LIST_IGNORE;
               }}
+              disabled={!user || isUploadingAvatar}
+              showUploadList={false}
             >
               <button
-                type="button"
                 className={styles.avatarUpload}
                 disabled={!user || isUploadingAvatar}
+                type="button"
               >
                 <EditIcon />
                 {isUploadingAvatar ? 'Загрузка...' : 'Изменить фотографию'}
@@ -295,15 +295,15 @@ export const PersonalData = ({ user }: TPersonalDataProps) => {
                   <div className={styles.nameFieldsRow}>
                     <div className={styles.nameInputWrapper}>
                       <input
-                        type="text"
-                        name="last_name"
+                        className={errors.last_name ? styles.inputError : ''}
+                        aria-invalid={!!errors.last_name}
                         disabled={isSaving}
                         maxLength={50}
-                        aria-invalid={!!errors.last_name}
+                        name="last_name"
+                        placeholder="Фамилия"
+                        type="text"
                         value={formData.last_name}
                         onChange={handleInputChange}
-                        placeholder="Фамилия"
-                        className={errors.last_name ? styles.inputError : ''}
                       />
                       {errors.last_name && (
                         <span className={styles.nameErrorText}>
@@ -313,15 +313,15 @@ export const PersonalData = ({ user }: TPersonalDataProps) => {
                     </div>
                     <div className={styles.nameInputWrapper}>
                       <input
-                        type="text"
-                        name="first_name"
+                        className={errors.first_name ? styles.inputError : ''}
+                        aria-invalid={!!errors.first_name}
                         disabled={isSaving}
                         maxLength={50}
-                        aria-invalid={!!errors.first_name}
+                        name="first_name"
+                        placeholder="Имя"
+                        type="text"
                         value={formData.first_name}
                         onChange={handleInputChange}
-                        placeholder="Имя"
-                        className={errors.first_name ? styles.inputError : ''}
                       />
                       {errors.first_name && (
                         <span className={styles.nameErrorText}>
@@ -331,15 +331,15 @@ export const PersonalData = ({ user }: TPersonalDataProps) => {
                     </div>
                     <div className={styles.nameInputWrapper}>
                       <input
-                        type="text"
-                        name="middle_name"
+                        className={errors.middle_name ? styles.inputError : ''}
+                        aria-invalid={!!errors.middle_name}
                         disabled={isSaving}
                         maxLength={50}
-                        aria-invalid={!!errors.middle_name}
+                        name="middle_name"
+                        placeholder="Отчество"
+                        type="text"
                         value={formData.middle_name}
                         onChange={handleInputChange}
-                        placeholder="Отчество"
-                        className={errors.middle_name ? styles.inputError : ''}
                       />
                       {errors.middle_name && (
                         <span className={styles.nameErrorText}>
@@ -350,18 +350,18 @@ export const PersonalData = ({ user }: TPersonalDataProps) => {
                   </div>
                   <div className={styles.nameActions}>
                     <button
-                      type="button"
                       className={styles.saveNameButton}
-                      onClick={() => void handleSubmit()}
                       disabled={isSaving || !hasChanges}
+                      type="button"
+                      onClick={() => void handleSubmit()}
                     >
                       {isSaving ? 'Сохранение...' : 'Сохранить'}
                     </button>
                     <button
-                      type="button"
                       className={styles.cancelButton}
-                      onClick={handleCancelChanges}
                       disabled={isSaving}
+                      type="button"
+                      onClick={handleCancelChanges}
                     >
                       Отмена
                     </button>
@@ -375,11 +375,11 @@ export const PersonalData = ({ user }: TPersonalDataProps) => {
               )}
               {!isEditingName && (
                 <button
-                  type="button"
                   className={styles.editButton}
-                  onClick={handleNameEdit}
-                  disabled={isSaving}
                   aria-label="Редактировать имя"
+                  disabled={isSaving}
+                  type="button"
+                  onClick={handleNameEdit}
                 >
                   <EditIcon />
                 </button>
@@ -393,23 +393,23 @@ export const PersonalData = ({ user }: TPersonalDataProps) => {
                 <label htmlFor="study_group">Учебная группа</label>
                 <div className={styles.editableField}>
                   <FormattedInput
-                    type="text"
+                    aria-invalid={!!errors.study_group}
+                    disabled={isSaving}
+                    format={formatStudyGroup}
                     id="study_group"
                     name="study_group"
-                    disabled={isSaving}
-                    value={formData.study_group.replace('-', '')}
                     parse={parseStudyGroup}
-                    format={formatStudyGroup}
+                    placeholder="Введите номер группы"
+                    type="text"
+                    value={formData.study_group.replace('-', '')}
                     onChange={(value) =>
                       handleFieldChange(
                         'study_group',
                         formatStudyGroup(value).text,
                       )
                     }
-                    placeholder="Введите номер группы"
-                    aria-invalid={!!errors.study_group}
                   />
-                  <button type="button" className={styles.editButton}>
+                  <button className={styles.editButton} type="button">
                     <EditIcon />
                   </button>
                 </div>
@@ -423,14 +423,14 @@ export const PersonalData = ({ user }: TPersonalDataProps) => {
               <label htmlFor="phone_number">Номер телефона</label>
               <div className={styles.editableField}>
                 <PhoneInput
+                  aria-invalid={!!errors.phone_number}
+                  disabled={isSaving}
                   id="phone_number"
                   name="phone_number"
-                  disabled={isSaving}
                   value={formData.phone_number}
                   onChange={(value) => handleFieldChange('phone_number', value)}
-                  aria-invalid={!!errors.phone_number}
                 />
-                <button type="button" className={styles.editButton}>
+                <button className={styles.editButton} type="button">
                   <EditIcon />
                 </button>
               </div>
@@ -443,17 +443,17 @@ export const PersonalData = ({ user }: TPersonalDataProps) => {
               <label htmlFor="email">Электронная почта</label>
               <div className={styles.editableField}>
                 <input
-                  type="email"
-                  id="email"
-                  name="email"
+                  aria-invalid={!!errors.email}
                   disabled={isSaving}
+                  id="email"
                   maxLength={64}
+                  name="email"
+                  placeholder="example@mail.ru"
+                  type="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  placeholder="example@mail.ru"
-                  aria-invalid={!!errors.email}
                 />
-                <button type="button" className={styles.editButton}>
+                <button className={styles.editButton} type="button">
                   <EditIcon />
                 </button>
               </div>
@@ -466,17 +466,17 @@ export const PersonalData = ({ user }: TPersonalDataProps) => {
               <label htmlFor="social_media">Соцсети</label>
               <div className={styles.editableField}>
                 <input
-                  type="text"
-                  id="social_media"
-                  name="social_media"
+                  aria-invalid={!!errors.social_media}
                   disabled={isSaving}
+                  id="social_media"
+                  maxLength={50}
+                  name="social_media"
+                  placeholder="Ссылка на профиль или @username"
+                  type="text"
                   value={formData.social_media}
                   onChange={handleInputChange}
-                  maxLength={50}
-                  placeholder="Ссылка на профиль или @username"
-                  aria-invalid={!!errors.social_media}
                 />
-                <button type="button" className={styles.editButton}>
+                <button className={styles.editButton} type="button">
                   <EditIcon />
                 </button>
               </div>
@@ -489,15 +489,15 @@ export const PersonalData = ({ user }: TPersonalDataProps) => {
               <label>Пароль</label>
               <div className={styles.passwordField}>
                 <input
-                  type="password"
-                  placeholder="*********"
                   disabled
+                  placeholder="*********"
                   style={{ backgroundColor: 'transparent' }}
+                  type="password"
                 />
               </div>
               <button
-                type="button"
                 className={styles.changePasswordLink}
+                type="button"
                 onClick={() => setIsPasswordModalOpen(true)}
               >
                 Сменить пароль?
@@ -507,25 +507,25 @@ export const PersonalData = ({ user }: TPersonalDataProps) => {
 
           <div className={styles.actions}>
             <button
-              type="button"
               className={styles.cancelButton}
-              onClick={handleCancelChanges}
               disabled={isSaving || Object.keys(draft).length === 0}
+              type="button"
+              onClick={handleCancelChanges}
             >
               Отменить изменения
             </button>
             <button
-              type="submit"
               className={styles.saveButton}
               disabled={isSaving || !hasChanges}
+              type="submit"
             >
               {isSaving ? 'Сохранение...' : 'Сохранить изменения'}
             </button>
             <button
-              type="button"
               className={styles.logoutButton}
-              onClick={() => void handleLogout()}
               disabled={isSaving}
+              type="button"
+              onClick={() => void handleLogout()}
             >
               <ExitIcon />
               {isSaving ? 'Сохранение...' : 'Выйти'}
@@ -539,9 +539,12 @@ export const PersonalData = ({ user }: TPersonalDataProps) => {
       )}
 
       <Modal
-        title="Смена пароля"
+        cancelText="Отмена"
+        confirmLoading={isSavingPassword}
+        destroyOnHidden
+        okText="Сохранить"
         open={isPasswordModalOpen}
-        onOk={() => void handlePasswordSubmit()}
+        title="Смена пароля"
         onCancel={() => {
           setIsPasswordModalOpen(false);
           setPasswordData({
@@ -550,10 +553,7 @@ export const PersonalData = ({ user }: TPersonalDataProps) => {
             confirm_password: '',
           });
         }}
-        confirmLoading={isSavingPassword}
-        okText="Сохранить"
-        cancelText="Отмена"
-        destroyOnHidden
+        onOk={() => void handlePasswordSubmit()}
       >
         <div
           style={{
@@ -570,10 +570,10 @@ export const PersonalData = ({ user }: TPersonalDataProps) => {
               Старый пароль
             </label>
             <Input.Password
-              size="large"
-              placeholder="Введите старый пароль"
               autoComplete="current-password"
               maxLength={64}
+              placeholder="Введите старый пароль"
+              size="large"
               value={passwordData.old_password}
               onChange={(e) =>
                 setPasswordData((prev) => ({
@@ -590,10 +590,10 @@ export const PersonalData = ({ user }: TPersonalDataProps) => {
               Новый пароль
             </label>
             <Input.Password
-              size="large"
-              placeholder="Введите новый пароль"
               autoComplete="new-password"
               maxLength={64}
+              placeholder="Введите новый пароль"
+              size="large"
               value={passwordData.new_password}
               onChange={(e) =>
                 setPasswordData((prev) => ({
@@ -610,10 +610,10 @@ export const PersonalData = ({ user }: TPersonalDataProps) => {
               Подтвердите пароль
             </label>
             <Input.Password
-              size="large"
-              placeholder="Повторите новый пароль"
               autoComplete="new-password"
               maxLength={64}
+              placeholder="Повторите новый пароль"
+              size="large"
               value={passwordData.confirm_password}
               onChange={(e) =>
                 setPasswordData((prev) => ({

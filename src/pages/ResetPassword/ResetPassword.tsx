@@ -7,8 +7,8 @@ const ResetPassword = () => {
   const [params] = useSearchParams();
   return (
     <ModalWindow
-      isOpen
       initialView="change"
+      isOpen
       resetToken={params.get('token') || ''}
       onClose={() => navigate(SLUG.MAIN, { replace: true })}
     />

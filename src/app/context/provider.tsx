@@ -46,18 +46,18 @@ export const AppContextProvider = ({ children }: TProps) => {
   if (!skipUserRequest && error.message && error.status !== 401) {
     return (
       <Result
-        status="error"
-        title="Не удалось проверить авторизацию"
-        subTitle={error.message}
         extra={
           <Button
-            type="primary"
             loading={isAppLoading}
+            type="primary"
             onClick={() => void fetching()}
           >
             Повторить
           </Button>
         }
+        status="error"
+        subTitle={error.message}
+        title="Не удалось проверить авторизацию"
       />
     );
   }

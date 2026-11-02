@@ -66,9 +66,26 @@ export const EmergencyContactModal = ({
 
   return (
     <Modal
-      title="Экстренный контакт"
-      open
+      cancelButtonProps={{ disabled: mutation.isPending }}
+      cancelText={readOnly ? 'Закрыть' : 'Назад'}
       centered
+      closable={!mutation.isPending}
+      confirmLoading={mutation.isPending}
+      footer={
+        readOnly ? (
+          <Button disabled={mutation.isPending} onClick={onClose}>
+            Закрыть
+          </Button>
+        ) : undefined
+      }
+      keyboard={!mutation.isPending}
+      mask={{ closable: !mutation.isPending }}
+      okButtonProps={{
+        disabled: contact.trim().length > 512,
+      }}
+      okText="Сохранить"
+      open
+      title="Экстренный контакт"
       onCancel={() => {
         if (!mutation.isPending) onClose();
       }}
@@ -78,23 +95,6 @@ export const EmergencyContactModal = ({
           mutation.mutate();
         }
       }}
-      okText="Сохранить"
-      cancelText={readOnly ? 'Закрыть' : 'Назад'}
-      footer={
-        readOnly ? (
-          <Button onClick={onClose} disabled={mutation.isPending}>
-            Закрыть
-          </Button>
-        ) : undefined
-      }
-      okButtonProps={{
-        disabled: contact.trim().length > 512,
-      }}
-      confirmLoading={mutation.isPending}
-      cancelButtonProps={{ disabled: mutation.isPending }}
-      closable={!mutation.isPending}
-      mask={{ closable: !mutation.isPending }}
-      keyboard={!mutation.isPending}
     >
       <div className={styles.content}>
         <p id="emergency-contact-hint">
@@ -105,16 +105,16 @@ export const EmergencyContactModal = ({
         </p>
         <label htmlFor="emergency-contact">Контакт (необязательно)</label>
         <Input.TextArea
-          id="emergency-contact"
           aria-describedby="emergency-contact-hint"
+          disabled={mutation.isPending}
+          id="emergency-contact"
+          maxLength={512}
+          placeholder="Например, мама Анна, +7 999 123-45-67"
+          readOnly={readOnly}
+          rows={4}
+          showCount
           value={contact}
           onChange={(event) => setContact(event.target.value)}
-          placeholder="Например, мама Анна, +7 999 123-45-67"
-          rows={4}
-          maxLength={512}
-          showCount
-          disabled={mutation.isPending}
-          readOnly={readOnly}
         />
         {readOnly && !errorMessage && (
           <p>
@@ -122,7 +122,7 @@ export const EmergencyContactModal = ({
             просмотра.
           </p>
         )}
-        {errorMessage && <Alert type="error" showIcon title={errorMessage} />}
+        {errorMessage && <Alert showIcon title={errorMessage} type="error" />}
       </div>
     </Modal>
   );

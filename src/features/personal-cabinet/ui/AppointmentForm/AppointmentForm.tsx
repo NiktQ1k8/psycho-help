@@ -361,8 +361,8 @@ export const AppointmentForm = () => {
     return (
       <Result
         status="error"
-        title="Не удалось загрузить форму записи"
         subTitle={getRequestErrorMessage(doctorsError)}
+        title="Не удалось загрузить форму записи"
       />
     );
   }
@@ -375,22 +375,22 @@ export const AppointmentForm = () => {
             <h3 className={styles.label}>Выберите формат консультации</h3>
             <div className={styles.format__btns}>
               <button
-                type="button"
                 className={clsx(styles.formatButton, {
                   [styles.active]: meetingType === 'Online',
                 })}
-                onClick={() => handleMeetingTypeChange('Online')}
                 aria-pressed={meetingType === 'Online'}
+                type="button"
+                onClick={() => handleMeetingTypeChange('Online')}
               >
                 Онлайн
               </button>
               <button
-                type="button"
                 className={clsx(styles.formatButton, {
                   [styles.active]: meetingType === 'Offline',
                 })}
-                onClick={() => handleMeetingTypeChange('Offline')}
                 aria-pressed={meetingType === 'Offline'}
+                type="button"
+                onClick={() => handleMeetingTypeChange('Offline')}
               >
                 Очно
               </button>
@@ -402,16 +402,16 @@ export const AppointmentForm = () => {
               <p className={styles.label}>Выберите место консультации</p>
               <div className={styles.location__btns}>
                 {uniqueOffices.map((office) => (
-                  <div key={office} className={styles.location__element}>
+                  <div className={styles.location__element} key={office}>
                     <input
-                      type="checkbox"
-                      id={`office-${office}`}
                       checked={selectedOffices.includes(office)}
+                      id={`office-${office}`}
+                      type="checkbox"
                       onChange={() => handleOfficeToggle(office)}
                     />
                     <label
-                      htmlFor={`office-${office}`}
                       className={styles.location__text}
+                      htmlFor={`office-${office}`}
                     >
                       {office}
                     </label>
@@ -428,11 +428,11 @@ export const AppointmentForm = () => {
               {filteredDoctors.length > 1 && (
                 <div className={styles.galleryNav}>
                   <button
-                    type="button"
                     className={styles.galleryBtn}
-                    onClick={handlePrevTherapist}
-                    disabled={currentTherapistIndex === 0}
                     aria-label="Предыдущий специалист"
+                    disabled={currentTherapistIndex === 0}
+                    type="button"
+                    onClick={handlePrevTherapist}
                   >
                     <Arrow
                       className={clsx(
@@ -443,13 +443,13 @@ export const AppointmentForm = () => {
                     />
                   </button>
                   <button
-                    type="button"
                     className={styles.galleryBtn}
-                    onClick={handleNextTherapist}
+                    aria-label="Следующий специалист"
                     disabled={
                       currentTherapistIndex === filteredDoctors.length - 1
                     }
-                    aria-label="Следующий специалист"
+                    type="button"
+                    onClick={handleNextTherapist}
                   >
                     <Arrow className={styles.galleryArrow} aria-hidden />
                   </button>
@@ -462,14 +462,14 @@ export const AppointmentForm = () => {
                 <div className={styles.mainInfo}>
                   <div className={styles.imgWrapper}>
                     <img
-                      key={currentTherapist.id || currentTherapist.photo}
                       className={styles.photo}
+                      alt={`Психолог ${currentTherapist.last_name} ${currentTherapist.first_name}`}
+                      key={currentTherapist.id || currentTherapist.photo}
                       src={
                         currentTherapist.photo
                           ? `${import.meta.env.VITE_REACT_APP_IMAGE_URL}${currentTherapist.photo}`
                           : altPhoto
                       }
-                      alt={`Психолог ${currentTherapist.last_name} ${currentTherapist.first_name}`}
                       onError={(event) => {
                         if (
                           event.currentTarget.getAttribute('src') !== altPhoto
@@ -521,7 +521,7 @@ export const AppointmentForm = () => {
                               item.trim().slice(1);
                             if (!text) return null;
                             return (
-                              <span key={text} className={styles.consultArea}>
+                              <span className={styles.consultArea} key={text}>
                                 {text}
                               </span>
                             );
@@ -544,13 +544,13 @@ export const AppointmentForm = () => {
             <legend className={styles.label}>Длительность консультации</legend>
             <div className={styles.chips}>
               {([60, 90] as const).map((duration) => (
-                <label key={duration} className={styles.chip}>
+                <label className={styles.chip} key={duration}>
                   <input
-                    type="radio"
-                    name="appointment-duration"
                     className={styles.chipInput}
-                    value={duration}
                     checked={(appointment.duration ?? 60) === duration}
+                    name="appointment-duration"
+                    type="radio"
+                    value={duration}
                     onChange={() =>
                       setAppointment({
                         duration,
@@ -568,15 +568,15 @@ export const AppointmentForm = () => {
               Выберите дату
             </label>
             <DatePicker<DateTime>
-              id="booking-date"
-              value={scheduleDate}
-              allowClear={false}
-              format="DD.MM.YYYY"
               className={styles.datePicker}
-              placeholder="Выберите дату"
+              allowClear={false}
               disabledDate={(current) =>
                 current.startOf('day') < moscowDate().startOf('day')
               }
+              format="DD.MM.YYYY"
+              id="booking-date"
+              placeholder="Выберите дату"
+              value={scheduleDate}
               onChange={(value) => {
                 if (value) {
                   setScheduleDate(value.startOf('day'));
@@ -595,13 +595,13 @@ export const AppointmentForm = () => {
             {meetingType && !isLoadingSchedule && !scheduleError && (
               <div className={styles.chips}>
                 {availableSlots.map((slot) => (
-                  <label key={slot.datetime} className={styles.chip}>
+                  <label className={styles.chip} key={slot.datetime}>
                     <input
-                      type="radio"
-                      name="booking-time"
                       className={styles.chipInput}
-                      value={slot.datetime}
                       checked={selectedSlot?.datetime === slot.datetime}
+                      name="booking-time"
+                      type="radio"
+                      value={slot.datetime}
                       onChange={() =>
                         setAppointment({
                           psychologist_id: currentTherapist?.id,
@@ -628,15 +628,15 @@ export const AppointmentForm = () => {
           </fieldset>
           {scheduleError && (
             <Alert
-              type="error"
-              showIcon
-              title="Не удалось загрузить доступное время"
-              description={getRequestErrorMessage(scheduleError)}
               action={
                 <Button onClick={() => void refetchSchedule()}>
                   Повторить
                 </Button>
               }
+              description={getRequestErrorMessage(scheduleError)}
+              showIcon
+              title="Не удалось загрузить доступное время"
+              type="error"
             />
           )}
           {meetingType === 'Online' && (
@@ -645,16 +645,16 @@ export const AppointmentForm = () => {
                 Ссылка на онлайн-консультацию
               </label>
               <input
-                id="booking-venue"
-                type="url"
-                maxLength={128}
                 className={styles.venueInput}
+                aria-describedby="booking-venue-hint"
+                id="booking-venue"
+                maxLength={128}
+                placeholder="https://…"
+                type="url"
                 value={appointment.venue ?? ''}
                 onChange={(event) =>
                   setAppointment({ venue: event.target.value })
                 }
-                placeholder="https://…"
-                aria-describedby="booking-venue-hint"
               />
               <p id="booking-venue-hint">
                 Укажите ссылку на встречу, согласованную с психологом.
@@ -667,12 +667,12 @@ export const AppointmentForm = () => {
               Ваш запрос
             </label>
             <textarea
+              className={styles.textarea}
               id="booking-reason"
               maxLength={2000}
+              placeholder="Опишите вашу проблему"
               value={appointment.reason ?? ''}
               onChange={(e) => setAppointment({ reason: e.target.value })}
-              className={styles.textarea}
-              placeholder="Опишите вашу проблему"
             />
           </div>
 
@@ -681,14 +681,14 @@ export const AppointmentForm = () => {
               Комментарий к записи (необязательно)
             </label>
             <textarea
+              className={styles.textarea}
               id="booking-comment"
               maxLength={512}
+              placeholder="Например, приду вместе с другом"
               value={appointment.comment ?? ''}
               onChange={(event) =>
                 setAppointment({ comment: event.target.value })
               }
-              className={styles.textarea}
-              placeholder="Например, приду вместе с другом"
             />
           </div>
 
@@ -697,19 +697,19 @@ export const AppointmentForm = () => {
               Экстренный контакт (необязательно)
             </label>
             <textarea
+              className={styles.textarea}
+              aria-describedby="booking-emergency-contact-hint"
               id="booking-emergency-contact"
+              maxLength={512}
+              placeholder="Например, мама Анна, +7 999 123-45-67"
               value={appointment.emergency_contact ?? ''}
               onChange={(event) =>
                 setAppointment({ emergency_contact: event.target.value })
               }
-              maxLength={512}
-              className={styles.textarea}
-              placeholder="Например, мама Анна, +7 999 123-45-67"
-              aria-describedby="booking-emergency-contact-hint"
             />
             <p
-              id="booking-emergency-contact-hint"
               className={styles.privacy_text}
+              id="booking-emergency-contact-hint"
             >
               С кем связаться в экстренной ситуации: имя, кем вам приходится
               человек и телефон или другой способ связи. Контакт увидит
@@ -725,8 +725,8 @@ export const AppointmentForm = () => {
             <a
               className={styles.privacy_link}
               href={privacyFile}
-              target="_blank"
               rel="noopener noreferrer"
+              target="_blank"
             >
               Правила обработки специальных категорий персональных данных
             </a>
@@ -745,8 +745,8 @@ export const AppointmentForm = () => {
           {!createdAppointmentId && (
             <BackButton
               className={styles.backButton}
-              lightColor="var(--labels-neutral-secondary)"
               darkColor="var(--labels-neutral-inverted-primary)"
+              lightColor="var(--labels-neutral-secondary)"
               onClick={() => setWindow('form')}
             />
           )}
@@ -797,10 +797,10 @@ export const AppointmentForm = () => {
               Тема встречи:
             </label>
             <textarea
-              id="booking-reason-preview"
-              value={appointment.reason ?? ''}
-              readOnly
               className={clsx(styles.textarea, styles.results__textarea)}
+              id="booking-reason-preview"
+              readOnly
+              value={appointment.reason ?? ''}
             />
 
             {appointment.comment?.trim() && (
@@ -815,10 +815,10 @@ export const AppointmentForm = () => {
                   Комментарий к записи:
                 </label>
                 <textarea
-                  id="booking-comment-preview"
-                  value={appointment.comment.trim()}
-                  readOnly
                   className={clsx(styles.textarea, styles.results__textarea)}
+                  id="booking-comment-preview"
+                  readOnly
+                  value={appointment.comment.trim()}
                 />
               </>
             )}
@@ -835,30 +835,30 @@ export const AppointmentForm = () => {
                   Экстренный контакт:
                 </label>
                 <textarea
-                  id="booking-emergency-contact-preview"
-                  value={appointment.emergency_contact.trim()}
-                  readOnly
                   className={clsx(styles.textarea, styles.results__textarea)}
+                  id="booking-emergency-contact-preview"
+                  readOnly
+                  value={appointment.emergency_contact.trim()}
                 />
               </>
             )}
 
             {createdAppointmentId && (
               <Alert
-                type="warning"
-                showIcon
-                title="Запись уже создана"
                 description={
                   contactSaveError ||
                   'Осталось сохранить экстренный контакт. Повторная попытка не создаст новую запись.'
                 }
+                showIcon
+                title="Запись уже создана"
+                type="warning"
               />
             )}
 
             <button
               className={styles.submitBtn}
-              onClick={() => void handleSubmit()}
               disabled={isSubmitting}
+              onClick={() => void handleSubmit()}
             >
               {isSubmitting
                 ? 'Отправка...'
@@ -867,7 +867,7 @@ export const AppointmentForm = () => {
                   : 'Записаться'}
             </button>
             {createdAppointmentId && (
-              <Button onClick={finishBooking} disabled={isSubmitting}>
+              <Button disabled={isSubmitting} onClick={finishBooking}>
                 Перейти к записям
               </Button>
             )}

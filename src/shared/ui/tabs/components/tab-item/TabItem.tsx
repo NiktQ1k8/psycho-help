@@ -33,20 +33,20 @@ export const TabItem: FC<ITabItemProps> = ({
 
   return (
     <button
-      ref={tabRef}
       className={clsx(styles.tab, {
         [styles.active]: isActive,
         [styles.disabled]: disabled,
       })}
-      role="tab"
-      aria-selected={isActive}
       aria-controls={`tabpanel-${id}`}
       aria-disabled={disabled}
-      tabIndex={isActive ? 0 : -1}
+      aria-selected={isActive}
+      disabled={disabled}
       id={`tab-${id}`}
+      ref={tabRef}
+      role="tab"
+      tabIndex={isActive ? 0 : -1}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
-      disabled={disabled}
     >
       <span className={styles.tabLabel}>{label}</span>
     </button>

@@ -16,12 +16,12 @@ const QuestionsList = ({
     <div className={styles.wrapper}>
       {questions.map((questionObj) => (
         <Question
+          answer={questionObj.answer}
           ask={questionObj.ask}
           id={questionObj.id}
-          answer={questionObj.answer}
+          isActive={openId === questionObj.id}
           key={questionObj.id}
           onToggle={handleToggle}
-          isActive={openId === questionObj.id}
         />
       ))}
     </div>

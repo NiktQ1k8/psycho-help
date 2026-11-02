@@ -42,11 +42,11 @@ const DoctorPage = () => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.links}>
-        <Link to={SLUG.MAIN} className={styles.link}>
+        <Link className={styles.link} to={SLUG.MAIN}>
           Главная
         </Link>
         <span>/</span>
-        <Link to={SLUG.THERAPISTS} className={styles.link}>
+        <Link className={styles.link} to={SLUG.THERAPISTS}>
           Психологи
         </Link>
         <span>/</span>

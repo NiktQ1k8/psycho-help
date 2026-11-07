@@ -3,17 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import { useAuth } from '@/entities/auth/model/useAuth';
 import ModalWindow from '@/features/auth/modal/modal';
+import { useAppointmentBooking } from '@/features/personal-cabinet/model/appointment-booking';
 import { SLUG } from '@/shared/config/slug';
 import { ButtonLink } from '@/shared/ui/button-link/ButtonLink';
 import OfflineIcon from '../../assets/offline.svg?react';
 import OnlineIcon from '../../assets/online.svg?react';
 import styles from './BookingForm.module.scss';
 
-type TFormat = 'offline' | 'online';
-
 export const BookingForm = () => {
   const formatName = useId();
-  const [format, setFormat] = useState<TFormat>('offline');
+  const landingFormat = useAppointmentBooking((state) => state.landingFormat);
+  const setFormat = useAppointmentBooking((state) => state.setLandingFormat);
+  const format = landingFormat === 'Online' ? 'online' : 'offline';
   const [isModalOpen, setModalOpen] = useState(false);
   const isAuth = useAuth((state) => state.isAuth);
   const navigate = useNavigate();
@@ -60,7 +61,7 @@ export const BookingForm = () => {
               name={formatName}
               type="radio"
               value="offline"
-              onChange={() => setFormat('offline')}
+              onChange={() => setFormat('Offline')}
             />
             <OfflineIcon className={styles.icon} aria-hidden />
             <span>лично</span>
@@ -77,7 +78,7 @@ export const BookingForm = () => {
               name={formatName}
               type="radio"
               value="online"
-              onChange={() => setFormat('online')}
+              onChange={() => setFormat('Online')}
             />
             <OnlineIcon className={styles.icon} aria-hidden />
             <span>онлайн</span>

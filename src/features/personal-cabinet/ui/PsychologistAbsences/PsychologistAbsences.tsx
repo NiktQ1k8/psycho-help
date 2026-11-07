@@ -15,6 +15,7 @@ import type {
   TTherapistStatus,
   TTherapistStatusRequest,
 } from '@/entities/therapist/types';
+import { useCabinetDrafts } from '@/features/personal-cabinet/model/cabinet-drafts';
 import { moscowDate, toApiDate } from '@/shared/lib/date-time';
 import { DatePicker } from '@/shared/ui/date-picker/MoscowDatePicker';
 import './PsychologistAbsences.antd.scss';
@@ -58,19 +59,23 @@ export const PsychologistAbsences = ({
   const { message } = App.useApp();
   const queryClient = useQueryClient();
   const query = useQuery(therapistQueries.statuses(userId));
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editing, setEditing] = useState<TTherapistStatus | null>(null);
-  const [status, setStatus] =
-    useState<TTherapistStatusRequest['status']>('vacation');
-  const [start, setStart] = useState<DateTime | null>(null);
-  const [end, setEnd] = useState<DateTime | null>(null);
+  const draft = useCabinetDrafts((state) => state.absence);
+  const setAbsence = useCabinetDrafts((state) => state.setAbsence);
+  const clearAbsence = useCabinetDrafts((state) => state.clearAbsence);
+  const isFormOpen = draft !== null;
+  const editing = draft?.editing ?? null;
+  const status = draft?.status ?? 'vacation';
+  const start = draft?.start ? moscowDate(draft.start) : null;
+  const end = draft?.end ? moscowDate(draft.end) : null;
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleDatesChange = (
     dates: [DateTime | null, DateTime | null] | null,
   ) => {
-    setStart(dates?.[0] ?? null);
-    setEnd(dates?.[1] ?? null);
+    setAbsence({
+      start: dates?.[0] ? toApiDate(dates[0]) : null,
+      end: dates?.[1] ? toApiDate(dates[1]) : null,
+    });
   };
 
   const refresh = () =>
@@ -79,8 +84,7 @@ export const PsychologistAbsences = ({
     });
 
   const closeForm = () => {
-    setIsFormOpen(false);
-    setEditing(null);
+    clearAbsence();
     setErrorMessage('');
   };
 
@@ -105,7 +109,7 @@ export const PsychologistAbsences = ({
         await deleteTherapistStatus(userId, original.id);
       } catch (error) {
         if (isAxiosError(error) && error.response?.status === 404) {
-          setEditing(null);
+          setAbsence({ editing: null });
         }
         throw new Error(
           statusError(error, 'Не удалось изменить период. Повторите попытку.'),
@@ -128,11 +132,11 @@ export const PsychologistAbsences = ({
         if (!restored) {
           restored = await createTherapistStatus(userId, {
             status: original.status,
-            start_date: original.start_date,
-            end_date: original.end_date,
+            start_date: toApiDate(moscowDate(original.start_date)),
+            end_date: toApiDate(moscowDate(original.end_date)),
           }).catch(() => undefined);
         }
-        setEditing(restored ?? null);
+        setAbsence({ editing: restored ?? null });
         throw new Error(
           restored
             ? `${statusError(error, 'Не удалось сохранить изменения.')} Прежний период восстановлен. Можно исправить данные и повторить попытку.`
@@ -178,12 +182,13 @@ export const PsychologistAbsences = ({
   );
 
   const openForm = (period?: TTherapistStatus) => {
-    setEditing(period ?? null);
-    setStatus(period?.status ?? 'vacation');
-    setStart(period ? moscowDate(period.start_date) : null);
-    setEnd(period ? moscowDate(period.end_date) : null);
+    setAbsence({
+      editing: period ?? null,
+      status: period?.status ?? 'vacation',
+      start: period?.start_date ?? null,
+      end: period?.end_date ?? null,
+    });
     setErrorMessage('');
-    setIsFormOpen(true);
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -266,7 +271,7 @@ export const PsychologistAbsences = ({
                   name="absence-status"
                   type="radio"
                   value={value}
-                  onChange={() => setStatus(value)}
+                  onChange={() => setAbsence({ status: value })}
                 />
                 {statusNames[value]}
               </label>

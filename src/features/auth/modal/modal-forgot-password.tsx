@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { authApi } from '@/entities/auth/api';
 import { getAuthErrorMessage } from '@/entities/auth/model/auth-errors';
 import { validateProfileField } from '@/entities/auth/model/profile-form';
+import { useAuthDrafts } from '@/features/auth/model/auth-drafts';
 import { useFetch } from '@/shared/api/useFetch';
 import type { TAuthModalProps } from '../model/modal-types';
 import styles from './Modal.module.scss';
@@ -11,7 +12,8 @@ const ModalForgotPassword = ({
   isOpen,
   setModalOpen,
 }: TAuthModalProps) => {
-  const [email, setEmail] = useState('');
+  const email = useAuthDrafts((state) => state.forgotEmail);
+  const setEmail = useAuthDrafts((state) => state.setForgotEmail);
   const [emailError, setEmailError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const { fetching, isLoading, error, clearError } = useFetch(
@@ -20,6 +22,7 @@ const ModalForgotPassword = ({
         email: email.trim(),
       });
       setSuccessMessage(response.message);
+      setEmail('');
     },
     (error) => getAuthErrorMessage(error, 'requestPasswordReset'),
   );

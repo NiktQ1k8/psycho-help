@@ -8,6 +8,10 @@ interface IAppointmentBooking {
   appointment: TAppointmentBooking;
   createdAppointmentId: string | null;
   selectedOffices: string[];
+  scheduleDate: string | null;
+  landingFormat: TAppointmentType;
+  setLandingFormat: (format: TAppointmentType) => void;
+  setScheduleDate: (date: string) => void;
   setType: (type: TAppointmentType) => void;
   setSelectedOffices: (offices: string[]) => void;
   setAppointment: (patch: TAppointmentBooking) => void;
@@ -15,7 +19,18 @@ interface IAppointmentBooking {
   resetAppointment: () => void;
 }
 
-type TAppointmentBooking = Partial<TAppointmentCreateRequest> & {
+type TAppointmentBooking = Partial<
+  Pick<
+    TAppointmentCreateRequest,
+    | 'psychologist_id'
+    | 'type'
+    | 'duration'
+    | 'scheduled_time'
+    | 'reason'
+    | 'venue'
+    | 'comment'
+  >
+> & {
   emergency_contact?: string;
 };
 
@@ -28,16 +43,27 @@ export const useAppointmentBooking = create<IAppointmentBooking>((set) => ({
   appointment: { ...defaultAppointment },
   createdAppointmentId: null,
   selectedOffices: [],
-  setType: (type) =>
+  scheduleDate: null,
+  landingFormat: 'Offline',
+  setLandingFormat: (landingFormat) => set({ landingFormat }),
+  setScheduleDate: (scheduleDate) =>
     set((state) => ({
-      appointment: {
-        ...state.appointment,
-        type,
-        scheduled_time: undefined,
-        venue: undefined,
-      },
-      selectedOffices: [],
+      scheduleDate,
+      appointment: { ...state.appointment, scheduled_time: undefined },
     })),
+  setType: (type) =>
+    set((state) => {
+      if (state.appointment.type === type) return state;
+      return {
+        appointment: {
+          ...state.appointment,
+          type,
+          scheduled_time: undefined,
+          venue: undefined,
+        },
+        selectedOffices: [],
+      };
+    }),
   setSelectedOffices: (selectedOffices) =>
     set((state) => ({
       selectedOffices,
@@ -51,6 +77,8 @@ export const useAppointmentBooking = create<IAppointmentBooking>((set) => ({
     set({
       appointment: { ...defaultAppointment },
       createdAppointmentId: null,
+      scheduleDate: null,
+      landingFormat: 'Offline',
       selectedOffices: [],
     }),
 }));

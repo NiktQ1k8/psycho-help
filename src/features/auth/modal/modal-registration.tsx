@@ -5,6 +5,7 @@ import {
   validateProfileField,
 } from '@/entities/auth/model/profile-form';
 import { useAuth } from '@/entities/auth/model/useAuth';
+import { useAuthDrafts } from '@/features/auth/model/auth-drafts';
 import { useFetch } from '@/shared/api/useFetch';
 import { PhoneInput } from '@/shared/ui/phone-input/PhoneInput';
 import type { TAuthModalProps } from '../model/modal-types';
@@ -26,11 +27,19 @@ const ModalRegistration: React.FC<TAuthModalProps> = ({
   isOpen,
   setModalOpen,
 }) => {
-  const [formValue, setFormValue] = useState({ ...INITIAL_FORM_VALUE });
+  const registrationDraft = useAuthDrafts((state) => state.registration);
+  const setRegistration = useAuthDrafts((state) => state.setRegistration);
+  const clearRegistration = useAuthDrafts((state) => state.clearRegistration);
+  const [passwords, setPasswords] = useState({
+    password: '',
+    confirm_password: '',
+  });
+  const formValue = { ...registrationDraft, ...passwords };
   const [errors, setErrors] = useState({ ...INITIAL_FORM_VALUE });
 
   const resetForm = () => {
-    setFormValue({ ...INITIAL_FORM_VALUE });
+    clearRegistration();
+    setPasswords({ password: '', confirm_password: '' });
     setErrors({ ...INITIAL_FORM_VALUE });
   };
 
@@ -103,10 +112,11 @@ const ModalRegistration: React.FC<TAuthModalProps> = ({
 
   const handleFieldChange = (name: keyof typeof formValue, value: string) => {
     clearError();
-    setFormValue((prevValues) => ({
-      ...prevValues,
-      [name]: value,
-    }));
+    if (name === 'password' || name === 'confirm_password') {
+      setPasswords((previous) => ({ ...previous, [name]: value }));
+    } else {
+      setRegistration({ [name]: value });
+    }
     setErrors((prevErrors) => ({
       ...prevErrors,
       [name]: validateField(name, value),

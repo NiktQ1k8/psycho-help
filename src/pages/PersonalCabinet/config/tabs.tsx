@@ -45,7 +45,7 @@ export const roleBasedTabs: Record<string, ITabConfig[]> = {
     {
       id: 'profile',
       label: 'Профиль',
-      render: ({ user }) => <PersonalData user={user} />,
+      render: ({ user }) => <PersonalData key={user.id} user={user} />,
     },
   ],
   psychologist: [
@@ -67,7 +67,7 @@ export const roleBasedTabs: Record<string, ITabConfig[]> = {
     {
       id: 'profile',
       label: 'Профиль',
-      render: ({ user }) => <PersonalData user={user} />,
+      render: ({ user }) => <PersonalData key={user.id} user={user} />,
     },
     {
       id: 'medicalRecords',

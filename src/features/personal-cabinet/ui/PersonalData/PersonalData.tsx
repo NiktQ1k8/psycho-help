@@ -62,7 +62,6 @@ export const PersonalData = ({ user }: TPersonalDataProps) => {
   const { message: messageApi, modal } = App.useApp();
   const queryClient = useQueryClient();
 
-  const [isEditingName, setIsEditingName] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
 
@@ -74,11 +73,17 @@ export const PersonalData = ({ user }: TPersonalDataProps) => {
     confirm_password: '',
   });
 
-  const draft = useCabinetDrafts((state) => state.profile);
-  const setProfileDraft = useCabinetDrafts((state) => state.setProfile);
-  const clearProfileDraft = useCabinetDrafts((state) => state.clearProfile);
+  const changes = useCabinetDrafts((state) => state.profile);
+  const setProfile = useCabinetDrafts((state) => state.setProfile);
+  const clearProfile = useCabinetDrafts((state) => state.clearProfile);
   const originalData = getProfileFormData(user);
-  const formData = { ...originalData, ...draft };
+  const formData = { ...originalData, ...changes };
+  const [isEditingName, setIsEditingName] = useState(
+    () =>
+      formData.first_name !== originalData.first_name ||
+      formData.last_name !== originalData.last_name ||
+      formData.middle_name !== originalData.middle_name,
+  );
   const hasChanges = (
     Object.keys(formData) as Array<keyof TProfileFormData>
   ).some(
@@ -89,7 +94,7 @@ export const PersonalData = ({ user }: TPersonalDataProps) => {
   const [errors, setErrors] = useState<TProfileFormErrors>({});
 
   const handleFieldChange = (name: keyof TProfileFormData, value: string) => {
-    setProfileDraft({ [name]: value });
+    setProfile({ [name]: value });
     setErrors((prev) => ({
       ...prev,
       [name]: validateProfileField(name, value),
@@ -106,7 +111,7 @@ export const PersonalData = ({ user }: TPersonalDataProps) => {
 
   const handleCancelChanges = () => {
     if (isSaving) return;
-    clearProfileDraft();
+    clearProfile();
     setErrors({});
     setIsEditingName(false);
   };
@@ -164,7 +169,7 @@ export const PersonalData = ({ user }: TPersonalDataProps) => {
       setErrors({});
       setIsEditingName(false);
       setUser(user);
-      clearProfileDraft();
+      clearProfile();
       messageApi.success('Изменения профиля сохранены');
     } catch (error) {
       messageApi.error(
@@ -508,7 +513,7 @@ export const PersonalData = ({ user }: TPersonalDataProps) => {
           <div className={styles.actions}>
             <button
               className={styles.cancelButton}
-              disabled={isSaving || Object.keys(draft).length === 0}
+              disabled={isSaving || Object.keys(changes).length === 0}
               type="button"
               onClick={handleCancelChanges}
             >

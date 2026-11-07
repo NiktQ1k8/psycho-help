@@ -192,11 +192,14 @@ export const UserDashboard = ({ userName }: TUserDashboardProps) => {
       }
       return cancelAppointment(id, { cancel_reason: reason });
     },
-    onSuccess: async (_data, variables) => {
+    onSuccess: async (data, variables) => {
       await refreshAppointments();
       message.success('Успешно отменено');
       setCancelModal({ visible: false, type: 'appointment', id: '' });
       clearCancellationReason(`${variables.type}:${variables.id}`);
+      const appointmentId =
+        'appointment_id' in data ? data.appointment_id : variables.id;
+      useCabinetDrafts.getState().clearEmergencyContact(appointmentId);
     },
     onError: async (error) => {
       if (

@@ -31,15 +31,6 @@ import './AppointmentForm.antd.scss';
 import styles from './AppointmentForm.module.scss';
 import privacyFile from './assets/Privacy_police.pdf';
 
-const isMeetingUrlValid = (value?: string | null) => {
-  try {
-    const url = new URL(value?.trim() ?? '');
-    return url.protocol === 'https:' || url.protocol === 'http:';
-  } catch {
-    return false;
-  }
-};
-
 export const AppointmentForm = () => {
   const { message } = App.useApp();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -64,6 +55,9 @@ export const AppointmentForm = () => {
   const [contactSaveError, setContactSaveError] = useState('');
   const setAppointment = useAppointmentBooking((state) => state.setAppointment);
   const meetingType = appointment.type;
+  const venueHint = !appointment.venue?.trim()
+    ? 'Укажите место онлайн-консультации'
+    : '';
   const setMeetingType = useAppointmentBooking((state) => state.setType);
   const selectedOffices = useAppointmentBooking(
     (state) => state.selectedOffices,
@@ -71,11 +65,18 @@ export const AppointmentForm = () => {
   const setSelectedOffices = useAppointmentBooking(
     (state) => state.setSelectedOffices,
   );
-  const [scheduleDate, setScheduleDate] = useState<DateTime>(() =>
-    appointment.scheduled_time
-      ? moscowDate(appointment.scheduled_time).startOf('day')
-      : moscowDate().plus({ days: 1 }).startOf('day'),
+  const savedScheduleDate = useAppointmentBooking(
+    (state) => state.scheduleDate,
   );
+  const setScheduleDate = useAppointmentBooking(
+    (state) => state.setScheduleDate,
+  );
+  const scheduleDate =
+    savedScheduleDate || appointment.scheduled_time
+      ? moscowDate(savedScheduleDate || appointment.scheduled_time).startOf(
+          'day',
+        )
+      : moscowDate().plus({ days: 1 }).startOf('day');
   const [window, setWindow] = useState<'form' | 'results'>(
     createdAppointmentId ? 'results' : 'form',
   );
@@ -205,10 +206,8 @@ export const AppointmentForm = () => {
       message.error('Выберите доступное время консультации');
       return;
     }
-    if (meetingType === 'Online' && !isMeetingUrlValid(appointment.venue)) {
-      message.error(
-        'Укажите ссылку на онлайн-консультацию, начинающуюся с https:// или http://',
-      );
+    if (meetingType === 'Online' && venueHint) {
+      message.error(venueHint);
       return;
     }
     const description = appointment.reason?.trim();
@@ -269,8 +268,8 @@ export const AppointmentForm = () => {
     setIsSubmitting(true);
     setContactSaveError('');
 
-    if (meetingType === 'Online' && !isMeetingUrlValid(appointment.venue)) {
-      message.error('Укажите корректную ссылку на онлайн-консультацию');
+    if (meetingType === 'Online' && venueHint) {
+      message.error(venueHint);
       setWindow('form');
       setIsSubmitting(false);
       return;
@@ -342,7 +341,7 @@ export const AppointmentForm = () => {
       } else if (isAxiosError(error) && error.response?.status === 422) {
         setWindow('form');
         message.error(
-          'Не удалось записаться. Проверьте дату, формат и ссылку на встречу.',
+          'Не удалось записаться. Проверьте дату, формат и место консультации.',
         );
       } else {
         message.error(
@@ -579,8 +578,7 @@ export const AppointmentForm = () => {
               value={scheduleDate}
               onChange={(value) => {
                 if (value) {
-                  setScheduleDate(value.startOf('day'));
-                  setAppointment({ scheduled_time: undefined });
+                  setScheduleDate(value.toFormat('yyyy-MM-dd'));
                 }
               }}
             />
@@ -642,23 +640,18 @@ export const AppointmentForm = () => {
           {meetingType === 'Online' && (
             <div className={styles.field}>
               <label className={styles.label} htmlFor="booking-venue">
-                Ссылка на онлайн-консультацию
+                Место онлайн-консультации
               </label>
-              <input
-                className={styles.venueInput}
-                aria-describedby="booking-venue-hint"
+              <textarea
+                className={styles.textarea}
                 id="booking-venue"
                 maxLength={128}
-                placeholder="https://…"
-                type="url"
+                placeholder="Укажите удобный сервис, способ связи или другие пожелания"
                 value={appointment.venue ?? ''}
                 onChange={(event) =>
                   setAppointment({ venue: event.target.value })
                 }
               />
-              <p id="booking-venue-hint">
-                Укажите ссылку на встречу, согласованную с психологом.
-              </p>
             </div>
           )}
 

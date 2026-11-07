@@ -2,6 +2,7 @@ import { isAxiosError } from 'axios';
 import type { InternalAxiosRequestConfig } from 'axios';
 import { refreshSession } from '@/entities/auth/api';
 import { useAuth } from '@/entities/auth/model/useAuth';
+import { useAuthDrafts } from '@/features/auth/model/auth-drafts';
 import { useAppointmentBooking } from '@/features/personal-cabinet/model/appointment-booking';
 import { useCabinetDrafts } from '@/features/personal-cabinet/model/cabinet-drafts';
 import { usePsychologistDrafts } from '@/features/personal-cabinet/model/psychologist-drafts';
@@ -12,6 +13,9 @@ type TSessionRequestConfig = InternalAxiosRequestConfig & { _retry?: boolean };
 
 export const setupSession = () => {
   const unsubscribe = useAuth.subscribe((state, previous) => {
+    if (state.user?.id !== previous.user?.id) {
+      useAuthDrafts.setState(useAuthDrafts.getInitialState(), true);
+    }
     if (state.user && (!previous.user || state.user.id === previous.user.id)) {
       return;
     }

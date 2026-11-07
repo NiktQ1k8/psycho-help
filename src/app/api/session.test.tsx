@@ -27,6 +27,7 @@ import { authApi } from '@/entities/auth/api';
 import { getAuthErrorMessage } from '@/entities/auth/model/auth-errors';
 import { useAuth } from '@/entities/auth/model/useAuth';
 import type { TUser } from '@/entities/auth/types';
+import { useAuthDrafts } from '@/features/auth/model/auth-drafts';
 import { useAppointmentBooking } from '@/features/personal-cabinet/model/appointment-booking';
 import { useCabinetDrafts } from '@/features/personal-cabinet/model/cabinet-drafts';
 import { usePsychologistDrafts } from '@/features/personal-cabinet/model/psychologist-drafts';
@@ -229,6 +230,8 @@ describe('Авторизация и сессия', () => {
       await screen.findByText('Главная');
       requests = [];
       queryClient.setQueryData(['appointment.list'], ['private data']);
+      useAuthDrafts.getState().setLoginEmail('draft@example.com');
+      useAuthDrafts.getState().setRegistration({ first_name: 'Черновик' });
       respond = (config) => {
         expect(config.method).toBe('post');
         expect(JSON.parse(config.data as string)).toEqual(
@@ -243,6 +246,8 @@ describe('Авторизация и сессия', () => {
         action === 'login' ? '/api/users/login' : '/api/users/register',
       ]);
       expect(useAuth.getState()).toMatchObject({ isAuth: true, user });
+      expect(useAuthDrafts.getState().loginEmail).toBe('');
+      expect(useAuthDrafts.getState().registration.first_name).toBe('');
       expect(queryClient.getQueryData(['appointment.list'])).toBeUndefined();
     },
   );
@@ -396,6 +401,7 @@ describe('Авторизация и сессия', () => {
       reason: 'Личный черновик',
       emergency_contact: 'Мама, +79990000000',
     });
+    useAppointmentBooking.getState().setScheduleDate('2026-12-01');
     useAppointmentBooking
       .getState()
       .setCreatedAppointmentId('created-appointment');
@@ -408,7 +414,19 @@ describe('Авторизация и сессия', () => {
     usePsychologistDrafts.getState().setScheduleDraft('appointment', {
       date: '2026-12-01',
     });
-    useCabinetDrafts.getState().setProfile({ social_media: '@private' });
+    useCabinetDrafts.getState().setProfile({ email: 'draft@example.com' });
+    useCabinetDrafts
+      .getState()
+      .setEmergencyContact('appointment', 'Личный контакт');
+    useCabinetDrafts
+      .getState()
+      .setAbsence({ status: 'sick', start: '2026-12-01T00:00:00+03:00' });
+    useAuthDrafts.getState().setLoginEmail('draft@example.com');
+    useAuthDrafts.getState().setForgotEmail('draft@example.com');
+    useAuthDrafts.getState().setRegistration({ first_name: 'Черновик' });
+    usePsychologistDrafts
+      .getState()
+      .setEmergencyCancellation('appointment', true);
     useCabinetDrafts
       .getState()
       .setCancellationReason('appointment:private', 'Личная причина');
@@ -426,13 +444,22 @@ describe('Авторизация и сессия', () => {
       useAppointmentBooking.getState().appointment.emergency_contact,
     ).toBeUndefined();
     expect(useAppointmentBooking.getState().createdAppointmentId).toBeNull();
+    expect(useAppointmentBooking.getState().scheduleDate).toBeNull();
     expect(usePsychologistDrafts.getState().patientCommentDrafts).toEqual({});
     expect(usePsychologistDrafts.getState().psychologistCommentDrafts).toEqual(
       {},
     );
     expect(usePsychologistDrafts.getState().scheduleDrafts).toEqual({});
-    expect(useCabinetDrafts.getState().profile).toEqual({});
     expect(useCabinetDrafts.getState().cancellationReasons).toEqual({});
+    expect(useCabinetDrafts.getState().profile).toEqual({});
+    expect(useCabinetDrafts.getState().emergencyContacts).toEqual({});
+    expect(useCabinetDrafts.getState().absence).toBeNull();
+    expect(useAuthDrafts.getState().loginEmail).toBe('');
+    expect(useAuthDrafts.getState().forgotEmail).toBe('');
+    expect(useAuthDrafts.getState().registration.first_name).toBe('');
+    expect(
+      usePsychologistDrafts.getState().emergencyCancellationDrafts,
+    ).toEqual({});
     expect(useAppointmentBooking.getState().appointment.type).toBeUndefined();
     expect(usePsychologistView.getState().appointmentFilters.searchQuery).toBe(
       '',

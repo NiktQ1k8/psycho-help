@@ -18,6 +18,7 @@ import { useAuth } from '@/entities/auth/model/useAuth';
 import { getUserFullName } from '@/entities/auth/model/user-name';
 import { Role } from '@/entities/role/helpers';
 import { therapistQueryKey } from '@/entities/therapist/queries';
+import { useCabinetDrafts } from '@/features/personal-cabinet/model/cabinet-drafts';
 import { isConsultationTimeValid } from '@/features/personal-cabinet/model/consultation-time';
 import { usePsychologistDrafts } from '@/features/personal-cabinet/model/psychologist-drafts';
 import { PsychologistCancelModal } from '@/features/personal-cabinet/ui/PsychologistCancelModal/PsychologistCancelModal';
@@ -94,19 +95,20 @@ export const PsychologistAppointmentPage = () => {
     selectedDateTime.toFormat('yyyy-MM-dd HH:mm') !==
       scheduled?.toFormat('yyyy-MM-dd HH:mm');
   const venue = scheduleDraft?.venue ?? appointment?.venue ?? '';
-  const comment = scheduleDraft?.comment ?? appointment?.comment ?? '';
-  const [contactDrafts, setContactDrafts] = useState<Record<string, string>>(
-    {},
+  const contactDraft = useCabinetDrafts(
+    (state) => state.emergencyContacts[appointmentId],
   );
-  const contact =
-    contactDrafts[appointmentId] ?? appointment?.emergency_contact ?? '';
+  const setContactDraft = useCabinetDrafts(
+    (state) => state.setEmergencyContact,
+  );
+  const clearContactDraft = useCabinetDrafts(
+    (state) => state.clearEmergencyContact,
+  );
+  const contact = contactDraft ?? appointment?.emergency_contact ?? '';
   const hasContactChanges =
     contact.trim() !== (appointment?.emergency_contact?.trim() ?? '');
   const hasVenueChanges = venue.trim() !== (appointment?.venue.trim() ?? '');
-  const hasCommentChanges =
-    comment.trim() !== (appointment?.comment?.trim() ?? '');
-  const hasAppointmentChanges =
-    hasScheduleChanges || hasVenueChanges || hasCommentChanges;
+  const hasAppointmentChanges = hasScheduleChanges || hasVenueChanges;
   const isScheduleValid =
     !!selectedDateTime && isConsultationTimeValid(selectedDateTime);
   const changeHint = !isScheduleValid
@@ -115,9 +117,7 @@ export const PsychologistAppointmentPage = () => {
       ? 'Укажите место или ссылку на консультацию'
       : venue.trim().length > 128
         ? 'Сократите место или ссылку до 128 символов'
-        : comment.trim().length > 512
-          ? 'Сократите комментарий к записи до 512 символов'
-          : '';
+        : '';
 
   const patientCommentDraft = usePsychologistDrafts(
     (state) => state.patientCommentDrafts[appointmentId],
@@ -130,8 +130,8 @@ export const PsychologistAppointmentPage = () => {
   const setPsychologistCommentDraft = usePsychologistDrafts(
     (state) => state.setPsychologistCommentDraft,
   );
-  const clearPsychologistCommentDraft = usePsychologistDrafts(
-    (state) => state.clearPsychologistCommentDraft,
+  const clearAppointmentDrafts = usePsychologistDrafts(
+    (state) => state.clearAppointmentDrafts,
   );
   const completionHint = hasContactChanges
     ? 'Сохраните или сбросьте изменения экстренного контакта перед завершением записи.'
@@ -150,9 +150,6 @@ export const PsychologistAppointmentPage = () => {
 
   const setPatientCommentDraft = usePsychologistDrafts(
     (state) => state.setPatientCommentDraft,
-  );
-  const clearPatientCommentDraft = usePsychologistDrafts(
-    (state) => state.clearPatientCommentDraft,
   );
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
 
@@ -194,9 +191,8 @@ export const PsychologistAppointmentPage = () => {
     onSuccess: async () => {
       await refreshAppointment();
       message.success('Запись завершена');
-      clearPatientCommentDraft(appointmentId);
-      clearPsychologistCommentDraft(appointmentId);
-      clearScheduleDraft(appointmentId);
+      clearAppointmentDrafts(appointmentId);
+      clearContactDraft(appointmentId);
       navigate(-1);
     },
     onError: handleSaveError,
@@ -215,7 +211,6 @@ export const PsychologistAppointmentPage = () => {
       return requestAppointmentReschedule(appointmentId, {
         scheduled_time: toApiDate(selectedDateTime),
         ...(hasVenueChanges ? { venue: venue.trim() } : {}),
-        ...(hasCommentChanges ? { comment: comment.trim() } : {}),
       });
     },
     onSuccess: async () => {
@@ -248,10 +243,7 @@ export const PsychologistAppointmentPage = () => {
       void queryClient.invalidateQueries({
         queryKey: [appointmentQueryKey.list],
       });
-      setContactDrafts((drafts) => {
-        const { [updated.id]: _removed, ...rest } = drafts;
-        return rest;
-      });
+      clearContactDraft(updated.id);
       message.success('Экстренный контакт сохранён');
     },
     onError: (error, variables) => {
@@ -455,7 +447,7 @@ export const PsychologistAppointmentPage = () => {
             <div className={clsx(styles.infoRowGrid, styles.venueRow)}>
               <label className={styles.infoLabel} htmlFor="appointment-venue">
                 {appointment.type === 'Online'
-                  ? 'Ссылка на консультацию'
+                  ? 'Место онлайн-консультации'
                   : 'Место'}
               </label>
               {appointment.status === 'awaiting' ? (
@@ -466,7 +458,7 @@ export const PsychologistAppointmentPage = () => {
                   maxLength={128}
                   placeholder={
                     appointment.type === 'Online'
-                      ? 'Ссылка на встречу'
+                      ? 'Сервис, способ связи или ссылка на встречу'
                       : 'Адрес и кабинет'
                   }
                   type="text"
@@ -521,19 +513,19 @@ export const PsychologistAppointmentPage = () => {
                 !pendingRequest && (
                   <Alert
                     showIcon
-                    title="Для изменения места или комментария выберите также другую дату или время"
+                    title="Для изменения места выберите также другую дату или время"
                     type="warning"
                   />
                 )}
             </div>
           )}
 
-          {reason && (
-            <div className={styles.infoRow}>
-              <span className={styles.infoLabel}>Тема встречи</span>
-              <span className={styles.infoValue}>{reason}</span>
-            </div>
-          )}
+          <div className={styles.infoRow}>
+            <span className={styles.infoLabel}>Тема встречи</span>
+            <span className={styles.infoValue}>
+              {reason || 'Тема встречи не указана'}
+            </span>
+          </div>
 
           <div className={styles.infoRow}>
             <label
@@ -561,10 +553,7 @@ export const PsychologistAppointmentPage = () => {
                   : (appointment.emergency_contact ?? '')
               }
               onChange={(event) =>
-                setContactDrafts((drafts) => ({
-                  ...drafts,
-                  [appointmentId]: event.target.value,
-                }))
+                setContactDraft(appointmentId, event.target.value)
               }
             />
             <p
@@ -608,10 +597,7 @@ export const PsychologistAppointmentPage = () => {
                 <Button
                   disabled={isSaving}
                   onClick={() => {
-                    setContactDrafts((drafts) => {
-                      const { [appointmentId]: _removed, ...rest } = drafts;
-                      return rest;
-                    });
+                    clearContactDraft(appointmentId);
                     contactMutation.reset();
                   }}
                 >
@@ -621,36 +607,10 @@ export const PsychologistAppointmentPage = () => {
             )}
           </div>
 
-          {(appointment.status === 'awaiting' || appointment.comment) && (
+          {appointment.comment && (
             <div className={styles.infoRow}>
-              <label className={styles.infoLabel} htmlFor="appointment-comment">
-                Комментарий к записи
-              </label>
-              {appointment.status === 'awaiting' ? (
-                <>
-                  <textarea
-                    className={styles.textarea}
-                    aria-describedby="appointment-comment-hint"
-                    disabled={!canEditSchedule}
-                    id="appointment-comment"
-                    maxLength={512}
-                    placeholder="Организационные детали консультации"
-                    rows={3}
-                    value={comment}
-                    onChange={(event) =>
-                      setScheduleDraft(appointmentId, {
-                        comment: event.target.value,
-                      })
-                    }
-                  />
-                  <p className={styles.fieldHint} id="appointment-comment-hint">
-                    Пациент увидит этот комментарий. Изменения требуют его
-                    подтверждения.
-                  </p>
-                </>
-              ) : (
-                <span className={styles.infoValue}>{appointment.comment}</span>
-              )}
+              <span className={styles.infoLabel}>Комментарий к записи</span>
+              <span className={styles.infoValue}>{appointment.comment}</span>
             </div>
           )}
 

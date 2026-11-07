@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { App, Checkbox, Input, Modal } from 'antd';
 import { isAxiosError } from 'axios';
@@ -7,6 +6,7 @@ import {
   cancelAppointment,
 } from '@/entities/appointment/api';
 import { therapistQueryKey } from '@/entities/therapist/queries';
+import { useCabinetDrafts } from '@/features/personal-cabinet/model/cabinet-drafts';
 import { usePsychologistDrafts } from '@/features/personal-cabinet/model/psychologist-drafts';
 import { getRequestErrorMessage } from '@/shared/api/errors';
 
@@ -23,13 +23,21 @@ export const PsychologistCancelModal = ({
 }: TPsychologistCancelModalProps) => {
   const { message } = App.useApp();
   const queryClient = useQueryClient();
-  const [isEmergency, setIsEmergency] = useState(false);
+  const isEmergency = usePsychologistDrafts((state) =>
+    appointmentId
+      ? (state.emergencyCancellationDrafts[appointmentId] ?? false)
+      : false,
+  );
+  const setIsEmergency = usePsychologistDrafts(
+    (state) => state.setEmergencyCancellation,
+  );
+  const clearContact = useCabinetDrafts((state) => state.clearEmergencyContact);
   const reason = usePsychologistDrafts((state) =>
     appointmentId ? state.reasonDrafts[appointmentId] || '' : '',
   );
   const setReasonDraft = usePsychologistDrafts((state) => state.setReasonDraft);
-  const clearReasonDraft = usePsychologistDrafts(
-    (state) => state.clearReasonDraft,
+  const clearAppointmentDrafts = usePsychologistDrafts(
+    (state) => state.clearAppointmentDrafts,
   );
 
   const refreshAppointment = (id: string) =>
@@ -52,8 +60,8 @@ export const PsychologistCancelModal = ({
       }),
     onSuccess: async (_data, variables) => {
       await refreshAppointment(variables.id);
-      clearReasonDraft(variables.id);
-      setIsEmergency(false);
+      clearAppointmentDrafts(variables.id);
+      clearContact(variables.id);
       onClose();
       onSuccess?.();
     },
@@ -91,7 +99,6 @@ export const PsychologistCancelModal = ({
       title="Отмена записи"
       onCancel={() => {
         if (!mutation.isPending) {
-          setIsEmergency(false);
           onClose();
         }
       }}
@@ -123,7 +130,10 @@ export const PsychologistCancelModal = ({
         <Checkbox
           checked={isEmergency}
           disabled={mutation.isPending}
-          onChange={(event) => setIsEmergency(event.target.checked)}
+          onChange={(event) => {
+            if (appointmentId)
+              setIsEmergency(appointmentId, event.target.checked);
+          }}
         >
           Экстренная отмена
         </Checkbox>

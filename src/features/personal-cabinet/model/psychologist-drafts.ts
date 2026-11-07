@@ -5,22 +5,21 @@ export type TScheduleDraft = {
   date?: string;
   time?: string;
   venue?: string;
-  comment?: string;
 };
 
 interface IPsychologistDraftsState {
   reasonDrafts: Record<string, string>;
+  emergencyCancellationDrafts: Record<string, boolean>;
+  setEmergencyCancellation: (id: string, isEmergency: boolean) => void;
   patientCommentDrafts: Record<string, string>;
   psychologistCommentDrafts: Record<string, string>;
   scheduleDrafts: Record<string, TScheduleDraft>;
   setScheduleDraft: (id: string, patch: TScheduleDraft) => void;
   clearScheduleDraft: (id: string) => void;
+  clearAppointmentDrafts: (id: string) => void;
   setReasonDraft: (appointmentId: string, reason: string) => void;
-  clearReasonDraft: (appointmentId: string) => void;
   setPatientCommentDraft: (appointmentId: string, comment: string) => void;
-  clearPatientCommentDraft: (appointmentId: string) => void;
   setPsychologistCommentDraft: (appointmentId: string, comment: string) => void;
-  clearPsychologistCommentDraft: (appointmentId: string) => void;
 }
 
 const omitKey = <T>(record: Record<string, T>, key: string) => {
@@ -32,9 +31,31 @@ export const usePsychologistDrafts = create<IPsychologistDraftsState>()(
   persist(
     (set) => ({
       reasonDrafts: {},
+      emergencyCancellationDrafts: {},
+      setEmergencyCancellation: (id, isEmergency) =>
+        set((state) => ({
+          emergencyCancellationDrafts: {
+            ...state.emergencyCancellationDrafts,
+            [id]: isEmergency,
+          },
+        })),
       patientCommentDrafts: {},
       psychologistCommentDrafts: {},
       scheduleDrafts: {},
+      clearAppointmentDrafts: (id) =>
+        set((state) => ({
+          reasonDrafts: omitKey(state.reasonDrafts, id),
+          emergencyCancellationDrafts: omitKey(
+            state.emergencyCancellationDrafts,
+            id,
+          ),
+          patientCommentDrafts: omitKey(state.patientCommentDrafts, id),
+          psychologistCommentDrafts: omitKey(
+            state.psychologistCommentDrafts,
+            id,
+          ),
+          scheduleDrafts: omitKey(state.scheduleDrafts, id),
+        })),
       setScheduleDraft: (id, patch) =>
         set((state) => ({
           scheduleDrafts: {
@@ -53,11 +74,6 @@ export const usePsychologistDrafts = create<IPsychologistDraftsState>()(
           },
         })),
 
-      clearReasonDraft: (appointmentId) =>
-        set((state) => ({
-          reasonDrafts: omitKey(state.reasonDrafts, appointmentId),
-        })),
-
       setPatientCommentDraft: (appointmentId, comment) =>
         set((state) => ({
           patientCommentDrafts: {
@@ -66,28 +82,12 @@ export const usePsychologistDrafts = create<IPsychologistDraftsState>()(
           },
         })),
 
-      clearPatientCommentDraft: (appointmentId) =>
-        set((state) => ({
-          patientCommentDrafts: omitKey(
-            state.patientCommentDrafts,
-            appointmentId,
-          ),
-        })),
-
       setPsychologistCommentDraft: (appointmentId, comment) =>
         set((state) => ({
           psychologistCommentDrafts: {
             ...state.psychologistCommentDrafts,
             [appointmentId]: comment,
           },
-        })),
-
-      clearPsychologistCommentDraft: (appointmentId) =>
-        set((state) => ({
-          psychologistCommentDrafts: omitKey(
-            state.psychologistCommentDrafts,
-            appointmentId,
-          ),
         })),
     }),
     {

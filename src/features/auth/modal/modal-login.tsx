@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { getAuthErrorMessage } from '@/entities/auth/model/auth-errors';
 import { validateProfileField } from '@/entities/auth/model/profile-form';
 import { useAuth } from '@/entities/auth/model/useAuth';
+import { useAuthDrafts } from '@/features/auth/model/auth-drafts';
 import { useFetch } from '@/shared/api/useFetch';
 import type { TAuthModalProps } from '../model/modal-types';
 import styles from './Modal.module.scss';
@@ -18,7 +19,10 @@ const ModalLogin: React.FC<TAuthModalProps> = ({
   isOpen,
   setModalOpen,
 }) => {
-  const [formValue, setFormValue] = useState({ ...INITIAL_FORM_VALUE });
+  const email = useAuthDrafts((state) => state.loginEmail);
+  const setEmail = useAuthDrafts((state) => state.setLoginEmail);
+  const [password, setPassword] = useState('');
+  const formValue = { email, password };
   const [errors, setErrors] = useState({ ...INITIAL_FORM_VALUE });
   const [showPassword, setShowPassword] = useState(false);
 
@@ -48,6 +52,8 @@ const ModalLogin: React.FC<TAuthModalProps> = ({
     if (isLoading || !validateForm()) return;
     const ok = await fetching();
     if (ok) {
+      setEmail('');
+      setPassword('');
       setModalOpen(false);
     }
   };
@@ -59,10 +65,8 @@ const ModalLogin: React.FC<TAuthModalProps> = ({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     clearError();
-    setFormValue((prevValues) => ({
-      ...prevValues,
-      [name]: value,
-    }));
+    if (name === 'email') setEmail(value);
+    else setPassword(value);
     setErrors((prevErrors) => ({
       ...prevErrors,
       [name]: '',

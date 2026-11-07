@@ -282,8 +282,7 @@
   }
 }
 
-.datePicker,
-.venueInput {
+.datePicker {
   width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
@@ -470,8 +469,7 @@
     color: var(--labels-neutral-inverted-primary);
   }
 
-  .datePicker,
-  .venueInput {
+  .datePicker {
     color: var(--labels-neutral-inverted-primary);
     background: var(--fills-neutral-primary);
   }

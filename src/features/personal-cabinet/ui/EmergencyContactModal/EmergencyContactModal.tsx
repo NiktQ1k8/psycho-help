@@ -7,6 +7,7 @@ import {
   updateAppointmentEmergencyContact,
 } from '@/entities/appointment/api';
 import type { TAppointment } from '@/entities/appointment/types';
+import { useCabinetDrafts } from '@/features/personal-cabinet/model/cabinet-drafts';
 import { getRequestErrorMessage } from '@/shared/api/errors';
 import styles from './EmergencyContactModal.module.scss';
 
@@ -21,10 +22,17 @@ export const EmergencyContactModal = ({
 }: IEmergencyContactModalProps) => {
   const { message } = App.useApp();
   const queryClient = useQueryClient();
-  const [contact, setContact] = useState(appointment.emergency_contact ?? '');
+  const contactDraft = useCabinetDrafts(
+    (state) => state.emergencyContacts[appointment.id],
+  );
+  const setContact = useCabinetDrafts((state) => state.setEmergencyContact);
+  const clearContact = useCabinetDrafts((state) => state.clearEmergencyContact);
   const [errorMessage, setErrorMessage] = useState('');
   const [unavailable, setUnavailable] = useState(false);
   const readOnly = appointment.status !== 'awaiting' || unavailable;
+  const contact = readOnly
+    ? (appointment.emergency_contact ?? '')
+    : (contactDraft ?? appointment.emergency_contact ?? '');
   const mutation = useMutation({
     mutationFn: () =>
       updateAppointmentEmergencyContact(appointment.id, {
@@ -35,6 +43,7 @@ export const EmergencyContactModal = ({
       void queryClient.invalidateQueries({
         queryKey: [appointmentQueryKey.list],
       });
+      clearContact(updated.id);
       message.success('Экстренный контакт сохранён');
       onClose();
     },
@@ -114,7 +123,7 @@ export const EmergencyContactModal = ({
           rows={4}
           showCount
           value={contact}
-          onChange={(event) => setContact(event.target.value)}
+          onChange={(event) => setContact(appointment.id, event.target.value)}
         />
         {readOnly && !errorMessage && (
           <p>

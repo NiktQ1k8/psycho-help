@@ -18,7 +18,7 @@ const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
-  const animatingTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  const animatingTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const { currentTheme, toggleTheme } = useTheme();
 
   const closeMenu = useCallback(() => {

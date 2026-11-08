@@ -70,7 +70,9 @@ const HomePage: FC = () => {
         <BlockWrapper
           key={`home-page-${index}`}
           {...block}
-          ref={(el) => (refs.current[index] = el)}
+          ref={(el) => {
+            refs.current[index] = el;
+          }}
         />
       ))}
     </div>

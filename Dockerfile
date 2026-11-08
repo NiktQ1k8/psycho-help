@@ -17,8 +17,6 @@ RUN --mount=type=cache,id=psycho-help-npm,target=/root/.npm,sharing=locked \
         --no-audit \
         --no-fund \
         --loglevel=verbose \
-        --fetch-timeout=60000 \
-        --fetch-retries=2 \
         --fetch-retry-mintimeout=1000 \
         --fetch-retry-maxtimeout=10000 \
         --logs-dir=/tmp/npm-logs \

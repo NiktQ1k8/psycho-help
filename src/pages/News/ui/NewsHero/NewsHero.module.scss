@@ -25,7 +25,8 @@
 }
 
 .text {
-  font: var(--font-text-large);
+  @include text-large;
+
   color: var(--labels-neutral-secondary);
 }
 

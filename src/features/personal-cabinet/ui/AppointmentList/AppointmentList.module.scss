@@ -59,13 +59,17 @@
 .patientName {
   flex-shrink: 0;
   max-width: 370px;
-  font: var(--font-text-large);
+
+  @include text-large;
+
   color: var(--labels-neutral-primary);
 }
 
 .location {
   display: block;
-  font: var(--font-text-large);
+
+  @include text-large;
+
   color: var(--labels-neutral-secondary);
 }
 

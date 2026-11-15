@@ -89,17 +89,18 @@
 }
 
 .speciality {
-  font: var(--font-text-large);
+  @include text-large;
+
   font-size: 2rem;
   color: var(--labels-neutral-primary);
 }
 
 .experience {
-  font: var(--font-text-large);
+  @include text-large;
+
   font-size: 2rem;
   font-weight: 400;
   color: var(--labels-neutral-secondary);
-
   opacity: 0.72;
 }
 

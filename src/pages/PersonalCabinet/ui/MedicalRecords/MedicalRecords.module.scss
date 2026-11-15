@@ -23,13 +23,16 @@
 }
 
 .patient_name {
-  font: var(--font-text-large);
+  @include text-large;
+
   color: var(--labels-neutral-primary);
 }
 
 .study_group {
   max-width: 250px;
-  font: var(--font-text-large);
+
+  @include text-large;
+
   color: var(--labels-neutral-secondary);
 }
 

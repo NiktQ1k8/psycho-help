@@ -30,7 +30,8 @@
 
   @include past-desktop {
     padding: 1.6rem 6.4rem;
-    font: var(--font-text-large);
+
+    @include text-large;
   }
 }
 

@@ -231,7 +231,8 @@
 }
 
 .infoName {
-  font: var(--font-text-large);
+  @include text-large;
+
   font-size: 20px;
   line-height: 28px;
   color: var(--labels-neutral-primary);
@@ -245,7 +246,8 @@
   border: none;
   border-radius: 16px;
 
-  font: var(--font-text-large);
+  @include text-large;
+
   font-weight: 500;
 
   transition: background-color 0.2s;

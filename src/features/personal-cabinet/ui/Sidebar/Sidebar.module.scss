@@ -45,7 +45,8 @@
   border: none;
   border-radius: 8px;
 
-  font: var(--font-text-large);
+  @include text-large;
+
   color: var(--labels-neutral-primary);
   text-align: left;
   text-decoration: none;

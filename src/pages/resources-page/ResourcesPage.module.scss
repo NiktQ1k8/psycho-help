@@ -50,7 +50,9 @@
 
       .features {
         display: flex;
-        font: var(--font-text-large);
+
+        @include text-large;
+
         color: var(--labels-neutral-secondary);
         list-style: none;
       }

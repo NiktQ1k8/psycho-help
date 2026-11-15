@@ -34,11 +34,11 @@
 
 .answer {
   display: none;
-
   margin-top: 2.4rem;
   margin-right: 2.4rem;
 
-  font: var(--font-text-large);
+  @include text-large;
+
   color: var(--labels-neutral-primary);
 }
 

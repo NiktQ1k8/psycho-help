@@ -36,7 +36,7 @@
 }
 
 .description {
-  font: var(--font-text-large);
+  @include text-large;
 }
 
 .image {

@@ -30,7 +30,9 @@
 
 .text {
   margin: 0 0 3.6rem;
-  font: var(--font-text-large);
+
+  @include text-large;
+
   color: var(--labels-neutral-primary);
 }
 

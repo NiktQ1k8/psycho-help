@@ -425,7 +425,8 @@
   border: none;
   border-radius: 8px;
 
-  font: var(--font-text-large);
+  @include text-large;
+
   color: var(--labels-danger-primary);
 
   background-color: transparent;

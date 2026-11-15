@@ -17,7 +17,8 @@
 }
 
 .counter {
-  font: var(--font-text-large);
+  @include text-large;
+
   color: var(--labels-neutral-tetriary);
 }
 

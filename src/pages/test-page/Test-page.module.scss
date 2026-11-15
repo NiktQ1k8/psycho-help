@@ -135,7 +135,7 @@
 
 @include mobile-specific {
   .counter {
-    font: var(--font-text-medium);
+    @include text-medium;
   }
 
   .title {
@@ -148,12 +148,13 @@
   }
 
   .option {
-    font: var(--font-text-medium);
+    @include text-medium;
   }
 
   .buttonAction {
     padding-inline: 4.85rem;
-    font: var(--font-text-medium);
+
+    @include text-medium;
   }
 
   .question {

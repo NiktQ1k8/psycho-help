@@ -38,7 +38,8 @@
   gap: 12px;
   align-items: flex-start;
 
-  font: var(--font-text-medium);
+  @include text-medium;
+
   color: var(--labels-neutral-primary);
 }
 
@@ -117,7 +118,8 @@
   border: none;
   border-radius: 16px;
 
-  font: var(--font-text-medium);
+  @include text-medium;
+
   color: var(--interactive-brand-primary);
 
   background-color: var(--interactive-brand-secondary);
@@ -134,7 +136,8 @@
   border: none;
   border-radius: 16px;
 
-  font: var(--font-text-medium);
+  @include text-medium;
+
   color: var(--labels-neutral-inverted-primary);
 
   background-color: var(--interactive-brand-primary);
@@ -151,7 +154,8 @@
   border: 1px solid var(--labels-danger-primary);
   border-radius: 16px;
 
-  font: var(--font-text-medium);
+  @include text-medium;
+
   color: var(--labels-danger-primary);
 
   background-color: transparent;
@@ -162,7 +166,8 @@
 }
 
 .description {
-  font: var(--font-text-medium);
+  @include text-medium;
+
   color: var(--labels-neutral-secondary);
   overflow-wrap: anywhere;
   white-space: pre-wrap;

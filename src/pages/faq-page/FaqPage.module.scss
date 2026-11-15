@@ -60,7 +60,7 @@
 
 @media (width <= 634px) {
   .description {
-    font: var(--font-text-medium);
+    @include text-medium;
   }
 
   .wrapper {

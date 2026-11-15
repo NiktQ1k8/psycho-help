@@ -81,7 +81,8 @@
   padding: 0;
   border: none;
 
-  font: var(--font-text-medium);
+  @include text-medium;
+
   color: var(--labels-neutral-primary);
 
   background: none;

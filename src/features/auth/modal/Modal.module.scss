@@ -7,7 +7,8 @@
   align-items: center;
   justify-content: center;
 
-  font: var(--font-text-medium);
+  @include text-medium;
+
   font-size: 16px;
 
   background-color: var(--labels-neutral-tetriary);

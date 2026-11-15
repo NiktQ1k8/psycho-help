@@ -41,7 +41,7 @@
   padding: 4px;
   border: none;
 
-  font: var(--font-text-medium);
+  @include text-medium;
 
   background: transparent;
 

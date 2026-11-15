@@ -55,7 +55,8 @@
 }
 
 .date {
-  font: var(--font-text-medium);
+  @include text-medium;
+
   color: var(--labels-neutral-primary);
 }
 
@@ -91,7 +92,7 @@
   }
 
   .type {
-    font: var(--font-text-medium);
+    @include text-medium;
   }
 
   .date {

@@ -96,7 +96,8 @@
 
   padding: 16px 0;
 
-  font: var(--font-text-medium);
+  @include text-medium;
+
   font-size: 16px;
   line-height: 28px;
 }
@@ -112,7 +113,8 @@
 .infoValueGrid {
   padding: 12px;
 
-  font: var(--font-text-medium);
+  @include text-medium;
+
   font-size: 16px;
   line-height: 24px;
   color: var(--labels-neutral-primary);
@@ -183,7 +185,8 @@
 
   width: 100%;
 
-  font: var(--font-text-medium);
+  @include text-medium;
+
   font-size: 16px;
   line-height: 28px;
 }
@@ -210,7 +213,8 @@
   border: 1px solid var(--border-neutral-base);
   border-radius: 6px;
 
-  font: var(--font-text-medium);
+  @include text-medium;
+
   color: var(--labels-neutral-primary);
 
   background-color: var(--backgrounds-neutral-primary);

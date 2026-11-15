@@ -8,7 +8,8 @@
   padding-top: 24px;
   border-top: 1px solid var(--border-neutral-soft);
 
-  font: var(--font-text-medium);
+  @include text-medium;
+
   color: var(--labels-neutral-primary);
 
   h2,

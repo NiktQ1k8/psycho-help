@@ -21,7 +21,9 @@
 
 .name {
   max-width: 150px;
-  font: var(--font-text-medium);
+
+  @include text-medium;
+
   color: var(--labels-neutral-primary);
   text-align: center;
 }

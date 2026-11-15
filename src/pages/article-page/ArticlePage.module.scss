@@ -62,7 +62,9 @@
 
     & > p {
       margin-bottom: 2.4rem;
-      font: var(--font-text-medium);
+
+      @include text-medium;
+
       color: var(--labels-neutral-primary);
     }
 
@@ -70,7 +72,8 @@
       margin-bottom: 2.4rem;
 
       & > p {
-        font: var(--font-text-medium);
+        @include text-medium;
+
         color: var(--labels-neutral-primary);
       }
 
@@ -79,7 +82,9 @@
 
         & > li {
           margin-bottom: 0.4rem;
-          font: var(--font-text-medium);
+
+          @include text-medium;
+
           color: var(--labels-neutral-primary);
 
           // list-style-position: inside;

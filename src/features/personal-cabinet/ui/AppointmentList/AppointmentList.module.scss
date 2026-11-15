@@ -40,7 +40,8 @@
 }
 
 .timeCol {
-  font: var(--font-text-medium);
+  @include text-medium;
+
   color: var(--labels-neutral-primary);
 }
 
@@ -111,7 +112,8 @@
 }
 
 .status-text {
-  font: var(--font-text-medium);
+  @include text-medium;
+
   color: var(--labels-neutral-primary);
 }
 
@@ -122,7 +124,8 @@
   border: none;
   border-radius: 12px;
 
-  font: var(--font-text-medium);
+  @include text-medium;
+
   color: var(--labels-neutral-inverted-primary);
   white-space: nowrap;
 

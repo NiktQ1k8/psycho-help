@@ -44,7 +44,8 @@
     }
 
     .description {
-      font: var(--font-text-medium);
+      @include text-medium;
+
       color: var(--labels-neutral-secondary);
 
       &.ellipse {

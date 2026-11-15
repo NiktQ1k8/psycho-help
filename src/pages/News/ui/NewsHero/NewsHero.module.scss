@@ -42,7 +42,7 @@
   }
 
   .text {
-    font: var(--font-text-medium);
+    @include text-medium;
   }
 }
 

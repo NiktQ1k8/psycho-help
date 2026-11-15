@@ -118,7 +118,8 @@
   border: none;
   border-radius: 8px;
 
-  font: var(--font-text-medium);
+  @include text-medium;
+
   color: var(--labels-brand-primary);
   text-underline-position: from-font;
   text-underline-offset: 25%;
@@ -146,7 +147,7 @@
   flex-direction: column;
   gap: 20px;
 
-  font: var(--font-text-medium);
+  @include text-medium;
 
   background-color: var(--backgrounds-neutral-primary);
 }
@@ -388,7 +389,8 @@
   padding: 0;
   border: none;
 
-  font: var(--font-text-medium);
+  @include text-medium;
+
   color: var(--interactive-brand-primary);
 
   background: none;
@@ -409,7 +411,8 @@
 
   .cancelButton {
     padding: 11px 20px;
-    font: var(--font-text-medium);
+
+    @include text-medium;
   }
 }
 
@@ -459,7 +462,8 @@
   border: none;
   border-radius: 8px;
 
-  font: var(--font-text-medium);
+  @include text-medium;
+
   color: var(--backgrounds-neutral-primary);
 
   background-color: var(--interactive-brand-primary);

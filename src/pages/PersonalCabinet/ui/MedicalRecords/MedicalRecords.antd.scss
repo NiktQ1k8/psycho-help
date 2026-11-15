@@ -1,6 +1,6 @@
 [data-medical-record-pagination] {
   .ant-pagination {
-    font: var(--font-text-medium);
+    @include text-medium;
   }
 
   .ant-pagination-item-active {

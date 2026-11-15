@@ -48,7 +48,8 @@
 }
 
 .value {
-  font: var(--font-text-medium);
+  @include text-medium;
+
   color: var(--labels-neutral-inverted-primary);
   text-decoration: none;
 
@@ -107,7 +108,8 @@
 
   padding: 16px;
 
-  font: var(--font-text-medium);
+  @include text-medium;
+
   color: var(--labels-neutral-inverted-primary);
 }
 

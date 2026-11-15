@@ -29,7 +29,8 @@
 .button {
   padding: 10px;
   border-radius: 10px;
-  font: var(--font-text-medium-button);
+
+  @include text-medium-button;
 }
 
 @media (width <= 425px) {

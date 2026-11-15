@@ -13,7 +13,8 @@
   border: none;
   border-radius: 16px;
 
-  font: var(--font-text-large-button);
+  @include text-large-button;
+
   color: var(--text-color);
   text-decoration: none;
 

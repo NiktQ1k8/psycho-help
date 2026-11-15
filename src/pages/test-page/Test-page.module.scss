@@ -64,7 +64,9 @@
 .buttonAction {
   padding: 1.6rem 7.75rem;
   border-radius: 0.8rem;
-  font: var(--font-text-large-button);
+
+  @include text-large-button;
+
   transition: background-color 0.3s ease;
 
   &Complete,
@@ -100,7 +102,7 @@
   }
 
   .option {
-    font: var(--font-text-large-button);
+    @include text-large-button;
   }
 
   .buttonAction {
@@ -119,7 +121,7 @@
   }
 
   .option {
-    font: var(--font-text-large-button);
+    @include text-large-button;
   }
 
   .buttonAction {

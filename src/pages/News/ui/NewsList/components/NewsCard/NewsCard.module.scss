@@ -96,7 +96,7 @@
   }
 
   .date {
-    font: var(--font-text-small);
+    @include text-small;
   }
 
   .title {

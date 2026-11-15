@@ -100,7 +100,8 @@
   padding: 0;
   border: none;
 
-  font: var(--font-text-small);
+  @include text-small;
+
   line-height: 100%;
   color: var(--labels-neutral-primary);
 

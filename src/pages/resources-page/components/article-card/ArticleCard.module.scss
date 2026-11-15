@@ -19,7 +19,8 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    font: var(--font-text-small);
+
+    @include text-small;
   }
 
   .imageWrapper {

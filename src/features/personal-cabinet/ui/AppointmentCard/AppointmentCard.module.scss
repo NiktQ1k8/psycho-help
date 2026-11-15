@@ -73,7 +73,8 @@
   gap: 8px;
   align-items: center;
 
-  font: var(--font-text-small);
+  @include text-small;
+
   color: var(--labels-neutral-secondary);
 }
 

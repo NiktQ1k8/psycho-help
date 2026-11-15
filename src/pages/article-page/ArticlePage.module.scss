@@ -20,7 +20,8 @@
     gap: 1.6rem;
     align-items: center;
 
-    font: var(--font-text-small);
+    @include text-small;
+
     color: var(--labels-neutral-secondary);
   }
 

@@ -34,11 +34,7 @@ $breakpoint-tablet: 634px;
 
 @mixin header($level) {
   font: var(--font-h#{$level});
-  letter-spacing: var(--font-header-letter-spacing);
-
-  @if $level == 5 {
-    letter-spacing: var(--font-header-letter-spacing-h5);
-  }
+  letter-spacing: var(--font-h#{$level}-letter-spacing);
 }
 
 @mixin native-select {
@@ -52,6 +48,7 @@ $breakpoint-tablet: 634px;
 
   font: var(--font-text-medium);
   color: var(--labels-neutral-primary);
+  letter-spacing: var(--font-text-medium-letter-spacing);
 
   background-color: var(--backgrounds-neutral-primary);
 
@@ -69,4 +66,34 @@ $breakpoint-tablet: 634px;
     color: var(--labels-neutral-inverted-primary);
     background-color: var(--backgrounds-neutral-inverted);
   }
+}
+
+@mixin text-large {
+  font: var(--font-text-large);
+  letter-spacing: var(--font-text-large-letter-spacing);
+}
+
+@mixin text-large-button {
+  font: var(--font-text-large-button);
+  letter-spacing: var(--font-text-large-button-letter-spacing);
+}
+
+@mixin text-medium {
+  font: var(--font-text-medium);
+  letter-spacing: var(--font-text-medium-letter-spacing);
+}
+
+@mixin text-medium-button {
+  font: var(--font-text-medium-button);
+  letter-spacing: var(--font-text-medium-button-letter-spacing);
+}
+
+@mixin text-small {
+  font: var(--font-text-small);
+  letter-spacing: var(--font-text-small-letter-spacing);
+}
+
+@mixin text-xsmall {
+  font: var(--font-text-xsmall);
+  letter-spacing: var(--font-text-xsmall-letter-spacing);
 }

@@ -82,9 +82,8 @@
 .fio {
   margin: 0 0 0.4rem;
 
-  font: var(--font-h4);
-  font-size: 3.2rem;
-  font-weight: 500;
+  @include header(4);
+
   color: var(--labels-neutral-primary);
 }
 

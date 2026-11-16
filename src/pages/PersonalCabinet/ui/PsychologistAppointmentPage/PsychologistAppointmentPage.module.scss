@@ -26,10 +26,7 @@
 .title {
   margin: 24px 0;
 
-  font: var(--font-h4);
-  font-size: 32px;
-  font-weight: 700;
-  line-height: 36px;
+  @include header(4);
 }
 
 .status {

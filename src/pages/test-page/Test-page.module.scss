@@ -97,8 +97,7 @@
   }
 
   .title {
-    font: var(--font-h4);
-    letter-spacing: var(--font-header-letter-spacing);
+    @include header(4);
   }
 
   .option {
@@ -117,7 +116,7 @@
   }
 
   .title {
-    font: var(--font-h4);
+    @include header(4);
   }
 
   .option {
@@ -139,8 +138,7 @@
   }
 
   .title {
-    font: var(--font-h4);
-    letter-spacing: var(--font-header-letter-spacing);
+    @include header(4);
   }
 
   .options {

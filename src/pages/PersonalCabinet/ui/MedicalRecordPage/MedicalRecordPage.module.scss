@@ -6,7 +6,7 @@
 }
 
 .title {
-  font: var(--font-h4);
+  @include header(4);
 }
 
 .patientInfo {

@@ -20,7 +20,8 @@
 }
 
 .title {
-  font: var(--font-h1);
+  @include header(1);
+
   color: var(--labels-brand-secondary);
 }
 

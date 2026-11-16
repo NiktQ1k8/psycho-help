@@ -106,9 +106,8 @@
 .consult_label {
   margin-top: 0.8rem;
 
-  font: var(--font-h5);
-  font-size: 2.4rem;
-  font-weight: 500;
+  @include header(5);
+
   color: var(--labels-neutral-primary);
 }
 

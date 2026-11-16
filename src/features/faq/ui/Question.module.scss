@@ -51,9 +51,9 @@
 }
 
 .p {
-  font: var(--font-h5);
+  @include header(5);
+
   color: var(--labels-neutral-primary);
-  letter-spacing: var(--font-header-letter-spacing-h5);
 }
 
 @media (width <= 1024px) {

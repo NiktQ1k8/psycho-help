@@ -312,9 +312,7 @@
   }
 
   .infoName {
-    font: var(--font-h5);
-    font-size: 18px;
-    line-height: 24px;
+    @include header(5);
   }
 }
 

@@ -58,9 +58,10 @@
 
     & > h2 {
       margin-bottom: 2.4rem;
-      font: var(--font-h3);
+
+      @include header(3);
+
       color: var(--labels-neutral-primary);
-      letter-spacing: var(--font-header-letter-spacing);
     }
 
     & > p {

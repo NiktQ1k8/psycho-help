@@ -27,9 +27,10 @@
 
   .title {
     margin-block: 0.9rem;
-    font: var(--font-h2);
+
+    @include header(2);
+
     color: var(--labels-neutral-primary);
-    letter-spacing: var(--font-header-letter-spacing);
   }
 
   .content {
@@ -49,9 +50,10 @@
 
     & > h1 {
       margin-bottom: 2.4rem;
-      font: var(--font-h2);
+
+      @include header(2);
+
       color: var(--labels-neutral-primary);
-      letter-spacing: var(--font-header-letter-spacing);
     }
 
     & > h2 {

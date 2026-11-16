@@ -44,7 +44,8 @@
       text-align: center;
 
       .title {
-        font: var(--font-h2);
+        @include header(2);
+
         color: var(--labels-neutral-primary);
       }
 

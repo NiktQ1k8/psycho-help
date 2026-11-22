@@ -109,7 +109,7 @@ $font-weight-semi-bold: 600;
   --font-text-large: #{$font-weight-regular 2rem/2.8rem $font-family-body};
   --font-text-large-button: #{$font-weight-medium 2rem/2.8rem $font-family-body};
   --font-text-medium: #{$font-weight-regular 1.6rem/2.4rem $font-family-body};
-  --font-text-medium-button: #{$font-weight-semi-bold 1.6rem/2.4rem
+  --font-text-medium-button: #{$font-weight-medium 1.6rem/2.4rem
     $font-family-body};
   --font-text-small: #{$font-weight-regular 1.2rem/1.6rem $font-family-body};
   --font-text-xsmall: #{$font-weight-regular 1rem/1.4rem $font-family-body};

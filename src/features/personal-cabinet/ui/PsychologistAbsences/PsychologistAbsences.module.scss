@@ -19,11 +19,11 @@
   }
 
   h2 {
-    @include header(2);
+    @include header(4);
   }
 
   h3 {
-    @include header(3);
+    @include text-medium-button;
   }
 }
 

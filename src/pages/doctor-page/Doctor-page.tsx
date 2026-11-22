@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -18,10 +17,6 @@ const DoctorPage = () => {
     isLoading,
     error,
   } = useQuery(therapistQueries.byId(id!));
-
-  useEffect(() => {
-    window.scroll(0, 0);
-  }, []);
 
   if (isLoading) {
     return (

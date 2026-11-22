@@ -4,7 +4,6 @@ import { therapistQueries } from '@/entities/therapist/queries';
 import DoctorList from '@/features/therapists/ui/doctor-list';
 import Title from '@/features/therapists/ui/title';
 import Loader from '@/shared/ui/loader/loader';
-import styles from './DoctorPage.module.scss';
 
 const DoctorsPage = () => {
   const { data: doctors, isLoading, error } = useQuery(therapistQueries.list());
@@ -25,10 +24,10 @@ const DoctorsPage = () => {
   }
 
   return (
-    <div className={styles.wrapper}>
+    <>
       <Title />
       <DoctorList doctors={doctors} />
-    </div>
+    </>
   );
 };
 

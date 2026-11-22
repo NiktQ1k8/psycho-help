@@ -744,7 +744,7 @@ export const AppointmentForm = () => {
             />
           )}
           <div className={styles.results__info}>
-            <h3 className={styles.results__title}>Запись</h3>
+            <h1 className={styles.results__title}>Запись</h1>
 
             <p className={styles.results__text}>
               <span

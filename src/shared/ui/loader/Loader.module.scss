@@ -42,5 +42,6 @@
 
 .loader__text {
   margin-top: 1rem;
-  font-size: 1.4rem;
+
+  @include text-medium;
 }

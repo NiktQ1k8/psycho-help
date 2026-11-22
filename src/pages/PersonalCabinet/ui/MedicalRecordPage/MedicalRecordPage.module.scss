@@ -6,7 +6,7 @@
 }
 
 .title {
-  font: var(--font-h4);
+  @include header(4);
 }
 
 .patientInfo {
@@ -25,7 +25,8 @@
   dt,
   dd {
     margin: 0;
-    font: var(--font-text-medium);
+
+    @include text-medium;
   }
 
   dt {

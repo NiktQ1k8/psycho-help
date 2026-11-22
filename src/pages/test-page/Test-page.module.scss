@@ -17,7 +17,8 @@
 }
 
 .counter {
-  font: var(--font-text-large);
+  @include text-large;
+
   color: var(--labels-neutral-tetriary);
 }
 
@@ -63,7 +64,9 @@
 .buttonAction {
   padding: 1.6rem 7.75rem;
   border-radius: 0.8rem;
-  font: var(--font-text-large-button);
+
+  @include text-large-button;
+
   transition: background-color 0.3s ease;
 
   &Complete,
@@ -94,12 +97,11 @@
   }
 
   .title {
-    font: var(--font-h4);
-    letter-spacing: var(--font-header-letter-spacing);
+    @include header(4);
   }
 
   .option {
-    font: var(--font-text-large-button);
+    @include text-large-button;
   }
 
   .buttonAction {
@@ -114,11 +116,11 @@
   }
 
   .title {
-    font: var(--font-h4);
+    @include header(4);
   }
 
   .option {
-    font: var(--font-text-large-button);
+    @include text-large-button;
   }
 
   .buttonAction {
@@ -132,12 +134,11 @@
 
 @include mobile-specific {
   .counter {
-    font: var(--font-text-medium);
+    @include text-medium;
   }
 
   .title {
-    font: var(--font-h4);
-    letter-spacing: var(--font-header-letter-spacing);
+    @include header(4);
   }
 
   .options {
@@ -145,12 +146,13 @@
   }
 
   .option {
-    font: var(--font-text-medium);
+    @include text-medium;
   }
 
   .buttonAction {
     padding-inline: 4.85rem;
-    font: var(--font-text-medium);
+
+    @include text-medium;
   }
 
   .question {

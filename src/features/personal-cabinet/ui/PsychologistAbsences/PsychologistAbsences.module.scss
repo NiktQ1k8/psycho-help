@@ -8,7 +8,8 @@
   padding-top: 24px;
   border-top: 1px solid var(--border-neutral-soft);
 
-  font: var(--font-text-medium);
+  @include text-medium;
+
   color: var(--labels-neutral-primary);
 
   h2,
@@ -18,11 +19,11 @@
   }
 
   h2 {
-    font-size: 24px;
+    @include header(4);
   }
 
   h3 {
-    font-size: 18px;
+    @include text-medium-button;
   }
 }
 

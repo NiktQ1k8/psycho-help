@@ -11,11 +11,10 @@
 
 .label {
   display: block;
-
   margin-bottom: 8px;
 
-  font-size: 24px;
-  font-weight: 500;
+  @include header(5);
+
   color: var(--labels-neutral-primary);
 }
 
@@ -38,7 +37,7 @@
   border: 1px solid #ccc;
   border-radius: 8px;
 
-  font-size: 16px;
+  @include text-medium-button;
 
   background: #fff;
 }
@@ -70,7 +69,9 @@
 .location__text {
   cursor: pointer;
   user-select: none;
-  font-size: 16px;
+
+  @include text-medium;
+
   color: var(--labels-neutral-primary);
 }
 
@@ -98,8 +99,7 @@
 }
 
 .name {
-  font-size: 24px;
-  font-weight: 500;
+  @include header(5);
 }
 
 .info {
@@ -115,16 +115,18 @@
 }
 
 .qual {
-  font-size: 20px;
+  @include text-large;
 }
 
 .exp {
-  font-size: 20px;
+  @include text-large;
+
   color: var(--labels-neutral-secondary);
 }
 
 .office {
-  font-size: 16px;
+  @include text-large;
+
   color: var(--labels-neutral-secondary);
 }
 
@@ -143,7 +145,8 @@
   border: var(--border-neutral-base) 1px solid;
   border-radius: 16px;
 
-  font-size: 14px;
+  @include text-medium;
+
   color: var(--labels-neutral-secondary);
 }
 
@@ -204,7 +207,8 @@
 .therapist .empty {
   padding: 24px;
 
-  font-size: 16px;
+  @include text-medium;
+
   font-style: italic;
   color: var(--labels-neutral-secondary);
   text-align: center;
@@ -256,7 +260,8 @@
   border: 1px solid var(--border-neutral-base);
   border-radius: 999px;
 
-  font-size: 16px;
+  @include text-medium;
+
   color: var(--labels-neutral-primary);
 
   background-color: var(--backgrounds-neutral-primary);
@@ -288,7 +293,8 @@
   border: 1px solid #ccc;
   border-radius: 8px;
 
-  font-size: 16px;
+  @include text-medium;
+
   color: var(--labels-neutral-primary);
 
   background: #fff;
@@ -303,7 +309,7 @@
   border: 1px solid #ccc;
   border-radius: 8px;
 
-  font-size: 16px;
+  @include text-medium;
 
   background: #fff;
 }
@@ -319,7 +325,8 @@
   border: none;
   border-radius: 16px;
 
-  font-size: 20px;
+  @include text-large-button;
+
   color: var(--labels-neutral-inverted-primary);
 
   background-color: var(--interactive-brand-primary);
@@ -338,12 +345,14 @@
 
 .privacy_text {
   margin-bottom: 8px;
-  font-size: 14px;
+
+  @include text-small;
+
   color: var(--labels-neutral-secondary);
 }
 
 .privacy_link {
-  font-size: 14px;
+  @include text-small;
 }
 
 .backButton {
@@ -358,11 +367,12 @@
 }
 
 .results__title {
-  font-size: 32px;
+  @include header(4);
 }
 
 .results__text {
-  font-size: 20px;
+  @include text-large;
+
   overflow-wrap: anywhere;
 }
 
@@ -385,7 +395,8 @@
   border: none;
   border-radius: 16px;
 
-  font-size: 20px;
+  @include text-large-button;
+
   color: var(--labels-neutral-inverted-primary);
 
   background-color: var(--interactive-brand-primary);

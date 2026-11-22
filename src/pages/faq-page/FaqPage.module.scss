@@ -30,13 +30,14 @@
 
 .faq {
   margin: 0;
-  font: var(--font-h1);
+
+  @include header(1);
+
   color: var(--labels-brand-primary);
-  letter-spacing: var(--font-header-letter-spacing);
 }
 
 .description {
-  font: var(--font-text-large);
+  @include text-large;
 }
 
 .image {
@@ -60,7 +61,7 @@
 
 @media (width <= 634px) {
   .description {
-    font: var(--font-text-medium);
+    @include text-medium;
   }
 
   .wrapper {

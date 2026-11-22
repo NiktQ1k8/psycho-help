@@ -23,13 +23,16 @@
 }
 
 .patient_name {
-  font: var(--font-text-large);
+  @include text-large;
+
   color: var(--labels-neutral-primary);
 }
 
 .study_group {
   max-width: 250px;
-  font: var(--font-text-large);
+
+  @include text-large;
+
   color: var(--labels-neutral-secondary);
 }
 
@@ -45,7 +48,8 @@
   border: none;
   border-radius: 12px;
 
-  font: var(--font-text-medium);
+  @include text-medium;
+
   color: var(--labels-neutral-inverted-primary);
   white-space: nowrap;
 
@@ -65,11 +69,10 @@
 .pagination {
   display: flex;
   justify-content: center;
-
   margin-top: 16px;
   margin-bottom: 24px;
 
-  font: var(--font-text-medium);
+  @include text-medium;
 }
 
 @media (width <= 900px) {

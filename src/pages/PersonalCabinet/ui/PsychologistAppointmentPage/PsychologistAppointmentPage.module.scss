@@ -26,10 +26,7 @@
 .title {
   margin: 24px 0;
 
-  font: var(--font-h4);
-  font-size: 32px;
-  font-weight: 700;
-  line-height: 36px;
+  @include header(4);
 }
 
 .status {
@@ -58,8 +55,8 @@
 }
 
 .status-text {
-  font-size: 16px;
-  line-height: 24px;
+  @include text-medium;
+
   color: var(--labels-neutral-primary);
 }
 
@@ -73,13 +70,15 @@
 
   .reasonLabel {
     margin-right: 8px;
-    font-size: 14px;
-    font-weight: 600;
+
+    @include text-medium;
+
     color: var(--labels-warning-primary, #f59e0b);
   }
 
   .reasonText {
-    font-size: 14px;
+    @include text-medium;
+
     color: var(--labels-neutral-primary);
   }
 }
@@ -93,18 +92,16 @@
 .infoRow {
   display: flex;
   flex-direction: column;
-
   padding: 16px 0;
 
-  font: var(--font-text-medium);
-  font-size: 16px;
-  line-height: 28px;
+  @include text-medium;
 }
 
 .infoLabel {
   margin-bottom: 8px;
-  font-size: 16px;
-  line-height: 24px;
+
+  @include text-medium;
+
   color: var(--labels-neutral-tetriary);
 }
 
@@ -112,9 +109,8 @@
 .infoValueGrid {
   padding: 12px;
 
-  font: var(--font-text-medium);
-  font-size: 16px;
-  line-height: 24px;
+  @include text-medium;
+
   color: var(--labels-neutral-primary);
 }
 
@@ -128,7 +124,9 @@
 
 .fieldHint {
   margin-top: 8px;
-  font-size: 14px;
+
+  @include text-medium;
+
   color: var(--labels-neutral-secondary);
 }
 
@@ -180,12 +178,9 @@
 .infoRowGrid {
   display: flex;
   flex-direction: column;
-
   width: 100%;
 
-  font: var(--font-text-medium);
-  font-size: 16px;
-  line-height: 28px;
+  @include text-medium;
 }
 
 .infoValueGrid {
@@ -210,7 +205,8 @@
   border: 1px solid var(--border-neutral-base);
   border-radius: 6px;
 
-  font: var(--font-text-medium);
+  @include text-medium;
+
   color: var(--labels-neutral-primary);
 
   background-color: var(--backgrounds-neutral-primary);
@@ -231,9 +227,8 @@
 }
 
 .infoName {
-  font: var(--font-text-large);
-  font-size: 20px;
-  line-height: 28px;
+  @include text-large;
+
   color: var(--labels-neutral-primary);
 }
 
@@ -245,7 +240,8 @@
   border: none;
   border-radius: 16px;
 
-  font: var(--font-text-large);
+  @include text-large;
+
   font-weight: 500;
 
   transition: background-color 0.2s;
@@ -304,14 +300,12 @@
   .title {
     margin-top: 30px;
     margin-bottom: 20px;
-    font-size: 20px;
-    line-height: 28px;
+
+    @include header(4);
   }
 
   .infoName {
-    font: var(--font-h5);
-    font-size: 18px;
-    line-height: 24px;
+    @include header(5);
   }
 }
 

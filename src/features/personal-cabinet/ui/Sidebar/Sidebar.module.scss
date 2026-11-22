@@ -21,7 +21,9 @@
 
 .name {
   max-width: 150px;
-  font: var(--font-text-medium);
+
+  @include text-medium;
+
   color: var(--labels-neutral-primary);
   text-align: center;
 }
@@ -45,7 +47,8 @@
   border: none;
   border-radius: 8px;
 
-  font: var(--font-text-large);
+  @include text-large;
+
   color: var(--labels-neutral-primary);
   text-align: left;
   text-decoration: none;

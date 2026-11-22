@@ -82,59 +82,50 @@
 .fio {
   margin: 0 0 0.4rem;
 
-  font: var(--font-h4);
-  font-size: 3.2rem;
-  font-weight: 500;
+  @include header(4);
+
   color: var(--labels-neutral-primary);
 }
 
 .speciality {
-  font: var(--font-text-large);
-  font-size: 2rem;
+  @include text-large;
+
   color: var(--labels-neutral-primary);
 }
 
 .experience {
-  font: var(--font-text-large);
-  font-size: 2rem;
-  font-weight: 400;
-  color: var(--labels-neutral-secondary);
+  @include text-large;
 
+  color: var(--labels-neutral-secondary);
   opacity: 0.72;
 }
 
 .consult_label {
   margin-top: 0.8rem;
 
-  font: var(--font-h5);
-  font-size: 2.4rem;
-  font-weight: 500;
+  @include header(5);
+
   color: var(--labels-neutral-primary);
 }
 
 .consult_areas {
   margin-top: 0.2rem;
 
-  font-size: 2rem;
-  line-height: 1.5;
-  color: var(--labels-neutral-secondary);
+  @include text-large;
 
+  color: var(--labels-neutral-secondary);
   opacity: 0.72;
 }
 
 @media (width <= 1150px) {
-  .fio {
-    font-size: 2.8rem;
-  }
-
   .consult_areas,
   .speciality,
   .experience {
-    font-size: 1.6rem;
+    @include text-medium;
   }
 
   .consult_label {
-    font-size: 2.2rem;
+    @include text-large;
   }
 }
 

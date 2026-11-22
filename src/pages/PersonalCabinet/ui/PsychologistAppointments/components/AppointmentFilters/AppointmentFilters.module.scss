@@ -54,7 +54,8 @@
   height: 100%;
   border: none;
 
-  font-size: 14px;
+  @include text-medium;
+
   color: var(--labels-neutral-tetriary);
 
   background: transparent;
@@ -81,7 +82,8 @@
   padding: 0;
   border: none;
 
-  font: var(--font-text-medium);
+  @include text-medium;
+
   color: var(--labels-neutral-primary);
 
   background: none;
@@ -99,7 +101,8 @@
   padding: 0;
   border: none;
 
-  font: var(--font-text-small);
+  @include text-small;
+
   line-height: 100%;
   color: var(--labels-neutral-primary);
 

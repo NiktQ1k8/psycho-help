@@ -30,15 +30,15 @@
 
 .lunchLabel,
 .fridayLabel {
-  font-size: 20px;
-  font-weight: 600;
+  @include text-medium;
+
   color: var(--labels-neutral-tetriary);
 }
 
 .lunchTime,
 .fridayTime {
-  font-size: 22px;
-  font-weight: 600;
+  @include header(5);
+
   color: var(--labels-neutral-primary);
 }
 

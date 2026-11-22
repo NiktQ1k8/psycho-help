@@ -49,12 +49,14 @@
 }
 
 .type {
-  font: var(--font-text-large);
+  @include text-large;
+
   color: var(--labels-neutral-secondary);
 }
 
 .date {
-  font: var(--font-text-medium);
+  @include text-medium;
+
   color: var(--labels-neutral-primary);
 }
 
@@ -65,7 +67,8 @@
   -webkit-line-clamp: 4;
   line-clamp: 4;
 
-  font: var(--font-text-large);
+  @include text-large;
+
   color: var(--labels-neutral-primary);
 
   transition: color 0.3s;
@@ -89,15 +92,15 @@
   }
 
   .type {
-    font: var(--font-text-medium);
+    @include text-medium;
   }
 
   .date {
-    font: var(--font-text-small);
+    @include text-small;
   }
 
   .title {
-    font: var(--font-h5);
+    @include header(5);
   }
 }
 

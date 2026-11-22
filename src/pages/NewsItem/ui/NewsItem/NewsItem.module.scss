@@ -5,8 +5,8 @@
   margin: 0 auto;
   padding: 41px 67px 67px;
 
-  font-size: 20px;
-  line-height: 28px;
+  @include text-large;
+
   color: var(--labels-neutral-primary);
 }
 
@@ -37,10 +37,7 @@
 .title {
   margin-bottom: 24px;
 
-  font-size: 28px;
-  font-weight: 600;
-  line-height: 36px;
-  letter-spacing: -0.03em;
+  @include header(2);
 }
 
 .content {
@@ -64,9 +61,8 @@
   max-width: 390px;
   margin: 50px auto 0;
 
-  font-size: 20px;
-  font-weight: 500;
-  line-height: 28px;
+  @include text-large-button;
+
   color: var(--labels-brand-primary);
 }
 
@@ -74,8 +70,8 @@
   .wrapper {
     max-width: 606px;
     padding: 24px 10px 53px;
-    font-size: 16px;
-    line-height: 24px;
+
+    @include text-medium;
   }
 
   .newsHeader {
@@ -86,13 +82,12 @@
 
   .info {
     gap: 15px;
-    font-size: 12px;
-    line-height: 16px;
+
+    @include text-small;
   }
 
   .title {
     margin-bottom: 9px;
-    letter-spacing: -0.05em;
   }
 
   .content {
@@ -109,8 +104,8 @@
 
   .bottomBtn {
     margin: 28px auto 0;
-    font-size: 16px;
-    line-height: 24px;
+
+    @include text-medium-button;
   }
 }
 

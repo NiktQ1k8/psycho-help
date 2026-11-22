@@ -25,16 +25,14 @@
 }
 
 .greeting__title {
-  font-family: Geist, sans-serif;
-  font-size: 4.4rem;
-  font-weight: 500;
-  line-height: 52px;
+  @include header(2);
+
   color: var(--labels-neutral-primary);
 }
 
 .greeting__subtitle {
-  font-family: Roboto, sans-serif;
-  font-size: 2rem;
+  @include text-large;
+
   color: var(--labels-neutral-secondary);
 }
 
@@ -114,14 +112,8 @@
     text-align: center;
   }
 
-  .greeting__title {
-    font-size: 2.8rem;
-    line-height: 36px;
-  }
-
   .greeting__subtitle {
-    font-size: 1.6rem;
-    line-height: 24px;
+    @include text-medium;
   }
 
   .greeting__text {

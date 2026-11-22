@@ -42,13 +42,14 @@
 }
 
 .label {
-  font-size: 14px;
-  line-height: 20px;
+  @include text-medium;
+
   color: var(--labels-brand-quaternary);
 }
 
 .value {
-  font: var(--font-text-medium);
+  @include text-medium;
+
   color: var(--labels-neutral-inverted-primary);
   text-decoration: none;
 
@@ -107,7 +108,8 @@
 
   padding: 16px;
 
-  font: var(--font-text-medium);
+  @include text-medium;
+
   color: var(--labels-neutral-inverted-primary);
 }
 
@@ -137,8 +139,8 @@
 .issuesPlank {
   margin-top: 16px;
 
-  font-size: 12px;
-  line-height: 16px;
+  @include text-small;
+
   color: var(--labels-neutral-inverted-primary);
   text-align: center;
 }

@@ -23,16 +23,16 @@
 }
 
 .title {
-  font-size: 32px;
-  font-weight: 500;
-  line-height: 36px;
+  @include header(3);
+
   color: var(--labels-neutral-primary);
-  letter-spacing: -0.05em;
 }
 
 .text {
   z-index: 1;
-  font: var(--font-text-large);
+
+  @include text-large;
+
   color: var(--labels-neutral-primary);
 }
 

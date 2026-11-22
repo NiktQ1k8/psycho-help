@@ -15,7 +15,8 @@
   border: 1px solid var(--border-neutral-base);
   border-radius: 12px;
 
-  font: var(--font-text-medium);
+  @include text-medium;
+
   color: var(--interactive-neutral-primary);
 
   background-color: var(--backgrounds-neutral-primary);
@@ -28,7 +29,8 @@
 .button {
   padding: 10px;
   border-radius: 10px;
-  font: var(--font-text-medium-button);
+
+  @include text-medium-button;
 }
 
 @media (width <= 425px) {

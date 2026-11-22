@@ -44,13 +44,16 @@
       text-align: center;
 
       .title {
-        font: var(--font-h2);
+        @include header(2);
+
         color: var(--labels-neutral-primary);
       }
 
       .features {
         display: flex;
-        font: var(--font-text-large);
+
+        @include text-large;
+
         color: var(--labels-neutral-secondary);
         list-style: none;
       }

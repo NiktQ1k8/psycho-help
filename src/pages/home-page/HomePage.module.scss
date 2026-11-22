@@ -9,19 +9,14 @@
 }
 
 .title {
-  font-size: 3rem;
+  @include header(2);
+
   text-align: center;
 }
 
 @media (width <= 425px) {
   .titleWrapper {
     margin-top: 20px;
-  }
-
-  .title {
-    font-size: 2.8rem;
-    line-height: 36px;
-    text-align: center;
   }
 }
 

@@ -20,15 +20,17 @@
     gap: 1.6rem;
     align-items: center;
 
-    font: var(--font-text-small);
+    @include text-small;
+
     color: var(--labels-neutral-secondary);
   }
 
   .title {
     margin-block: 0.9rem;
-    font: var(--font-h2);
+
+    @include header(2);
+
     color: var(--labels-neutral-primary);
-    letter-spacing: var(--font-header-letter-spacing);
   }
 
   .content {
@@ -48,21 +50,25 @@
 
     & > h1 {
       margin-bottom: 2.4rem;
-      font: var(--font-h2);
+
+      @include header(2);
+
       color: var(--labels-neutral-primary);
-      letter-spacing: var(--font-header-letter-spacing);
     }
 
     & > h2 {
       margin-bottom: 2.4rem;
-      font: var(--font-h3);
+
+      @include header(3);
+
       color: var(--labels-neutral-primary);
-      letter-spacing: var(--font-header-letter-spacing);
     }
 
     & > p {
       margin-bottom: 2.4rem;
-      font: var(--font-text-medium);
+
+      @include text-medium;
+
       color: var(--labels-neutral-primary);
     }
 
@@ -70,7 +76,8 @@
       margin-bottom: 2.4rem;
 
       & > p {
-        font: var(--font-text-medium);
+        @include text-medium;
+
         color: var(--labels-neutral-primary);
       }
 
@@ -79,7 +86,9 @@
 
         & > li {
           margin-bottom: 0.4rem;
-          font: var(--font-text-medium);
+
+          @include text-medium;
+
           color: var(--labels-neutral-primary);
 
           // list-style-position: inside;

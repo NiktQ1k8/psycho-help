@@ -19,7 +19,8 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    font: var(--font-text-small);
+
+    @include text-small;
   }
 
   .imageWrapper {
@@ -40,11 +41,12 @@
     padding-inline: 0.8rem;
 
     .title {
-      font: var(--font-h4);
+      @include header(4);
     }
 
     .description {
-      font: var(--font-text-medium);
+      @include text-medium;
+
       color: var(--labels-neutral-secondary);
 
       &.ellipse {
@@ -75,7 +77,7 @@
 
     .content {
       .title {
-        font: var(--font-h4);
+        @include header(4);
       }
     }
   }

@@ -23,14 +23,17 @@
 
 .title {
   margin: 0 0 1.2rem;
-  font: var(--font-h4);
+
+  @include header(4);
+
   color: var(--labels-neutral-primary);
-  letter-spacing: var(--font-header-letter-spacing);
 }
 
 .text {
   margin: 0 0 3.6rem;
-  font: var(--font-text-large);
+
+  @include text-large;
+
   color: var(--labels-neutral-primary);
 }
 

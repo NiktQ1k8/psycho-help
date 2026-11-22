@@ -4,7 +4,8 @@
   border: 1px solid var(--border-neutral-soft);
   border-radius: 8px;
 
-  font-size: 16px;
+  @include text-medium;
+
   color: var(--labels-neutral-primary);
 
   background-color: var(--backgrounds-neutral-primary);
@@ -72,7 +73,8 @@
     padding: 0;
     border: none;
 
-    font-size: 16px;
+    @include text-medium;
+
     color: var(--labels-neutral-primary);
 
     background: transparent;
@@ -160,8 +162,9 @@
 
   h2 {
     margin: 0;
-    font-size: 20px;
-    font-weight: 600;
+
+    @include text-medium;
+
     color: var(--labels-neutral-primary);
   }
 }
@@ -172,7 +175,8 @@
   align-items: flex-start;
 
   .name {
-    font-size: 20px;
+    @include text-large;
+
     font-weight: 600;
     color: var(--labels-neutral-primary);
   }
@@ -218,7 +222,9 @@
 
 .nameErrorText {
   padding-left: 4px;
-  font-size: 12px;
+
+  @include text-small;
+
   color: var(--labels-danger-primary);
 }
 
@@ -235,8 +241,8 @@
   border: none;
   border-radius: 8px;
 
-  font-size: 14px;
-  font-weight: 500;
+  @include text-medium-button;
+
   color: var(--backgrounds-neutral-primary);
 
   background-color: var(--interactive-brand-primary);
@@ -260,8 +266,8 @@
   border: 1px solid var(--border-neutral-soft);
   border-radius: 8px;
 
-  font-size: 14px;
-  font-weight: 500;
+  @include text-medium-button;
+
   color: var(--labels-neutral-secondary);
 
   background-color: transparent;
@@ -328,7 +334,9 @@
 
   .errorText {
     margin-top: 4px;
-    font-size: 12px;
+
+    @include text-small;
+
     color: var(--labels-danger-primary);
   }
 }
@@ -366,7 +374,8 @@
     padding: 0;
     border: none;
 
-    font-size: 16px;
+    @include text-medium;
+
     color: var(--labels-neutral-primary);
 
     background: transparent;

@@ -54,7 +54,8 @@
   height: 100%;
   border: none;
 
-  font-size: 14px;
+  @include text-medium;
+
   color: var(--labels-neutral-tetriary);
 
   background: transparent;

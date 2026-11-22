@@ -19,11 +19,11 @@
   }
 
   h2 {
-    font-size: 24px;
+    @include header(2);
   }
 
   h3 {
-    font-size: 18px;
+    @include header(3);
   }
 }
 

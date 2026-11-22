@@ -15,7 +15,8 @@
   border-width: 0;
   border-radius: 16px;
 
-  font-size: 2rem;
+  @include text-large-button;
+
   color: var(--labels-neutral-inverted-primary);
 
   background-color: var(--interactive-brand-primary);
@@ -35,8 +36,7 @@
 }
 
 .name {
-  font-size: 2.4rem;
-  font-weight: 500;
+  @include header(3);
 }
 
 .infoBlock {
@@ -53,16 +53,18 @@
 }
 
 .qual {
-  font-size: 2rem;
+  @include text-large;
 }
 
 .exp {
-  font-size: 2rem;
+  @include text-large;
+
   color: var(--labels-neutral-secondary);
 }
 
 .office {
-  font-size: 1.6rem;
+  @include text-medium;
+
   color: var(--labels-neutral-secondary);
 }
 
@@ -99,7 +101,8 @@
   border: none;
   border-radius: 16px;
 
-  font-size: 2rem;
+  @include text-large-button;
+
   color: var(--labels-neutral-primary);
 
   background: none;
@@ -112,7 +115,9 @@
 
 .supInfo {
   margin-top: 24px;
-  font-size: 1.6rem;
+
+  @include text-medium;
+
   color: var(--labels-neutral-secondary);
 }
 
@@ -147,23 +152,19 @@
   }
 
   .infoBtn {
-    font-size: 1.2rem;
-  }
-
-  .name {
-    font-size: 1.8rem;
+    @include text-small;
   }
 
   .qual {
-    font-size: 1.6rem;
+    @include text-medium;
   }
 
   .exp {
-    font-size: 1.6rem;
+    @include text-medium;
   }
 
   .office {
-    font-size: 1.2rem;
+    @include text-small;
   }
 }
 

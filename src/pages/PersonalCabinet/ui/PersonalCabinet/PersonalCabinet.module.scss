@@ -41,6 +41,6 @@
   }
 
   .mainContent h2 {
-    font-size: 20px;
+    @include header(4);
   }
 }

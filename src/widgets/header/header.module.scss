@@ -120,8 +120,8 @@ html[data-theme='dark']:has(.header__list--open) {
   border: 1px solid transparent;
   border-radius: 1.6rem;
 
-  font-size: 1.6rem;
-  line-height: 2.4rem;
+  @include text-medium;
+
   color: var(--labels-neutral-primary);
   text-decoration: none;
 

@@ -33,7 +33,9 @@
 
 .text {
   margin-bottom: 4.8rem;
-  font-size: 2rem;
+
+  @include text-large;
+
   color: var(--labels-neutral-secondary);
 }
 
@@ -52,7 +54,8 @@
   }
 
   .text {
-    font-size: 2rem;
+    @include text-large;
+
     opacity: 0.72;
   }
 }
@@ -87,7 +90,8 @@
   }
 
   .text {
-    font-size: 1.6rem;
+    @include text-medium;
+
     text-align: center;
   }
 

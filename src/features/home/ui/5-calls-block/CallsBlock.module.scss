@@ -14,8 +14,9 @@
 
 .calls__text {
   width: 60%;
-  font-size: 2rem;
-  line-height: 2.8rem;
+
+  @include text-large;
+
   color: var(--labels-neutral-tetriary);
 }
 
@@ -42,9 +43,8 @@
 }
 
 .calls__title {
-  font-size: 1.6rem;
-  font-weight: 500;
-  line-height: 2.4rem;
+  @include text-medium;
+
   color: var(--labels-neutral-primary);
 }
 
@@ -54,9 +54,8 @@
   border: 2px solid transparent;
   border-radius: 12px;
 
-  font-size: 2.4rem;
-  font-weight: 500;
-  line-height: 2.8rem;
+  @include header(5);
+
   color: var(--labels-brand-primary);
   text-decoration: none;
 }
@@ -79,8 +78,8 @@
 }
 
 .calls__phone_text {
-  font-size: 1.2rem;
-  line-height: 1.6rem;
+  @include text-xsmall;
+
   color: var(--labels-neutral-tetriary);
 }
 
@@ -134,8 +133,7 @@
   }
 
   .calls__title {
-    font-size: 1.6rem;
-    line-height: 2.4rem;
+    @include text-medium;
   }
 
   .calls__image {

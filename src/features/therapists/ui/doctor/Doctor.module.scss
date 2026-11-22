@@ -90,15 +90,12 @@
 .speciality {
   @include text-large;
 
-  font-size: 2rem;
   color: var(--labels-neutral-primary);
 }
 
 .experience {
   @include text-large;
 
-  font-size: 2rem;
-  font-weight: 400;
   color: var(--labels-neutral-secondary);
   opacity: 0.72;
 }
@@ -114,26 +111,21 @@
 .consult_areas {
   margin-top: 0.2rem;
 
-  font-size: 2rem;
-  line-height: 1.5;
-  color: var(--labels-neutral-secondary);
+  @include text-large;
 
+  color: var(--labels-neutral-secondary);
   opacity: 0.72;
 }
 
 @media (width <= 1150px) {
-  .fio {
-    font-size: 2.8rem;
-  }
-
   .consult_areas,
   .speciality,
   .experience {
-    font-size: 1.6rem;
+    @include text-medium;
   }
 
   .consult_label {
-    font-size: 2.2rem;
+    @include text-large;
   }
 }
 

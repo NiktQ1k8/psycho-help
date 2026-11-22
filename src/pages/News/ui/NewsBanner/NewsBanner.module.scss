@@ -23,11 +23,9 @@
 }
 
 .title {
-  font-size: 32px;
-  font-weight: 500;
-  line-height: 36px;
+  @include header(3);
+
   color: var(--labels-neutral-primary);
-  letter-spacing: -0.05em;
 }
 
 .text {

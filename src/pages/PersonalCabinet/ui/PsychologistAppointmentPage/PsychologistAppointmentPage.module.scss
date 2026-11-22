@@ -55,8 +55,8 @@
 }
 
 .status-text {
-  font-size: 16px;
-  line-height: 24px;
+  @include text-medium;
+
   color: var(--labels-neutral-primary);
 }
 
@@ -70,13 +70,15 @@
 
   .reasonLabel {
     margin-right: 8px;
-    font-size: 14px;
-    font-weight: 600;
+
+    @include text-medium;
+
     color: var(--labels-warning-primary, #f59e0b);
   }
 
   .reasonText {
-    font-size: 14px;
+    @include text-medium;
+
     color: var(--labels-neutral-primary);
   }
 }
@@ -90,19 +92,16 @@
 .infoRow {
   display: flex;
   flex-direction: column;
-
   padding: 16px 0;
 
   @include text-medium;
-
-  font-size: 16px;
-  line-height: 28px;
 }
 
 .infoLabel {
   margin-bottom: 8px;
-  font-size: 16px;
-  line-height: 24px;
+
+  @include text-medium;
+
   color: var(--labels-neutral-tetriary);
 }
 
@@ -112,8 +111,6 @@
 
   @include text-medium;
 
-  font-size: 16px;
-  line-height: 24px;
   color: var(--labels-neutral-primary);
 }
 
@@ -127,7 +124,9 @@
 
 .fieldHint {
   margin-top: 8px;
-  font-size: 14px;
+
+  @include text-medium;
+
   color: var(--labels-neutral-secondary);
 }
 
@@ -179,13 +178,9 @@
 .infoRowGrid {
   display: flex;
   flex-direction: column;
-
   width: 100%;
 
   @include text-medium;
-
-  font-size: 16px;
-  line-height: 28px;
 }
 
 .infoValueGrid {
@@ -234,8 +229,6 @@
 .infoName {
   @include text-large;
 
-  font-size: 20px;
-  line-height: 28px;
   color: var(--labels-neutral-primary);
 }
 
@@ -307,8 +300,8 @@
   .title {
     margin-top: 30px;
     margin-bottom: 20px;
-    font-size: 20px;
-    line-height: 28px;
+
+    @include header(4);
   }
 
   .infoName {

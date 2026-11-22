@@ -16,7 +16,8 @@
   border: none;
   border-radius: 50%;
 
-  font-size: 1.5rem;
+  @include text-medium-button;
+
   color: var(--labels-neutral-inverted-primary);
 
   visibility: hidden;

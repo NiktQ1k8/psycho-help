@@ -48,9 +48,8 @@
 .text {
   margin: 0;
 
-  font-size: 18px;
-  font-weight: 500;
-  line-height: 1.4;
+  @include text-medium;
+
   color: var(--labels-neutral-primary);
   text-align: center;
   white-space: pre-line;
@@ -102,10 +101,6 @@
 @media (width <= 768px) {
   .imageWrapper {
     margin-bottom: 20px;
-  }
-
-  .text {
-    font-size: 16px;
   }
 }
 
